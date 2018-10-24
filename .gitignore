@@ -1,0 +1,11 @@
+**/*.[jJ][pP][gG]
+**/*.[Pp][Nn][Gg]
+**/*.[Ww][Aa][Vv]
+**/*.[Mm][Pp]3
+**/Debug
+**/[Rr]elease
+**/*.opendb
+**/*.db
+**/HEW
+**/.vs
+**/*.ipch
