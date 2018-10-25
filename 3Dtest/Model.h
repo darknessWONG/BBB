@@ -1,29 +1,47 @@
 #pragma once
+#include "stdafx.h"
 #include "GameObject.h"
 class Model :
 	public GameObject
 {
 public:
 	Model();
+	Model(string modelPath);
 	~Model();
+	/*===========================================
+	virtual member
+	============================================*/
+	virtual void draw(void);
+
+	/*===========================================
+	public function
+	============================================*/
+	void loadModel(void);
+
+	/*===========================================
+	public geter / seter
+	============================================*/
+	string getModelPath(void);
+	void setModelPath(string modelPath);
 
 private:
+
+	string modelPath;
+
 	//mesh
-	LPD3DXMESH g_pD3DXMesh = NULL;
+	LPD3DXMESH mesh = NULL;
 	//adacency buffer
-	LPD3DXBUFFER g_pD3DXAdacencyBuffer = NULL;
+	LPD3DXBUFFER adacencyBuffer = NULL;
 	//number of material
-	DWORD g_dwNumMaterials = 0;
+	DWORD numMaterials = 0;
 
 	//array of material 
-	D3DCOLORVALUE *g_pMeshColor = NULL;
-	LPDIRECT3DTEXTURE9 *g_pMeshTexture = NULL;
+	D3DCOLORVALUE *meshColor = NULL;
+	LPDIRECT3DTEXTURE9 *meshTexture = NULL;
 
 	//pointer of material buffer
-	D3DXMATERIAL *g_d3dxMaterials = NULL;
+	D3DXMATERIAL *materials = NULL;
 
-	D3DMATERIAL9 *g_pMeshMat = NULL;
-
-	D3DXMATRIX *g_pModelMtxWorld = NULL;
+	D3DMATERIAL9 *meshMat = NULL;
 };
 
