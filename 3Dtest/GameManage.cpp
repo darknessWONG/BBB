@@ -26,6 +26,8 @@ void GameManage::init(void)
 
 	Model* mesh = new Model("radio.x");
 	mesh->loadModel(pD3DDevice);
+	mesh->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
+	mesh->setRotateSpeed(3);
 	gameObjects.push_back(mesh);
 
 	light = new Light();

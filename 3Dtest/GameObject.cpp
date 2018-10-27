@@ -40,42 +40,24 @@ GameObject::~GameObject()
 
 void GameObject::calWorldMatrix(void)
 {
-	D3DXVECTOR3 y(0, 1, 0), z(0, 0, 1);
+	D3DXVECTOR3 y(0, 1, 0), x(1, 0, 0);
 	D3DXVec3Normalize(vecFront, vecFront);
 	D3DXVec3Normalize(&y, &y);
-	D3DXVec3Normalize(&z, &z);
-
-	//float r = D3DXVec3Length(vec);
-	//D3DXMATRIX rotZ, rotY;
-	//D3DXMatrixIdentity(&rotZ);
-	//D3DXMatrixIdentity(&rotY);
-	//float ry = sqrt(vec->z*vec->z + vec->x*vec->x);
-
-	//rotZ._11 = vec->y / r;
-	//rotZ._21 = ry / r;
-	//rotZ._12 = -rotZ._21;
-	//rotZ._22 = rotZ._11;
-
-	//rotY._11 = vec->x / ry;
-	//rotY._13 = vec->z / ry;
-	//rotY._31 = -rotY._13;
-	//rotY._33 = rotY._11;
-
-	//*outMat = rotZ*rotY;
+	D3DXVec3Normalize(&x, &x);
 
 	float cosy = D3DXVec3Dot(&y, vecFront);
 	float siny = sqrt(1 - cosy * cosy);
-	siny = vecFront->z < 0 ? -siny : siny;
+	siny = vecFront->x < 0 ? -siny : siny;
 	float cosxz = cosy * cos(D3DX_PI / 2) + siny * sin(D3DX_PI / 2);
 	float sinxz = sqrt(1 - cosxz * cosxz);
-	sinxz = vecFront->z < 0 ? -sinxz : sinxz;
+	sinxz = vecFront->x < 0 ? -sinxz : sinxz;
 
-	float cosz = D3DXVec3Dot(&z, vecUp);
-	float sinz = sqrt(1 - cosz * cosz);
-	sinz = vecUp->x < 0 ? -sinz : sinz;
-	float cosyz = cosz * cos(D3DX_PI / 2) + sinz * sin(D3DX_PI / 2);
-	float sinyz = sqrt(1 - cosyz * cosyz);
-	sinyz = vecUp->y < 0 ? -sinyz : sinyz;
+	float cosx = D3DXVec3Dot(&x, vecFront);
+	float sinx = sqrt(1 - cosx * cosx);
+	sinx = vecFront->z < 0 ? -sinx : sinx;
+	float coszy = cosx * cos(D3DX_PI / 2) + sinx * sin(D3DX_PI / 2);
+	float sinzy = sqrt(1 - coszy * coszy);
+	sinzy = vecFront->z < 0 ? -sinzy : sinzy;
 
 	D3DXMATRIX mtxRotateX;
 	D3DXMatrixIdentity(&mtxRotateX);
@@ -86,10 +68,10 @@ void GameObject::calWorldMatrix(void)
 
 	D3DXMATRIX mtxRotateY;
 	D3DXMatrixIdentity(&mtxRotateY);
-	mtxRotateY._11 = cosyz;
-	mtxRotateY._13 = sinyz;
-	mtxRotateY._31 = -sinyz;
-	mtxRotateY._33 = cosyz;
+	mtxRotateY._11 = coszy;
+	mtxRotateY._13 = sinzy;
+	mtxRotateY._31 = -sinzy;
+	mtxRotateY._33 = coszy;
 
 	D3DXVECTOR3 mtxPreFront(0, 0, 1);
 
@@ -101,6 +83,7 @@ void GameObject::calWorldMatrix(void)
 	mtxTrans._42 = vecNowPos->y;
 	mtxTrans._43 = vecNowPos->z;
 
+	D3DXMatrixIdentity(mtxWorld);
 	D3DXMatrixMultiply(mtxWorld, mtxWorld, &mtxRotateX);
 	D3DXMatrixMultiply(mtxWorld, mtxWorld, &mtxRotateY);
 	D3DXMatrixMultiply(mtxWorld, mtxWorld, &mtxTrans);
@@ -115,6 +98,7 @@ void GameObject::dataUpdate(void)
 	rotateSpeed *= rotateDamping;
 	D3DXMATRIX mtxRotate;
 	D3DXMatrixIdentity(&mtxRotate);
+	D3DXMatrixRotationAxis(&mtxRotate, vecRotateAxis, rotateSpeed);
 	D3DXVec3TransformNormal(vecFront, vecFront, &mtxRotate);
 	D3DXVec3TransformNormal(vecRight, vecRight, &mtxRotate);
 	D3DXVec3TransformNormal(vecUp, vecUp, &mtxRotate);
