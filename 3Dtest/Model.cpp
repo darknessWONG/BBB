@@ -17,18 +17,18 @@ Model::~Model()
 {
 }
 
-void Model::draw(void)
+void Model::draw(LPDIRECT3DDEVICE9 pD3DDevice)
 {
-	Common::g_pD3DDevice->SetTransform(D3DTS_WORLD, getMtxWorld());
+	pD3DDevice->SetTransform(D3DTS_WORLD, getMtxWorld());
 	for (int i = 0; i < numMaterials; i++)
 	{
-		Common::g_pD3DDevice->SetMaterial(&meshMat[i]);
-		Common::g_pD3DDevice->SetTexture(0, meshTexture[i]);
+		pD3DDevice->SetMaterial(&meshMat[i]);
+		pD3DDevice->SetTexture(0, meshTexture[i]);
 		mesh->DrawSubset(i);
 	}
 }
 
-void Model::loadModel(void)
+void Model::loadModel(LPDIRECT3DDEVICE9 pD3DDevice)
 {
 	if (modelPath == "")
 	{
@@ -38,7 +38,7 @@ void Model::loadModel(void)
 	//material buffer
 	LPD3DXBUFFER mtrlBuffer = NULL;
 
-	HRESULT hr = D3DXLoadMeshFromX(modelPath.c_str(), D3DXMESH_MANAGED, Common::g_pD3DDevice, &adacencyBuffer, &mtrlBuffer, NULL, &numMaterials, &mesh);
+	HRESULT hr = D3DXLoadMeshFromX(modelPath.c_str(), D3DXMESH_MANAGED, pD3DDevice, &adacencyBuffer, &mtrlBuffer, NULL, &numMaterials, &mesh);
 	if (FAILED(hr))
 	{
 		return;
@@ -60,7 +60,7 @@ void Model::loadModel(void)
 		}
 		else
 		{
-			hr = D3DXCreateTextureFromFile(Common::g_pD3DDevice, materials[i].pTextureFilename, &meshTexture[i]);
+			hr = D3DXCreateTextureFromFile(pD3DDevice, materials[i].pTextureFilename, &meshTexture[i]);
 		}
 	}
 

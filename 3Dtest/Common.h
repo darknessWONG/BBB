@@ -15,6 +15,9 @@ public:
 	static UINT frameCount;
 	static FLOAT screen_width;
 	static FLOAT screen_height;
+
+	static bool MyDirect3D_Initialize(HWND hWnd);
+	static void MyDirect3D_Finalize(void);
 };
 
 template <typename T>

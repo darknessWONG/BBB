@@ -35,7 +35,7 @@ Camera::~Camera()
 	safe_delete<D3DXVECTOR3>(vecWatchAt);
 }
 
-void Camera::draw(void)
+void Camera::draw(LPDIRECT3DDEVICE9 pD3DDevice)
 {
 	D3DXMATRIX mtxView;
 	D3DXMatrixIdentity(&mtxView);
@@ -49,9 +49,9 @@ void Camera::draw(void)
 	D3DXMatrixPerspectiveFovLH(&mtxProjection, D3DXToRadian(60), (float)Common::screen_width/ Common::screen_height, 0.1f, 100.0f);
 
 	//set the view matirx to the device
-	Common::g_pD3DDevice->SetTransform(D3DTS_VIEW, &mtxView);
+	pD3DDevice->SetTransform(D3DTS_VIEW, &mtxView);
 	//set the projection matirx to the device
-	Common::g_pD3DDevice->SetTransform(D3DTS_PROJECTION, &mtxProjection);
+	pD3DDevice->SetTransform(D3DTS_PROJECTION, &mtxProjection);
 }
 
 void Camera::calWatchAt(void)

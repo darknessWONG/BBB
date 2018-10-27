@@ -5,6 +5,7 @@
 
 GameObject::GameObject()
 {
+	mtxWorld = new D3DXMATRIX();
 	D3DXMatrixIdentity(mtxWorld);
 
 	vecFront = new D3DXVECTOR3(0, 0, 1);    //the up direct of camera(normalize vector)
@@ -39,31 +40,60 @@ GameObject::~GameObject()
 
 void GameObject::calWorldMatrix(void)
 {
-	D3DXVECTOR3 y(0, 1, 0), x(1, 0, 0);
+	D3DXVECTOR3 y(0, 1, 0), z(0, 0, 1);
 	D3DXVec3Normalize(vecFront, vecFront);
 	D3DXVec3Normalize(&y, &y);
-	D3DXVec3Normalize(&x, &x);
+	D3DXVec3Normalize(&z, &z);
+
+	//float r = D3DXVec3Length(vec);
+	//D3DXMATRIX rotZ, rotY;
+	//D3DXMatrixIdentity(&rotZ);
+	//D3DXMatrixIdentity(&rotY);
+	//float ry = sqrt(vec->z*vec->z + vec->x*vec->x);
+
+	//rotZ._11 = vec->y / r;
+	//rotZ._21 = ry / r;
+	//rotZ._12 = -rotZ._21;
+	//rotZ._22 = rotZ._11;
+
+	//rotY._11 = vec->x / ry;
+	//rotY._13 = vec->z / ry;
+	//rotY._31 = -rotY._13;
+	//rotY._33 = rotY._11;
+
+	//*outMat = rotZ*rotY;
 
 	float cosy = D3DXVec3Dot(&y, vecFront);
 	float siny = sqrt(1 - cosy * cosy);
 	siny = vecFront->z < 0 ? -siny : siny;
-	float cosx = D3DXVec3Dot(&x, vecFront);
-	float sinx = sqrt(1 - cosx * cosx);
-	sinx = vecFront->x < 0 ? -sinx : sinx;
+	float cosxz = cosy * cos(D3DX_PI / 2) + siny * sin(D3DX_PI / 2);
+	float sinxz = sqrt(1 - cosxz * cosxz);
+	sinxz = vecFront->z < 0 ? -sinxz : sinxz;
+
+	float cosz = D3DXVec3Dot(&z, vecUp);
+	float sinz = sqrt(1 - cosz * cosz);
+	sinz = vecUp->x < 0 ? -sinz : sinz;
+	float cosyz = cosz * cos(D3DX_PI / 2) + sinz * sin(D3DX_PI / 2);
+	float sinyz = sqrt(1 - cosyz * cosyz);
+	sinyz = vecUp->y < 0 ? -sinyz : sinyz;
 
 	D3DXMATRIX mtxRotateX;
 	D3DXMatrixIdentity(&mtxRotateX);
-	mtxRotateX._22 = cosx;
-	mtxRotateX._23 = -sinx;
-	mtxRotateX._32 = sinx;
-	mtxRotateX._33 = cosx;
+	mtxRotateX._22 = cosxz;
+	mtxRotateX._23 = -sinxz;
+	mtxRotateX._32 = sinxz;
+	mtxRotateX._33 = cosxz;
 
 	D3DXMATRIX mtxRotateY;
 	D3DXMatrixIdentity(&mtxRotateY);
-	mtxRotateY._11 = cosy;
-	mtxRotateY._13 = siny;
-	mtxRotateY._31 = -siny;
-	mtxRotateY._33 = cosy;
+	mtxRotateY._11 = cosyz;
+	mtxRotateY._13 = sinyz;
+	mtxRotateY._31 = -sinyz;
+	mtxRotateY._33 = cosyz;
+
+	D3DXVECTOR3 mtxPreFront(0, 0, 1);
+
+
 
 	D3DXMATRIX mtxTrans;
 	D3DXMatrixIdentity(&mtxTrans);

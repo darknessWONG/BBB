@@ -12,7 +12,7 @@ public:
 	============================================*/
 	virtual void calWorldMatrix(void);
 	virtual void dataUpdate(void);
-	virtual void draw(void) = 0;
+	virtual void draw(LPDIRECT3DDEVICE9 pD3DDevice) = 0;
 
 	/*===========================================
 	public function

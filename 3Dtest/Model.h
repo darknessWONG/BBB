@@ -11,12 +11,12 @@ public:
 	/*===========================================
 	virtual member
 	============================================*/
-	virtual void draw(void);
+	virtual void draw(LPDIRECT3DDEVICE9 pD3DDevice);
 
 	/*===========================================
 	public function
 	============================================*/
-	void loadModel(void);
+	void loadModel(LPDIRECT3DDEVICE9 pD3DDevice);
 
 	/*===========================================
 	public geter / seter
