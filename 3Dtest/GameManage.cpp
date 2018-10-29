@@ -28,7 +28,16 @@ void GameManage::init(void)
 	mesh->loadModel(pD3DDevice);
 	mesh->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
 	mesh->setRotateSpeed(20);
+	mesh->setVecNowPos(new D3DXVECTOR3(0, 5, 0));
 	gameObjects.push_back(mesh);
+
+
+	Model* mesh1 = new Model("tree.x");
+	mesh1->loadModel(pD3DDevice);
+	mesh1->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
+	mesh1->setRotateSpeed(20);
+	mesh1->setVecNowPos(new D3DXVECTOR3(8, 0, 0));
+	gameObjects.push_back(mesh1);
 
 	light = new Light();
 	light->init(pD3DDevice);

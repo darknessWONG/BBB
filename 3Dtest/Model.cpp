@@ -53,6 +53,7 @@ void Model::loadModel(LPDIRECT3DDEVICE9 pD3DDevice)
 	{
 		meshMat[i] = materials[i].MatD3D;
 		meshColor[i] = materials[i].MatD3D.Diffuse;
+		meshMat[i].Ambient = materials[i].MatD3D.Diffuse;
 
 		if (materials[i].pTextureFilename == NULL)
 		{
