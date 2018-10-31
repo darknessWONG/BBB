@@ -17,6 +17,7 @@ public:
 	/*===========================================
 	public function
 	============================================*/
+	void addSpeed(D3DXVECTOR3* speedDir, float speed);
 
 	/*===========================================
 	public geter / seter
@@ -31,10 +32,10 @@ public:
 	void setVecUp(D3DXVECTOR3* vecUp);
 	D3DXVECTOR3* getVecNowPos(void);
 	void setVecNowPos(D3DXVECTOR3* vecNowPos);
-	D3DXVECTOR3* getVecMoveDirect(void);
-	void setVecMoveDirect(D3DXVECTOR3* vecMoveDirect);
-	float getMoveSpeed(void);
-	void setMoveSpeed(float moveSpeed);
+	D3DXVECTOR3* getVecMoveSpeed(void);
+	void setVecMoveSpeed(D3DXVECTOR3* vecMoveSpeed);
+	float getMaxSpeed(void);
+	void setMaxSpeed(float maxSpeed);
 	float getMoveDamping(void);
 	void setMoveDamping(float moveDamping);
 	D3DXVECTOR3* getVecRotateAxis(void);
@@ -51,12 +52,14 @@ private:
 	D3DXVECTOR3 *vecUp;	     //the right direct of camera(normalize vector)
 
 	D3DXVECTOR3 *vecNowPos;
-	D3DXVECTOR3 *vecMoveDirect;
-	float moveSpeed;
+	D3DXVECTOR3 *vecMoveSpeed;
+	float maxSpeed;
 	float moveDamping;
 
 	D3DXVECTOR3 *vecRotateAxis;
 	float rotateSpeed;
 	float rotateDamping;
+
+	static D3DXVECTOR3* zeroDirect;
 };
 

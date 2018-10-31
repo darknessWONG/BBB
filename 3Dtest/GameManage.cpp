@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "GameManage.h"
 #include "Model.h"
-
+#include "Player.h"
 
 GameManage::GameManage()
 {
@@ -24,10 +24,12 @@ void GameManage::init(void)
 	D3DXVECTOR3* cameraUp = new D3DXVECTOR3(0, 1, 0);
 	camera = new Camera(cameraPos, cameraWatchAt, cameraUp);
 
-	Model* mesh = new Model("radio.x");
+	Player* mesh = new Player("radio.x");
 	mesh->loadModel(pD3DDevice);
-	mesh->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
-	mesh->setRotateSpeed(20);
+	//mesh->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
+	//mesh->setRotateSpeed(20);
+	mesh->setWalkSpeed(0.01);
+	mesh->setMaxSpeed(0.3);
 	mesh->setVecNowPos(new D3DXVECTOR3(0, 5, 0));
 	gameObjects.push_back(mesh);
 

@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "Common.h"
 
+D3DXVECTOR3* GameObject::zeroDirect = new D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 GameObject::GameObject()
 {
@@ -13,8 +14,7 @@ GameObject::GameObject()
 	vecUp = new D3DXVECTOR3(0, 1, 0);	     //the right direct of camera(normalize vector)
 
 	vecNowPos = new D3DXVECTOR3(0, 0, 0);
-	vecMoveDirect = new D3DXVECTOR3(0, 0, 0);
-	moveSpeed = 0;
+	vecMoveSpeed = new D3DXVECTOR3(0, 0, 0);
 	moveDamping = MOVEDAMPING;
 
 	vecRotateAxis = new D3DXVECTOR3(0, 0, 0);
@@ -32,7 +32,7 @@ GameObject::~GameObject()
 	safe_delete<D3DXVECTOR3>(vecUp);	     //the right direct of camera(normalize vector)
 
 	safe_delete<D3DXVECTOR3>(vecNowPos);
-	safe_delete<D3DXVECTOR3>(vecMoveDirect);
+	safe_delete<D3DXVECTOR3>(vecMoveSpeed);
 
 	safe_delete<D3DXVECTOR3>(vecRotateAxis);
 
@@ -58,8 +58,14 @@ void GameObject::calWorldMatrix(void)
 
 void GameObject::dataUpdate(void)
 {
-	moveSpeed *= moveDamping;
-	D3DXVECTOR3 newPos(*vecNowPos + (*vecMoveDirect * moveSpeed));
+	*vecMoveSpeed *= moveDamping;
+	if (D3DXVec3Length(vecMoveSpeed) > maxSpeed)
+	{
+		D3DXVec3Normalize(vecMoveSpeed, vecMoveSpeed);
+		*vecMoveSpeed *= maxSpeed;
+	}
+
+	D3DXVECTOR3 newPos(*vecNowPos + *vecMoveSpeed);
 	setVecNowPos(&newPos);
 
 	rotateSpeed *= rotateDamping;
@@ -69,6 +75,13 @@ void GameObject::dataUpdate(void)
 	D3DXVec3TransformNormal(vecFront, vecFront, &mtxRotate);
 	D3DXVec3TransformNormal(vecRight, vecRight, &mtxRotate);
 	D3DXVec3TransformNormal(vecUp, vecUp, &mtxRotate);
+}
+
+void GameObject::addSpeed(D3DXVECTOR3 * speedDir, float speed)
+{
+	D3DXVECTOR3 norSpeed;
+	D3DXVec3Normalize(&norSpeed, speedDir);
+	*vecMoveSpeed += norSpeed * speed;
 }
 
 D3DXMATRIX* GameObject::getMtxWorld(void)
@@ -126,25 +139,25 @@ void GameObject::setVecNowPos(D3DXVECTOR3* vecNowPos)
 	this->vecNowPos = new D3DXVECTOR3(*vecNowPos);
 }
 
-D3DXVECTOR3* GameObject::getVecMoveDirect(void)
+D3DXVECTOR3* GameObject::getVecMoveSpeed(void)
 {
-	return vecMoveDirect;
+	return vecMoveSpeed;
 }
 
-void GameObject::setVecMoveDirect(D3DXVECTOR3* vecMoveDirect)
+void GameObject::setVecMoveSpeed(D3DXVECTOR3* vecMoveSpeed)
 {
-	safe_delete<D3DXVECTOR3>(this->vecMoveDirect);
-	this->vecMoveDirect = new D3DXVECTOR3(*vecMoveDirect);
+	safe_delete<D3DXVECTOR3>(this->vecMoveSpeed);
+	this->vecMoveSpeed = new D3DXVECTOR3(*vecMoveSpeed);
 }
 
-float GameObject::getMoveSpeed(void)
+float GameObject::getMaxSpeed(void)
 {
-	return moveSpeed;
+	return maxSpeed;
 }
 
-void GameObject::setMoveSpeed(float moveSpeed)
+void GameObject::setMaxSpeed(float maxSpeed)
 {
-	this->moveSpeed = moveSpeed;
+	this->maxSpeed = maxSpeed;
 }
 
 float GameObject::getMoveDamping(void)
