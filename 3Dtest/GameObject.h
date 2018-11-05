@@ -12,7 +12,12 @@ public:
 	============================================*/
 	virtual void calWorldMatrix(void);
 	virtual void dataUpdate(void);
+	virtual void positionUpdateX(void);
+	virtual void positionUpdateY(void);
+	virtual void positionUpdateZ(void);
+	virtual void positionUpdate(void);
 	virtual void draw(LPDIRECT3DDEVICE9 pD3DDevice) = 0;
+	virtual RECT getBoundingRect(void) = 0;
 
 	/*===========================================
 	public function
@@ -30,6 +35,8 @@ public:
 	void setVecRight(D3DXVECTOR3* vecRight);
 	D3DXVECTOR3* getVecUp(void);
 	void setVecUp(D3DXVECTOR3* vecUp);
+	bool getCanMove(void);
+	void setCanMove(bool canMove);
 	D3DXVECTOR3* getVecNowPos(void);
 	void setVecNowPos(D3DXVECTOR3* vecNowPos);
 	D3DXVECTOR3* getVecMoveSpeed(void);
@@ -51,6 +58,7 @@ private:
 	D3DXVECTOR3 *vecRight;    //the front direct of camera(normalize vector)
 	D3DXVECTOR3 *vecUp;	     //the right direct of camera(normalize vector)
 
+	bool canMove;
 	D3DXVECTOR3 *vecNowPos;
 	D3DXVECTOR3 *vecMoveSpeed;
 	float maxSpeed;

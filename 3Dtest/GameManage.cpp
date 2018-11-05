@@ -30,7 +30,7 @@ void GameManage::init(void)
 	//mesh->setRotateSpeed(20);
 	mesh->setWalkSpeed(0.01);
 	mesh->setMaxSpeed(0.3);
-	mesh->setVecNowPos(new D3DXVECTOR3(0, 5, 0));
+	mesh->setVecNowPos(new D3DXVECTOR3(0, 0, 0));
 	gameObjects.push_back(mesh);
 
 
