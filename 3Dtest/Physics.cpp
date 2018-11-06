@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Physics.h"
 #include <math.h>
 

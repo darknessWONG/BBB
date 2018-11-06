@@ -13,7 +13,8 @@ public:
 	============================================*/
 	virtual void dataUpdate(void);
 	virtual void draw(LPDIRECT3DDEVICE9 pD3DDevice);
-	virtual RECT getBoundingRect(void);
+	virtual RECTF getBoundingRect(void);
+	virtual D3DXVECTOR2 getBoundingCenter(void);
 
 	/*===========================================
 	public function

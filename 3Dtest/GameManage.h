@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "Camera.h"
 #include "Light.h"
+#include "MapManage.h"
 
 class GameManage
 {
@@ -12,6 +13,7 @@ public:
 	~GameManage();
 	
 	void init(void);
+	void beforeUpdate(void);
 	void update(void);
 	void draw(void);
 	void release(void);
@@ -24,5 +26,7 @@ private:
 	Camera* camera = NULL;
 	Light* light = NULL;
 	vector<GameObject*> gameObjects;
+
+	MapManage* map = NULL;
 };
 

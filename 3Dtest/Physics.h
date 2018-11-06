@@ -15,6 +15,14 @@ typedef struct
 	float pointBX;
 }line_segment;
 
+typedef struct
+{
+	float left;
+	float right;
+	float top;
+	float bottom;
+}RECTF;
+
 enum TouchType
 {
 	noTouch,

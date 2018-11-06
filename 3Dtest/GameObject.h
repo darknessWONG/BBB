@@ -1,5 +1,6 @@
 #pragma once
 #include <d3dx9.h>
+#include "Physics.h"
 
 class GameObject
 {
@@ -17,7 +18,10 @@ public:
 	virtual void positionUpdateZ(void);
 	virtual void positionUpdate(void);
 	virtual void draw(LPDIRECT3DDEVICE9 pD3DDevice) = 0;
-	virtual RECT getBoundingRect(void) = 0;
+	virtual RECTF getBoundingRect(void) = 0;
+	//the center of the bounding box
+	//position may not be the center of the bounding box, so it have to be calculate
+	virtual D3DXVECTOR2 getBoundingCenter(void) = 0;
 
 	/*===========================================
 	public function

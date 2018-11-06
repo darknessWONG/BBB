@@ -54,6 +54,17 @@ void Camera::draw(LPDIRECT3DDEVICE9 pD3DDevice)
 	pD3DDevice->SetTransform(D3DTS_PROJECTION, &mtxProjection);
 }
 
+RECTF Camera::getBoundingRect(void)
+{
+	RECTF rect = { 0, 0, 0, 0 };
+	return rect;
+}
+
+D3DXVECTOR2 Camera::getBoundingCenter(void)
+{
+	return {0, 0};
+}
+
 void Camera::calWatchAt(void)
 {
 	D3DXVECTOR3 watchAt(*getVecNowPos() + *geteVecFront() * distance);

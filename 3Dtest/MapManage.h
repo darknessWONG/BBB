@@ -27,6 +27,7 @@ public:
 	void addGameObject(GameObject* gameObject);
 	void cleanGameObject(void);
 	void updateGameObejcts(void);
+	void drawGameObjects(LPDIRECT3DDEVICE9 pD3DDevice);
 
 	vector<TouchStatus> collision_detection(GameObject* gameObject);
 	TouchType collision_detection(GameObject* gameObject1, GameObject* gameObject2);

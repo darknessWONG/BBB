@@ -123,12 +123,21 @@ void Model::setModelPath(string modelPath)
 	this->modelPath = modelPath;
 }
 
-RECT Model::getBoundingRect(void)
+RECTF Model::getBoundingRect(void)
 {
-	RECT rect;
-	rect.left = boundingBoxMax.x + getVecNowPos()->x;
-	rect.right = boundingBoxMin.x + getVecNowPos()->x;
-	rect.top = boundingBoxMin.z + getVecNowPos()->z;
-	rect.bottom = boundingBoxMax.z + getVecNowPos()->z;
+	RECTF rect;
+	rect.left = boundingBoxMin.x + getVecNowPos()->x;
+	rect.right = boundingBoxMax.x + getVecNowPos()->x;
+	rect.top = boundingBoxMax.z + getVecNowPos()->z;
+	rect.bottom = boundingBoxMin.z + getVecNowPos()->z;
 	return rect;
+}
+
+D3DXVECTOR2 Model::getBoundingCenter(void)
+{
+	RECTF rect = getBoundingRect();
+	D3DXVECTOR2 center = { 0, 0 };
+	center.x = rect.left + (rect.right - rect.left) / 2;
+	center.y = rect.bottom + (rect.top - rect.bottom) / 2;
+	return center;
 }
