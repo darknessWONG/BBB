@@ -29,4 +29,3 @@ private:
 
 	MapManage* map = NULL;
 };
-

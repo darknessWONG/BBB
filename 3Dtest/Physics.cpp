@@ -61,8 +61,17 @@ bool Physics::rectInRect(D3DXVECTOR2 * rectPoints1, D3DXVECTOR2 * rectPoints2)
 	return false;
 }
 
-TouchType Physics::rectTouchRect(D3DXVECTOR2 * rectPoints1, D3DXVECTOR2 * rectPoints2)
+TouchType Physics::rectTouchRect(D3DXVECTOR2 * rect1, D3DXVECTOR2 * rect2)
 {
+	D3DXVECTOR2 rectPoints1[4];
+	D3DXVECTOR2 rectPoints2[4];
+	for (int i = 0; i < 4; i++)
+	{
+		rectPoints1[i].x = round(rect1[i].x, FLOATBITS);
+		rectPoints1[i].y = round(rect1[i].y, FLOATBITS);
+		rectPoints2[i].x = round(rect2[i].x, FLOATBITS);
+		rectPoints2[i].y = round(rect2[i].y, FLOATBITS);
+	}
 	float lengthx = fabs((rectPoints1[1].x - rectPoints1[0].x) + (rectPoints2[1].x - rectPoints2[0].x));
 	float lengthy = fabs((rectPoints1[2].y - rectPoints1[0].y) + (rectPoints2[2].y - rectPoints2[0].y));
 	float lx = fabs((rectPoints1[0].x + rectPoints1[1].x) - (rectPoints2[0].x + rectPoints2[1].x));
@@ -133,6 +142,15 @@ BOOL Physics::linesegmentTouchLinesegment(line_segment line1, line_segment line2
 			return FALSE;
 		}
 	}
+}
+
+float Physics::round(float src, int bits)
+{
+	stringstream ss;
+	ss << fixed << setprecision(bits) << src;
+	ss >> src;
+
+	return src;
 }
 
 void Physics::sortLinesegmentPoint(line_segment & line)

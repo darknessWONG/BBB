@@ -42,8 +42,8 @@ void GameManage::init(void)
 	mesh1->loadModel(pD3DDevice);
 	mesh1->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
 	//mesh1->setRotateSpeed(20);
-	mesh1->setCanMove(true);
-	mesh1->setVecNowPos(new D3DXVECTOR3(8, 0, 0));
+	mesh1->setCanMove(false);
+	mesh1->setVecNowPos(new D3DXVECTOR3(7.5, 0, 0));
 	gameObjects.push_back(mesh1);
 	map->addGameObject(mesh1);
 

@@ -1,5 +1,5 @@
-#pragma once
-#include <d3dx9.h>
+﻿#pragma once
+#include "stdafx.h"
 
 typedef struct
 {
@@ -52,6 +52,7 @@ public:
 	static BOOL lineTouchLine(line line1, line line2, D3DXVECTOR2& intersectPoint);
 	static BOOL linesegmentTouchLinesegment(line_segment line1, line_segment line2);
 
+	static float round(float src, int bits);
 private:
 	static void sortLinesegmentPoint(line_segment& line);
 };

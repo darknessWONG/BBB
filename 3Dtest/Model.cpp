@@ -126,10 +126,21 @@ void Model::setModelPath(string modelPath)
 RECTF Model::getBoundingRect(void)
 {
 	RECTF rect;
-	rect.left = boundingBoxMin.x + getVecNowPos()->x;
-	rect.right = boundingBoxMax.x + getVecNowPos()->x;
-	rect.top = boundingBoxMax.z + getVecNowPos()->z;
-	rect.bottom = boundingBoxMin.z + getVecNowPos()->z;
+	float maxX = Physics::round(boundingBoxMax.x, FLOATBITS);
+	float minX = Physics::round(boundingBoxMin.x, FLOATBITS);
+	float maxZ = Physics::round(boundingBoxMax.z, FLOATBITS);
+	float minZ = Physics::round(boundingBoxMin.z, FLOATBITS);
+	float posX = Physics::round(getVecNowPos()->x, FLOATBITS);
+	float posZ = Physics::round(getVecNowPos()->z, FLOATBITS); 
+
+	//rect.left = (float)((double)boundingBoxMin.x + (double)getVecNowPos()->x);
+	//rect.right = (float)((double)boundingBoxMax.x + (double)getVecNowPos()->x);
+	//rect.top = (float)((double)boundingBoxMax.z + (double)getVecNowPos()->z);
+	//rect.bottom = (float)((double)boundingBoxMin.z + (double)getVecNowPos()->z);
+	rect.left = minX + posX;
+	rect.right = maxX + posX;
+	rect.top = maxZ + posZ;
+	rect.bottom = minZ + posZ;
 	return rect;
 }
 
@@ -137,7 +148,7 @@ D3DXVECTOR2 Model::getBoundingCenter(void)
 {
 	RECTF rect = getBoundingRect();
 	D3DXVECTOR2 center = { 0, 0 };
-	center.x = rect.left + (rect.right - rect.left) / 2;
-	center.y = rect.bottom + (rect.top - rect.bottom) / 2;
+	center.x = Physics::round((rect.left + rect.right) / 2, FLOATBITS);
+	center.y = Physics::round((rect.bottom + rect.top) / 2, FLOATBITS);
 	return center;
 }
