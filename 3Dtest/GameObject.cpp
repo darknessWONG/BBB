@@ -61,7 +61,6 @@ void GameObject::calWorldMatrix(void)
 
 void GameObject::dataUpdate(void)
 {
-	*vecMoveSpeed *= moveDamping;
 	if (D3DXVec3Length(vecMoveSpeed) > maxSpeed)
 	{
 		D3DXVec3Normalize(vecMoveSpeed, vecMoveSpeed);
@@ -75,6 +74,8 @@ void GameObject::dataUpdate(void)
 	D3DXVec3TransformNormal(vecFront, vecFront, &mtxRotate);
 	D3DXVec3TransformNormal(vecRight, vecRight, &mtxRotate);
 	D3DXVec3TransformNormal(vecUp, vecUp, &mtxRotate);
+
+	*vecMoveSpeed *= moveDamping;
 }
 
 void GameObject::positionUpdateX(void)

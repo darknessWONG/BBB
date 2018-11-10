@@ -34,6 +34,7 @@ void MapManage::updateGameObejcts(void)
 		//x position update
 		gameObjects[i]->positionUpdateX();
 		vector<TouchStatus> list = collision_detection(gameObjects[i]);
+		D3DXVECTOR3 xSpeed = *gameObjects[i]->getVecMoveSpeed();
 		while (list.size() != 0)
 		{
 			D3DXVECTOR3 new_point(*(gameObjects[i]->getVecNowPos()));
@@ -42,20 +43,17 @@ void MapManage::updateGameObejcts(void)
 			//position is the center of the model coordinates, 
 			//but it may not be the center of the bounding box
 			float gameObjCenterPos = Physics::round(gameObjects[i]->getBoundingCenter().x - new_point.x, FLOATBITS);
-			if (gameObjects[i]->getVecMoveSpeed()->x > 0)
+			if (xSpeed.x > 0)
 			{
 				new_point.x = Physics::round((list[0].obj->getBoundingCenter().x - ((gameObjLength + listObjLength) / 2.0) - gameObjCenterPos), FLOATBITS);
 			}
 			else
 			{
-				/*float a = list[0].obj->getBoundingCenter().x;
-				float b = ((gameObjLength + listObjLength) / 2);
-				float c = gameObjCenterPos;
-				new_point.x = a + b - c;*/
-				//new_point.x = (float)((double)list[0].obj->getBoundingCenter().x + (((double)gameObjLength + (double)listObjLength) / 2.0) - (double)gameObjCenterPos);
 				new_point.x = Physics::round((list[0].obj->getBoundingCenter().x + ((gameObjLength + listObjLength) / 2.0) - gameObjCenterPos), FLOATBITS);
-
 			}
+			D3DXVECTOR3 newSpeed = *gameObjects[i]->getVecMoveSpeed();
+			newSpeed.x = 0.0f;
+			gameObjects[i]->setVecMoveSpeed(&newSpeed);
 			gameObjects[i]->setVecNowPos(&new_point);
 			list = collision_detection(gameObjects[i]);
 		}
@@ -63,6 +61,7 @@ void MapManage::updateGameObejcts(void)
 		//z position update
 		gameObjects[i]->positionUpdateZ();
 		list = collision_detection(gameObjects[i]);
+		D3DXVECTOR3 zSpeed = *gameObjects[i]->getVecMoveSpeed();
 		while (list.size() != 0)
 		{
 			D3DXVECTOR3 new_point(*(gameObjects[i]->getVecNowPos()));
@@ -71,7 +70,7 @@ void MapManage::updateGameObejcts(void)
 			//position is the center of the model coordinates, 
 			//but it may not be the center of the bounding box
 			float gameObjCenterPos = Physics::round(gameObjects[i]->getBoundingCenter().y - new_point.z, FLOATBITS);
-			if (gameObjects[i]->getVecMoveSpeed()->z > 0)
+			if (zSpeed.z > 0)
 			{
 				new_point.z = Physics::round(list[0].obj->getBoundingCenter().y - ((gameObjWidth + listObjWidth) / 2.0) - gameObjCenterPos, FLOATBITS);
 			}
@@ -80,6 +79,9 @@ void MapManage::updateGameObejcts(void)
 				//new_point.z = (float)((double)list[0].obj->getBoundingCenter().y + (((double)gameObjWidth + (double)listObjWidth) / 2.0) - (double)gameObjCenterPos);
 				new_point.z = Physics::round(list[0].obj->getBoundingCenter().y + ((gameObjWidth + listObjWidth) / 2.0) - gameObjCenterPos, FLOATBITS);
 			}
+			D3DXVECTOR3 newSpeed = *gameObjects[i]->getVecMoveSpeed();
+			newSpeed.z = 0.0f;
+			gameObjects[i]->setVecMoveSpeed(&newSpeed);
 			gameObjects[i]->setVecNowPos(&new_point);
 			list = collision_detection(gameObjects[i]);
 		}

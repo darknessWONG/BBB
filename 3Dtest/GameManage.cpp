@@ -10,6 +10,7 @@ GameManage::GameManage()
 GameManage::GameManage(LPDIRECT3DDEVICE9 pD3DDevice)
 {
 	setPD3DDevice(pD3DDevice);
+	gs = GameState::GameStateTitleInit;
 }
 
 
@@ -26,6 +27,96 @@ void GameManage::init(void)
 	D3DXVECTOR3* cameraUp = new D3DXVECTOR3(0, 1, 0);
 	camera = new Camera(cameraPos, cameraWatchAt, cameraUp);
 
+
+
+	light = new Light();
+	light->init(pD3DDevice);
+}
+
+void GameManage::beforeUpdate(void)
+{
+	map->cleanGameObject();
+	int gameObjectsNum = gameObjects.size();
+	for (int i = 0; i < gameObjectsNum; i++)
+	{
+		map->addGameObject(gameObjects[i]);
+	}
+}
+
+void GameManage::update(void)
+{
+	beforeUpdate();
+	camera->dataUpdate();
+	camera->calWatchAt();
+	camera->calWorldMatrix();
+	camera->draw(pD3DDevice);
+
+	switch (gs)
+	{
+	case GameState::GameStateTitleInit:
+		titleStateInit();
+		break;
+	case GameState::GameStateTitleRunning:
+		titleStateUpdate();
+		break;
+	case GameState::GameStateTitleClean:
+		titleStateClean();
+		break;
+	case GameState::GameStateGameInit:
+		gameStateInit();
+		break;
+	case GameState::GameStateGameRunning:
+		gameStateUpdate();
+		break;
+	case GameState::GameStateGameClean:
+		gameStateClean();
+		break;
+	case GameState::GameStateEndInit:
+		endStateInit();
+		break;
+	case GameState::GameStateEndRunning:
+		endStateUpdate();
+		break;
+	case GameState::GameStateEndClean:
+		endStateClean();
+		break;
+	}
+
+	map->updateGameObejcts();
+}
+
+void GameManage::draw(void)
+{
+	light->lightSet(pD3DDevice);
+	camera->draw(pD3DDevice);
+
+	if (gs == GameState::GameStateGameRunning)
+	{
+		map->drawGameObjects(pD3DDevice);
+	}
+}
+
+void GameManage::release(void)
+{
+}
+
+void GameManage::titleStateInit(void)
+{
+	gs = GameState::GameStateTitleRunning;
+}
+
+void GameManage::titleStateUpdate(void)
+{
+	gs = GameState::GameStateTitleClean;
+}
+
+void GameManage::titleStateClean(void)
+{
+	gs = GameState::GameStateGameInit;
+}
+
+void GameManage::gameStateInit(void)
+{
 	Player* mesh = new Player("radio.x");
 	mesh->loadModel(pD3DDevice);
 	//mesh->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
@@ -47,51 +138,37 @@ void GameManage::init(void)
 	gameObjects.push_back(mesh1);
 	map->addGameObject(mesh1);
 
-	light = new Light();
-	light->init(pD3DDevice);
+	gs = GameState::GameStateGameRunning;
 }
 
-void GameManage::beforeUpdate(void)
+void GameManage::gameStateUpdate(void)
 {
-	map->cleanGameObject();
-	int gameObjectsNum = gameObjects.size();
-	for (int i = 0; i < gameObjectsNum; i++)
-	{
-		map->addGameObject(gameObjects[i]);
-	}
+	checkEnd();
 }
 
-void GameManage::update(void)
+void GameManage::gameStateClean(void)
 {
-	beforeUpdate();
-
-	camera->dataUpdate();
-	camera->calWatchAt();
-	camera->calWorldMatrix();
-	camera->draw(pD3DDevice);
-
-	/*for (int i = 0; i < gameObjects.size(); i++)
-	{
-		gameObjects[i]->dataUpdate();
-		gameObjects[i]->calWorldMatrix();
-	}*/
-	map->updateGameObejcts();
+	gs = GameState::GameStateEndInit;
 }
 
-void GameManage::draw(void)
+void GameManage::endStateInit(void)
 {
-	light->lightSet(pD3DDevice);
-	camera->draw(pD3DDevice);
-	
-	//for (int i = 0; i < gameObjects.size(); i++)
-	//{
-	//	gameObjects[i]->draw(pD3DDevice);
-	//}
-	map->drawGameObjects(pD3DDevice);
+	gs = GameState::GameStateEndRunning;
 }
 
-void GameManage::release(void)
+void GameManage::endStateUpdate(void)
 {
+	gs = GameState::GameStateEndClean;
+}
+
+void GameManage::endStateClean(void)
+{
+	gs = GameState::GameStateTitleInit;
+}
+
+void GameManage::checkEnd(void)
+{
+	//gs = GameState::GameStateGameClean;
 }
 
 void GameManage::setPD3DDevice(LPDIRECT3DDEVICE9 pD3DDevice)
