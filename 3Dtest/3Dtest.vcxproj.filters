@@ -69,6 +69,15 @@
     <ClInclude Include="Physics.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Vigilance.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SpecialArea.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -117,6 +126,15 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Physics.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Vigilance.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SpecialArea.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

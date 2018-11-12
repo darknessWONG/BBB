@@ -38,18 +38,26 @@ void MapManage::updateGameObejcts(void)
 		while (list.size() != 0)
 		{
 			D3DXVECTOR3 new_point(*(gameObjects[i]->getVecNowPos()));
-			float gameObjLength = Physics::round(fabs(gameObjects[i]->getBoundingRect().right - gameObjects[i]->getBoundingRect().left), FLOATBITS);
-			float listObjLength = Physics::round(fabs(list[0].obj->getBoundingRect().right - list[0].obj->getBoundingRect().left), FLOATBITS);
+			//float gameObjLength = Physics::round(fabs(gameObjects[i]->getBoundingRect().right - gameObjects[i]->getBoundingRect().left), FLOATBITS);
+			//float listObjLength = Physics::round(fabs(list[0].obj->getBoundingRect().right - list[0].obj->getBoundingRect().left), FLOATBITS);
+			////position is the center of the model coordinates, 
+			////but it may not be the center of the bounding box
+			//float gameObjCenterPos = Physics::round(gameObjects[i]->getBoundingCenter().x - new_point.x, FLOATBITS);
+			float gameObjLength = fabs(gameObjects[i]->getBoundingRect().right - gameObjects[i]->getBoundingRect().left);
+			float listObjLength = fabs(list[0].obj->getBoundingRect().right - list[0].obj->getBoundingRect().left);
 			//position is the center of the model coordinates, 
 			//but it may not be the center of the bounding box
-			float gameObjCenterPos = Physics::round(gameObjects[i]->getBoundingCenter().x - new_point.x, FLOATBITS);
+			float gameObjCenterPos = gameObjects[i]->getBoundingCenter().x - new_point.x;
 			if (xSpeed.x > 0)
 			{
-				new_point.x = Physics::round((list[0].obj->getBoundingCenter().x - ((gameObjLength + listObjLength) / 2.0) - gameObjCenterPos), FLOATBITS);
+				//new_point.x = Physics::round((list[0].obj->getBoundingCenter().x - ((gameObjLength + listObjLength) / 2.0) - gameObjCenterPos), FLOATBITS);
+				new_point.x = (list[0].obj->getBoundingCenter().x - ((gameObjLength + listObjLength) / 2.0) - gameObjCenterPos);
 			}
 			else
 			{
-				new_point.x = Physics::round((list[0].obj->getBoundingCenter().x + ((gameObjLength + listObjLength) / 2.0) - gameObjCenterPos), FLOATBITS);
+				//new_point.x = Physics::round((list[0].obj->getBoundingCenter().x + ((gameObjLength + listObjLength) / 2.0) - gameObjCenterPos), FLOATBITS);
+
+				new_point.x = (list[0].obj->getBoundingCenter().x + ((gameObjLength + listObjLength) / 2.0) - gameObjCenterPos);
 			}
 			D3DXVECTOR3 newSpeed = *gameObjects[i]->getVecMoveSpeed();
 			newSpeed.x = 0.0f;
@@ -65,19 +73,27 @@ void MapManage::updateGameObejcts(void)
 		while (list.size() != 0)
 		{
 			D3DXVECTOR3 new_point(*(gameObjects[i]->getVecNowPos()));
-			float gameObjWidth = Physics::round(abs(gameObjects[i]->getBoundingRect().top - gameObjects[i]->getBoundingRect().bottom), FLOATBITS);
-			float listObjWidth = Physics::round(abs(list[0].obj->getBoundingRect().top - list[0].obj->getBoundingRect().bottom), FLOATBITS);
+			//float gameObjWidth = Physics::round(abs(gameObjects[i]->getBoundingRect().top - gameObjects[i]->getBoundingRect().bottom), FLOATBITS);
+			//float listObjWidth = Physics::round(abs(list[0].obj->getBoundingRect().top - list[0].obj->getBoundingRect().bottom), FLOATBITS);
+			////position is the center of the model coordinates, 
+			////but it may not be the center of the bounding box
+			//float gameObjCenterPos = Physics::round(gameObjects[i]->getBoundingCenter().y - new_point.z, FLOATBITS);
+			float gameObjWidth = abs(gameObjects[i]->getBoundingRect().top - gameObjects[i]->getBoundingRect().bottom);
+			float listObjWidth = abs(list[0].obj->getBoundingRect().top - list[0].obj->getBoundingRect().bottom);
 			//position is the center of the model coordinates, 
 			//but it may not be the center of the bounding box
-			float gameObjCenterPos = Physics::round(gameObjects[i]->getBoundingCenter().y - new_point.z, FLOATBITS);
+			float gameObjCenterPos = gameObjects[i]->getBoundingCenter().y - new_point.z;
 			if (zSpeed.z > 0)
 			{
-				new_point.z = Physics::round(list[0].obj->getBoundingCenter().y - ((gameObjWidth + listObjWidth) / 2.0) - gameObjCenterPos, FLOATBITS);
+				//new_point.z = Physics::round(list[0].obj->getBoundingCenter().y - ((gameObjWidth + listObjWidth) / 2.0) - gameObjCenterPos, FLOATBITS);
+
+				new_point.z = list[0].obj->getBoundingCenter().y - ((gameObjWidth + listObjWidth) / 2.0) - gameObjCenterPos;
 			}
 			else
 			{
-				//new_point.z = (float)((double)list[0].obj->getBoundingCenter().y + (((double)gameObjWidth + (double)listObjWidth) / 2.0) - (double)gameObjCenterPos);
-				new_point.z = Physics::round(list[0].obj->getBoundingCenter().y + ((gameObjWidth + listObjWidth) / 2.0) - gameObjCenterPos, FLOATBITS);
+				//new_point.z = Physics::round(list[0].obj->getBoundingCenter().y + ((gameObjWidth + listObjWidth) / 2.0) - gameObjCenterPos, FLOATBITS);
+
+				new_point.z = list[0].obj->getBoundingCenter().y + ((gameObjWidth + listObjWidth) / 2.0) - gameObjCenterPos;
 			}
 			D3DXVECTOR3 newSpeed = *gameObjects[i]->getVecMoveSpeed();
 			newSpeed.z = 0.0f;

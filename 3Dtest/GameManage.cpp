@@ -2,6 +2,8 @@
 #include "GameManage.h"
 #include "Model.h"
 #include "Player.h"
+#include "Vigilance.h"
+#include "Enemy.h"
 
 GameManage::GameManage()
 {
@@ -137,6 +139,27 @@ void GameManage::gameStateInit(void)
 	mesh1->setVecNowPos(new D3DXVECTOR3(7.5, 0, 0));
 	gameObjects.push_back(mesh1);
 	map->addGameObject(mesh1);
+
+
+	Enemy* mesh3 = new Enemy("radio.x");
+	mesh3->loadModel(pD3DDevice);
+	mesh3->setWalkSpeed(0.01);
+	mesh3->setMaxSpeed(0.3);
+	mesh3->setCanMove(true);
+	mesh3->setVecNowPos(new D3DXVECTOR3(1, 0, 1));
+	mesh3->setVecPatrolStart(new D3DXVECTOR3(1, 0, 1));
+	mesh3->setVecPatrolEnd(new D3DXVECTOR3(1, 0, 5));
+	gameObjects.push_back(mesh3);
+	map->addGameObject(mesh3);
+
+	Vigilance* mesh4 = new Vigilance();
+	mesh4->setMaxSpeed(0.3);
+	mesh4->setCanMove(true);
+	mesh4->setVecNowPos(new D3DXVECTOR3(1, 0, 1));
+	mesh4->setBelong(mesh3);
+	mesh4->setRadius(2);
+	gameObjects.push_back(mesh4);
+	map->addGameObject(mesh4);
 
 	gs = GameState::GameStateGameRunning;
 }
