@@ -160,15 +160,6 @@ void GameManage::tutorial_state_clean(void)
 
 void GameManage::game_state_init(void)
 {
-	//Model* mesh = new Model("radio.x");
-	//mesh->loadModel(pD3DDevice);
-	//mesh->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
-	//mesh->setRotateSpeed(3);
-
-	//gameObjects.push_back(mesh);
-
-	//gs = GameState_game_state_running;
-
 	Player* mesh = new Player("radio.x");
 	mesh->loadModel(pD3DDevice);
 	//mesh->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
@@ -225,11 +216,10 @@ void GameManage::game_state_clean(void)
 	int idx = gameObjects.size();
 	for (int i = 0; i < idx; i++)
 	{
-		// TODO
-		GameObject* ptemp = gameObjects[idx - i - 1];
-		gameObjects.pop_back();
-		delete ptemp;
+		delete gameObjects[i];
 	}
+	gameObjects.clear();
+	map->cleanGameObject();
 
 	gs = GameState_result_state_init;
 }

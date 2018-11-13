@@ -7,7 +7,7 @@ class Enemy :
 public:
 	Enemy();
 	Enemy(string modelPath);
-	~Enemy();
+	virtual ~Enemy();
 
 	/*===========================================
 	virtual member

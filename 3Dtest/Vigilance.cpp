@@ -51,6 +51,8 @@ void Vigilance::draw(LPDIRECT3DDEVICE9 pD3DDevice)
 	//D3DXCreateSphere(pD3DDevice, boundingSphereRadius, 20, 20, &sphereMesh, 0);
 	pD3DDevice->SetTransform(D3DTS_WORLD, getMtxWorld());
 	SphereMesh->DrawSubset(0);
+
+	SphereMesh->Release();
 #endif
 }
 

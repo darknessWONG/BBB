@@ -5,7 +5,7 @@ class SpecialArea :
 {
 public:
 	SpecialArea();
-	~SpecialArea();
+	virtual ~SpecialArea();
 
 	/*===========================================
 	virtual member

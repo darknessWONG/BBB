@@ -28,7 +28,6 @@ GameObject::GameObject()
 GameObject::~GameObject()
 {
 	safe_delete<D3DXMATRIX>(mtxWorld);
-
 	safe_delete<D3DXVECTOR3>(vecFront);    //the up direct of camera(normalize vector)
 	safe_delete<D3DXVECTOR3>(vecRight);    //the front direct of camera(normalize vector)
 	safe_delete<D3DXVECTOR3>(vecUp);	     //the right direct of camera(normalize vector)
@@ -37,7 +36,6 @@ GameObject::~GameObject()
 	safe_delete<D3DXVECTOR3>(vecMoveSpeed);
 
 	safe_delete<D3DXVECTOR3>(vecRotateAxis);
-
 }
 
 void GameObject::calWorldMatrix(void)

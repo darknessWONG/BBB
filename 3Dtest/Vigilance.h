@@ -6,7 +6,7 @@ class Vigilance :
 {
 public:
 	Vigilance();
-	~Vigilance();
+	virtual ~Vigilance();
 	
 	/*===========================================
 	virtual member
