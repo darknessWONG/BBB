@@ -1,17 +1,20 @@
 #include "stdafx.h"
 #include "GameManage.h"
 #include "Model.h"
+#include "Player.h"
+#include "Vigilance.h"
+#include "Enemy.h"
 #include "input.h"
-
 
 GameManage::GameManage()
 {
-	state = GameState::GameState_title_state_init;
+	gs = GameState::GameState_title_state_init;
 }
 
 GameManage::GameManage(LPDIRECT3DDEVICE9 pD3DDevice)
 {
 	setPD3DDevice(pD3DDevice);
+	gs = GameState::GameState_title_state_init;
 }
 
 
@@ -21,6 +24,8 @@ GameManage::~GameManage()
 
 void GameManage::init(void)
 {
+	map = new MapManage();
+
 	D3DXVECTOR3* cameraPos = new D3DXVECTOR3(0, 20, -20);
 	D3DXVECTOR3* cameraWatchAt = new D3DXVECTOR3(0, 0, 0);
 	D3DXVECTOR3* cameraUp = new D3DXVECTOR3(0, 1, 0);
@@ -30,21 +35,25 @@ void GameManage::init(void)
 	light->init(pD3DDevice);
 }
 
+void GameManage::beforeUpdate(void)
+{
+	map->cleanGameObject();
+	int gameObjectsNum = gameObjects.size();
+	for (int i = 0; i < gameObjectsNum; i++)
+	{
+		map->addGameObject(gameObjects[i]);
+	}
+}
+
 void GameManage::update(void)
 {
-	// past
+	beforeUpdate();
 	camera->dataUpdate();
 	camera->calWatchAt();
 	camera->calWorldMatrix();
 	camera->draw(pD3DDevice);
 
-	for (int i = 0; i < gameObjects.size(); i++)
-	{
-		gameObjects[i]->dataUpdate();
-		gameObjects[i]->calWorldMatrix();
-	}
-
-	switch (state)
+	switch (gs)
 	{
 	case GameState::GameState_title_state_init:
 		title_state_init();
@@ -100,16 +109,18 @@ void GameManage::update(void)
 	case GameState::GameState_ranking_state_clean:
 		ranking_state_clean();
 	}
+
+	map->updateGameObejcts();
 }
 
 void GameManage::draw(void)
 {
 	light->lightSet(pD3DDevice);
 	camera->draw(pD3DDevice);
-	
-	for (int i = 0; i < gameObjects.size(); i++)
+
+	if (gs == GameState::GameState_game_state_running)
 	{
-		gameObjects[i]->draw(pD3DDevice);
+		map->drawGameObjects(pD3DDevice);
 	}
 }
 
@@ -119,44 +130,88 @@ void GameManage::release(void)
 
 void GameManage::title_state_init(void)
 {
-	state = GameState_title_state_running;
+	gs = GameState_title_state_running;
 }
 
 void GameManage::title_state_update(void)
 {
-	state = GameState_title_state_clean;
+	gs = GameState_title_state_clean;
 }
 
 void GameManage::title_state_clean(void)
 {
-	state = GameState_tutorial_state_init;
+	gs = GameState_tutorial_state_init;
 }
 
 void GameManage::tutorial_state_init(void)
 {
-	state = GameState_tutorial_state_running;
+	gs = GameState_tutorial_state_running;
 }
 
 void GameManage::tutorial_state_update(void)
 {
-	state = GameState_tutorial_state_clean;
+	gs = GameState_tutorial_state_clean;
 }
 
 void GameManage::tutorial_state_clean(void)
 {
-	state = GameState_game_state_init;
+	gs = GameState_game_state_init;
 }
 
 void GameManage::game_state_init(void)
 {
-	Model* mesh = new Model("radio.x");
+	//Model* mesh = new Model("radio.x");
+	//mesh->loadModel(pD3DDevice);
+	//mesh->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
+	//mesh->setRotateSpeed(3);
+
+	//gameObjects.push_back(mesh);
+
+	//gs = GameState_game_state_running;
+
+	Player* mesh = new Player("radio.x");
 	mesh->loadModel(pD3DDevice);
-	mesh->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
-	mesh->setRotateSpeed(3);
-
+	//mesh->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
+	//mesh->setRotateSpeed(20);
+	mesh->setWalkSpeed(0.01);
+	mesh->setMaxSpeed(0.3);
+	mesh->setCanMove(true);
+	mesh->setVecNowPos(new D3DXVECTOR3(0, 0, 0));
 	gameObjects.push_back(mesh);
+	map->addGameObject(mesh);
 
-	state = GameState_game_state_running;
+
+	Model* mesh1 = new Model("tree.x");
+	mesh1->loadModel(pD3DDevice);
+	mesh1->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
+	//mesh1->setRotateSpeed(20);
+	mesh1->setCanMove(false);
+	mesh1->setVecNowPos(new D3DXVECTOR3(7.5, 0, 0));
+	gameObjects.push_back(mesh1);
+	map->addGameObject(mesh1);
+
+
+	Enemy* mesh3 = new Enemy("radio.x");
+	mesh3->loadModel(pD3DDevice);
+	mesh3->setWalkSpeed(0.01);
+	mesh3->setMaxSpeed(0.3);
+	mesh3->setCanMove(true);
+	mesh3->setVecNowPos(new D3DXVECTOR3(1, 0, 1));
+	mesh3->setVecPatrolStart(new D3DXVECTOR3(1, 0, 1));
+	mesh3->setVecPatrolEnd(new D3DXVECTOR3(1, 0, 5));
+	gameObjects.push_back(mesh3);
+	map->addGameObject(mesh3);
+
+	Vigilance* mesh4 = new Vigilance();
+	mesh4->setMaxSpeed(0.3);
+	mesh4->setCanMove(true);
+	mesh4->setVecNowPos(new D3DXVECTOR3(1, 0, 1));
+	mesh4->setBelong(mesh3);
+	mesh4->setRadius(2);
+	gameObjects.push_back(mesh4);
+	map->addGameObject(mesh4);
+
+	gs = GameState::GameState_game_state_running;
 }
 
 void GameManage::game_state_update(void)
@@ -176,52 +231,57 @@ void GameManage::game_state_clean(void)
 		delete ptemp;
 	}
 
-	state = GameState_result_state_init;
+	gs = GameState_result_state_init;
 }
 
 void GameManage::result_state_init(void)
 {
-	state = GameState_result_state_running;
+	gs = GameState_result_state_running;
 }
 
 void GameManage::result_state_update(void)
 {
-	state = GameState_result_state_clean;
+	gs = GameState_result_state_clean;
 }
 
 void GameManage::result_state_clean(void)
 {
-	state = GameState_naming_state_init;
+	gs = GameState_naming_state_init;
 }
 
 void GameManage::naming_state_init(void)
 {
-	state = GameState_naming_state_running;
+	gs = GameState_naming_state_running;
 }
 
 void GameManage::naming_state_update(void)
 {
-	state = GameState_naming_state_clean;
+	gs = GameState_naming_state_clean;
 }
 
 void GameManage::naming_state_clean(void)
 {
-	state = GameState_ranking_state_init;
+	gs = GameState_ranking_state_init;
 }
 
 void GameManage::ranking_state_init(void)
 {
-	state = GameState_ranking_state_running;
+	gs = GameState_ranking_state_running;
 }
 
 void GameManage::ranking_state_update(void)
 {
-	state = GameState_ranking_state_clean;
+	gs = GameState_ranking_state_clean;
 }
 
 void GameManage::ranking_state_clean(void)
 {
-	state = GameState_title_state_init;
+	gs = GameState_title_state_init;
+}
+
+void GameManage::checkEnd(void)
+{
+	//gs = GameState::GameStateGameClean;
 }
 
 void GameManage::setPD3DDevice(LPDIRECT3DDEVICE9 pD3DDevice)
@@ -233,6 +293,6 @@ void GameManage::state_read_input(GameState name)
 {
 	if (Keyboard_IsPress(DIK_SPACE))
 	{
-		state = name;
+		gs = name;
 	}
 }

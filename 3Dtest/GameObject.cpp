@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "Common.h"
 
+D3DXVECTOR3* GameObject::zeroDirect = new D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 GameObject::GameObject()
 {
@@ -13,13 +14,14 @@ GameObject::GameObject()
 	vecUp = new D3DXVECTOR3(0, 1, 0);	     //the right direct of camera(normalize vector)
 
 	vecNowPos = new D3DXVECTOR3(0, 0, 0);
-	vecMoveDirect = new D3DXVECTOR3(0, 0, 0);
-	moveSpeed = 0;
+	vecMoveSpeed = new D3DXVECTOR3(0, 0, 0);
 	moveDamping = MOVEDAMPING;
 
 	vecRotateAxis = new D3DXVECTOR3(0, 0, 0);
 	rotateSpeed = 0;
 	rotateDamping = ROTATEDAMPING;
+
+	canMove = false;
 }
 
 
@@ -32,7 +34,7 @@ GameObject::~GameObject()
 	safe_delete<D3DXVECTOR3>(vecUp);	     //the right direct of camera(normalize vector)
 
 	safe_delete<D3DXVECTOR3>(vecNowPos);
-	safe_delete<D3DXVECTOR3>(vecMoveDirect);
+	safe_delete<D3DXVECTOR3>(vecMoveSpeed);
 
 	safe_delete<D3DXVECTOR3>(vecRotateAxis);
 
@@ -40,42 +42,6 @@ GameObject::~GameObject()
 
 void GameObject::calWorldMatrix(void)
 {
-	D3DXVECTOR3 y(0, 1, 0), x(1, 0, 0);
-	D3DXVec3Normalize(vecFront, vecFront);
-	D3DXVec3Normalize(&y, &y);
-	D3DXVec3Normalize(&x, &x);
-
-	float cosy = D3DXVec3Dot(&y, vecFront);
-	float siny = sqrt(1 - cosy * cosy);
-	siny = vecFront->x < 0 ? -siny : siny;
-	float cosxz = cosy * cos(D3DX_PI / 2) + siny * sin(D3DX_PI / 2);
-	float sinxz = sqrt(1 - cosxz * cosxz);
-	sinxz = vecFront->x < 0 ? -sinxz : sinxz;
-
-	float cosx = D3DXVec3Dot(&x, vecFront);
-	float sinx = sqrt(1 - cosx * cosx);
-	sinx = vecFront->z < 0 ? -sinx : sinx;
-	float coszy = cosx * cos(D3DX_PI / 2) + sinx * sin(D3DX_PI / 2);
-	float sinzy = sqrt(1 - coszy * coszy);
-	sinzy = vecFront->z < 0 ? -sinzy : sinzy;
-
-	D3DXMATRIX mtxRotateX;
-	D3DXMatrixIdentity(&mtxRotateX);
-	mtxRotateX._22 = cosxz;
-	mtxRotateX._23 = -sinxz;
-	mtxRotateX._32 = sinxz;
-	mtxRotateX._33 = cosxz;
-
-	D3DXMATRIX mtxRotateY;
-	D3DXMatrixIdentity(&mtxRotateY);
-	mtxRotateY._11 = coszy;
-	mtxRotateY._13 = sinzy;
-	mtxRotateY._31 = -sinzy;
-	mtxRotateY._33 = coszy;
-
-	D3DXVECTOR3 mtxPreFront(0, 0, 1);
-
-
 
 	D3DXMATRIX mtxTrans;
 	D3DXMatrixIdentity(&mtxTrans);
@@ -84,16 +50,22 @@ void GameObject::calWorldMatrix(void)
 	mtxTrans._43 = vecNowPos->z;
 
 	D3DXMatrixIdentity(mtxWorld);
-	D3DXMatrixMultiply(mtxWorld, mtxWorld, &mtxRotateX);
-	D3DXMatrixMultiply(mtxWorld, mtxWorld, &mtxRotateY);
+	D3DXMATRIX mtxRotate;
+	D3DXMatrixIdentity(&mtxRotate);
+	D3DXMatrixRotationAxis(&mtxRotate, vecRotateAxis, rotateSpeed);
+
+	D3DXMatrixMultiply(mtxWorld, mtxWorld, &mtxRotate);
 	D3DXMatrixMultiply(mtxWorld, mtxWorld, &mtxTrans);
+
 }
 
 void GameObject::dataUpdate(void)
 {
-	moveSpeed *= moveDamping;
-	D3DXVECTOR3 newPos(*vecNowPos + (*vecMoveDirect * moveSpeed));
-	setVecNowPos(&newPos);
+	if (D3DXVec3Length(vecMoveSpeed) > maxSpeed)
+	{
+		D3DXVec3Normalize(vecMoveSpeed, vecMoveSpeed);
+		*vecMoveSpeed *= maxSpeed;
+	}
 
 	rotateSpeed *= rotateDamping;
 	D3DXMATRIX mtxRotate;
@@ -102,6 +74,42 @@ void GameObject::dataUpdate(void)
 	D3DXVec3TransformNormal(vecFront, vecFront, &mtxRotate);
 	D3DXVec3TransformNormal(vecRight, vecRight, &mtxRotate);
 	D3DXVec3TransformNormal(vecUp, vecUp, &mtxRotate);
+
+	*vecMoveSpeed *= moveDamping;
+}
+
+void GameObject::positionUpdateX(void)
+{
+	D3DXVECTOR3 newPos(*vecNowPos);
+	newPos.x += vecMoveSpeed->x;
+	setVecNowPos(&newPos);
+}
+
+void GameObject::positionUpdateY(void)
+{
+	D3DXVECTOR3 newPos(*vecNowPos);
+	newPos.y += vecMoveSpeed->y;
+	setVecNowPos(&newPos);
+}
+
+void GameObject::positionUpdateZ(void)
+{
+	D3DXVECTOR3 newPos(*vecNowPos);
+	newPos.z += vecMoveSpeed->z;
+	setVecNowPos(&newPos);
+}
+
+void GameObject::positionUpdate(void)
+{
+	D3DXVECTOR3 newPos(*vecNowPos + *vecMoveSpeed);
+	setVecNowPos(&newPos);
+}
+
+void GameObject::addSpeed(D3DXVECTOR3 * speedDir, float speed)
+{
+	D3DXVECTOR3 norSpeed;
+	D3DXVec3Normalize(&norSpeed, speedDir);
+	*vecMoveSpeed += norSpeed * speed;
 }
 
 D3DXMATRIX* GameObject::getMtxWorld(void)
@@ -148,6 +156,16 @@ void GameObject::setVecUp(D3DXVECTOR3* vecUp)
 	this->vecUp = new D3DXVECTOR3(*vecUp);
 }
 
+bool GameObject::getCanMove(void)
+{
+	return canMove;
+}
+
+void GameObject::setCanMove(bool canMove)
+{
+	this->canMove = canMove;
+}
+
 D3DXVECTOR3* GameObject::getVecNowPos(void)
 {
 	return vecNowPos;
@@ -159,25 +177,25 @@ void GameObject::setVecNowPos(D3DXVECTOR3* vecNowPos)
 	this->vecNowPos = new D3DXVECTOR3(*vecNowPos);
 }
 
-D3DXVECTOR3* GameObject::getVecMoveDirect(void)
+D3DXVECTOR3* GameObject::getVecMoveSpeed(void)
 {
-	return vecMoveDirect;
+	return vecMoveSpeed;
 }
 
-void GameObject::setVecMoveDirect(D3DXVECTOR3* vecMoveDirect)
+void GameObject::setVecMoveSpeed(D3DXVECTOR3* vecMoveSpeed)
 {
-	safe_delete<D3DXVECTOR3>(this->vecMoveDirect);
-	this->vecMoveDirect = new D3DXVECTOR3(*vecMoveDirect);
+	safe_delete<D3DXVECTOR3>(this->vecMoveSpeed);
+	this->vecMoveSpeed = new D3DXVECTOR3(*vecMoveSpeed);
 }
 
-float GameObject::getMoveSpeed(void)
+float GameObject::getMaxSpeed(void)
 {
-	return moveSpeed;
+	return maxSpeed;
 }
 
-void GameObject::setMoveSpeed(float moveSpeed)
+void GameObject::setMaxSpeed(float maxSpeed)
 {
-	this->moveSpeed = moveSpeed;
+	this->maxSpeed = maxSpeed;
 }
 
 float GameObject::getMoveDamping(void)

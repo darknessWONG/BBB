@@ -4,17 +4,26 @@
 
 Model::Model()
 {
-
+	boundingBoxMin = { 0.0f, 0.0f, 0.0f };
+	boundingBoxMax = { 0.0f, 0.0f, 0.0f };
 }
 
 Model::Model(string modelPath)
 {
 	this->modelPath = modelPath;
+	boundingBoxMin = { 0.0f, 0.0f, 0.0f };
+	boundingBoxMax = { 0.0f, 0.0f, 0.0f };
 }
 
 
 Model::~Model()
 {
+}
+
+void Model::dataUpdate(void)
+{
+	calBoundingBox();
+	GameObject::dataUpdate();
 }
 
 void Model::draw(LPDIRECT3DDEVICE9 pD3DDevice)
@@ -26,6 +35,24 @@ void Model::draw(LPDIRECT3DDEVICE9 pD3DDevice)
 		pD3DDevice->SetTexture(0, meshTexture[i]);
 		mesh->DrawSubset(i);
 	}
+
+#ifdef _DEBUG
+	D3DMATERIAL9 blue;
+	blue.Diffuse = { 1.0f, 1.0f, 1.0f, 0.5f };
+	blue.Ambient = blue.Diffuse;
+	pD3DDevice->SetMaterial(&blue);
+	pD3DDevice->SetTexture(0, 0); // disable texture
+
+	LPD3DXMESH boxMesh;
+
+	D3DXMATRIX mtxBoxWorld = *getMtxWorld();
+	mtxBoxWorld._42 += (boundingBoxMax.y - boundingBoxMin.y) / 2;
+
+	D3DXCreateBox(pD3DDevice, boundingBoxMax.x - boundingBoxMin.x, boundingBoxMax.y - boundingBoxMin.y, boundingBoxMax.z - boundingBoxMin.z, &boxMesh, 0);
+	//D3DXCreateSphere(pD3DDevice, boundingSphereRadius, 20, 20, &sphereMesh, 0);
+	pD3DDevice->SetTransform(D3DTS_WORLD, &mtxBoxWorld);
+	boxMesh->DrawSubset(0);
+#endif
 }
 
 void Model::loadModel(LPDIRECT3DDEVICE9 pD3DDevice)
@@ -53,6 +80,7 @@ void Model::loadModel(LPDIRECT3DDEVICE9 pD3DDevice)
 	{
 		meshMat[i] = materials[i].MatD3D;
 		meshColor[i] = materials[i].MatD3D.Diffuse;
+		meshMat[i].Ambient = materials[i].MatD3D.Diffuse;
 
 		if (materials[i].pTextureFilename == NULL)
 		{
@@ -64,10 +92,25 @@ void Model::loadModel(LPDIRECT3DDEVICE9 pD3DDevice)
 		}
 	}
 
+	calBoundingBox();
+
 	if (mtrlBuffer != NULL)
 	{
 		mtrlBuffer->Release();
 	}
+
+
+}
+
+void Model::calBoundingBox(void)
+{
+	BYTE* v = 0;
+	mesh->LockVertexBuffer(0, (void**)&v);
+
+	int num = mesh->GetNumVertices();
+	D3DXComputeBoundingBox((D3DXVECTOR3*)v, num, D3DXGetFVFVertexSize(mesh->GetFVF()), &boundingBoxMin, &boundingBoxMax);
+	//D3DXComputeBoundingSphere((D3DXVECTOR3*)v, num, D3DXGetFVFVertexSize(mesh->GetFVF()), &boundingSphereCenter, &boundingSphereRadius);
+	mesh->UnlockVertexBuffer();
 }
 
 string Model::getModelPath(void)
@@ -78,4 +121,34 @@ string Model::getModelPath(void)
 void Model::setModelPath(string modelPath)
 {
 	this->modelPath = modelPath;
+}
+
+RECTF Model::getBoundingRect(void)
+{
+	RECTF rect;
+	float maxX = Physics::round(boundingBoxMax.x, FLOATBITS);
+	float minX = Physics::round(boundingBoxMin.x, FLOATBITS);
+	float maxZ = Physics::round(boundingBoxMax.z, FLOATBITS);
+	float minZ = Physics::round(boundingBoxMin.z, FLOATBITS);
+	float posX = Physics::round(getVecNowPos()->x, FLOATBITS);
+	float posZ = Physics::round(getVecNowPos()->z, FLOATBITS); 
+
+	//rect.left = (float)((double)boundingBoxMin.x + (double)getVecNowPos()->x);
+	//rect.right = (float)((double)boundingBoxMax.x + (double)getVecNowPos()->x);
+	//rect.top = (float)((double)boundingBoxMax.z + (double)getVecNowPos()->z);
+	//rect.bottom = (float)((double)boundingBoxMin.z + (double)getVecNowPos()->z);
+	rect.left = minX + posX;
+	rect.right = maxX + posX;
+	rect.top = maxZ + posZ;
+	rect.bottom = minZ + posZ;
+	return rect;
+}
+
+D3DXVECTOR2 Model::getBoundingCenter(void)
+{
+	RECTF rect = getBoundingRect();
+	D3DXVECTOR2 center = { 0, 0 };
+	center.x = Physics::round((rect.left + rect.right) / 2, FLOATBITS);
+	center.y = Physics::round((rect.bottom + rect.top) / 2, FLOATBITS);
+	return center;
 }

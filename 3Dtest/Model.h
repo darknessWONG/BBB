@@ -11,18 +11,23 @@ public:
 	/*===========================================
 	virtual member
 	============================================*/
+	virtual void dataUpdate(void);
 	virtual void draw(LPDIRECT3DDEVICE9 pD3DDevice);
+	virtual RECTF getBoundingRect(void);
+	virtual D3DXVECTOR2 getBoundingCenter(void);
 
 	/*===========================================
 	public function
 	============================================*/
 	void loadModel(LPDIRECT3DDEVICE9 pD3DDevice);
+	void calBoundingBox(void);
 
 	/*===========================================
 	public geter / seter
 	============================================*/
 	string getModelPath(void);
 	void setModelPath(string modelPath);
+
 
 private:
 
@@ -43,5 +48,11 @@ private:
 	D3DXMATERIAL *materials = NULL;
 
 	D3DMATERIAL9 *meshMat = NULL;
+
+	D3DXVECTOR3 boundingBoxMin;
+	D3DXVECTOR3 boundingBoxMax;
+
+	//D3DXVECTOR3 boundingSphereCenter;
+	//float boundingSphereRadius;
 };
 

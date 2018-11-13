@@ -1,5 +1,6 @@
 #pragma once
 #include <d3dx9.h>
+#include "Physics.h"
 
 class GameObject
 {
@@ -12,11 +13,20 @@ public:
 	============================================*/
 	virtual void calWorldMatrix(void);
 	virtual void dataUpdate(void);
+	virtual void positionUpdateX(void);
+	virtual void positionUpdateY(void);
+	virtual void positionUpdateZ(void);
+	virtual void positionUpdate(void);
 	virtual void draw(LPDIRECT3DDEVICE9 pD3DDevice) = 0;
+	virtual RECTF getBoundingRect(void) = 0;
+	//the center of the bounding box
+	//position may not be the center of the bounding box, so it have to be calculate
+	virtual D3DXVECTOR2 getBoundingCenter(void) = 0;
 
 	/*===========================================
 	public function
 	============================================*/
+	void addSpeed(D3DXVECTOR3* speedDir, float speed);
 
 	/*===========================================
 	public geter / seter
@@ -29,12 +39,14 @@ public:
 	void setVecRight(D3DXVECTOR3* vecRight);
 	D3DXVECTOR3* getVecUp(void);
 	void setVecUp(D3DXVECTOR3* vecUp);
+	bool getCanMove(void);
+	void setCanMove(bool canMove);
 	D3DXVECTOR3* getVecNowPos(void);
 	void setVecNowPos(D3DXVECTOR3* vecNowPos);
-	D3DXVECTOR3* getVecMoveDirect(void);
-	void setVecMoveDirect(D3DXVECTOR3* vecMoveDirect);
-	float getMoveSpeed(void);
-	void setMoveSpeed(float moveSpeed);
+	D3DXVECTOR3* getVecMoveSpeed(void);
+	void setVecMoveSpeed(D3DXVECTOR3* vecMoveSpeed);
+	float getMaxSpeed(void);
+	void setMaxSpeed(float maxSpeed);
 	float getMoveDamping(void);
 	void setMoveDamping(float moveDamping);
 	D3DXVECTOR3* getVecRotateAxis(void);
@@ -50,13 +62,16 @@ private:
 	D3DXVECTOR3 *vecRight;    //the front direct of camera(normalize vector)
 	D3DXVECTOR3 *vecUp;	     //the right direct of camera(normalize vector)
 
+	bool canMove;
 	D3DXVECTOR3 *vecNowPos;
-	D3DXVECTOR3 *vecMoveDirect;
-	float moveSpeed;
+	D3DXVECTOR3 *vecMoveSpeed;
+	float maxSpeed;
 	float moveDamping;
 
 	D3DXVECTOR3 *vecRotateAxis;
 	float rotateSpeed;
 	float rotateDamping;
+
+	static D3DXVECTOR3* zeroDirect;
 };
 

@@ -13,7 +13,9 @@ public:
 	virtual member
 	============================================*/
 	virtual void draw(LPDIRECT3DDEVICE9 pD3DDevice);
-
+	virtual RECTF getBoundingRect(void);
+	virtual D3DXVECTOR2 getBoundingCenter(void);
+	
 	/*===========================================
 	public function
 	============================================*/

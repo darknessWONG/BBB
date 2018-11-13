@@ -4,6 +4,21 @@
 #include "Camera.h"
 #include "Light.h"
 #include "static.h"
+#include "MapManage.h"
+
+//enum GameState
+//{
+//	GameStateTitleInit,
+//	GameStateTitleRunning,
+//	GameStateTitleClean,
+//	GameStateGameInit,
+//	GameStateGameRunning,
+//	GameStateGameClean,
+//	GameStateEndInit,
+//	GameStateEndRunning,
+//	GameStateEndClean,
+//	GameStateMax
+//};
 
 class GameManage
 {
@@ -13,6 +28,7 @@ public:
 	~GameManage();
 	
 	void init(void);
+	void beforeUpdate(void);
 	void update(void);
 	void draw(void);
 	void release(void);
@@ -37,6 +53,8 @@ public:
 	void ranking_state_update(void);
 	void ranking_state_clean(void);
 
+	void checkEnd(void);
+
 	void setPD3DDevice(LPDIRECT3DDEVICE9 pD3DDevice);
 private:
 	void state_read_input(GameState name);
@@ -47,6 +65,7 @@ private:
 	Light* light = NULL;
 	vector<GameObject*> gameObjects;
 
-	GameState state;
-};
+	MapManage* map = NULL;
 
+	GameState gs;
+};

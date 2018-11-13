@@ -57,6 +57,27 @@
     <ClInclude Include="input.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Chara.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MapManage.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Vigilance.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SpecialArea.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -93,6 +114,27 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="input.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Chara.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MapManage.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Vigilance.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SpecialArea.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
