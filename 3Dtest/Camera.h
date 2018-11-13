@@ -8,7 +8,7 @@ class Camera
 public:
 	Camera();
 	Camera(D3DXVECTOR3* position, D3DXVECTOR3* watchAt, D3DXVECTOR3* up);
-	~Camera();
+	virtual ~Camera();
 	/*===========================================
 	virtual member
 	============================================*/

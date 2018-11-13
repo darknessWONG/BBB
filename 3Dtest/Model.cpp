@@ -18,6 +18,25 @@ Model::Model(string modelPath)
 
 Model::~Model()
 {
+	mesh->Release();
+	mesh = NULL;
+	adacencyBuffer->Release();
+	adacencyBuffer = NULL;
+
+	for (int i = 0; i < numMaterials; i++)
+	{
+		if (meshTexture[i] != NULL)
+		{
+			meshTexture[i]->Release();
+			meshTexture[i] = NULL;
+		}
+	}
+	delete[] meshColor;
+	meshColor = NULL;
+	delete[] meshTexture;
+	meshTexture = NULL;
+
+	materials = NULL;
 }
 
 void Model::dataUpdate(void)
@@ -52,6 +71,8 @@ void Model::draw(LPDIRECT3DDEVICE9 pD3DDevice)
 	//D3DXCreateSphere(pD3DDevice, boundingSphereRadius, 20, 20, &sphereMesh, 0);
 	pD3DDevice->SetTransform(D3DTS_WORLD, &mtxBoxWorld);
 	boxMesh->DrawSubset(0);
+
+	boxMesh->Release();
 #endif
 }
 

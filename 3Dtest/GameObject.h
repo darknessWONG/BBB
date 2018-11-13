@@ -6,7 +6,7 @@ class GameObject
 {
 public:
 	GameObject();
-	~GameObject();
+	virtual ~GameObject();
 
 	/*===========================================
 	virtual member

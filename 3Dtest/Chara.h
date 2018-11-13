@@ -6,7 +6,7 @@ class Chara :
 public:
 	Chara();
 	Chara(string modelPath);
-	~Chara();
+	virtual ~Chara();
 
 	float getWalkSpeed(void);
 	void setWalkSpeed(float walkSpeed);

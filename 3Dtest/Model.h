@@ -7,7 +7,7 @@ class Model :
 public:
 	Model();
 	Model(string modelPath);
-	~Model();
+	virtual ~Model();
 	/*===========================================
 	virtual member
 	============================================*/
