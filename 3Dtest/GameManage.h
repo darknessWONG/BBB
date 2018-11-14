@@ -3,7 +3,10 @@
 #include "GameObject.h"
 #include "Camera.h"
 #include "Light.h"
+#include "Vigilance.h"
 #include "MapManage.h"
+#include "Player.h"
+#include "Enemy.h"
 
 enum GameState
 {
@@ -43,13 +46,20 @@ public:
 	void endStateClean(void);
 	void checkEnd(void);
 
+	void enemyUpdate(void);
+
 	void setPD3DDevice(LPDIRECT3DDEVICE9 pD3DDevice);
 private:
 	LPDIRECT3DDEVICE9 pD3DDevice = NULL;
 
 	Camera* camera = NULL;
 	Light* light = NULL;
-	vector<GameObject*> gameObjects;
+
+	Player *player = NULL;
+	vector<Enemy*> enemys;
+	vector<Vigilance*> vigliances;
+
+	vector<GameObject*> others;
 
 	MapManage* map = NULL;
 

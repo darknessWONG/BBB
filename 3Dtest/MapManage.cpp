@@ -13,7 +13,10 @@ MapManage::~MapManage()
 
 void MapManage::addGameObject(GameObject * gameObject)
 {
-	gameObjects.push_back(gameObject);
+	if (gameObject != NULL)
+	{
+		gameObjects.push_back(gameObject);
+	}
 }
 
 void MapManage::cleanGameObject(void)
@@ -138,6 +141,56 @@ TouchType MapManage::collision_detection(GameObject * gameObject1, GameObject * 
 
 	return is_hitted;
 
+}
+
+vector<GameObject*> MapManage::calObjectInCycle(Vigilance * cycle)
+{
+	D3DXVECTOR2 center = cycle->getBoundingCenter();
+	Cycle c;
+	c.center_x = center.x;
+	c.center_y = center.y;
+	c.r = cycle->getRadius();
+
+	int gameObjectNum = gameObjects.size();
+	vector<GameObject*> list;
+	for (int i = 0; i < gameObjectNum; i++)
+	{
+		if (gameObjects[i] == cycle)
+		{
+			continue;
+		}
+		D3DXVECTOR2 objCenter = gameObjects[i]->getBoundingCenter();
+		if (Physics::pointInCycle(&c, &objCenter))
+		{
+			list.push_back(gameObjects[i]);
+		}
+	}
+	return list;
+}
+
+vector<GameObject*> MapManage::calObjectOnSight(Enemy * enemy, Player * player)
+{
+	line_segment sight = Physics::createLinesegment(enemy->getBoundingCenter(), player->getBoundingCenter());
+
+	vector<GameObject*> list;
+
+	int gameObjNum = gameObjects.size();
+	for (int i = 0; i < gameObjNum; i++)
+	{
+		if (gameObjects[i] == enemy || gameObjects[i] == player || typeid(Vigilance) == typeid(*gameObjects[i]))
+		{
+			continue;
+		}
+		RECTF rect = gameObjects[i]->getBoundingRect();
+		line_segment diagonal1 = Physics::createLinesegment(D3DXVECTOR2(rect.left, rect.top), D3DXVECTOR2(rect.right, rect.bottom));
+		line_segment diagonal2 = Physics::createLinesegment(D3DXVECTOR2(rect.right, rect.top), D3DXVECTOR2(rect.left, rect.bottom));
+		if (Physics::linesegmentTouchLinesegment(sight, diagonal1) || Physics::linesegmentTouchLinesegment(sight, diagonal2))
+		{
+			list.push_back(gameObjects[i]);
+		}
+	}
+
+	return list;
 }
 
 vector<TouchStatus> MapManage::collision_detection(GameObject * gameObject)

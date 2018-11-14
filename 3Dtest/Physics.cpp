@@ -67,10 +67,10 @@ TouchType Physics::rectTouchRect(D3DXVECTOR2 * rect1, D3DXVECTOR2 * rect2)
 	D3DXVECTOR2 rectPoints2[4];
 	for (int i = 0; i < 4; i++)
 	{
-		//rectPoints1[i].x = round(rect1[i].x, FLOATBITS);
-		//rectPoints1[i].y = round(rect1[i].y, FLOATBITS);
-		//rectPoints2[i].x = round(rect2[i].x, FLOATBITS);
-		//rectPoints2[i].y = round(rect2[i].y, FLOATBITS);
+		/*rectPoints1[i].x = round(rect1[i].x, FLOATBITS);
+		rectPoints1[i].y = round(rect1[i].y, FLOATBITS);
+		rectPoints2[i].x = round(rect2[i].x, FLOATBITS);
+		rectPoints2[i].y = round(rect2[i].y, FLOATBITS);*/
 
 		rectPoints1[i].x = rect1[i].x;
 		rectPoints1[i].y = rect1[i].y;
@@ -101,6 +101,18 @@ TouchType Physics::rectTouchRect(D3DXVECTOR2 * rect1, D3DXVECTOR2 * rect2)
 	return TouchType::noTouch;
 }
 
+bool Physics::pointInCycle(Cycle * cycle, D3DXVECTOR2 * point)
+{
+	float dis = (point->x - cycle->center_x) * (point->x - cycle->center_x) + (point->y - cycle->center_y) * (point->y - cycle->center_y);
+	float ra2 = cycle->r * cycle->r;
+
+	if (round(dis, FLOATBITS) <= round(ra2, FLOATBITS))
+	{
+		return true;
+	}
+	return false;
+}
+
 BOOL Physics::lineTouchLine(line line1, line line2, D3DXVECTOR2& intersectPoint)
 {
 	if (line1.a == line2.a)
@@ -115,7 +127,7 @@ BOOL Physics::lineTouchLine(line line1, line line2, D3DXVECTOR2& intersectPoint)
 		}
 	}
 
-	intersectPoint.x = (line2.b - line1.b) / (line1.a - line1.b);
+	intersectPoint.x = (line2.b - line1.b) / (line1.a - line2.a);
 	intersectPoint.y = line1.a * intersectPoint.x + line1.b;
 
 	return TRUE;
@@ -147,6 +159,22 @@ BOOL Physics::linesegmentTouchLinesegment(line_segment line1, line_segment line2
 			return FALSE;
 		}
 	}
+}
+
+line Physics::createLine(D3DXVECTOR2 point1, D3DXVECTOR2 point2)
+{
+	line li;
+	li.a = (point1.y - point2.y) / (point1.x - point2.x);
+	li.b = point1.y - li.a * point1.x;
+	return li;
+}
+
+line_segment Physics::createLinesegment(D3DXVECTOR2 point1, D3DXVECTOR2 point2)
+{
+	line li = createLine(point1, point2);
+	line_segment lis = { li.a, li.b, point1.x, point2.x };
+
+	return lis;
 }
 
 float Physics::round(float src, int bits)

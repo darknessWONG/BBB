@@ -26,26 +26,29 @@ void Enemy::dataUpdate(void)
 	{
 		vecPatrolTarget = vecPatrolEnd;
 	}
-	D3DXVECTOR3 patrolLine = *vecPatrolEnd - *vecPatrolStart;
-	if (vecPatrolTarget == vecPatrolStart)
+	if (!isTracking)
 	{
-		patrolLine = -patrolLine;
-	}
-	D3DXVECTOR3 nowLine = *vecPatrolTarget - *getVecNowPos();
-
-	float dot = D3DXVec3Dot(&patrolLine, &nowLine);
-	float length = D3DXVec3Length(&patrolLine) * D3DXVec3Length(&nowLine);
-	if (Physics::round(dot, FLOATBITS) == -Physics::round(length, FLOATBITS))
-	{
-		if (vecPatrolTarget == vecPatrolEnd)
+		D3DXVECTOR3 patrolLine = *vecPatrolEnd - *vecPatrolStart;
+		if (vecPatrolTarget == vecPatrolStart)
 		{
-			vecPatrolTarget = vecPatrolStart;
+			patrolLine = -patrolLine;
 		}
-		else
-		{
-			vecPatrolTarget = vecPatrolEnd;
-		}
+		D3DXVECTOR3 nowLine = *vecPatrolTarget - *getVecNowPos();
 
+		float dot = D3DXVec3Dot(&patrolLine, &nowLine);
+		float length = D3DXVec3Length(&patrolLine) * D3DXVec3Length(&nowLine);
+		if (Physics::round(dot, FLOATBITS) == -Physics::round(length, FLOATBITS))
+		{
+			if (vecPatrolTarget == vecPatrolEnd)
+			{
+				vecPatrolTarget = vecPatrolStart;
+			}
+			else
+			{
+				vecPatrolTarget = vecPatrolEnd;
+			}
+
+		}
 	}
 	D3DXVECTOR3 speedDir = *vecPatrolTarget - *getVecNowPos();
 	D3DXVec3Normalize(&speedDir, &speedDir);
@@ -84,6 +87,21 @@ D3DXVECTOR3 * Enemy::getVecPatrolTarget(void)
 
 void Enemy::setVecPatrolTarget(D3DXVECTOR3 * vecPatrolTarget)
 {
-	safe_delete<D3DXVECTOR3>(this->vecPatrolTarget);
+	//safe_delete<D3DXVECTOR3>(this->vecPatrolTarget);
 	this->vecPatrolTarget = new D3DXVECTOR3(*vecPatrolTarget);
+}
+
+bool Enemy::getIsTracking(void)
+{
+	return isTracking;
+}
+
+void Enemy::setIsTracking(bool isTracking)
+{
+
+	if (this->isTracking && !isTracking)
+	{
+		vecPatrolTarget = vecPatrolEnd;
+	}
+	this->isTracking = isTracking;
 }

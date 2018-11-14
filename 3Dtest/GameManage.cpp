@@ -38,10 +38,25 @@ void GameManage::init(void)
 void GameManage::beforeUpdate(void)
 {
 	map->cleanGameObject();
-	int gameObjectsNum = gameObjects.size();
+
+	map->addGameObject(player);
+
+	int gameObjectsNum = enemys.size();
 	for (int i = 0; i < gameObjectsNum; i++)
 	{
-		map->addGameObject(gameObjects[i]);
+		map->addGameObject(enemys[i]);
+	}
+
+	gameObjectsNum = vigliances.size();
+	for (int i = 0; i < gameObjectsNum; i++)
+	{
+		map->addGameObject(vigliances[i]);
+	}
+
+	gameObjectsNum = others.size();
+	for (int i = 0; i < gameObjectsNum; i++)
+	{
+		map->addGameObject(others[i]);
 	}
 }
 
@@ -127,7 +142,7 @@ void GameManage::gameStateInit(void)
 	mesh->setMaxSpeed(0.3);
 	mesh->setCanMove(true);
 	mesh->setVecNowPos(new D3DXVECTOR3(0, 0, 0));
-	gameObjects.push_back(mesh);
+	player = mesh;
 	map->addGameObject(mesh);
 
 
@@ -137,7 +152,7 @@ void GameManage::gameStateInit(void)
 	//mesh1->setRotateSpeed(20);
 	mesh1->setCanMove(false);
 	mesh1->setVecNowPos(new D3DXVECTOR3(7.5, 0, 0));
-	gameObjects.push_back(mesh1);
+	others.push_back(mesh1);
 	map->addGameObject(mesh1);
 
 
@@ -149,7 +164,7 @@ void GameManage::gameStateInit(void)
 	mesh3->setVecNowPos(new D3DXVECTOR3(1, 0, 1));
 	mesh3->setVecPatrolStart(new D3DXVECTOR3(1, 0, 1));
 	mesh3->setVecPatrolEnd(new D3DXVECTOR3(1, 0, 5));
-	gameObjects.push_back(mesh3);
+	enemys.push_back(mesh3);
 	map->addGameObject(mesh3);
 
 	Vigilance* mesh4 = new Vigilance();
@@ -157,8 +172,8 @@ void GameManage::gameStateInit(void)
 	mesh4->setCanMove(true);
 	mesh4->setVecNowPos(new D3DXVECTOR3(1, 0, 1));
 	mesh4->setBelong(mesh3);
-	mesh4->setRadius(2);
-	gameObjects.push_back(mesh4);
+	mesh4->setRadius(7);
+	vigliances.push_back(mesh4);
 	map->addGameObject(mesh4);
 
 	gs = GameState::GameStateGameRunning;
@@ -166,6 +181,7 @@ void GameManage::gameStateInit(void)
 
 void GameManage::gameStateUpdate(void)
 {
+	enemyUpdate();
 	checkEnd();
 }
 
@@ -192,6 +208,41 @@ void GameManage::endStateClean(void)
 void GameManage::checkEnd(void)
 {
 	//gs = GameState::GameStateGameClean;
+}
+
+void GameManage::enemyUpdate(void)
+{
+	int viNum = vigliances.size();
+	for (int i = 0; i < viNum; i++)
+	{
+		bool isPor = false;
+		if (typeid(Enemy) != typeid(*vigliances[i]->getBelong()))
+		{
+			continue;
+		}
+		vector<GameObject*> list = map->calObjectInCycle(vigliances[i]);
+		if (list.size() > 0)
+		{
+			int num = list.size();
+			for (int j = 0; j < num; j++)
+			{
+				if (typeid(Player) == typeid(*list[j]))
+				{
+					D3DXVECTOR2 listObjCenter = list[j]->getBoundingCenter();
+					D3DXVECTOR3 targe = D3DXVECTOR3(listObjCenter.x, 0, listObjCenter.y);
+					
+					vector<GameObject*> sightList = map->calObjectOnSight(((Enemy*)(vigliances[i]->getBelong())), (Player*)list[j]);
+					if (sightList.size() == 0)
+					{
+						((Enemy*)(vigliances[i]->getBelong()))->setVecPatrolTarget(&targe);
+						isPor = true;
+					}
+					
+				}
+			}
+		}
+		((Enemy*)(vigliances[i]->getBelong()))->setIsTracking(isPor);
+	}
 }
 
 void GameManage::setPD3DDevice(LPDIRECT3DDEVICE9 pD3DDevice)

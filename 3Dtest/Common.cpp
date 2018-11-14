@@ -65,6 +65,14 @@ bool Common::MyDirect3D_Initialize(HWND hWnd)
 	g_pD3DDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	g_pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 
+	//alpha test
+	g_pD3DDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+	g_pD3DDevice->SetRenderState(D3DRS_ALPHAREF, ALPHAREF);
+	g_pD3DDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
+	//z-buffer test
+	g_pD3DDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
+	g_pD3DDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
+
 	// 頂点カラーとテクスチャのブレンド設定
 	g_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
 
