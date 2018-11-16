@@ -78,6 +78,12 @@
     <ClInclude Include="SpecialArea.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Battle.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BattleChara.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -135,6 +141,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="SpecialArea.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Battle.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BattleChara.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

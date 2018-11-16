@@ -46,18 +46,18 @@ void GameManage::beforeUpdate(void)
 	{
 		map->addGameObject(enemys[i]);
 	}
-
+	gameObjectsNum = others.size();
+	for (int i = 0; i < gameObjectsNum; i++)
+	{
+		map->addGameObject(others[i]);
+	}
 	gameObjectsNum = vigliances.size();
 	for (int i = 0; i < gameObjectsNum; i++)
 	{
 		map->addGameObject(vigliances[i]);
 	}
 
-	gameObjectsNum = others.size();
-	for (int i = 0; i < gameObjectsNum; i++)
-	{
-		map->addGameObject(others[i]);
-	}
+
 }
 
 void GameManage::update(void)
@@ -235,7 +235,7 @@ void GameManage::enemyUpdate(void)
 					if (sightList.size() == 0)
 					{
 						((Enemy*)(vigliances[i]->getBelong()))->setVecPatrolTarget(&targe);
-						isPor = true;
+						isPor = true;;
 					}
 					
 				}

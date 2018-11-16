@@ -20,6 +20,8 @@ GameObject::GameObject()
 	vecRotateAxis = new D3DXVECTOR3(0, 0, 0);
 	rotateSpeed = 0;
 	rotateDamping = ROTATEDAMPING;
+	vecTargetFront = NULL;
+
 
 	canMove = false;
 }
@@ -35,6 +37,7 @@ GameObject::~GameObject()
 
 	safe_delete<D3DXVECTOR3>(vecNowPos);
 	safe_delete<D3DXVECTOR3>(vecMoveSpeed);
+	safe_delete<D3DXVECTOR3>(vecTargetFront);
 
 	safe_delete<D3DXVECTOR3>(vecRotateAxis);
 
@@ -43,16 +46,30 @@ GameObject::~GameObject()
 void GameObject::calWorldMatrix(void)
 {
 
+	D3DXMatrixIdentity(mtxWorld);
+
 	D3DXMATRIX mtxTrans;
 	D3DXMatrixIdentity(&mtxTrans);
 	mtxTrans._41 = vecNowPos->x;
 	mtxTrans._42 = vecNowPos->y;
 	mtxTrans._43 = vecNowPos->z;
 
-	D3DXMatrixIdentity(mtxWorld);
+	//D3DXMATRIX mtxRotate;
+	//D3DXMatrixIdentity(&mtxRotate);
+	//D3DXMatrixRotationAxis(&mtxRotate, vecRotateAxis, rotateSpeed);
+
+	float cosFront = vecFront->z;
+	float sinFront = sqrt(1 - cosFront * cosFront);
+	if (vecFront->x > 0)
+	{
+		sinFront = -sinFront;
+	}
 	D3DXMATRIX mtxRotate;
 	D3DXMatrixIdentity(&mtxRotate);
-	D3DXMatrixRotationAxis(&mtxRotate, vecRotateAxis, rotateSpeed);
+	mtxRotate._11 = cosFront;
+	mtxRotate._13 = sinFront;
+	mtxRotate._31 = -sinFront;
+	mtxRotate._33 = cosFront;
 
 	D3DXMatrixMultiply(mtxWorld, mtxWorld, &mtxRotate);
 	D3DXMatrixMultiply(mtxWorld, mtxWorld, &mtxTrans);
@@ -66,6 +83,7 @@ void GameObject::dataUpdate(void)
 		D3DXVec3Normalize(vecMoveSpeed, vecMoveSpeed);
 		*vecMoveSpeed *= maxSpeed;
 	}
+	*vecMoveSpeed *= moveDamping;
 
 	rotateSpeed *= rotateDamping;
 	D3DXMATRIX mtxRotate;
@@ -75,7 +93,11 @@ void GameObject::dataUpdate(void)
 	D3DXVec3TransformNormal(vecRight, vecRight, &mtxRotate);
 	D3DXVec3TransformNormal(vecUp, vecUp, &mtxRotate);
 
-	*vecMoveSpeed *= moveDamping;
+	if (vecTargetFront != NULL && *vecFront != *vecTargetFront)
+	{
+		vecFront = vecTargetFront;
+		D3DXVec3Cross(vecRight, vecFront, vecUp);
+	}
 }
 
 void GameObject::positionUpdateX(void)
@@ -237,4 +259,15 @@ float GameObject::getRotateDamping(void)
 void GameObject::setRotateDamping(float rotateDamping)
 {
 	this->rotateDamping = rotateDamping;
+}
+
+D3DXVECTOR3 * GameObject::getVecTargetFront(void)
+{
+	return vecTargetFront;
+}
+
+void GameObject::setVecTargetFront(D3DXVECTOR3 * vecTargetFront)
+{
+	safe_delete<D3DXVECTOR3>(this->vecTargetFront);
+	this->vecTargetFront = new D3DXVECTOR3(*vecTargetFront);
 }

@@ -152,6 +152,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3Dtest.h" />
+    <ClInclude Include="Battle.h" />
+    <ClInclude Include="BattleChara.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Chara.h" />
     <ClInclude Include="Common.h" />
@@ -174,6 +176,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3Dtest.cpp" />
+    <ClCompile Include="Battle.cpp" />
+    <ClCompile Include="BattleChara.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Chara.cpp" />
     <ClCompile Include="Common.cpp" />

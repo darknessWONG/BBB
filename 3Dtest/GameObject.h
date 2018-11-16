@@ -55,11 +55,13 @@ public:
 	void setRotateSpeed(float rotateSpeed);
 	float getRotateDamping(void);
 	void setRotateDamping(float rotateDamping);
+	D3DXVECTOR3* getVecTargetFront(void);
+	void setVecTargetFront(D3DXVECTOR3* vecTargetFront);
 private:
 	D3DXMATRIX *mtxWorld;
 
-	D3DXVECTOR3 *vecFront;    //the up direct of camera(normalize vector)
-	D3DXVECTOR3 *vecRight;    //the front direct of camera(normalize vector)
+	D3DXVECTOR3 *vecFront;   //the up direct of camera(normalize vector)
+	D3DXVECTOR3 *vecRight;   //the front direct of camera(normalize vector)
 	D3DXVECTOR3 *vecUp;	     //the right direct of camera(normalize vector)
 
 	bool canMove;
@@ -71,6 +73,8 @@ private:
 	D3DXVECTOR3 *vecRotateAxis;
 	float rotateSpeed;
 	float rotateDamping;
+
+	D3DXVECTOR3 *vecTargetFront;
 
 	static D3DXVECTOR3* zeroDirect;
 };

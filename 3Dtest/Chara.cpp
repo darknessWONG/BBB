@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "Common.h"
 #include "Chara.h"
 
 
@@ -14,6 +15,17 @@ Chara::Chara(string modelPath)
 
 Chara::~Chara()
 {
+}
+
+BattleChara * Chara::geBattleChara(void)
+{
+	return bc;
+}
+
+void Chara::seBattleChara(BattleChara * bc)
+{
+	safe_delete<BattleChara>(this->bc);
+	this->bc = bc;
 }
 
 float Chara::getWalkSpeed(void)
