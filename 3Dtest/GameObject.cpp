@@ -78,26 +78,9 @@ void GameObject::calWorldMatrix(void)
 
 void GameObject::dataUpdate(void)
 {
-	if (D3DXVec3Length(vecMoveSpeed) > maxSpeed)
-	{
-		D3DXVec3Normalize(vecMoveSpeed, vecMoveSpeed);
-		*vecMoveSpeed *= maxSpeed;
-	}
-	*vecMoveSpeed *= moveDamping;
+	calSpeed();
+	calFront();
 
-	rotateSpeed *= rotateDamping;
-	D3DXMATRIX mtxRotate;
-	D3DXMatrixIdentity(&mtxRotate);
-	D3DXMatrixRotationAxis(&mtxRotate, vecRotateAxis, rotateSpeed);
-	D3DXVec3TransformNormal(vecFront, vecFront, &mtxRotate);
-	D3DXVec3TransformNormal(vecRight, vecRight, &mtxRotate);
-	D3DXVec3TransformNormal(vecUp, vecUp, &mtxRotate);
-
-	if (vecTargetFront != NULL && *vecFront != *vecTargetFront)
-	{
-		vecFront = vecTargetFront;
-		D3DXVec3Cross(vecRight, vecFront, vecUp);
-	}
 }
 
 void GameObject::positionUpdateX(void)
@@ -132,6 +115,46 @@ void GameObject::addSpeed(D3DXVECTOR3 * speedDir, float speed)
 	D3DXVECTOR3 norSpeed;
 	D3DXVec3Normalize(&norSpeed, speedDir);
 	*vecMoveSpeed += norSpeed * speed;
+}
+
+void GameObject::calSpeed(void)
+{
+	//if (vecTargetPos != NULL)
+	//{
+	//	D3DXVECTOR2 boundingCenter = getBoundingCenter();
+	//	D3DXVECTOR3 newSpeed = *vecTargetPos - D3DXVECTOR3(boundingCenter.x, 0, boundingCenter.y);
+	//	D3DXVECTOR3 nowSpeed;
+	//	D3DXVec3Normalize(&nowSpeed, vecMoveSpeed);
+	//	D3DXVec3Normalize(&newSpeed, &newSpeed);
+	//	if (nowSpeed != newSpeed)
+	//	{
+	//		setVecMoveSpeed(&nowSpeed);
+	//	}
+	//}
+
+	if (D3DXVec3Length(vecMoveSpeed) > maxSpeed)
+	{
+		D3DXVec3Normalize(vecMoveSpeed, vecMoveSpeed);
+		*vecMoveSpeed *= maxSpeed;
+	}
+	*vecMoveSpeed *= moveDamping;
+}
+
+void GameObject::calFront(void)
+{
+	rotateSpeed *= rotateDamping;
+	D3DXMATRIX mtxRotate;
+	D3DXMatrixIdentity(&mtxRotate);
+	D3DXMatrixRotationAxis(&mtxRotate, vecRotateAxis, rotateSpeed);
+	D3DXVec3TransformNormal(vecFront, vecFront, &mtxRotate);
+	D3DXVec3TransformNormal(vecRight, vecRight, &mtxRotate);
+	D3DXVec3TransformNormal(vecUp, vecUp, &mtxRotate);
+
+	if (vecTargetFront != NULL && *vecFront != *vecTargetFront)
+	{
+		vecFront = vecTargetFront;
+		D3DXVec3Cross(vecRight, vecFront, vecUp);
+	}
 }
 
 D3DXMATRIX* GameObject::getMtxWorld(void)
@@ -271,3 +294,13 @@ void GameObject::setVecTargetFront(D3DXVECTOR3 * vecTargetFront)
 	safe_delete<D3DXVECTOR3>(this->vecTargetFront);
 	this->vecTargetFront = new D3DXVECTOR3(*vecTargetFront);
 }
+
+//D3DXVECTOR3 * GameObject::getVecTargetPos(void)S
+//{
+//	return vecTargetPos;
+//}
+//
+//void GameObject::setVecTargetPos(D3DXVECTOR3 * vecTargetPos)
+//{
+//	this->vecTargetPos = new D3DXVECTOR3(*vecTargetPos);
+//}

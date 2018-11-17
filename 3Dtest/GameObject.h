@@ -27,7 +27,9 @@ public:
 	public function
 	============================================*/
 	void addSpeed(D3DXVECTOR3* speedDir, float speed);
-
+	void calSpeed(void);
+	//not just vecFront, vecUp and vecRight will be updated in this function too
+	void calFront(void);
 	/*===========================================
 	public geter / seter
 	============================================*/
@@ -57,6 +59,8 @@ public:
 	void setRotateDamping(float rotateDamping);
 	D3DXVECTOR3* getVecTargetFront(void);
 	void setVecTargetFront(D3DXVECTOR3* vecTargetFront);
+	//D3DXVECTOR3 *getVecTargetPos(void);
+	//void setVecTargetPos(D3DXVECTOR3 * vecTargetPos);
 private:
 	D3DXMATRIX *mtxWorld;
 
@@ -75,7 +79,7 @@ private:
 	float rotateDamping;
 
 	D3DXVECTOR3 *vecTargetFront;
-
+	//D3DXVECTOR3 *vecTargetPos;
 	static D3DXVECTOR3* zeroDirect;
 };
 

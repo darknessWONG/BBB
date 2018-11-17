@@ -84,6 +84,15 @@
     <ClInclude Include="BattleChara.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="PerformManage.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Perform.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MovePerform.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -147,6 +156,15 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="BattleChara.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="PerformManage.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Perform.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MovePerform.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

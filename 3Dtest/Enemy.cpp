@@ -50,13 +50,14 @@ void Enemy::dataUpdate(void)
 
 		}
 	}
-	D3DXVECTOR3 speedDir = *vecPatrolTarget - *getVecNowPos();
+	D3DXVECTOR2 boundingCenter = getBoundingCenter();
+	D3DXVECTOR3 speedDir = *vecPatrolTarget - D3DXVECTOR3(boundingCenter.x, 0, boundingCenter.y);
 	D3DXVec3Normalize(&speedDir, &speedDir);
 	setVecMoveSpeed(&D3DXVECTOR3(0, 0, 0));
 	addSpeed(&speedDir, getWalkSpeed());
 
 	D3DXVECTOR2 newCenter = { vecPatrolTarget->x, vecPatrolTarget->z };
-	D3DXVECTOR2 newFront = getBoundingCenter() - newCenter;
+	D3DXVECTOR2 newFront = boundingCenter - newCenter;
 	D3DXVECTOR3 newFront3 = { newFront.x, 0, newFront.y };
 	D3DXVec3Normalize(&newFront3, &newFront3);
 	setVecTargetFront(&newFront3);
