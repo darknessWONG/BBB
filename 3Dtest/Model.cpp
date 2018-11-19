@@ -57,7 +57,7 @@ void Model::draw(LPDIRECT3DDEVICE9 pD3DDevice)
 
 #ifdef _DEBUG
 	D3DMATERIAL9 blue;
-	blue.Diffuse = { 1.0f, 1.0f, 1.0f, 0.5f };
+	blue.Diffuse = { 1.0f, 1.0f, 1.0f, 0.2f };
 	blue.Ambient = blue.Diffuse;
 	pD3DDevice->SetMaterial(&blue);
 	pD3DDevice->SetTexture(0, 0); // disable texture

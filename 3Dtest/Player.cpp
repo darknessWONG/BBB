@@ -46,6 +46,9 @@ void Player::dataUpdate(void)
 	if (true == isWalk)
 	{
 		addSpeed(&dir, getWalkSpeed());
+		D3DXVECTOR3 nowSpeed = *getVecMoveSpeed();
+		D3DXVec3Normalize(&nowSpeed, &nowSpeed);
+		setVecTargetFront(&nowSpeed);
 	}
 
 	Chara::dataUpdate();

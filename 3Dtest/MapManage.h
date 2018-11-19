@@ -2,7 +2,10 @@
 #include <vector>
 #include "GameObject.h"
 #include "Model.h"
+#include "Vigilance.h"
 #include "Physics.h"
+#include "Player.h"
+#include "Enemy.h"
 
 
 typedef struct
@@ -31,6 +34,8 @@ public:
 
 	vector<TouchStatus> collision_detection(GameObject* gameObject);
 	TouchType collision_detection(GameObject* gameObject1, GameObject* gameObject2);
+	vector<GameObject*> calObjectInCycle(Vigilance* cycle);
+	vector<GameObject*> calObjectOnSight(Enemy* enemy, Player* player);
 	/*===========================================
 	public geter / seter
 	============================================*/

@@ -63,7 +63,12 @@ private:
 
 	Camera* camera = NULL;
 	Light* light = NULL;
-	vector<GameObject*> gameObjects;
+
+	Player *player = NULL;
+	vector<Enemy*> enemys;
+	vector<Vigilance*> vigliances;
+	
+	vector<GameObject*> others;
 
 	MapManage* map = NULL;
 

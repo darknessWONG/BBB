@@ -5,6 +5,7 @@
 #include "Vigilance.h"
 #include "Enemy.h"
 #include "input.h"
+#include "Common.h"
 
 GameManage::GameManage()
 {
@@ -38,10 +39,21 @@ void GameManage::init(void)
 void GameManage::beforeUpdate(void)
 {
 	map->cleanGameObject();
-	int gameObjectsNum = gameObjects.size();
+	map->addGameObject(player);
+	int gameObjectsNum = others.size();
 	for (int i = 0; i < gameObjectsNum; i++)
 	{
-		map->addGameObject(gameObjects[i]);
+		map->addGameObject(others[i]);
+	}
+	gameObjectsNum = enemys.size();
+	for (int i = 0; i < gameObjectsNum; i++)
+	{
+		map->addGameObject(enemys[i]);
+	}
+	gameObjectsNum = vigliances.size();
+	for (int i = 0; i < gameObjectsNum; i++)
+	{
+		map->addGameObject(vigliances[i]);
 	}
 }
 
@@ -168,7 +180,8 @@ void GameManage::game_state_init(void)
 	mesh->setMaxSpeed(0.3);
 	mesh->setCanMove(true);
 	mesh->setVecNowPos(new D3DXVECTOR3(0, 0, 0));
-	gameObjects.push_back(mesh);
+	//gameObjects.push_back(mesh);
+	player = mesh;
 	map->addGameObject(mesh);
 
 
@@ -178,7 +191,8 @@ void GameManage::game_state_init(void)
 	//mesh1->setRotateSpeed(20);
 	mesh1->setCanMove(false);
 	mesh1->setVecNowPos(new D3DXVECTOR3(7.5, 0, 0));
-	gameObjects.push_back(mesh1);
+	//gameObjects.push_back(mesh1);
+	others.push_back(mesh1);
 	map->addGameObject(mesh1);
 
 
@@ -190,7 +204,8 @@ void GameManage::game_state_init(void)
 	mesh3->setVecNowPos(new D3DXVECTOR3(1, 0, 1));
 	mesh3->setVecPatrolStart(new D3DXVECTOR3(1, 0, 1));
 	mesh3->setVecPatrolEnd(new D3DXVECTOR3(1, 0, 5));
-	gameObjects.push_back(mesh3);
+	//gameObjects.push_back(mesh3);
+	enemys.push_back(mesh3);
 	map->addGameObject(mesh3);
 
 	Vigilance* mesh4 = new Vigilance();
@@ -199,7 +214,9 @@ void GameManage::game_state_init(void)
 	mesh4->setVecNowPos(new D3DXVECTOR3(1, 0, 1));
 	mesh4->setBelong(mesh3);
 	mesh4->setRadius(2);
-	gameObjects.push_back(mesh4);
+	mesh4->setRadius(7);
+	vigliances.push_back(mesh4);
+	//gameObjects.push_back(mesh4);
 	map->addGameObject(mesh4);
 
 	gs = GameState::GameState_game_state_running;
@@ -213,14 +230,35 @@ void GameManage::game_state_update(void)
 
 void GameManage::game_state_clean(void)
 {
-	int idx = gameObjects.size();
-	for (int i = 0; i < idx; i++)
-	{
-		delete gameObjects[i];
-	}
-	gameObjects.clear();
-	map->cleanGameObject();
+	//int idx = gameObjects.size();
+	//for (int i = 0; i < idx; i++)
+	//{
+	//	delete gameObjects[i];
+	//}
+	//gameObjects.clear();
+	//map->cleanGameObject();
 
+	map->cleanGameObject();
+	int gameObjectsNum = others.size();
+	for (int i = 0; i < gameObjectsNum; i++)
+	{
+		delete others[i];
+	}
+	gameObjectsNum = vigliances.size();
+	for (int i = 0; i < gameObjectsNum; i++)
+	{
+		delete vigliances[i];
+	}
+	gameObjectsNum = enemys.size();
+	for (int i = 0; i < gameObjectsNum; i++)
+	{
+		delete enemys[i];
+	}
+	safe_delete<Player>(player);
+	
+	enemys.clear();
+	others.clear();
+	vigliances.clear();
 	gs = GameState_result_state_init;
 }
 
