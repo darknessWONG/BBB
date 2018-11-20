@@ -158,8 +158,10 @@
     <ClInclude Include="debugPrintf.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="GameManage.h" />
+    <ClInclude Include="Item.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="input.h" />
+    <ClInclude Include="ItemFactory.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="MapManage.h" />
     <ClInclude Include="Model.h" />
@@ -180,8 +182,10 @@
     <ClCompile Include="debugPrintf.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="GameManage.cpp" />
+    <ClCompile Include="Item.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="input.cpp" />
+    <ClCompile Include="ItemFactory.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapManage.cpp" />
