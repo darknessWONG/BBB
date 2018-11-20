@@ -33,3 +33,12 @@ bool PerformManage::playPerforms(void)
 	}
 	return false;
 }
+
+Perform * PerformManage::getPlayingPerforms(void)
+{
+	if (performs.size() <= 0)
+	{
+		return NULL;
+	}
+	return performs[0];
+}

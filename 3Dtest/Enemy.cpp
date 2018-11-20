@@ -33,7 +33,8 @@ void Enemy::dataUpdate(void)
 		{
 			patrolLine = -patrolLine;
 		}
-		D3DXVECTOR3 nowLine = *vecPatrolTarget - *getVecNowPos();
+		D3DXVECTOR2 boundingCenter = getBoundingCenter();
+		D3DXVECTOR3 nowLine = *vecPatrolTarget - D3DXVECTOR3(boundingCenter.x, 0, boundingCenter.y);
 
 		float dot = D3DXVec3Dot(&patrolLine, &nowLine);
 		float length = D3DXVec3Length(&patrolLine) * D3DXVec3Length(&nowLine);

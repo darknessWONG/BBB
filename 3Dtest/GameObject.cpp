@@ -22,8 +22,10 @@ GameObject::GameObject()
 	rotateDamping = ROTATEDAMPING;
 	vecTargetFront = NULL;
 
-
+	moveThisTurn = false;
 	canMove = false;
+
+	overlapLevel = 0;
 }
 
 
@@ -157,6 +159,16 @@ void GameObject::calFront(void)
 	}
 }
 
+void GameObject::lockThisTurn(void)
+{
+	moveThisTurn = false;
+}
+
+void GameObject::unlockThisTurn(void)
+{
+	moveThisTurn = true;
+}
+
 D3DXMATRIX* GameObject::getMtxWorld(void)
 {
 	return mtxWorld;
@@ -253,6 +265,16 @@ void GameObject::setMoveDamping(float moveDamping)
 	this->moveDamping = moveDamping;
 }
 
+int GameObject::getOverlapLevel(void)
+{
+	return overlapLevel;
+}
+
+void GameObject::setOverlapLevel(int overlapLevel)
+{
+	this->overlapLevel = overlapLevel;
+}
+
 D3DXVECTOR3* GameObject::getVecRotateAxis(void)
 {
 	return vecRotateAxis;
@@ -293,6 +315,11 @@ void GameObject::setVecTargetFront(D3DXVECTOR3 * vecTargetFront)
 {
 	safe_delete<D3DXVECTOR3>(this->vecTargetFront);
 	this->vecTargetFront = new D3DXVECTOR3(*vecTargetFront);
+}
+
+bool GameObject::getMoveThisTurn(void)
+{
+	return moveThisTurn;
 }
 
 //D3DXVECTOR3 * GameObject::getVecTargetPos(void)S

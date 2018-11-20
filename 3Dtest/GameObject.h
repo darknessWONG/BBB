@@ -30,6 +30,8 @@ public:
 	void calSpeed(void);
 	//not just vecFront, vecUp and vecRight will be updated in this function too
 	void calFront(void);
+	void lockThisTurn(void);
+	void unlockThisTurn(void);
 	/*===========================================
 	public geter / seter
 	============================================*/
@@ -51,6 +53,8 @@ public:
 	void setMaxSpeed(float maxSpeed);
 	float getMoveDamping(void);
 	void setMoveDamping(float moveDamping);
+	int getOverlapLevel(void);
+	void setOverlapLevel(int overlapLevel);
 	D3DXVECTOR3* getVecRotateAxis(void);
 	void setVecRotateAxis(D3DXVECTOR3* vecRotateAxis);
 	float getRotateSpeed(void);
@@ -59,6 +63,7 @@ public:
 	void setRotateDamping(float rotateDamping);
 	D3DXVECTOR3* getVecTargetFront(void);
 	void setVecTargetFront(D3DXVECTOR3* vecTargetFront);
+	bool getMoveThisTurn(void);
 	//D3DXVECTOR3 *getVecTargetPos(void);
 	//void setVecTargetPos(D3DXVECTOR3 * vecTargetPos);
 private:
@@ -69,10 +74,15 @@ private:
 	D3DXVECTOR3 *vecUp;	     //the right direct of camera(normalize vector)
 
 	bool canMove;
+	bool moveThisTurn;
 	D3DXVECTOR3 *vecNowPos;
 	D3DXVECTOR3 *vecMoveSpeed;
 	float maxSpeed;
 	float moveDamping;
+
+	//if two object's overlap level's sum is gerther then 0, they will touch each other when near
+	//if lower the 0, will not
+	int overlapLevel;
 
 	D3DXVECTOR3 *vecRotateAxis;
 	float rotateSpeed;

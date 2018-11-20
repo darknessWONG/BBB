@@ -29,14 +29,15 @@ void MapManage::updateGameObejcts(void)
 	int gameObjectNum = gameObjects.size();
 	for (int i = 0; i < gameObjectNum; i++)
 	{
-		if (!gameObjects[i]->getCanMove())
+		if (!gameObjects[i]->getCanMove() || !gameObjects[i]->getMoveThisTurn())
 		{
+			gameObjects[i]->unlockThisTurn();
 			continue;
 		}
 		gameObjects[i]->dataUpdate();
 		//x position update
 		gameObjects[i]->positionUpdateX();
-		vector<TouchStatus> list = collision_detection(gameObjects[i]);
+		vector<TouchStatus> list = collisionDetectionOvl(gameObjects[i]);
 		D3DXVECTOR3 xSpeed = *gameObjects[i]->getVecMoveSpeed();
 		while (list.size() != 0)
 		{
@@ -66,12 +67,12 @@ void MapManage::updateGameObejcts(void)
 			newSpeed.x = 0.0f;
 			gameObjects[i]->setVecMoveSpeed(&newSpeed);
 			gameObjects[i]->setVecNowPos(&new_point);
-			list = collision_detection(gameObjects[i]);
+			list = collisionDetectionOvl(gameObjects[i]);
 		}
 
 		//z position update
 		gameObjects[i]->positionUpdateZ();
-		list = collision_detection(gameObjects[i]);
+		list = collisionDetectionOvl(gameObjects[i]);
 		D3DXVECTOR3 zSpeed = *gameObjects[i]->getVecMoveSpeed();
 		while (list.size() != 0)
 		{
@@ -102,7 +103,7 @@ void MapManage::updateGameObejcts(void)
 			newSpeed.z = 0.0f;
 			gameObjects[i]->setVecMoveSpeed(&newSpeed);
 			gameObjects[i]->setVecNowPos(&new_point);
-			list = collision_detection(gameObjects[i]);
+			list = collisionDetectionOvl(gameObjects[i]);
 		}
 	}
 }
@@ -117,7 +118,7 @@ void MapManage::drawGameObjects(LPDIRECT3DDEVICE9 pD3DDevice)
 	}
 }
 
-TouchType MapManage::collision_detection(GameObject * gameObject1, GameObject * gameObject2)
+TouchType MapManage::collisionDetection(GameObject * gameObject1, GameObject * gameObject2)
 {
 	TouchType is_hitted = TouchType::noTouch;
 
@@ -141,6 +142,45 @@ TouchType MapManage::collision_detection(GameObject * gameObject1, GameObject * 
 
 	return is_hitted;
 
+}
+
+vector<TouchStatus> MapManage::collisionDetectionOvl(GameObject * gameObject)
+{
+	vector<TouchStatus> list;
+	RECTF rect = gameObject->getBoundingRect();
+	D3DXVECTOR2* position = new D3DXVECTOR2[4];
+	position[0] = D3DXVECTOR2(rect.left, rect.top);
+	position[1] = D3DXVECTOR2(rect.right, rect.top);
+	position[2] = D3DXVECTOR2(rect.left, rect.bottom);
+	position[3] = D3DXVECTOR2(rect.right, rect.bottom);
+
+	int ganmeObjectNum = gameObjects.size();
+	for (int i = 0; i < ganmeObjectNum; i++)
+	{
+		if (gameObjects[i] == gameObject)
+		{
+			continue;
+		}
+		if (0 > gameObject->getOverlapLevel() + gameObjects[i]->getOverlapLevel())
+		{
+			continue;
+		}
+		RECTF rect2 = gameObjects[i]->getBoundingRect();
+		D3DXVECTOR2* position2 = new D3DXVECTOR2[4];
+		position2[0] = D3DXVECTOR2(rect2.left, rect2.top);
+		position2[1] = D3DXVECTOR2(rect2.right, rect2.top);
+		position2[2] = D3DXVECTOR2(rect2.left, rect2.bottom);
+		position2[3] = D3DXVECTOR2(rect2.right, rect2.bottom);
+
+		TouchType ty = Physics::rectTouchRect(position2, position);
+		if (ty == TouchType::cover)
+		{
+			list.push_back(TouchStatus{ gameObjects[i], ty });
+		}
+		delete[] position2;
+	}
+	delete[] position;
+	return list;
 }
 
 vector<GameObject*> MapManage::calObjectInCycle(Vigilance * cycle)
@@ -193,7 +233,7 @@ vector<GameObject*> MapManage::calObjectOnSight(Enemy * enemy, Player * player)
 	return list;
 }
 
-vector<TouchStatus> MapManage::collision_detection(GameObject * gameObject)
+vector<TouchStatus> MapManage::collisionDetection(GameObject * gameObject)
 {
 	vector<TouchStatus> list;
 	RECTF rect = gameObject->getBoundingRect();

@@ -7,6 +7,8 @@ public:
 	Battle();
 	~Battle();
 
+
+
 	void addCharas(Chara* chara);
 
 private:

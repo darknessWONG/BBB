@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "Vigilance.h"
 #include "Enemy.h"
+#include "MovePerform.h"
 
 GameManage::GameManage()
 {
@@ -142,6 +143,7 @@ void GameManage::gameStateInit(void)
 	mesh->setMaxSpeed(0.3);
 	mesh->setCanMove(true);
 	mesh->setVecNowPos(new D3DXVECTOR3(0, 0, 0));
+	mesh->setOverlapLevel(1);
 	player = mesh;
 	map->addGameObject(mesh);
 
@@ -152,6 +154,7 @@ void GameManage::gameStateInit(void)
 	//mesh1->setRotateSpeed(20);
 	mesh1->setCanMove(false);
 	mesh1->setVecNowPos(new D3DXVECTOR3(7.5, 0, 0));
+	mesh1->setOverlapLevel(1);
 	others.push_back(mesh1);
 	map->addGameObject(mesh1);
 
@@ -164,6 +167,7 @@ void GameManage::gameStateInit(void)
 	mesh3->setVecNowPos(new D3DXVECTOR3(1, 0, 1));
 	mesh3->setVecPatrolStart(new D3DXVECTOR3(1, 0, 1));
 	mesh3->setVecPatrolEnd(new D3DXVECTOR3(1, 0, 5));
+	mesh3->setOverlapLevel(1);
 	enemys.push_back(mesh3);
 	map->addGameObject(mesh3);
 
@@ -173,14 +177,28 @@ void GameManage::gameStateInit(void)
 	mesh4->setVecNowPos(new D3DXVECTOR3(1, 0, 1));
 	mesh4->setBelong(mesh3);
 	mesh4->setRadius(7);
+	mesh4->setOverlapLevel(-5);
 	vigliances.push_back(mesh4);
 	map->addGameObject(mesh4);
+
+	MovePerform *per = new MovePerform();
+	per->setActor(player);
+	per->setMoveSpeed(0.1);
+	per->setVecTarget(D3DXVECTOR3(0, 0, -9));
+	per->setVecStart(D3DXVECTOR3(player->getBoundingCenter().x, 0, player->getBoundingCenter().y));
+	pm.addPerforms(per);
 
 	gs = GameState::GameStateGameRunning;
 }
 
 void GameManage::gameStateUpdate(void)
 {
+	if (pm.playPerforms())
+	{
+		lockUnmoveObject();
+		return;
+	}
+
 	enemyUpdate();
 	checkEnd();
 }
@@ -242,6 +260,40 @@ void GameManage::enemyUpdate(void)
 			}
 		}
 		((Enemy*)(vigliances[i]->getBelong()))->setIsTracking(isPor);
+	}
+}
+
+void GameManage::lockUnmoveObject(void)
+{
+	GameObject *actor = pm.getPlayingPerforms()->getActor();
+
+	int gameObjectsNum = enemys.size();
+	for (int i = 0; i < gameObjectsNum; i++)
+	{
+		if (actor == enemys[i])
+		{
+			continue;
+		}
+		enemys[i]->lockThisTurn();
+	}
+	gameObjectsNum = others.size();
+	for (int i = 0; i < gameObjectsNum; i++)
+	{
+		if (actor == others[i])
+		{
+			continue;
+		}
+		others[i]->lockThisTurn();
+	}
+	gameObjectsNum = vigliances.size();
+	for (int i = 0; i < gameObjectsNum; i++)
+	{
+		if (actor == vigliances[i])
+		{
+			continue;
+		}
+		vigliances[i]->lockThisTurn();
+		map->addGameObject(vigliances[i]);
 	}
 }
 

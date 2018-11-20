@@ -31,8 +31,11 @@ public:
 	void updateGameObejcts(void);
 	void drawGameObjects(LPDIRECT3DDEVICE9 pD3DDevice);
 
-	vector<TouchStatus> collision_detection(GameObject* gameObject);
-	TouchType collision_detection(GameObject* gameObject1, GameObject* gameObject2);
+	TouchType collisionDetection(GameObject* gameObject1, GameObject* gameObject2);
+	//do collision dectection without overlap level, can expressed the absolute positional relations
+	vector<TouchStatus> collisionDetection(GameObject* gameObject);
+	//do collision dectection with overlap level
+	vector<TouchStatus> collisionDetectionOvl(GameObject* gameObject);
 
 	vector<GameObject*> calObjectInCycle(Vigilance* cycle);
 	vector<GameObject*> calObjectOnSight(Enemy* enemy, Player* player);

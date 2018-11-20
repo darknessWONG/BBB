@@ -7,20 +7,7 @@
 #include "MapManage.h"
 #include "Player.h"
 #include "Enemy.h"
-
-enum GameState
-{
-	GameStateTitleInit,
-	GameStateTitleRunning,
-	GameStateTitleClean,
-	GameStateGameInit,
-	GameStateGameRunning,
-	GameStateGameClean,
-	GameStateEndInit,
-	GameStateEndRunning,
-	GameStateEndClean,
-	GameStateMax
-};
+#include "PerformManage.h"
 
 class GameManage
 {
@@ -48,6 +35,8 @@ public:
 
 	void enemyUpdate(void);
 
+	void lockUnmoveObject(void);
+
 	void setPD3DDevice(LPDIRECT3DDEVICE9 pD3DDevice);
 private:
 	LPDIRECT3DDEVICE9 pD3DDevice = NULL;
@@ -62,6 +51,8 @@ private:
 	vector<GameObject*> others;
 
 	MapManage* map = NULL;
+
+	PerformManage pm;
 
 	GameState gs;
 };
