@@ -17,7 +17,7 @@ Chara::~Chara()
 {
 }
 
-BattleChara * Chara::geBattleChara(void)
+BattleChara * Chara::getBattleChara(void)
 {
 	return bc;
 }

@@ -24,7 +24,9 @@ bool PerformManage::playPerforms(void)
 	}
 	if (performs[0]->checkEnd())
 	{
-		performs.pop_back();
+		//performs.pop_back();
+		vector<Perform*>::iterator it = performs.begin();
+		performs.erase(it);
 	}
 	if (performs.size() > 0)
 	{

@@ -161,6 +161,7 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="GameManage.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="Ground.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="MapManage.h" />
@@ -188,6 +189,7 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="GameManage.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="Ground.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="main.cpp" />

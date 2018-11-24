@@ -2,7 +2,9 @@
 #include "GameManage.h"
 #include "Model.h"
 #include "Player.h"
+#include "Ground.h"
 #include "Vigilance.h"
+#include "input.h"
 #include "Enemy.h"
 #include "MovePerform.h"
 
@@ -142,24 +144,44 @@ void GameManage::gameStateInit(void)
 	mesh->setWalkSpeed(0.01);
 	mesh->setMaxSpeed(0.3);
 	mesh->setCanMove(true);
-	mesh->setVecNowPos(new D3DXVECTOR3(0, 0, 0));
+	mesh->setVecNowPos(new D3DXVECTOR3(-10, 0, 0));
 	mesh->setOverlapLevel(1);
 	player = mesh;
 	map->addGameObject(mesh);
 
 
-	Model* mesh1 = new Model("tree.x");
-	mesh1->loadModel(pD3DDevice);
-	mesh1->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
+	Model* tree = new Model("Rock1.blend.x");
+	tree->loadModel(pD3DDevice);
+	tree->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
 	//mesh1->setRotateSpeed(20);
-	mesh1->setCanMove(false);
-	mesh1->setVecNowPos(new D3DXVECTOR3(7.5, 0, 0));
-	mesh1->setOverlapLevel(1);
-	others.push_back(mesh1);
-	map->addGameObject(mesh1);
+	tree->setCanMove(false);
+	tree->setVecNowPos(new D3DXVECTOR3(7.5, 0, 0));
+	tree->setOverlapLevel(1);
+	others.push_back(tree);
+	map->addGameObject(tree);
+
+	Model* tree2 = new Model("tree.x");
+	tree2->loadModel(pD3DDevice);
+	tree2->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
+	//mesh1->setRotateSpeed(20);
+	tree2->setCanMove(false);
+	tree2->setVecNowPos(new D3DXVECTOR3(-7.5, 0, 0));
+	tree2->setOverlapLevel(1);
+	others.push_back(tree2);
+	map->addGameObject(tree2);
+
+	Model* tree3 = new Ground("grass ground.blend.x");
+	tree3->loadModel(pD3DDevice);
+	tree3->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
+	//mesh1->setRotateSpeed(20);
+	tree3->setCanMove(false);
+	tree3->setVecNowPos(new D3DXVECTOR3(0, 0, 0));
+	tree3->setOverlapLevel(-5);
+	others.push_back(tree3);
+	map->addGameObject(tree3);
 
 
-	Enemy* mesh3 = new Enemy("radio.x");
+	Enemy* mesh3 = new Enemy("T-Rex.x");
 	mesh3->loadModel(pD3DDevice);
 	mesh3->setWalkSpeed(0.01);
 	mesh3->setMaxSpeed(0.3);
@@ -176,7 +198,7 @@ void GameManage::gameStateInit(void)
 	mesh4->setCanMove(true);
 	mesh4->setVecNowPos(new D3DXVECTOR3(1, 0, 1));
 	mesh4->setBelong(mesh3);
-	mesh4->setRadius(7);
+	mesh4->setRadius(10);
 	mesh4->setOverlapLevel(-5);
 	vigliances.push_back(mesh4);
 	map->addGameObject(mesh4);
@@ -184,7 +206,7 @@ void GameManage::gameStateInit(void)
 	MovePerform *per = new MovePerform();
 	per->setActor(player);
 	per->setMoveSpeed(0.1);
-	per->setVecTarget(D3DXVECTOR3(0, 0, -9));
+	per->setVecTarget(D3DXVECTOR3(-12, 0, 0));
 	per->setVecStart(D3DXVECTOR3(player->getBoundingCenter().x, 0, player->getBoundingCenter().y));
 	pm.addPerforms(per);
 
@@ -197,6 +219,30 @@ void GameManage::gameStateUpdate(void)
 	{
 		lockUnmoveObject();
 		return;
+	}
+
+	if (Keyboard_IsTrigger(DIK_0))
+	{
+		MovePerform *per = new MovePerform();
+		per->setActor(player);
+		per->setMoveSpeed(0.1);
+		per->setVecTarget(D3DXVECTOR3(-12, 0, 0));
+		per->setVecStart(D3DXVECTOR3(player->getBoundingCenter().x, 0, player->getBoundingCenter().y));
+		pm.addPerforms(per);
+
+		per = new MovePerform();
+		per->setActor(player);
+		per->setMoveSpeed(0.1);
+		per->setVecTarget(D3DXVECTOR3(-12, 0, -10));
+		per->setVecStart(D3DXVECTOR3(-12, 0, 0));
+		pm.addPerforms(per);
+
+		per = new MovePerform();
+		per->setActor(player);
+		per->setMoveSpeed(0.1);
+		per->setVecTarget(D3DXVECTOR3(0, 0, -10));
+		per->setVecStart(D3DXVECTOR3(-12, 0, -10));
+		pm.addPerforms(per);
 	}
 
 	enemyUpdate();
@@ -225,7 +271,10 @@ void GameManage::endStateClean(void)
 
 void GameManage::checkEnd(void)
 {
-	//gs = GameState::GameStateGameClean;
+	if (player->getBattleChara() != NULL && player->getBattleChara()->getHp() <= 0)
+	{
+		gs = GameState::GameStateGameClean;
+	}
 }
 
 void GameManage::enemyUpdate(void)

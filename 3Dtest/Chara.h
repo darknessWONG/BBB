@@ -9,7 +9,7 @@ public:
 	Chara(string modelPath);
 	virtual ~Chara();
 
-	BattleChara* geBattleChara(void);
+	BattleChara* getBattleChara(void);
 	void seBattleChara(BattleChara* bc);
 	float getWalkSpeed(void);
 	void setWalkSpeed(float walkSpeed);

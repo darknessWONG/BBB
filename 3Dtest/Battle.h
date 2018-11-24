@@ -7,11 +7,12 @@ public:
 	Battle();
 	~Battle();
 
-
-
+	void calActionList(void);
+	
 	void addCharas(Chara* chara);
 
 private:
 	vector<Chara*> charas;
+	vector<Chara*> actionList;
 };
 
