@@ -8,7 +8,9 @@ public:
 	PerformManage();
 	~PerformManage();
 	
-	void addPerforms(Perform* Perform);
+	void addPerforms(Perform* perform);
+	void removePerforms(int index);
+	void removePerforms(Perform* perform);
 	//if all performs are finished, return false
 	//if is playing, return true
 	bool playPerforms(void);

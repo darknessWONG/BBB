@@ -96,6 +96,12 @@
     <ClInclude Include="Ground.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="BattleSkill.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SideEffect.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -171,6 +177,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Ground.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BattleSkill.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SideEffect.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

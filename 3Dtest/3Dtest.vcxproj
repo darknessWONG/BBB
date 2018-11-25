@@ -154,6 +154,7 @@
     <ClInclude Include="3Dtest.h" />
     <ClInclude Include="Battle.h" />
     <ClInclude Include="BattleChara.h" />
+    <ClInclude Include="BattleSkill.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Chara.h" />
     <ClInclude Include="Common.h" />
@@ -172,6 +173,7 @@
     <ClInclude Include="Physics.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="SideEffect.h" />
     <ClInclude Include="SpecialArea.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system_timer.h" />
@@ -182,6 +184,7 @@
     <ClCompile Include="3Dtest.cpp" />
     <ClCompile Include="Battle.cpp" />
     <ClCompile Include="BattleChara.cpp" />
+    <ClCompile Include="BattleSkill.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Chara.cpp" />
     <ClCompile Include="Common.cpp" />
@@ -200,6 +203,7 @@
     <ClCompile Include="PerformManage.cpp" />
     <ClCompile Include="Physics.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="SideEffect.cpp" />
     <ClCompile Include="SpecialArea.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

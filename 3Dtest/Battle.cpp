@@ -11,6 +11,69 @@ Battle::~Battle()
 {
 }
 
+void Battle::start(void)
+{
+	switch (bs)
+	{
+	case BattleStateStandby:
+		standbyPhase();
+		break;
+	case BattleStateCommand:
+		commandPhase();
+		break;
+	case BattleStateTaragetSelect:
+		taragetSelectPhase();
+		break;
+	case BattleStateMove:
+		movePhase();
+		break;
+	case BattleStatePlaceSelect:
+		placeSelectPhase();
+		break;
+	case BattleStateDamage:
+		damagePhase();
+		break;
+	case BattleStateMapMove:
+		mapMovePhase();
+		break;
+	case BattleStateEnd:
+		endPhase();
+		break;
+	}
+}
+
+void Battle::standbyPhase(void)
+{
+}
+
+void Battle::commandPhase(void)
+{
+}
+
+void Battle::taragetSelectPhase(void)
+{
+}
+
+void Battle::movePhase(void)
+{
+}
+
+void Battle::placeSelectPhase(void)
+{
+}
+
+void Battle::damagePhase(void)
+{
+}
+
+void Battle::mapMovePhase(void)
+{
+}
+
+void Battle::endPhase(void)
+{
+}
+
 void Battle::calActionList(void)
 {
 	int charaNum = charas.size();

@@ -1,4 +1,6 @@
 #pragma once
+#include "BattleSkill.h"
+#include "SideEffect.h"
 class BattleChara
 {
 public:
@@ -21,5 +23,8 @@ private:
 	int atk;
 	int speed;
 	int movePoint;
+
+	vector<BattleSkill> skill;
+	vector<SideEffect> effect;
 };
 
