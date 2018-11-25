@@ -20,6 +20,7 @@ public:
 	string getDescribe(void);
 	void setDescribe(string describe);
 
+	int turn_pass(void);
 private:
 	string name;
 	SideEffectType type;

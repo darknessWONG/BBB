@@ -20,7 +20,8 @@ public:
 
 	void calActionList(void);
 
-
+	//if is dead return true or return false
+	bool checkDead(Chara* chara);
 	void addCharas(Chara* chara);
 
 private:
@@ -28,6 +29,6 @@ private:
 	vector<Chara*> actionList;
 
 	BattleState bs;
-	int nowActionPlayer;
+	int nowActionChara;
 };
 

@@ -4,7 +4,6 @@
 
 SideEffect::SideEffect()
 {
-	next = NULL;
 }
 
 SideEffect::SideEffect(const SideEffect & sideEffect)
@@ -81,3 +80,9 @@ void SideEffect::setDescribe(string describe)
 {
 	this->describe = describe;
 }
+
+int SideEffect::turn_pass(void)
+{
+	return --duration;
+}
+

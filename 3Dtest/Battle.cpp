@@ -44,10 +44,16 @@ void Battle::start(void)
 
 void Battle::standbyPhase(void)
 {
+	actionList[nowActionChara]->getBattleChara()->calStatus();
+	if (checkDead(actionList[nowActionChara]))
+	{
+		bs = BattleState::BattleStateEnd;
+	}
 }
 
 void Battle::commandPhase(void)
 {
+
 }
 
 void Battle::taragetSelectPhase(void)
@@ -82,7 +88,7 @@ void Battle::calActionList(void)
 	{
 		for (int i = 0; i < charaNum; i++)
 		{
-			if (charas[i]->getBattleChara()->getHp() >= 0)
+			if (charas[i]->getBattleChara()->getHpNow() >= 0)
 			{
 				actionList.push_back(charas[i]);
 			}
@@ -102,6 +108,15 @@ void Battle::calActionList(void)
 			}
 		}
 	}
+}
+
+bool Battle::checkDead(Chara * chara)
+{
+	if (chara->getBattleChara()->getHpNow() <= 0)
+	{
+		return true;
+	}
+	return false;
 }
 
 void Battle::addCharas(Chara * chara)
