@@ -47,6 +47,7 @@ void Model::dataUpdate(void)
 
 void Model::draw(LPDIRECT3DDEVICE9 pD3DDevice)
 {
+	pD3DDevice->SetFVF(FVF_VERTEX3D);
 	pD3DDevice->SetTransform(D3DTS_WORLD, getMtxWorld());
 	for (int i = 0; i < numMaterials; i++)
 	{

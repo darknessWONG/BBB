@@ -53,7 +53,7 @@ void Battle::standbyPhase(void)
 
 void Battle::commandPhase(void)
 {
-
+	
 }
 
 void Battle::taragetSelectPhase(void)

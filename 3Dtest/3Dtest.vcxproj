@@ -178,6 +178,8 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system_timer.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="TextureHandler2D.h" />
+    <ClInclude Include="UI.h" />
     <ClInclude Include="Vigilance.h" />
   </ItemGroup>
   <ItemGroup>
@@ -212,6 +214,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="system_timer.cpp" />
+    <ClCompile Include="TextureHandler2D.cpp" />
+    <ClCompile Include="UI.cpp" />
     <ClCompile Include="Vigilance.cpp" />
   </ItemGroup>
   <ItemGroup>
