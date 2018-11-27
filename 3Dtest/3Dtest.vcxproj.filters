@@ -78,6 +78,21 @@
     <ClInclude Include="SpecialArea.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Emitter.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Recipe.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="font.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="sprite.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="texture.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -135,6 +150,21 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="SpecialArea.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Emitter.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Recipe.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="font.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="sprite.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="texture.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

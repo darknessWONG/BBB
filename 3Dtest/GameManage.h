@@ -5,6 +5,7 @@
 #include "Light.h"
 #include "static.h"
 #include "MapManage.h"
+#include "Emitter.h"
 
 //enum GameState
 //{
@@ -64,6 +65,7 @@ private:
 	Camera* camera = NULL;
 	Light* light = NULL;
 	vector<GameObject*> gameObjects;
+	Emitter *pEmitter;
 
 	MapManage* map = NULL;
 

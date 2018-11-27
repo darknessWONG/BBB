@@ -5,6 +5,9 @@
 #include "Vigilance.h"
 #include "Enemy.h"
 #include "input.h"
+#include "Emitter.h"
+#include "font.h"
+#include "texture.h"
 
 GameManage::GameManage()
 {
@@ -17,9 +20,9 @@ GameManage::GameManage(LPDIRECT3DDEVICE9 pD3DDevice)
 	gs = GameState::GameState_title_state_init;
 }
 
-
 GameManage::~GameManage()
 {
+	Font_Finalize();
 }
 
 void GameManage::init(void)
@@ -33,6 +36,8 @@ void GameManage::init(void)
 
 	light = new Light();
 	light->init(pD3DDevice);
+
+	Font_Initialize();
 }
 
 void GameManage::beforeUpdate(void)
@@ -121,6 +126,7 @@ void GameManage::draw(void)
 	if (gs == GameState::GameState_game_state_running)
 	{
 		map->drawGameObjects(pD3DDevice);
+		pEmitter->Draw();
 	}
 }
 
@@ -202,11 +208,14 @@ void GameManage::game_state_init(void)
 	gameObjects.push_back(mesh4);
 	map->addGameObject(mesh4);
 
+	pEmitter = new Emitter();
+
 	gs = GameState::GameState_game_state_running;
 }
 
 void GameManage::game_state_update(void)
 {
+	pEmitter->Update();
 	state_read_input(GameState_game_state_clean);
 	//state = GameState_game_state_clean;
 }
