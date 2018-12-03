@@ -22,6 +22,8 @@ public:
 	//the center of the bounding box
 	//position may not be the center of the bounding box, so it have to be calculate
 	virtual D3DXVECTOR2 getBoundingCenter(void) = 0;
+	//calculate vecNowPos through center, set vecNowPos to let the bounding center get on the position where center at.
+	virtual void setBoundingCenter(D3DXVECTOR2 center) = 0;
 
 	/*===========================================
 	public function
@@ -59,6 +61,8 @@ public:
 	void setVecTargetFront(D3DXVECTOR3* vecTargetFront);
 	float getRotateDamping(void);
 	void setRotateDamping(float rotateDamping);
+	int getOverlapLevel(void);
+	void setOverlapLevel(int overlapLevel);
 private:
 	D3DXMATRIX *mtxWorld;
 
@@ -76,6 +80,10 @@ private:
 	D3DXVECTOR3 *vecRotateAxis;
 	float rotateSpeed;
 	float rotateDamping;
+
+	//if two object's overlap level's sum is gerther then 0, they will touch each other when near
+	//if lower the 0, will not
+	int overlapLevel;
 
 	static D3DXVECTOR3* zeroDirect;
 };

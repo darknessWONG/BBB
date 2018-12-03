@@ -266,6 +266,16 @@ void GameObject::setRotateDamping(float rotateDamping)
 	this->rotateDamping = rotateDamping;
 }
 
+int GameObject::getOverlapLevel(void)
+{
+	return overlapLevel;
+}
+
+void GameObject::setOverlapLevel(int overlapLevel)
+{
+	this->overlapLevel = overlapLevel;
+}
+
 D3DXVECTOR3 * GameObject::getVecTargetFront(void)
 {
 	return vecTargetFront;

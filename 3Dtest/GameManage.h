@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "GameObject.h"
 #include "Camera.h"
+#include "Item.h"
 #include "Light.h"
 #include "static.h"
 #include "MapManage.h"
@@ -54,6 +55,8 @@ public:
 	void ranking_state_clean(void);
 
 	void checkEnd(void);
+	void ItemUpdate(void);
+
 
 	void setPD3DDevice(LPDIRECT3DDEVICE9 pD3DDevice);
 private:
@@ -67,6 +70,7 @@ private:
 	Player *player = NULL;
 	vector<Enemy*> enemys;
 	vector<Vigilance*> vigliances;
+	vector<Item*> items;
 	
 	vector<GameObject*> others;
 

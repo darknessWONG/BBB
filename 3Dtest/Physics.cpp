@@ -86,15 +86,15 @@ TouchType Physics::rectTouchRect(D3DXVECTOR2 * rect1, D3DXVECTOR2 * rect2)
 	{
 		return TouchType::cover;
 	}
-	else if (lx < lengthx && ly == lengthy)
+	else if (round(lx, FLOATBITS) < round(lengthx, FLOATBITS) && round(ly, FLOATBITS) == round(lengthy, FLOATBITS))
 	{
 		return TouchType::yTouch;
 	}
-	else if (lx == lengthx && ly < lengthy)
+	else if (round(lx, FLOATBITS) == round(lengthx, FLOATBITS) && round(ly, FLOATBITS) < round(lengthy, FLOATBITS))
 	{
 		return TouchType::xTouch;
 	}
-	else if (lx == lengthx && ly == lengthy)
+	else if (round(lx, FLOATBITS) == round(lengthx, FLOATBITS) && round(ly, FLOATBITS) == round(lengthy, FLOATBITS))
 	{
 		return TouchType::pointTouch;
 	}

@@ -3,9 +3,11 @@
 #include "Model.h"
 #include "Player.h"
 #include "Vigilance.h"
+#include "ItemFactory.h"
 #include "Enemy.h"
 #include "input.h"
 #include "Common.h"
+
 
 GameManage::GameManage()
 {
@@ -44,6 +46,11 @@ void GameManage::beforeUpdate(void)
 	for (int i = 0; i < gameObjectsNum; i++)
 	{
 		map->addGameObject(others[i]);
+	}
+	gameObjectsNum = items.size();
+	for (int i = 0; i < gameObjectsNum; i++)
+	{
+		map->addGameObject(items[i]);
 	}
 	gameObjectsNum = enemys.size();
 	for (int i = 0; i < gameObjectsNum; i++)
@@ -172,6 +179,8 @@ void GameManage::tutorial_state_clean(void)
 
 void GameManage::game_state_init(void)
 {
+	ItemFactory::setDevice(pD3DDevice);
+
 	Player* mesh = new Player("radio.x");
 	mesh->loadModel(pD3DDevice);
 	//mesh->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
@@ -219,13 +228,19 @@ void GameManage::game_state_init(void)
 	//gameObjects.push_back(mesh4);
 	map->addGameObject(mesh4);
 
+	Item *abc = ItemFactory::create_item(-7, 7, 1);
+	map->addGameObject(abc);
+	items.push_back(abc);
+
+
 	gs = GameState::GameState_game_state_running;
 }
 
 void GameManage::game_state_update(void)
 {
-	state_read_input(GameState_game_state_clean);
+	//state_read_input(GameState_game_state_clean);
 	//state = GameState_game_state_clean;
+	ItemUpdate();
 }
 
 void GameManage::game_state_clean(void)
@@ -253,6 +268,11 @@ void GameManage::game_state_clean(void)
 	for (int i = 0; i < gameObjectsNum; i++)
 	{
 		delete enemys[i];
+	}
+	gameObjectsNum = items.size();
+	for (int i = 0; i < gameObjectsNum; i++)
+	{
+		delete items[i];
 	}
 	safe_delete<Player>(player);
 	
@@ -310,6 +330,30 @@ void GameManage::ranking_state_clean(void)
 void GameManage::checkEnd(void)
 {
 	//gs = GameState::GameStateGameClean;
+}
+
+void GameManage::ItemUpdate(void)
+{
+	if (player->getFindHoldings())
+	{
+		int itemsNum = items.size();
+		for (int i = 0; i < itemsNum; i++)
+		{
+			TouchType tt = map->collisionDetection(items[i], player);
+			
+			if (tt != TouchType::noTouch)
+			{
+				items[i]->setBelong(player);
+				player->setHoldings(items[i]);
+				player->setFindHoldings(false);
+				break;
+			}
+			if (player->getFindHoldings())
+			{
+				break;
+			}
+		}
+	}
 }
 
 void GameManage::setPD3DDevice(LPDIRECT3DDEVICE9 pD3DDevice)

@@ -18,6 +18,7 @@ public:
 	//the center of the bounding box
 	//position may not be the center of the bounding box, so it have to be calculate
 	virtual D3DXVECTOR2 getBoundingCenter(void);
+	virtual void setBoundingCenter(D3DXVECTOR2 center);
 
 	/*===========================================
 	public geter / seter

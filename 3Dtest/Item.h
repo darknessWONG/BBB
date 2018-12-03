@@ -12,6 +12,10 @@ public:
 	/*===========================================
 	virtual member
 	============================================*/
+	virtual void positionUpdateX(void);
+	virtual void positionUpdateY(void);
+	virtual void positionUpdateZ(void);
+	virtual void positionUpdate(void);
 	virtual void item_status_change();
 	virtual void item_status_change(Item* item);
 
