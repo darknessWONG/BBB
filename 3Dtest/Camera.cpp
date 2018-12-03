@@ -65,6 +65,10 @@ D3DXVECTOR2 Camera::getBoundingCenter(void)
 	return {0, 0};
 }
 
+void Camera::setBoundingCenter(D3DXVECTOR2 center)
+{
+}
+
 void Camera::calWatchAt(void)
 {
 	D3DXVECTOR3 watchAt(*getVecNowPos() + *geteVecFront() * distance);

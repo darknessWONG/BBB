@@ -74,7 +74,7 @@ void BattleChara::removeOverdueStauts(void)
 	int effectNum = effect.size();
 	for (int i = 0; i < effectNum; i++)
 	{
-		if (effect[i]->getDuration <= 0)
+		if (effect[i]->getDuration() <= 0)
 		{
 			list.push_back(i);
 		}

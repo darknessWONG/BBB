@@ -82,7 +82,11 @@ TouchType Physics::rectTouchRect(D3DXVECTOR2 * rect1, D3DXVECTOR2 * rect2)
 	float lx = fabs((rectPoints1[0].x + rectPoints1[1].x) - (rectPoints2[0].x + rectPoints2[1].x));
 	float ly = fabs((rectPoints1[0].y + rectPoints1[2].y) - (rectPoints2[0].y + rectPoints2[2].y));
 
-	if (round(lx, FLOATBITS) < round(lengthx, FLOATBITS) && round(ly, FLOATBITS) < round(lengthy, FLOATBITS))
+	lx = round(lx, FLOATBITS);
+	ly = round(ly, FLOATBITS);
+	lengthx = round(lengthx, FLOATBITS);
+	lengthy = round(lengthy, FLOATBITS);
+	if (lx < lengthx && ly < lengthy)
 	{
 		return TouchType::cover;
 	}

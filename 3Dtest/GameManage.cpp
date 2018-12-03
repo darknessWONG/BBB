@@ -271,7 +271,7 @@ void GameManage::endStateClean(void)
 
 void GameManage::checkEnd(void)
 {
-	if (player->getBattleChara() != NULL && player->getBattleChara()->getHp() <= 0)
+	if (player->getBattleChara() != NULL && player->getBattleChara()->getHpNow() <= 0)
 	{
 		gs = GameState::GameStateGameClean;
 	}

@@ -174,3 +174,13 @@ D3DXVECTOR2 Model::getBoundingCenter(void)
 	center.y = Physics::round((rect.bottom + rect.top) / 2, FLOATBITS);
 	return center;
 }
+
+void Model::setBoundingCenter(D3DXVECTOR2 center)
+{
+	D3DXVECTOR2 boundingCenter = getBoundingCenter();
+	D3DXVECTOR3 nowPos = *getVecNowPos();
+	D3DXVECTOR2 offset = { nowPos.x - boundingCenter.x, nowPos.z - boundingCenter.y };
+
+	nowPos = { center.x + offset.x, nowPos.y, center.y + offset.y };
+	setVecNowPos(&nowPos);
+}

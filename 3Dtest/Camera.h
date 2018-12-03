@@ -15,6 +15,7 @@ public:
 	virtual void draw(LPDIRECT3DDEVICE9 pD3DDevice);
 	virtual RECTF getBoundingRect(void);
 	virtual D3DXVECTOR2 getBoundingCenter(void);
+	virtual void setBoundingCenter(D3DXVECTOR2 center);
 	
 	/*===========================================
 	public function

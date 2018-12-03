@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "TextureHandler2D.h"
 #include "debugPrintf.h"
 
@@ -19,7 +20,7 @@ void TextureHandler2D::LoadTextures(LPDIRECT3DDEVICE9 g_pD3DDevice)
 	{
 		if (FAILED(D3DXCreateTextureFromFile(g_pD3DDevice, textures[i].paths.c_str(), &textures[i].tex_p)))
 		{
-			FaultLog("open texture failed");
+			//FaultLog("open texture failed");
 		}
 	}
 }

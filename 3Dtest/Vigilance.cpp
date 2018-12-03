@@ -70,6 +70,14 @@ D3DXVECTOR2 Vigilance::getBoundingCenter(void)
 	return D3DXVECTOR2(nowPos.x, nowPos.z);
 }
 
+void Vigilance::setBoundingCenter(D3DXVECTOR2 center)
+{
+	D3DXVECTOR3 nowPos = *getVecNowPos();
+	nowPos.x = center.x;
+	nowPos.z = center.y;
+	setVecNowPos(&nowPos);
+}
+
 Chara * Vigilance::getBelong(void)
 {
 	return belong;
