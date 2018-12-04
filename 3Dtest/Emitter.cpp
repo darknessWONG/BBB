@@ -96,7 +96,18 @@ void Emitter::Update()
 	}
 
 	// debug submit
-	
+	if (Keyboard_IsTrigger(DIK_0)) {
+		Submit(0);
+	}
+	if (Keyboard_IsTrigger(DIK_1)) {
+		Submit(1);
+	}
+	if (Keyboard_IsTrigger(DIK_2)) {
+		Submit(2);
+	}
+	if (Keyboard_IsTrigger(DIK_3)) {
+		Submit(3);
+	}
 }
 
 void Emitter::Draw()
@@ -144,19 +155,27 @@ void Emitter::Draw()
 
 void Emitter::Submit(int index)
 {
+	int indexBuffer = -1;
+	int timer = 0;
 	for (int i = 0; i < MAX_ORDER; i++) {
 		if (list[i].isActive == 1) {
 			if (list[i].recipe == index) {
-				// TODO Plus Score
-				score += Recipe::getScore(i);
-				// Delete this Order
-				Delete(i);
-				return;
+				if (list[i].count > timer) {
+					indexBuffer = i;
+					timer = list[i].count;
+				}
 			}
 		}
 	}
-	// TODO Minus Score
-	score -= 1000;
+	
+	// TODO Minus Score when submit wrong recipe
+	if (indexBuffer == -1) {
+		score -= 1000;
+	}
+	else {
+		score += Recipe::getScore(indexBuffer);
+		Delete(indexBuffer);
+	}
 }
 
 void Emitter::Delete(int index)

@@ -4,8 +4,8 @@
 #include "Recipe.h"
 
 #define MAX_ORDER			(4)
-#define ORDER_COMING_SPEED	(100)
-#define ORDER_MOVESPEED		(4.0f)
+#define ORDER_COMING_SPEED	(60)
+#define ORDER_MOVESPEED		(8.0f)
 #define ORDER_WIDTH			(205.0f)
 #define ORDER_TIME			(1000)
 
