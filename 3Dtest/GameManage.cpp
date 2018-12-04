@@ -7,6 +7,7 @@
 #include "Enemy.h"
 #include "input.h"
 #include "Common.h"
+#include "Workbench.h"
 
 
 GameManage::GameManage()
@@ -231,6 +232,15 @@ void GameManage::game_state_init(void)
 	Item *abc = ItemFactory::create_item(-7, 7, 1);
 	map->addGameObject(abc);
 	items.push_back(abc);
+
+
+	Workbench *wb = new Workbench(3, 3, 6, 6);
+	wb->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
+	wb->setCanMove(false);
+	wb->setVecNowPos(new D3DXVECTOR3(-7.5, 0, 0));
+	wb->setOverlapLevel(-10);
+	others.push_back(wb);
+	map->addGameObject(wb);
 
 
 	gs = GameState::GameState_game_state_running;

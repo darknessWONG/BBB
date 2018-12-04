@@ -1,0 +1,190 @@
+#include "stdafx.h"
+#include "Workbench.h"
+#include "ItemFactory.h"
+
+
+Workbench::Workbench(int line, int column, float width, float length)
+{
+	this->lineNum = line;
+	this->columnNum = column;
+	this->width = width;
+	this->length = length;
+
+	int vertexNum = ((lineNum + 1) + (columnNum + 1)) * 2;
+	grid = new Vertex[vertexNum];
+
+	for (int i = -width / 2, j = 0, k = length / 2;
+		i <= width / 2 || k >= -length / 2; 
+		i += width / (columnNum), k -= length / (lineNum), j += 2)
+	{
+		grid[j].position = D3DXVECTOR3(i, 0, length / 2);
+		grid[j].color = 0xFFFF0000;
+		grid[j].texPos = D3DXVECTOR2(j / (columnNum + 1), 0);
+
+		grid[j + 1].position = D3DXVECTOR3(i, 0, -length / 2);
+		grid[j + 1].color = 0xFFFF0000;
+		grid[j + 1].texPos = D3DXVECTOR2(j / (columnNum + 1), 1);
+
+		grid[vertexNum - 1 - j].position = D3DXVECTOR3(-width / 2, 0, k);
+		grid[vertexNum - 1 - j].color = 0xFFFF0000;
+		grid[vertexNum - 1 - j].texPos = D3DXVECTOR2(0, j / (lineNum + 1));
+
+		grid[vertexNum - 1 - (j + 1)].position = D3DXVECTOR3(width / 2, 0, k);
+		grid[vertexNum - 1 - (j + 1)].color = 0xFFFF0000;
+		grid[vertexNum - 1 - (j + 1)].texPos = D3DXVECTOR2(1, j / (lineNum + 1));
+	}
+
+	items = new Item*[lineNum * columnNum]{NULL};
+}
+
+
+Workbench::~Workbench()
+{
+}
+
+void Workbench::draw(LPDIRECT3DDEVICE9 pD3DDevice)
+{
+	pD3DDevice->SetFVF(FVF_VERTEX3D);
+
+	pD3DDevice->SetTransform(D3DTS_WORLD, getMtxWorld()); //set the world matrix to the device
+	pD3DDevice->SetTexture(0, NULL);
+
+	pD3DDevice->DrawPrimitiveUP(D3DPT_LINELIST, (lineNum + 1) + (columnNum + 1), grid, sizeof(Vertex));
+}
+
+RECTF Workbench::getBoundingRect(void)
+{
+	RECTF rect;
+	rect.top = getVecNowPos()->z + length / 2;
+	rect.bottom = getVecNowPos()->z - length / 2;
+	rect.right = getVecNowPos()->x + width / 2;
+	rect.left = getVecNowPos()->x - width / 2;
+	return rect;
+}
+
+D3DXVECTOR2 Workbench::getBoundingCenter(void)
+{
+	D3DXVECTOR3 *center = getVecNowPos();
+	return D3DXVECTOR2{center->x, center->z};
+}
+
+void Workbench::setBoundingCenter(D3DXVECTOR2 center)
+{
+	D3DXVECTOR3 nowPos = *getVecNowPos();
+	nowPos.x = center.x;
+	nowPos.z = center.y;
+	setVecNowPos(&nowPos);
+}
+
+bool Workbench::addItem(Item* item)
+{
+	D3DXVECTOR2 itemCenter = item->getBoundingCenter();
+	D3DXVECTOR2 center = getBoundingCenter();
+	center.x -= width / 2;
+	center.y += length / 2;
+	itemCenter -= center;
+	int x = itemCenter.x / width / columnNum;
+	int y = itemCenter.y / length / lineNum;
+
+	if (items[y * columnNum + x] != NULL)
+	{
+		items[y * columnNum + x] = item;
+		//item->setBelong(this);
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+void Workbench::releaseItems(void)
+{
+	delete items;
+	items = NULL;
+}
+
+void Workbench::fuse_items(void)
+{
+	int itemNum = lineNum * columnNum;
+	for (int i = 0; i < itemNum; i++)
+	{
+		if (items[i] != NULL && !items[i]->getIsDestory())
+		{
+			for (int j = i + 1; j < itemNum; j++)
+			{
+				if (!items[j]->getIsDestory())
+				{
+					ItemFactory::item_unite(items[i], items[j]);
+				}
+			}
+		}
+	}
+	releaseItems();
+}
+
+D3DXVECTOR2 Workbench::cal_bolck_position(D3DXVECTOR2 block)
+{
+	D3DXVECTOR2 result;
+	D3DXVECTOR2 center = getBoundingCenter();
+	center.x -= width / 2;
+	center.y += length / 2;
+
+	result.x = (width / columnNum * block.x) + center.x + width / columnNum / 2;
+	result.y = (length / lineNum * block.y) + center.y - length / lineNum / 2;
+	return result;
+}
+
+void Workbench::set_items_position(void)
+{
+	int itemNum = lineNum * columnNum;
+	for (int i = 0; i < lineNum; i++)
+	{
+		for (int j = 0; j < columnNum; j++)
+		{
+			D3DXVECTOR2 new_pos = cal_bolck_position({(float)j, (float)i});
+			items[i * columnNum + j]->setBoundingCenter(new_pos);
+		}
+	}
+
+}
+
+int Workbench::getLineNum(void)
+{
+	return lineNum;
+}
+
+void Workbench::setLineNum(int lineNum)
+{
+	this->lineNum = lineNum;
+}
+
+int Workbench::getColumnNum(void)
+{
+	return columnNum;
+}
+
+void Workbench::setColumnNum(int columnNum)
+{
+	this->columnNum = columnNum;
+}
+
+float Workbench::getWidth(void)
+{
+	return width;
+}
+
+void Workbench::setWidth(float width)
+{
+	this->width = width;
+}
+
+float Workbench::getLength(void)
+{
+	return length;
+}
+
+void Workbench::setLength(float length)
+{
+	this->length = length;
+}

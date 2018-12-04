@@ -173,6 +173,7 @@
     <ClInclude Include="system_timer.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Vigilance.h" />
+    <ClInclude Include="Workbench.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3Dtest.cpp" />
@@ -201,6 +202,7 @@
     </ClCompile>
     <ClCompile Include="system_timer.cpp" />
     <ClCompile Include="Vigilance.cpp" />
+    <ClCompile Include="Workbench.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="3Dtest.rc" />
