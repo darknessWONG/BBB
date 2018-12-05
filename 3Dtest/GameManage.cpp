@@ -186,6 +186,7 @@ void GameManage::tutorial_state_clean(void)
 void GameManage::game_state_init(void)
 {
 	ItemFactory::setDevice(pD3DDevice);
+	Workbench::initRecipe();
 
 	Player* mesh = new Player("radio.x");
 	mesh->loadModel(pD3DDevice);
@@ -234,9 +235,13 @@ void GameManage::game_state_init(void)
 	//gameObjects.push_back(mesh4);
 	map->addGameObject(mesh4);
 
-	Item *abc = ItemFactory::create_item(-7, 7, 1);
+	Item *abc = ItemFactory::create_item(-7, -7, 1);
 	map->addGameObject(abc);
 	items.push_back(abc);
+
+	Item *abc1 = ItemFactory::create_item(-8, 7, 2);
+	map->addGameObject(abc1);
+	items.push_back(abc1);
 
 
 	Workbench *wb = new Workbench(3, 3, 6, 6);
@@ -364,7 +369,7 @@ void GameManage::ItemUpdate(void)
 				player->setFindHoldings(false);
 				break;
 			}
-			if (player->getFindHoldings())
+			if (!player->getFindHoldings())
 			{
 				break;
 			}
@@ -399,7 +404,7 @@ void GameManage::workbenchUpdate(void)
 				}
 			}
 		}
-		wbs[i]->set_items_position();
+		wbs[i]->setItemsPosition();
 	}
 }
 

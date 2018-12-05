@@ -21,6 +21,7 @@ Item * ItemFactory::create_item(float x, float y, int type)
 	item->setCanMove(true);
 	item->setOverlapLevel(-10);
 	item->setVecNowPos(new D3DXVECTOR3(x, 0, y));
+	item->setStatusNow(type);
 	
 
 	return item;

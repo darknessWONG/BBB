@@ -1,8 +1,11 @@
 #include "stdafx.h"
 #include "Workbench.h"
 #include "ItemFactory.h"
+#include "input.h"
 #include "Common.h"
 
+int** Workbench::recipe = NULL;
+int Workbench::recipeNum = 0;
 
 Workbench::Workbench(int line, int column, float width, float length)
 {
@@ -51,6 +54,14 @@ void Workbench::draw(LPDIRECT3DDEVICE9 pD3DDevice)
 	pD3DDevice->SetTexture(0, NULL);
 
 	pD3DDevice->DrawPrimitiveUP(D3DPT_LINELIST, (lineNum + 1) + (columnNum + 1), grid, sizeof(Vertex));
+}
+
+void Workbench::dataUpdate(void)
+{
+	if (Keyboard_IsTrigger(DIK_J))
+	{
+		fuseItems();
+	}
 }
 
 RECTF Workbench::getBoundingRect(void)
@@ -108,26 +119,62 @@ void Workbench::releaseItems(void)
 	}
 }
 
-void Workbench::fuse_items(void)
+void Workbench::fuseItems(void)
 {
 	int itemNum = lineNum * columnNum;
-	for (int i = 0; i < itemNum; i++)
+	bool isFuse = false;
+	int i = 0;
+	for (i = 0; i < Workbench::recipeNum; i++)
 	{
-		if (items[i] != NULL && !items[i]->getIsDestory())
+		int j = 0;
+		for (j = 0; j < itemNum; j++)
 		{
-			for (int j = i + 1; j < itemNum; j++)
+			if ((items[j] == NULL && recipe[i][j] != -1))
 			{
-				if (!items[j]->getIsDestory())
+				break;
+			}
+			else if (items[j] != NULL && (items[j]->getStatusNow() != recipe[i][j]))
+			{
+				break;
+			}
+
+			//if ((items[j] == NULL && recipe[i][j] != -1)
+			//	|| (items[j] != NULL && (items[j]->getStatusNow() != recipe[i][j])))
+			//{
+			//	break;
+			//}
+		}
+		if (j == itemNum)
+		{
+			isFuse = true;
+			break;
+		}
+	}
+	if (isFuse)
+	{
+		bool fused = false;
+		for (int j = 0; j < itemNum; j++)
+		{
+			if (items[j] != NULL)
+			{
+				if (!fused)
 				{
-					ItemFactory::item_unite(items[i], items[j]);
+					items[j]->setStatusNow(recipe[i][itemNum]);
+					items[j]->setBoundingCenter(getBoundingCenter());
+					fused = true;
+				}
+				else
+				{
+					items[j]->setIsDestory(true);
 				}
 			}
 		}
 	}
+
 	releaseItems();
 }
 
-D3DXVECTOR2 Workbench::cal_bolck_position(D3DXVECTOR2 block)
+D3DXVECTOR2 Workbench::calBolckPosition(D3DXVECTOR2 block)
 {
 	D3DXVECTOR2 result;
 	D3DXVECTOR2 center = getBoundingCenter();
@@ -139,7 +186,7 @@ D3DXVECTOR2 Workbench::cal_bolck_position(D3DXVECTOR2 block)
 	return result;
 }
 
-void Workbench::set_items_position(void)
+void Workbench::setItemsPosition(void)
 {
 	int itemNum = lineNum * columnNum;
 	for (int i = 0; i < lineNum; i++)
@@ -148,7 +195,7 @@ void Workbench::set_items_position(void)
 		{
 			if (items[i * columnNum + j] != NULL)
 			{
-				D3DXVECTOR2 new_pos = cal_bolck_position({ (float)j, (float)i });
+				D3DXVECTOR2 new_pos = calBolckPosition({ (float)j, (float)i });
 				items[i * columnNum + j]->setBoundingCenter(new_pos);
 			}
 		}
@@ -194,4 +241,15 @@ float Workbench::getLength(void)
 void Workbench::setLength(float length)
 {
 	this->length = length;
+}
+
+void Workbench::initRecipe(void)
+{
+	recipeNum = 1;
+	recipe = new int*[1];
+	recipe[0] = new int[10]{
+		-1, -1, 1,
+		-1, -1, -1,
+		2, -1, -1, 3
+	};
 }

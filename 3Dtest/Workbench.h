@@ -9,8 +9,6 @@
 //	D3DXVECTOR2 pos;
 //}WorkbenchItem;
 
-
-
 class Workbench :
 	public GameObject
 {
@@ -22,6 +20,7 @@ public:
 	virtual member
 	============================================*/
 	virtual void draw(LPDIRECT3DDEVICE9 pD3DDevice);
+	virtual void dataUpdate(void);
 	virtual RECTF getBoundingRect(void);
 	virtual D3DXVECTOR2 getBoundingCenter(void);
 	virtual void setBoundingCenter(D3DXVECTOR2 center);
@@ -33,10 +32,10 @@ public:
 	void releaseItems(void);
 
 	//void pop_w_items(void);
-	void fuse_items(void);
+	void fuseItems(void);
 
-	D3DXVECTOR2 cal_bolck_position(D3DXVECTOR2 block);
-	void set_items_position(void);
+	D3DXVECTOR2 calBolckPosition(D3DXVECTOR2 block);
+	void setItemsPosition(void);
 
 	/*===========================================
 	public geter / seter
@@ -49,6 +48,11 @@ public:
 	void setWidth(float width);
 	float getLength(void);
 	void setLength(float length);
+
+	/*===========================================
+	static function
+	============================================*/
+	static void initRecipe(void);
 private:
 	Item** items;
 
@@ -57,5 +61,8 @@ private:
 	float width;
 	float length;
 	Vertex* grid;
+
+	static int** recipe;
+	static int recipeNum;
 };
 

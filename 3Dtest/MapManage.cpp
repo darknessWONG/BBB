@@ -29,11 +29,11 @@ void MapManage::updateGameObejcts(void)
 	int gameObjectNum = gameObjects.size();
 	for (int i = 0; i < gameObjectNum; i++)
 	{
+		gameObjects[i]->dataUpdate();
 		if (!gameObjects[i]->getCanMove())
 		{
 			continue;
 		}
-		gameObjects[i]->dataUpdate();
 		//x position update
 		gameObjects[i]->positionUpdateX();
 		vector<TouchStatus> list = collisionDetectionOvl(gameObjects[i]);
