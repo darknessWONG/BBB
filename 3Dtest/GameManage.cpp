@@ -42,6 +42,7 @@ void GameManage::init(void)
 void GameManage::beforeUpdate(void)
 {
 	map->cleanGameObject();
+	cleanDead();
 	map->addGameObject(player);
 	int gameObjectsNum = others.size();
 	for (int i = 0; i < gameObjectsNum; i++)
@@ -200,40 +201,6 @@ void GameManage::game_state_init(void)
 	player = mesh;
 	map->addGameObject(mesh);
 
-
-	Model* mesh1 = new Model("tree.x");
-	mesh1->loadModel(pD3DDevice);
-	mesh1->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
-	//mesh1->setRotateSpeed(20);
-	mesh1->setCanMove(false);
-	mesh1->setVecNowPos(new D3DXVECTOR3(7.5, 0, 0));
-	//gameObjects.push_back(mesh1);
-	others.push_back(mesh1);
-	map->addGameObject(mesh1);
-
-
-	Enemy* mesh3 = new Enemy("radio.x");
-	mesh3->loadModel(pD3DDevice);
-	mesh3->setWalkSpeed(0.01);
-	mesh3->setMaxSpeed(0.3);
-	mesh3->setCanMove(true);
-	mesh3->setVecNowPos(new D3DXVECTOR3(1, 0, 1));
-	mesh3->setVecPatrolStart(new D3DXVECTOR3(1, 0, 1));
-	mesh3->setVecPatrolEnd(new D3DXVECTOR3(1, 0, 5));
-	//gameObjects.push_back(mesh3);
-	enemys.push_back(mesh3);
-	map->addGameObject(mesh3);
-
-	Vigilance* mesh4 = new Vigilance();
-	mesh4->setMaxSpeed(0.3);
-	mesh4->setCanMove(true);
-	mesh4->setVecNowPos(new D3DXVECTOR3(1, 0, 1));
-	mesh4->setBelong(mesh3);
-	mesh4->setRadius(2);
-	mesh4->setRadius(7);
-	vigliances.push_back(mesh4);
-	//gameObjects.push_back(mesh4);
-	map->addGameObject(mesh4);
 
 	Item *abc = ItemFactory::create_item(-7, -7, 1);
 	map->addGameObject(abc);
@@ -405,6 +372,26 @@ void GameManage::workbenchUpdate(void)
 			}
 		}
 		wbs[i]->setItemsPosition();
+	}
+}
+
+void GameManage::cleanDead(void)
+{
+	for (int i = 0; i < items.size(); i++)
+	{
+		if (items[i]->getIsDestory())
+		{
+			Item* tmp = items[i];
+			for (vector<Item*>::iterator it = items.begin(); it != items.end(); it++)
+			{
+				if (*it == items[i])
+				{
+					items.erase(it);
+					i = 0;
+					break;
+				}
+			}
+		}
 	}
 }
 

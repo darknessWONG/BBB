@@ -137,12 +137,6 @@ void Workbench::fuseItems(void)
 			{
 				break;
 			}
-
-			//if ((items[j] == NULL && recipe[i][j] != -1)
-			//	|| (items[j] != NULL && (items[j]->getStatusNow() != recipe[i][j])))
-			//{
-			//	break;
-			//}
 		}
 		if (j == itemNum)
 		{

@@ -16,6 +16,7 @@ Chara::~Chara()
 {
 }
 
+
 float Chara::getWalkSpeed(void)
 {
 	return walkSpeed;

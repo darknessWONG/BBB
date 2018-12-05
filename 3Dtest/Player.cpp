@@ -44,7 +44,7 @@ void Player::dataUpdate(void)
 	}
 	if (Keyboard_IsTrigger(DIK_SPACE))
 	{
-		if (holdings == NULL)
+		if (getHoldings() == NULL)
 		{
 			findHoldings = true;
 		}
@@ -66,12 +66,6 @@ void Player::dataUpdate(void)
 	Chara::dataUpdate();
 }
 
-void Player::releaseHoldings(void)
-{
-	holdings->setBelong(NULL);
-	holdings = NULL;
-}
-
 bool Player::getFindHoldings(void)
 {
 	return findHoldings;
@@ -81,6 +75,14 @@ void Player::setFindHoldings(bool findHoldings)
 {
 	this->findHoldings = findHoldings;
 }
+
+
+void Player::releaseHoldings(void)
+{
+	holdings->setBelong(NULL);
+	holdings = NULL;
+}
+
 
 Item * Player::getHoldings(void)
 {

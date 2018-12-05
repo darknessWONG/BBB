@@ -14,6 +14,9 @@ Item::Item(string modelPath)
 
 Item::~Item()
 {
+	if(belong != NULL)
+	{
+	}
 }
 
 void Item::positionUpdateX(void)

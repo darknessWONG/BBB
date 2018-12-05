@@ -45,6 +45,8 @@ public:
 	void ItemUpdate(void);
 	void workbenchUpdate(void);
 
+	void cleanDead(void);
+
 	void setPD3DDevice(LPDIRECT3DDEVICE9 pD3DDevice);
 private:
 	void state_read_input(GameState name);

@@ -31,6 +31,6 @@ private:
 	float walkAccele;
 	bool findHoldings;
 
+
 	Item* holdings = NULL;
 };
-
