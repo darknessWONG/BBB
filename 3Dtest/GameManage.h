@@ -6,20 +6,7 @@
 #include "Light.h"
 #include "static.h"
 #include "MapManage.h"
-
-//enum GameState
-//{
-//	GameStateTitleInit,
-//	GameStateTitleRunning,
-//	GameStateTitleClean,
-//	GameStateGameInit,
-//	GameStateGameRunning,
-//	GameStateGameClean,
-//	GameStateEndInit,
-//	GameStateEndRunning,
-//	GameStateEndClean,
-//	GameStateMax
-//};
+#include "Workbench.h"
 
 class GameManage
 {
@@ -56,7 +43,7 @@ public:
 
 	void checkEnd(void);
 	void ItemUpdate(void);
-
+	void workbenchUpdate(void);
 
 	void setPD3DDevice(LPDIRECT3DDEVICE9 pD3DDevice);
 private:
@@ -71,6 +58,7 @@ private:
 	vector<Enemy*> enemys;
 	vector<Vigilance*> vigliances;
 	vector<Item*> items;
+	vector<Workbench*> wbs;
 	
 	vector<GameObject*> others;
 

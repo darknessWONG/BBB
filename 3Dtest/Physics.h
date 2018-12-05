@@ -48,10 +48,14 @@ public:
 
 	//Is point in the rect or on the rect's edege 
 	static bool pointOnRect(D3DXVECTOR2 point, D3DXVECTOR2* rectPoints);
+	static bool pointOnRect(D3DXVECTOR2 point, RECTF rect);
 	//Is point in the rect
 	static bool pointInRect(D3DXVECTOR2 point, D3DXVECTOR2* rectPoints);
+	static bool pointInRect(D3DXVECTOR2 point, RECTF rect);
 	//Is point on the rect's edege 
 	static bool pointTouchRect(D3DXVECTOR2 point, D3DXVECTOR2* rectPoints);
+	static bool pointTouchRect(D3DXVECTOR2 point, RECTF rect);
+
 	static bool rectInRect(D3DXVECTOR2* rectPoints1, D3DXVECTOR2* rectPoints2);
 	static bool pointInCycle(Cycle* cycle, D3DXVECTOR2* point);
 	static TouchType rectTouchRect(D3DXVECTOR2* rectPoints1, D3DXVECTOR2* rectPoints2);
@@ -62,6 +66,8 @@ public:
 	static BOOL linesegmentTouchLinesegment(line_segment line1, line_segment line2);
 	static line createLine(D3DXVECTOR2 point1, D3DXVECTOR2 point2);
 	static line_segment createLinesegment(D3DXVECTOR2 point1, D3DXVECTOR2 point2);
+
+	static D3DXVECTOR2* createRectPointsFromRECTF(RECTF const * rect);
 
 	static float round(float src, int bits);
 private:

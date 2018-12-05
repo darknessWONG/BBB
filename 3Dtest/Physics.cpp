@@ -24,16 +24,32 @@ bool Physics::pointOnRect(D3DXVECTOR2 point, D3DXVECTOR2 * rectPoints)
 	}
 }
 
+bool Physics::pointOnRect(D3DXVECTOR2 point, RECTF rect)
+{
+	D3DXVECTOR2* points = createRectPointsFromRECTF(&rect);
+	bool result = pointOnRect(point, points);
+	delete points;
+	return result;
+}
+
 bool Physics::pointInRect(D3DXVECTOR2 point, D3DXVECTOR2 * rectPoints)
 {
 	if (point.x > rectPoints[0].x && point.x < rectPoints[1].x)
 	{
-		if (point.y > rectPoints[0].y && point.y < rectPoints[3].y)
+		if (point.y < rectPoints[0].y && point.y > rectPoints[3].y)
 		{
 			return true;
 		}
 	}
 	return false;
+}
+
+bool Physics::pointInRect(D3DXVECTOR2 point, RECTF rect)
+{
+	D3DXVECTOR2* points = createRectPointsFromRECTF(&rect);
+	bool result = pointInRect(point, points);
+	delete points;
+	return result;
 }
 
 bool Physics::pointTouchRect(D3DXVECTOR2 point, D3DXVECTOR2 * rectPoints)
@@ -47,12 +63,20 @@ bool Physics::pointTouchRect(D3DXVECTOR2 point, D3DXVECTOR2 * rectPoints)
 	}
 	if (point.x == rectPoints[0].x || point.x == rectPoints[1].x)
 	{
-		if (point.y >= rectPoints[0].y && point.y <= rectPoints[3].y)
+		if (point.y <= rectPoints[0].y && point.y >= rectPoints[3].y)
 		{
 			return true;
 		}
 	}
 	return false;
+}
+
+bool Physics::pointTouchRect(D3DXVECTOR2 point, RECTF rect)
+{
+	D3DXVECTOR2* points = createRectPointsFromRECTF(&rect);
+	bool result = pointTouchRect(point, points);
+	delete points;
+	return result;
 }
 
 bool Physics::rectInRect(D3DXVECTOR2 * rectPoints1, D3DXVECTOR2 * rectPoints2)
@@ -175,6 +199,17 @@ line_segment Physics::createLinesegment(D3DXVECTOR2 point1, D3DXVECTOR2 point2)
 	line_segment lis = { li.a, li.b, point1.x, point2.x };
 	
 	return lis;
+}
+
+D3DXVECTOR2 * Physics::createRectPointsFromRECTF(RECTF const * rect)
+{
+	D3DXVECTOR2 *points = new D3DXVECTOR2[4]{
+		{ rect->left, rect->top},
+		{rect->right, rect->top},
+		{rect->left, rect->bottom},
+		{rect->right, rect->bottom}
+	};
+	return points;
 }
 
 float Physics::round(float src, int bits)

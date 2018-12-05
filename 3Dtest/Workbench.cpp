@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Workbench.h"
 #include "ItemFactory.h"
+#include "Common.h"
 
 
 Workbench::Workbench(int line, int column, float width, float length)
@@ -83,10 +84,10 @@ bool Workbench::addItem(Item* item)
 	center.x -= width / 2;
 	center.y += length / 2;
 	itemCenter -= center;
-	int x = itemCenter.x / width / columnNum;
-	int y = itemCenter.y / length / lineNum;
+	int x = abs(itemCenter.x *  columnNum / width);
+	int y = abs(itemCenter.y * lineNum / length);
 
-	if (items[y * columnNum + x] != NULL)
+	if (items[y * columnNum + x] == NULL)
 	{
 		items[y * columnNum + x] = item;
 		//item->setBelong(this);
@@ -100,8 +101,11 @@ bool Workbench::addItem(Item* item)
 
 void Workbench::releaseItems(void)
 {
-	delete items;
-	items = NULL;
+	int itemNum = lineNum * columnNum;
+	for (int i = 0; i < itemNum; i++)
+	{
+		items[i] = NULL;
+	}
 }
 
 void Workbench::fuse_items(void)
@@ -130,8 +134,8 @@ D3DXVECTOR2 Workbench::cal_bolck_position(D3DXVECTOR2 block)
 	center.x -= width / 2;
 	center.y += length / 2;
 
-	result.x = (width / columnNum * block.x) + center.x + width / columnNum / 2;
-	result.y = (length / lineNum * block.y) + center.y - length / lineNum / 2;
+	result.x = center.x + (width / columnNum * block.x) + width / columnNum / 2;
+	result.y = center.y - (length / lineNum * block.y) - length / lineNum / 2;
 	return result;
 }
 
@@ -142,8 +146,11 @@ void Workbench::set_items_position(void)
 	{
 		for (int j = 0; j < columnNum; j++)
 		{
-			D3DXVECTOR2 new_pos = cal_bolck_position({(float)j, (float)i});
-			items[i * columnNum + j]->setBoundingCenter(new_pos);
+			if (items[i * columnNum + j] != NULL)
+			{
+				D3DXVECTOR2 new_pos = cal_bolck_position({ (float)j, (float)i });
+				items[i * columnNum + j]->setBoundingCenter(new_pos);
+			}
 		}
 	}
 

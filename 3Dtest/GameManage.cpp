@@ -53,6 +53,11 @@ void GameManage::beforeUpdate(void)
 	{
 		map->addGameObject(items[i]);
 	}
+	gameObjectsNum = wbs.size();
+	for (int i = 0; i < gameObjectsNum; i++)
+	{
+		map->addGameObject(wbs[i]);
+	}
 	gameObjectsNum = enemys.size();
 	for (int i = 0; i < gameObjectsNum; i++)
 	{
@@ -239,7 +244,7 @@ void GameManage::game_state_init(void)
 	wb->setCanMove(false);
 	wb->setVecNowPos(new D3DXVECTOR3(-7.5, 0, 0));
 	wb->setOverlapLevel(-10);
-	others.push_back(wb);
+	wbs.push_back(wb);
 	map->addGameObject(wb);
 
 
@@ -251,6 +256,7 @@ void GameManage::game_state_update(void)
 	//state_read_input(GameState_game_state_clean);
 	//state = GameState_game_state_clean;
 	ItemUpdate();
+	workbenchUpdate();
 }
 
 void GameManage::game_state_clean(void)
@@ -363,6 +369,37 @@ void GameManage::ItemUpdate(void)
 				break;
 			}
 		}
+	}
+}
+
+void GameManage::workbenchUpdate(void)
+{
+	int wbNum = wbs.size();
+	int itemNum = items.size();
+	for (int i = 0; i < wbNum; i++)
+	{
+		wbs[i]->releaseItems();
+		//D3DXVECTOR2 wbCenter = wbs[i]->getBoundingCenter();
+		//float width = wbs[i]->getWidth();
+		//float length = wbs[i]->getLength();
+		RECTF wbRect = wbs[i]->getBoundingRect();
+		for (int j = 0; j < itemNum; j++)
+		{
+			if (items[j]->getIsDestory() || items[j]->getBelong() != NULL)
+			{
+				continue;
+			}
+			TouchType type = map->collisionDetection(wbs[i], items[j]);
+			if (type == TouchType::cover)
+			{
+				D3DXVECTOR2 itemCenter = items[j]->getBoundingCenter();
+				if (Physics::pointInRect(itemCenter, wbRect))
+				{
+					wbs[i]->addItem(items[j]);
+				}
+			}
+		}
+		wbs[i]->set_items_position();
 	}
 }
 
