@@ -166,6 +166,7 @@
     <ClInclude Include="input.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="MapManage.h" />
+    <ClInclude Include="MeumUI.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="MovePerform.h" />
     <ClInclude Include="Perform.h" />
@@ -199,6 +200,7 @@
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapManage.cpp" />
+    <ClCompile Include="MeumUI.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="MovePerform.cpp" />
     <ClCompile Include="Perform.cpp" />

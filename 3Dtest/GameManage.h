@@ -8,6 +8,7 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "PerformManage.h"
+#include "UI.h"
 
 class GameManage
 {
@@ -47,8 +48,8 @@ private:
 	Player *player = NULL;
 	vector<Enemy*> enemys;
 	vector<Vigilance*> vigliances;
-
 	vector<GameObject*> others;
+	vector<UI*> uis;
 
 	MapManage* map = NULL;
 

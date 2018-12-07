@@ -7,6 +7,8 @@
 #include "input.h"
 #include "Enemy.h"
 #include "MovePerform.h"
+#include "TextureHandler2D.h"
+#include "UI.h"
 
 GameManage::GameManage()
 {
@@ -32,10 +34,11 @@ void GameManage::init(void)
 	D3DXVECTOR3* cameraUp = new D3DXVECTOR3(0, 1, 0);
 	camera = new Camera(cameraPos, cameraWatchAt, cameraUp);
 
-
-
 	light = new Light();
 	light->init(pD3DDevice);
+
+	TextureHandler2D::AddTexture("net.jpg", 383, 300);
+	TextureHandler2D::LoadTextures(pD3DDevice);
 }
 
 void GameManage::beforeUpdate(void)
@@ -113,6 +116,13 @@ void GameManage::draw(void)
 	if (gs == GameState::GameStateGameRunning)
 	{
 		map->drawGameObjects(pD3DDevice);
+	}
+
+	int uiNum = uis.size();
+	for (int i = 0; i < uiNum; i++)
+	{
+		D3DXVECTOR2 basePos = { 0, 0 };
+		uis[i]->draw(pD3DDevice, &basePos);
 	}
 }
 
@@ -209,6 +219,9 @@ void GameManage::gameStateInit(void)
 	per->setVecTarget(D3DXVECTOR3(-12, 0, 0));
 	per->setVecStart(D3DXVECTOR3(player->getBoundingCenter().x, 0, player->getBoundingCenter().y));
 	pm.addPerforms(per);
+
+	UI* ui = new UI({ 0, 0 }, 200, 200, 0);
+	uis.push_back(ui);
 
 	gs = GameState::GameStateGameRunning;
 }

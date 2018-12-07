@@ -43,7 +43,7 @@ static bool Initialize(HINSTANCE hInstance, HWND hWnd);
 // ゲームの更新関数
 static void Update(void);
 // ゲームの描画関数
-static void Draw(void);
+static void draw(void);
 // ゲームの終了処理
 static void Finalize(void);
 
@@ -161,7 +161,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 				// ゲームの更新
 				Update();
 				// ゲームの描画
-				Draw();
+				draw();
 			}
 		}
 	}
@@ -277,7 +277,7 @@ void Update(void)
 }
 
 // ゲームの描画関数
-void Draw(void)
+void draw(void)
 {
 	LPDIRECT3DDEVICE9 pDevice = Common::g_pD3DDevice;
 	if (!pDevice) return;

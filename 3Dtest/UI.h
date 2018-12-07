@@ -4,12 +4,13 @@
 class UI
 {
 public:
-	UI();
+	UI(D3DXVECTOR2 pos, float width, float height, int tex);
 	~UI();
 
-	void Draw(LPDIRECT3DDEVICE9 g_pD3DDevice, D3DXVECTOR2 *basePoint);
+	void draw(LPDIRECT3DDEVICE9 g_pD3DDevice, D3DXVECTOR2 *basePoint);
 	void addChild(UI* ui);
 	void addNext(UI* ui);
+	void releaseChain(void);
 
 	D3DXVECTOR2 getPosition(void);
 	void setPosition(D3DXVECTOR2 position);
@@ -24,6 +25,9 @@ public:
 private:
 	void calPoints(D3DXVECTOR2* basePoint);
 	void calTexPoint(void);
+
+	void releaseChild(void);
+	void releaseNext(void);
 
 	D3DXVECTOR2 position;
 	D3DXVECTOR2 points[4];

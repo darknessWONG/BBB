@@ -2,8 +2,14 @@
 #include "UI.h"
 
 
-UI::UI()
+UI::UI(D3DXVECTOR2 pos, float width, float height, int tex)
 {
+	this->position = pos;
+	this->width = width;
+	this->height = height;
+	texture = tex;
+	child = NULL;
+	next = NULL;
 }
 
 
@@ -67,7 +73,7 @@ void UI::calTexPoint(void)
 	uvPos[3] = { 1, 1 };
 }
 
-void UI::Draw(LPDIRECT3DDEVICE9 g_pD3DDevice, D3DXVECTOR2 *basePoint)
+void UI::draw(LPDIRECT3DDEVICE9 g_pD3DDevice, D3DXVECTOR2 *basePoint)
 {
 	calPoints(basePoint);
 	calTexPoint();
@@ -78,7 +84,7 @@ void UI::Draw(LPDIRECT3DDEVICE9 g_pD3DDevice, D3DXVECTOR2 *basePoint)
 		f[i].pos = { points[i].x, points[i].y, 0, 1 };
 		f[i].pos.x += 0.5;
 		f[i].pos.y += 0.5;
-		f[i].color = D3DCOLOR_RGBA(255, 255, 255, 255);
+		f[i].color = D3DCOLOR_RGBA(255, 0, 0, 255);
 		f[i].uv = uvPos[i];
 	}
 	g_pD3DDevice->SetFVF(FVF_VERTEX2D);
@@ -88,12 +94,12 @@ void UI::Draw(LPDIRECT3DDEVICE9 g_pD3DDevice, D3DXVECTOR2 *basePoint)
 
 	if (next != NULL)
 	{
-		next->Draw(g_pD3DDevice, basePoint);
+		next->draw(g_pD3DDevice, basePoint);
 	}
 
 	if (child != NULL)
 	{
-		child->Draw(g_pD3DDevice, points);
+		child->draw(g_pD3DDevice, points);
 	}
 }
 
@@ -128,5 +134,35 @@ void UI::addNext(UI * ui)
 			tmp = tmp->next;
 		}
 		tmp->next = ui;
+	}
+}
+
+void UI::releaseChain(void)
+{
+	if (child != NULL)
+	{
+		child->releaseChain();
+	}
+	if (next != NULL)
+	{
+		next->releaseChain();
+	}
+	releaseNext();
+	releaseChild();
+}
+
+void UI::releaseChild(void)
+{
+	if (child != NULL)
+	{
+		child = NULL;
+	}
+}
+
+void UI::releaseNext(void)
+{
+	if (next != NULL)
+	{
+		next = NULL;
 	}
 }
