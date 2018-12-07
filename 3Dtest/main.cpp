@@ -15,7 +15,7 @@ Date   : 2018/09/05
 //#include "mydirect3d.h"
 //#include "debug_font.h"
 #include "input.h"
-//#include "texture.h"
+#include "texture.h"
 //#include "sprite.h"
 //#include "game.h"
 
@@ -213,9 +213,9 @@ bool Initialize(HINSTANCE hInstance, HWND hWnd)
 	}
 
 	// テクスチャの読み込み
-	/*if (Texture_Load() > 0) {
+	if (Texture_Load() > 0) {
 		MessageBox(hWnd, "いくつか読み込めなかったテクスチャファイルがあります", "エラー", MB_OK);
-	}*/
+	}
 
 	// システムタイマーの初期化
 	SystemTimer_Initialize();
@@ -311,7 +311,7 @@ void Finalize(void)
 	//Sprite_Finalize();
 
 	// テクスチャの解放
-	//Texture_Release();
+	Texture_Release();
 
 	// DirectInput版キーボードモジュールの終了処理
 	Keyboard_Finalize();

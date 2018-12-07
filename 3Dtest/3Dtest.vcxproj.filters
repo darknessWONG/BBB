@@ -1,172 +1,190 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="源文件">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="头文件">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="资源文件">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
+    <ClCompile Include="3Dtest.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="Chara.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="Common.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="debugPrintf.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="Emitter.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="font.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="GameManage.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="input.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemFactory.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="MapManage.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="Recipe.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="SpecialArea.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="sprite.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="system_timer.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="texture.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="Workbench.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="Vigilance.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="3Dtest.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Chara.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Common.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="debugPrintf.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Emitter.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="font.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManage.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="input.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemFactory.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="MapManage.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Recipe.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="sprite.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="SpecialArea.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="system_timer.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="texture.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Vigilance.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Workbench.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="3Dtest.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="3Dtest.ico" />
+    <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stdafx.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="3Dtest.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Common.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="debugPrintf.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Model.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="GameManage.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Light.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="system_timer.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="input.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Chara.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MapManage.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Physics.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Vigilance.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="SpecialArea.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Item.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="ItemFactory.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Workbench.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="3Dtest.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Common.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="debugPrintf.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Model.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="GameManage.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Light.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="system_timer.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="input.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Chara.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="MapManage.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Physics.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Vigilance.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="SpecialArea.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Item.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="ItemFactory.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Workbench.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="3Dtest.rc">
-      <Filter>资源文件</Filter>
-    </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="small.ico">
-      <Filter>资源文件</Filter>
-    </Image>
-    <Image Include="3Dtest.ico">
-      <Filter>资源文件</Filter>
-    </Image>
+    <Filter Include="Header">
+      <UniqueIdentifier>{3682a822-29f0-4785-a05b-5b5811e3b1a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source File">
+      <UniqueIdentifier>{3f7a6833-b237-4fd7-a59d-c6751a8c6c3d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

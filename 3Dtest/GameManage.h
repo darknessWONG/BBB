@@ -7,6 +7,7 @@
 #include "static.h"
 #include "MapManage.h"
 #include "Workbench.h"
+#include "Emitter.h"
 
 class GameManage
 {
@@ -63,6 +64,8 @@ private:
 	vector<Workbench*> wbs;
 	
 	vector<GameObject*> others;
+
+	Emitter *pEmitter;
 
 	MapManage* map = NULL;
 
