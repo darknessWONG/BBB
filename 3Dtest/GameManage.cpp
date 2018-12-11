@@ -148,11 +148,22 @@ void GameManage::draw(void)
 	light->lightSet(pD3DDevice);
 	camera->draw(pD3DDevice);
 
+	if (gs == GameState::GameState_title_state_running)
+	{
+		pTitle->Draw();
+	}
+
 	if (gs == GameState::GameState_game_state_running)
 	{
 		map->drawGameObjects(pD3DDevice);
 		pEmitter->Draw();
 	}
+
+	if (gs == GameState::GameState_result_state_running)
+	{
+		pResult->Draw();
+	}
+
 }
 
 void GameManage::release(void)
@@ -161,16 +172,24 @@ void GameManage::release(void)
 
 void GameManage::title_state_init(void)
 {
+	pTitle = new GameTitle();
+
 	gs = GameState_title_state_running;
 }
 
 void GameManage::title_state_update(void)
 {
-	gs = GameState_title_state_clean;
+	pTitle->Update();
+
+	if (pTitle->isEnd()) {
+		gs = GameState_title_state_clean;
+	}
 }
 
 void GameManage::title_state_clean(void)
 {
+	delete pTitle;
+
 	gs = GameState_tutorial_state_init;
 }
 
@@ -233,11 +252,12 @@ void GameManage::game_state_init(void)
 void GameManage::game_state_update(void)
 {
 	pEmitter->Update();
-	//state_read_input(GameState_game_state_clean);
 
-	//state = GameState_game_state_clean;
 	ItemUpdate();
 	workbenchUpdate();
+	
+	// Temporary change scene by ESC key
+	state_read_input(GameState::GameState_game_state_clean);
 }
 
 void GameManage::game_state_clean(void)
@@ -281,16 +301,25 @@ void GameManage::game_state_clean(void)
 
 void GameManage::result_state_init(void)
 {
+	pResult = new GameResult();
+
 	gs = GameState_result_state_running;
 }
 
 void GameManage::result_state_update(void)
 {
-	gs = GameState_result_state_clean;
+
+	pResult->Update();
+
+	if (pResult->isEnd()) {
+		gs = GameState_result_state_clean;
+	}
 }
 
 void GameManage::result_state_clean(void)
 {
+	delete pResult;
+
 	gs = GameState_naming_state_init;
 }
 
@@ -411,7 +440,7 @@ void GameManage::setPD3DDevice(LPDIRECT3DDEVICE9 pD3DDevice)
 
 void GameManage::state_read_input(GameState name)
 {
-	if (Keyboard_IsPress(DIK_SPACE))
+	if (Keyboard_IsPress(DIK_RETURN))
 	{
 		gs = name;
 	}

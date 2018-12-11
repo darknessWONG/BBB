@@ -8,6 +8,8 @@
 #include "MapManage.h"
 #include "Workbench.h"
 #include "Emitter.h"
+#include "GameTitle.h"
+#include "GameResult.h"
 
 class GameManage
 {
@@ -66,6 +68,9 @@ private:
 	vector<GameObject*> others;
 
 	Emitter *pEmitter;
+	
+	GameTitle *pTitle;
+	GameResult *pResult;
 
 	MapManage* map = NULL;
 

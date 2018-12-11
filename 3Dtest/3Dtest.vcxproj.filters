@@ -82,6 +82,12 @@
     <ClCompile Include="Vigilance.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
+    <ClCompile Include="GameTitle.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="GameResult.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3Dtest.h">
@@ -166,6 +172,12 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="Workbench.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GameTitle.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GameResult.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
