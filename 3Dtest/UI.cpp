@@ -84,7 +84,7 @@ void UI::draw(LPDIRECT3DDEVICE9 g_pD3DDevice, D3DXVECTOR2 *basePoint)
 		f[i].pos = { points[i].x, points[i].y, 0, 1 };
 		f[i].pos.x += 0.5;
 		f[i].pos.y += 0.5;
-		f[i].color = D3DCOLOR_RGBA(255, 0, 0, 255);
+		f[i].color = D3DCOLOR_RGBA(255, 255, 255, 255);
 		f[i].uv = uvPos[i];
 	}
 	g_pD3DDevice->SetFVF(FVF_VERTEX2D);

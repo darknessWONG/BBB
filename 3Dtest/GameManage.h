@@ -7,6 +7,7 @@
 #include "MapManage.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "MeumUI.h"
 #include "PerformManage.h"
 #include "UI.h"
 
@@ -49,7 +50,7 @@ private:
 	vector<Enemy*> enemys;
 	vector<Vigilance*> vigliances;
 	vector<GameObject*> others;
-	vector<UI*> uis;
+	vector<MeumUI*> uis;
 
 	MapManage* map = NULL;
 

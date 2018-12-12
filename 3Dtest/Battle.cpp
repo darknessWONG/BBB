@@ -4,6 +4,8 @@
 
 Battle::Battle()
 {
+	commandMeum = new MeumUI();
+
 }
 
 

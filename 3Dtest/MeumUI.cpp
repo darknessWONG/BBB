@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "MeumUI.h"
+#include "input.h"
 
 
 MeumUI::MeumUI()
@@ -22,13 +23,68 @@ void MeumUI::assembleUIs(void)
 	}
 }
 
-void MeumUI::draw(LPDIRECT3DDEVICE9 g_pD3DDevice);
+void MeumUI::dataUpdate(void)
 {
-	background->draw(g_pD3DDevice, position);
+	if (Keyboard_IsTrigger(DIK_UP))
+	{
+		setNowPointing(nowPointing - 1);
+	}
+	else if (Keyboard_IsTrigger(DIK_DOWN))
+	{
+		setNowPointing(nowPointing + 1);
+	}
+	calPointerPosition();
+}
+
+void MeumUI::draw(LPDIRECT3DDEVICE9 g_pD3DDevice)
+{
+	assembleUIs();
+	background->draw(g_pD3DDevice, &position);
 }
 
 void MeumUI::addOptins(UI * option)
 {
 	options.push_back(option);
+}
+
+void MeumUI::calPointerPosition(void)
+{
+	D3DXVECTOR2 opPos = options[nowPointing]->getPosition();
+	pointer->setPosition({ opPos.x - pointer->getWidth(), opPos.y });
+}
+
+D3DXVECTOR2 MeumUI::getPosition(void)
+{
+	return position;
+}
+
+void MeumUI::setPosition(D3DXVECTOR2 pos)
+{
+	this->position = pos;
+}
+
+int MeumUI::getNowPointing(void)
+{
+	return nowPointing;
+}
+
+void MeumUI::setNowPointing(int nowPointing)
+{
+	nowPointing %= options.size();
+	if (nowPointing < 0)
+	{
+		nowPointing = options.size() - nowPointing;
+	}
+	this->nowPointing = nowPointing;
+}
+
+void MeumUI::setBackground(UI * ui)
+{
+	background = ui;
+}
+
+void MeumUI::setPointer(UI * ui)
+{
+	pointer = ui;
 }
 

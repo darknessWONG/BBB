@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "Chara.h"
+#include "meumUI.h"
 class Battle
 {
 public:
@@ -30,5 +31,7 @@ private:
 
 	BattleState bs;
 	int nowActionChara;
+
+	MeumUI* commandMeum;
 };
 

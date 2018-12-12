@@ -8,6 +8,7 @@
 #include "Enemy.h"
 #include "MovePerform.h"
 #include "TextureHandler2D.h"
+#include "MeumUI.h"
 #include "UI.h"
 
 GameManage::GameManage()
@@ -38,6 +39,7 @@ void GameManage::init(void)
 	light->init(pD3DDevice);
 
 	TextureHandler2D::AddTexture("net.jpg", 383, 300);
+	TextureHandler2D::AddTexture("grass.jpg", 1024, 987);
 	TextureHandler2D::LoadTextures(pD3DDevice);
 }
 
@@ -121,8 +123,8 @@ void GameManage::draw(void)
 	int uiNum = uis.size();
 	for (int i = 0; i < uiNum; i++)
 	{
-		D3DXVECTOR2 basePos = { 0, 0 };
-		uis[i]->draw(pD3DDevice, &basePos);
+		uis[i]->dataUpdate();
+		uis[i]->draw(pD3DDevice);
 	}
 }
 
@@ -221,7 +223,16 @@ void GameManage::gameStateInit(void)
 	pm.addPerforms(per);
 
 	UI* ui = new UI({ 0, 0 }, 200, 200, 0);
-	uis.push_back(ui);
+	UI* ui1 = new UI({ 20, 20 }, 50, 50, 1);
+	UI* ui2 = new UI({ 80, 20 }, 50, 50, 1);
+	UI* ui3 = new UI({ 80, 80 }, 50, 50, 1);
+	MeumUI *meum = new MeumUI();
+	meum->addOptins(ui2);
+	meum->addOptins(ui3);
+	meum->setBackground(ui);
+	meum->setPointer(ui1);
+	meum->setPosition({ 0, 0 });
+	uis.push_back(meum);
 
 	gs = GameState::GameStateGameRunning;
 }
