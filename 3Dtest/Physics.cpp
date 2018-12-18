@@ -82,10 +82,10 @@ TouchType Physics::rectTouchRect(D3DXVECTOR2 * rect1, D3DXVECTOR2 * rect2)
 	float lx = fabs((rectPoints1[0].x + rectPoints1[1].x) - (rectPoints2[0].x + rectPoints2[1].x));
 	float ly = fabs((rectPoints1[0].y + rectPoints1[2].y) - (rectPoints2[0].y + rectPoints2[2].y));
 
-	lx = round(lx, FLOATBITS);
-	ly = round(ly, FLOATBITS);
-	lengthx = round(lengthx, FLOATBITS);
-	lengthy = round(lengthy, FLOATBITS);
+	lx = round(lx, FLOAT_BITS);
+	ly = round(ly, FLOAT_BITS);
+	lengthx = round(lengthx, FLOAT_BITS);
+	lengthy = round(lengthy, FLOAT_BITS);
 	if (lx < lengthx && ly < lengthy)
 	{
 		return TouchType::cover;
@@ -110,7 +110,7 @@ bool Physics::pointInCycle(Cycle * cycle, D3DXVECTOR2 * point)
 	float dis = (point->x - cycle->center_x) * (point->x - cycle->center_x) + (point->y - cycle->center_y) * (point->y - cycle->center_y);
 	float ra2 = cycle->r * cycle->r;
 
-	if (round(dis, FLOATBITS) <= round(ra2, FLOATBITS))
+	if (round(dis, FLOAT_BITS) <= round(ra2, FLOAT_BITS))
 	{
 		return true;
 	}

@@ -15,6 +15,7 @@ Date   : 2018/09/05
 //#include "mydirect3d.h"
 //#include "debug_font.h"
 #include "input.h"
+#include "font.h"
 //#include "texture.h"
 //#include "sprite.h"
 //#include "game.h"
@@ -211,6 +212,8 @@ bool Initialize(HINSTANCE hInstance, HWND hWnd)
 	if (!Keyboard_Initialize(hInstance, hWnd)) {
 		return false;
 	}
+
+	Font_Initialize();
 
 	// テクスチャの読み込み
 	/*if (Texture_Load() > 0) {

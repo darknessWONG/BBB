@@ -225,7 +225,9 @@ void GameManage::gameStateInit(void)
 	UI* ui = new UI({ 0, 0 }, 200, 200, 0);
 	UI* ui1 = new UI({ 20, 20 }, 50, 50, 1);
 	UI* ui2 = new UI({ 80, 20 }, 50, 50, 1);
+	ui2->setStr("ATTACK");
 	UI* ui3 = new UI({ 80, 80 }, 50, 50, 1);
+	ui3->setStr("RUN");
 	MeumUI *meum = new MeumUI();
 	meum->addOptins(ui2);
 	meum->addOptins(ui3);

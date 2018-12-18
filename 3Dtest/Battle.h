@@ -2,6 +2,19 @@
 #include <vector>
 #include "Chara.h"
 #include "meumUI.h"
+
+typedef struct action_st
+{
+	Chara* active = NULL;
+	vector<Chara*> passive;
+	bool isUseSkill;
+	BattleSkill* skill = NULL;
+	vector<int> damage;
+	vector<int> heal;
+}Action;
+
+
+
 class Battle
 {
 public:
@@ -21,16 +34,29 @@ public:
 
 	void calActionList(void);
 
+	void readCommand(void);
+	void selectTarget(void);
+	void seleteSkill(void);
+
 	//if is dead return true or return false
 	bool checkDead(Chara* chara);
 	void addCharas(Chara* chara);
 
+	void createTagatMeum(vector<Chara*> list);
+	vector<Chara*> calTargetList(Chara* acvite, BattleSkill* skill);
 private:
+	BattleState bs;
+	ActionPhaseStatus as;
+
 	vector<Chara*> charas;
 	vector<Chara*> actionList;
 
-	BattleState bs;
 	int nowActionChara;
+
+	int lastSelect;
+	int nowSelect;
+
+	Action* action;
 
 	MeumUI* commandMeum;
 };

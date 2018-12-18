@@ -5,7 +5,7 @@ class MovePerform : public Perform
 {
 public:
 	MovePerform();
-	~MovePerform();
+	virtual ~MovePerform();
 
 	/*===========================================
 	virtual member

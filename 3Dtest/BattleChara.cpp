@@ -175,3 +175,13 @@ void BattleChara::setMovePoint(int movePoint)
 {
 	this->movePoint = movePoint;
 }
+
+CampType BattleChara::getCamp(void)
+{
+	return camp;
+}
+
+void BattleChara::setCamp(CampType camp)
+{
+	this->camp = camp;
+}

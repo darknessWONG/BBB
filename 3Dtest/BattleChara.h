@@ -41,7 +41,8 @@ public:
 	void setSpeed(int speed);
 	int getMovePoint(void);
 	void setMovePoint(int movePoint);
-
+	CampType getCamp(void);
+	void setCamp(CampType camp);
 
 private:
 	int hpMax;
@@ -51,6 +52,8 @@ private:
 	int atk;
 	int speed;
 	int movePoint;
+
+	CampType camp;
 
 	vector<BattleSkill*> skill;
 	vector<SideEffect*> effect;

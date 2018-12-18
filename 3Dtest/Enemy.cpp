@@ -38,7 +38,7 @@ void Enemy::dataUpdate(void)
 
 		float dot = D3DXVec3Dot(&patrolLine, &nowLine);
 		float length = D3DXVec3Length(&patrolLine) * D3DXVec3Length(&nowLine);
-		if (Physics::round(dot, FLOATBITS) == -Physics::round(length, FLOATBITS))
+		if (Physics::round(dot, FLOAT_BITS) == -Physics::round(length, FLOAT_BITS))
 		{
 			if (vecPatrolTarget == vecPatrolEnd)
 			{

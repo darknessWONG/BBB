@@ -53,6 +53,28 @@ void MeumUI::calPointerPosition(void)
 	pointer->setPosition({ opPos.x - pointer->getWidth(), opPos.y });
 }
 
+UIIdentity MeumUI::getNowPointingIdentity(void)
+{
+	return options[nowPointing]->getIdentity();
+}
+
+int MeumUI::getNowPointingIndex(void)
+{
+	return options[nowPointing]->getIndex();
+}
+
+void MeumUI::cleanOption(void)
+{
+	background->releaseChain();
+	int optionNum = options.size();
+	for (int i = 0; i < optionNum; i++)
+	{
+		delete options[optionNum - i - 1];
+		options.pop_back();
+	}
+	nowPointing = 0;
+}
+
 D3DXVECTOR2 MeumUI::getPosition(void)
 {
 	return position;

@@ -20,6 +20,13 @@ public:
 	void setHeight(float height);
 	int getTexture(void);
 	void setTexture(int index);
+	string getStr(void);
+	void setStr(string str);
+	UIIdentity getIdentity(void);
+	void setIdentity(UIIdentity identity);
+	int getIndex(void);
+	void setIndex(int index);
+
 
 
 private:
@@ -35,6 +42,12 @@ private:
 	float width;
 	float height;
 	int texture;
+	string str;
+
+	UIIdentity identity;
+	//skill index of target index when identity is 	UIIdentityTarget or UIIdentitySkill
+	int index;
+
 	UI* child;
 	UI* next;
 };

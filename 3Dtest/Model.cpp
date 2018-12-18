@@ -148,12 +148,12 @@ void Model::setModelPath(string modelPath)
 RECTF Model::getBoundingRect(void)
 {
 	RECTF rect;
-	float maxX = Physics::round(boundingBoxMax.x, FLOATBITS);
-	float minX = Physics::round(boundingBoxMin.x, FLOATBITS);
-	float maxZ = Physics::round(boundingBoxMax.z, FLOATBITS);
-	float minZ = Physics::round(boundingBoxMin.z, FLOATBITS);
-	float posX = Physics::round(getVecNowPos()->x, FLOATBITS);
-	float posZ = Physics::round(getVecNowPos()->z, FLOATBITS); 
+	float maxX = Physics::round(boundingBoxMax.x, FLOAT_BITS);
+	float minX = Physics::round(boundingBoxMin.x, FLOAT_BITS);
+	float maxZ = Physics::round(boundingBoxMax.z, FLOAT_BITS);
+	float minZ = Physics::round(boundingBoxMin.z, FLOAT_BITS);
+	float posX = Physics::round(getVecNowPos()->x, FLOAT_BITS);
+	float posZ = Physics::round(getVecNowPos()->z, FLOAT_BITS); 
 
 	//rect.left = (float)((double)boundingBoxMin.x + (double)getVecNowPos()->x);
 	//rect.right = (float)((double)boundingBoxMax.x + (double)getVecNowPos()->x);
@@ -170,8 +170,8 @@ D3DXVECTOR2 Model::getBoundingCenter(void)
 {
 	RECTF rect = getBoundingRect();
 	D3DXVECTOR2 center = { 0, 0 };
-	center.x = Physics::round((rect.left + rect.right) / 2, FLOATBITS);
-	center.y = Physics::round((rect.bottom + rect.top) / 2, FLOATBITS);
+	center.x = Physics::round((rect.left + rect.right) / 2, FLOAT_BITS);
+	center.y = Physics::round((rect.bottom + rect.top) / 2, FLOAT_BITS);
 	return center;
 }
 

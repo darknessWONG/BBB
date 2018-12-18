@@ -1,11 +1,24 @@
 #include "stdafx.h"
 #include "Battle.h"
+#include "input.h"
 
 
 Battle::Battle()
 {
 	commandMeum = new MeumUI();
+	UI* ui = new UI({ 0, 0 }, 200, 200, 0);
+	UI* ui1 = new UI({ 20, 20 }, 50, 50, 1);
+	UI* ui2 = new UI({ 80, 20 }, 50, 50, 1);
+	ui2->setStr("ATTACK");
+	UI* ui3 = new UI({ 80, 80 }, 50, 50, 1);
+	ui3->setStr("RUN");
+	commandMeum->addOptins(ui2);
+	commandMeum->addOptins(ui3);
+	commandMeum->setBackground(ui);
+	commandMeum->setPointer(ui1);
+	commandMeum->setPosition({ 0, Common::screen_height - ui->getHeight() });
 
+	action = NULL;
 }
 
 
@@ -51,11 +64,29 @@ void Battle::standbyPhase(void)
 	{
 		bs = BattleState::BattleStateEnd;
 	}
+	if (action != NULL)
+	{
+		delete action;
+	}
+	action = new Action;
+	action->active = actionList[nowActionChara];
 }
 
 void Battle::commandPhase(void)
 {
-	
+
+	switch (as)
+	{
+	case ActionPhaseStatus::ActionPhaseStatusActionSelect:
+		readCommand();
+		break;
+	case ActionPhaseStatus::ActionPhaseStatusTargetSelect:
+		selectTarget();
+		break;
+	case ActionPhaseStatus::ActionPhaseStatusSkillSelect:
+		seleteSkill();
+		break;
+	}
 }
 
 void Battle::taragetSelectPhase(void)
@@ -112,6 +143,34 @@ void Battle::calActionList(void)
 	}
 }
 
+void Battle::readCommand(void)
+{
+	if (Keyboard_IsTrigger(DIK_RETURN))
+	{
+		switch (commandMeum->getNowPointingIdentity())
+		{
+		case UIIdentity::UIIdentityAttack:
+			as = ActionPhaseStatus::ActionPhaseStatusTargetSelect;
+			lastSelect = -1;
+			action->isUseSkill = false;
+			break;
+		case UIIdentity::UIIdentityUseSkill:
+			as = ActionPhaseStatus::ActionPhaseStatusSkillSelect;
+			lastSelect = 0;
+			action->isUseSkill = true;
+			break;
+		}
+	}
+}
+
+void Battle::selectTarget(void)
+{
+}
+
+void Battle::seleteSkill(void)
+{
+}
+
 bool Battle::checkDead(Chara * chara)
 {
 	if (chara->getBattleChara()->getHpNow() <= 0)
@@ -124,4 +183,64 @@ bool Battle::checkDead(Chara * chara)
 void Battle::addCharas(Chara * chara)
 {
 	charas.push_back(chara);
+}
+
+void Battle::createTagatMeum(vector<Chara*> list)
+{
+	commandMeum->cleanOption();
+	int listNum = list.size();
+	for (int i = 0; i < listNum; i++)
+	{
+		UI* ui = new UI({ 0, 0 }, 200, 200, 0);
+	}
+
+}
+
+vector<Chara*> Battle::calTargetList(Chara * acvite, BattleSkill * skill)
+{
+	vector<Chara*> list;
+	EffectTarget eTar;
+	if (skill == NULL)
+	{
+		eTar = EffectTarget::EffectTargetEnemy;
+	}
+	else
+	{
+		eTar = skill->getMainTarget();
+	}
+	CampType acvCamp = acvite->getBattleChara()->getCamp();
+	CampType targetCamp;
+	if (acvCamp == CampType::CampTypePlayer)
+	{
+		if (eTar == EffectTarget::EffectTargetAllEnemy || eTar == EffectTarget::EffectTargetEnemy)
+		{
+			targetCamp = CampType::CampTypeEnemy;
+		}
+		else if (eTar == EffectTarget::EffectTargetAllFriendly || eTar == EffectTarget::EffectTargetFriendly)
+		{
+			targetCamp = CampType::CampTypePlayer;
+		}
+	}
+	else
+	{
+		if (eTar == EffectTarget::EffectTargetAllEnemy || eTar == EffectTarget::EffectTargetEnemy)
+		{
+			targetCamp = CampType::CampTypePlayer;
+		}
+		else if (eTar == EffectTarget::EffectTargetAllFriendly || eTar == EffectTarget::EffectTargetFriendly)
+		{
+			targetCamp = CampType::CampTypeEnemy;
+		}
+	}
+
+	int num = actionList.size();
+	for (int i = 0; i < num; i++)
+	{
+		if (actionList[i]->getBattleChara()->getCamp() == targetCamp)
+		{
+			list.push_back(actionList[i]);
+		}
+	}
+
+	return list;
 }

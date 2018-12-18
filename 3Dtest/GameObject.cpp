@@ -15,11 +15,11 @@ GameObject::GameObject()
 
 	vecNowPos = new D3DXVECTOR3(0, 0, 0);
 	vecMoveSpeed = new D3DXVECTOR3(0, 0, 0);
-	moveDamping = MOVEDAMPING;
+	moveDamping = MOVE_DAMPING;
 
 	vecRotateAxis = new D3DXVECTOR3(0, 0, 0);
 	rotateSpeed = 0;
-	rotateDamping = ROTATEDAMPING;
+	rotateDamping = ROTATE_DAMPING;
 	vecTargetFront = NULL;
 
 	moveThisTurn = false;

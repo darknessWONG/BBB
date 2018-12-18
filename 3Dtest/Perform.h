@@ -4,7 +4,7 @@ class Perform
 {
 public:
 	Perform();
-	~Perform();
+	virtual ~Perform();
 	/*===========================================
 	virtual member
 	============================================*/

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "UI.h"
+#include "font.h"
 
 
 UI::UI(D3DXVECTOR2 pos, float width, float height, int tex)
@@ -10,6 +11,8 @@ UI::UI(D3DXVECTOR2 pos, float width, float height, int tex)
 	texture = tex;
 	child = NULL;
 	next = NULL;
+	identity = UIIdentity::UIIdentityMAX;
+	index = -1;
 }
 
 
@@ -57,6 +60,36 @@ void UI::setTexture(int index)
 	this->texture = index;
 }
 
+string UI::getStr(void)
+{
+	return str;
+}
+
+void UI::setStr(string str)
+{
+	this->str = str;
+}
+
+UIIdentity UI::getIdentity(void)
+{
+	return identity;
+}
+
+void UI::setIdentity(UIIdentity identity)
+{
+	this->identity = identity;
+}
+
+int UI::getIndex(void)
+{
+	return index;
+}
+
+void UI::setIndex(int index)
+{
+	this->index = index;
+}
+
 void UI::calPoints(D3DXVECTOR2* basePoint)
 {
 	points[0] = position + *basePoint;
@@ -91,6 +124,11 @@ void UI::draw(LPDIRECT3DDEVICE9 g_pD3DDevice, D3DXVECTOR2 *basePoint)
 	g_pD3DDevice->SetTexture(0, TextureHandler2D::GetTexture(texture).tex_p);
 
 	g_pD3DDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, f, sizeof(Vertex2D));
+
+	char *tmpStr = new char[str.length() + 1];
+	strcpy_s(tmpStr, str.length() + 1, str.c_str());
+	Font_Draw(f[0].pos.x, f[0].pos.y, tmpStr);
+	delete[] tmpStr;
 
 	if (next != NULL)
 	{

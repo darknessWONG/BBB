@@ -19,6 +19,9 @@ public:
 	void draw(LPDIRECT3DDEVICE9 g_pD3DDevice);
 	void addOptins(UI* option);
 	void calPointerPosition(void);
+	UIIdentity getNowPointingIdentity(void);
+	int getNowPointingIndex(void);
+	void cleanOption(void);
 
 	/*===========================================
 	public geter / seter

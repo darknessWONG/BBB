@@ -111,6 +111,21 @@
     <ClInclude Include="MeumUI.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="font.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Shape.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Cube.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Parts.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Human.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -201,6 +216,21 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="MeumUI.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="font.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Shape.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Cube.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Parts.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Human.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
