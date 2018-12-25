@@ -15,14 +15,10 @@ public:
 	/*===========================================
 	public function
 	============================================*/
-	void setLengthX(float lengthX);
-	void setLengthY(float lengthY);
-	void setLengthZ(float lengthZ);
+
 	/*===========================================
 	public geter / seter
 	============================================*/
-	D3DXVECTOR3 getLength(void);
-	void setLength(D3DXVECTOR3 length);
 
 	/*===========================================
 	static public function

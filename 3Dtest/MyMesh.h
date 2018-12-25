@@ -1,22 +1,17 @@
 #pragma once
 #include "GameObject.h"
 #include "Parts.h"
-class Human :
+class MyMesh :
 	public GameObject
 {
 public:
-	Human();
-	~Human();
+	MyMesh();
+	~MyMesh();
 
 	/*===========================================
 	virtual member
 	============================================*/
-	virtual void calWorldMatrix(void);
 	virtual void dataUpdate(void);
-	virtual void positionUpdateX(void);
-	virtual void positionUpdateY(void);
-	virtual void positionUpdateZ(void);
-	virtual void positionUpdate(void);
 	virtual void draw(LPDIRECT3DDEVICE9 pD3DDevice);
 	virtual RECTF getBoundingRect(void);
 	//the center of the bounding box
@@ -28,15 +23,21 @@ public:
 	/*===========================================
 	public function
 	============================================*/
+	Parts* getPartsByIndex(int index);
+	BOOL partsMove(int index, D3DXVECTOR3* scale, D3DXVECTOR3* rotation, D3DXVECTOR3* transport, D3DXVECTOR3* revolution);
 
 	/*===========================================
 	public geter / seter
 	============================================*/
-
+	string getModelClass(void);
+	void setModelClass(string modelClass);
+	Parts* getParts(void);
+	void setParts(Parts* part);
 
 private:
 	void findBoundingRect(Parts* part, D3DXVECTOR2& lt, D3DXVECTOR2& rb);
 
+	string modelClass;
 	Parts* parts;
 };
 

@@ -10,7 +10,7 @@ public:
 	virtual member
 	============================================*/
 	virtual void draw(LPDIRECT3DDEVICE9 pD3DDevice) = 0;
-	void setMtxWorld(D3DXMATRIX mtxWorld) = 0;
+	virtual void setMtxWorld(D3DXMATRIX mtxWorld) = 0;
 
 };
 

@@ -165,7 +165,7 @@
     <ClInclude Include="GameManage.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Ground.h" />
-    <ClInclude Include="Human.h" />
+    <ClInclude Include="MyMesh.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="MapManage.h" />
@@ -203,7 +203,7 @@
     <ClCompile Include="GameManage.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Ground.cpp" />
-    <ClCompile Include="Human.cpp" />
+    <ClCompile Include="MyMesh.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="main.cpp" />

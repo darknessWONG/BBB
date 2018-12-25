@@ -49,7 +49,6 @@ LPDIRECT3DINDEXBUFFER9 Cube::pIndexBuffer = NULL;
 Cube::Cube()
 {
 	D3DXMatrixIdentity(&mtxWorld);
-	length = { 1, 1, 1 };
 }
 
 
@@ -64,42 +63,21 @@ void Cube::draw(LPDIRECT3DDEVICE9 pD3DDevice)
 	pD3DDevice->SetTexture(0, NULL);
 
 	pD3DDevice->SetStreamSource(0, Cube::pVertexBuffer, 0, sizeof(Vertex3D));
-	pD3DDevice->SetIndices(Cube::pIndexBuffer);
+	pD3DDevice->SetIndices(Cube::pIndexBuffer);	
+	//make the polygon hollow
+	pD3DDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+	//set world matrix
+	pD3DDevice->SetTransform(D3DTS_WORLD, &mtxWorld);
 	//draw
-	//pD3DDevice->DrawPrimitiveUP(D3DPT_TRIANGLELIST, 12, cube, sizeof(Vertex));
 	pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, 24, 0, 12);
+	//restore
+	pD3DDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 }
 
 void Cube::setMtxWorld(D3DXMATRIX mtxWorld)
 {
 	D3DXMatrixIdentity(&this->mtxWorld);
-	D3DXMatrixScaling(&this->mtxWorld, length.x, length.y, length.z);
 	this->mtxWorld *= mtxWorld;
-}
-
-void Cube::setLengthX(float lengthX)
-{
-	length.x = lengthX;
-}
-
-void Cube::setLengthY(float lengthY)
-{
-	length.y = lengthY;
-}
-
-void Cube::setLengthZ(float lengthZ)
-{
-	length.z = lengthZ;
-}
-
-D3DXVECTOR3 Cube::getLength(void)
-{
-	return length;
-}
-
-void Cube::setLength(D3DXVECTOR3 length)
-{
-	this->length = length;
 }
 
 void Cube::initStaticMember(LPDIRECT3DDEVICE9 pD3DDevice)

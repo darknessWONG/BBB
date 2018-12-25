@@ -10,6 +10,7 @@
 #include "TextureHandler2D.h"
 #include "MeumUI.h"
 #include "UI.h"
+#include "MyMesh.h"
 
 GameManage::GameManage()
 {
@@ -41,6 +42,8 @@ void GameManage::init(void)
 	TextureHandler2D::AddTexture("net.jpg", 383, 300);
 	TextureHandler2D::AddTexture("grass.jpg", 1024, 987);
 	TextureHandler2D::LoadTextures(pD3DDevice);
+
+	Cube::initStaticMember(pD3DDevice);
 }
 
 void GameManage::beforeUpdate(void)
@@ -202,8 +205,8 @@ void GameManage::gameStateInit(void)
 	mesh3->setVecPatrolStart(new D3DXVECTOR3(1, 0, 1));
 	mesh3->setVecPatrolEnd(new D3DXVECTOR3(1, 0, 5));
 	mesh3->setOverlapLevel(1);
-	enemys.push_back(mesh3);
-	map->addGameObject(mesh3);
+	//enemys.push_back(mesh3);
+	//map->addGameObject(mesh3);
 
 	Vigilance* mesh4 = new Vigilance();
 	mesh4->setMaxSpeed(0.3);
@@ -235,6 +238,23 @@ void GameManage::gameStateInit(void)
 	meum->setPointer(ui1);
 	meum->setPosition({ 0, 0 });
 	uis.push_back(meum);
+
+	Parts* par = new Parts();
+	par->setModel(new Cube());
+	Parts* par2 = new Parts();
+	par2->setModel(new Cube());
+	par->addChild(par2);
+	par2->setOffsetT({10, 2, 2 });
+	par2->setOffsetR({ 45, 0, 0 });
+	MyMesh* mm = new MyMesh();
+	mm->setParts(par);
+	mm->setVecNowPos(new D3DXVECTOR3(0, 0, -10));
+	mm->setMaxSpeed(0.3);
+	mm->setCanMove(true);
+	mm->setOverlapLevel(1);
+	others.push_back(mm);
+	map->addGameObject(mm);
+
 
 	gs = GameState::GameStateGameRunning;
 }

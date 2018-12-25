@@ -123,7 +123,7 @@
     <ClInclude Include="Parts.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Human.h">
+    <ClInclude Include="MyMesh.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -230,7 +230,7 @@
     <ClCompile Include="Parts.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Human.cpp">
+    <ClCompile Include="MyMesh.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
