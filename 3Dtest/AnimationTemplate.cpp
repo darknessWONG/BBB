@@ -9,6 +9,7 @@ AnimationTemplate::AnimationTemplate(int index,
 	D3DXVECTOR3 revolution,
 	int totalFream)
 {
+	this->index = index;
 	this->scale = scale;
 	this->rotation = rotation;
 	this->transport = transport;

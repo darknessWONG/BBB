@@ -6,10 +6,12 @@ Parts::Parts()
 {
 	D3DXMatrixIdentity(&mtxWorld);
 
+	baseOffsetS = { 1, 1, 1 };
 	baseOffsetR = {0, 0, 0};
 	baseOffsetT = {0, 0, 0};
 	baseRotation = {0, 0, 0};
 
+	offsetS = { 1, 1, 1 };
 	offsetR = {0, 0, 0};
 	offsetT = {0, 0, 0};
 	rotation = {0, 0, 0};
@@ -46,6 +48,10 @@ void Parts::dataUpdate(void)
 {
 	D3DXMatrixIdentity(&mtxWorld);
 
+	D3DXMATRIX mtxOffsetS;
+	D3DXMatrixIdentity(&mtxOffsetS);
+	D3DXMatrixScaling(&mtxOffsetS, offsetS.x, offsetS.y, offsetS.z);
+
 	D3DXMATRIX mtxOffsetR;
 	D3DXMatrixIdentity(&mtxOffsetR);
 	D3DXMatrixRotationYawPitchRoll(&mtxOffsetR, D3DXToRadian(offsetR.y), D3DXToRadian(offsetR.x), D3DXToRadian(offsetR.z));
@@ -58,7 +64,7 @@ void Parts::dataUpdate(void)
 	D3DXMatrixIdentity(&mtxRotation);
 	D3DXMatrixRotationYawPitchRoll(&mtxRotation, D3DXToRadian(rotation.y), D3DXToRadian(rotation.x), D3DXToRadian(rotation.z));
 
-	mtxWorld = mtxOffsetR * mtxOffsetT * mtxRotation;
+	mtxWorld = mtxOffsetS * mtxOffsetR * mtxOffsetT * mtxRotation;
 
 	if (next != NULL)
 	{
@@ -165,20 +171,10 @@ Parts * Parts::getChild(void)
 	return child;
 }
 
-//void Parts::setChild(Parts * child)
-//{
-//	this->child = child;
-//}
-
 Parts * Parts::getNext(void)
 {
 	return next;
 }
-
-//void Parts::setNext(Parts * next)
-//{
-//	this->next = next;
-//}
 
 void Parts::addChild(Parts * parts)
 {

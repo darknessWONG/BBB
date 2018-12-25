@@ -11,6 +11,7 @@
 #include "MeumUI.h"
 #include "UI.h"
 #include "MyMesh.h"
+#include "AnimationSet.h"
 
 GameManage::GameManage()
 {
@@ -255,6 +256,9 @@ void GameManage::gameStateInit(void)
 	others.push_back(mm);
 	map->addGameObject(mm);
 
+	AnimationTemplate animateTamp(1, { 0, 0, 0 }, { 0, 0, 0 }, { 10, 0, 0 }, { 0, 0, 0 }, 300);
+	Animation* animate = new Animation(&animateTamp, mm);
+	animates.push_back(animate);
 
 	gs = GameState::GameStateGameRunning;
 }
@@ -291,6 +295,7 @@ void GameManage::gameStateUpdate(void)
 		pm.addPerforms(per);
 	}
 
+	animationUpdate();
 	enemyUpdate();
 	checkEnd();
 }
@@ -355,6 +360,15 @@ void GameManage::enemyUpdate(void)
 			}
 		}
 		((Enemy*)(vigliances[i]->getBelong()))->setIsTracking(isPor);
+	}
+}
+
+void GameManage::animationUpdate(void)
+{
+	int animateNum = animates.size();
+	for (int i = 0; i < animateNum; i++)
+	{
+		animates[i]->play();
 	}
 }
 

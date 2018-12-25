@@ -321,13 +321,3 @@ bool GameObject::getMoveThisTurn(void)
 {
 	return moveThisTurn;
 }
-
-//D3DXVECTOR3 * GameObject::getVecTargetPos(void)S
-//{
-//	return vecTargetPos;
-//}
-//
-//void GameObject::setVecTargetPos(D3DXVECTOR3 * vecTargetPos)
-//{
-//	this->vecTargetPos = new D3DXVECTOR3(*vecTargetPos);
-//}

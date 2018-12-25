@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "AnimationSetTemplate.h"
+#include "AnimationSet.h"
 
 
 AnimationSet::AnimationSet(vector<AnimationInfoTemplate> list, MyMesh* mesh)

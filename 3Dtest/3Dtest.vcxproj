@@ -152,6 +152,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3Dtest.h" />
+    <ClInclude Include="Animation.h" />
+    <ClInclude Include="AnimationSet.h" />
+    <ClInclude Include="AnimationTemplate.h" />
     <ClInclude Include="Battle.h" />
     <ClInclude Include="BattleChara.h" />
     <ClInclude Include="BattleSkill.h" />
@@ -190,6 +193,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3Dtest.cpp" />
+    <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="AnimationSet.cpp" />
+    <ClCompile Include="AnimationTemplate.cpp" />
     <ClCompile Include="Battle.cpp" />
     <ClCompile Include="BattleChara.cpp" />
     <ClCompile Include="BattleSkill.cpp" />

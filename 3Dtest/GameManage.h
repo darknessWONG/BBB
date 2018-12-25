@@ -10,6 +10,7 @@
 #include "MeumUI.h"
 #include "PerformManage.h"
 #include "UI.h"
+#include "Animation.h"
 
 class GameManage
 {
@@ -36,6 +37,7 @@ public:
 	void checkEnd(void);
 
 	void enemyUpdate(void);
+	void animationUpdate(void);
 
 	void lockUnmoveObject(void);
 
@@ -51,6 +53,7 @@ private:
 	vector<Vigilance*> vigliances;
 	vector<GameObject*> others;
 	vector<MeumUI*> uis;
+	vector<Animation*> animates;
 
 	MapManage* map = NULL;
 
