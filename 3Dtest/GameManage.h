@@ -11,6 +11,8 @@
 #include "PerformManage.h"
 #include "UI.h"
 #include "Animation.h"
+#include "AnimationSet.h"
+#include "AnimationManage.h"
 
 class GameManage
 {
@@ -53,11 +55,12 @@ private:
 	vector<Vigilance*> vigliances;
 	vector<GameObject*> others;
 	vector<MeumUI*> uis;
-	vector<Animation*> animates;
+	//vector<AnimationSet*> animates;
 
 	MapManage* map = NULL;
 
 	PerformManage pm;
+	AnimationManage am;
 
 	GameState gs;
 };

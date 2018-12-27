@@ -135,6 +135,9 @@
     <ClInclude Include="AnimationSet.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="AnimationManage.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -249,6 +252,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="AnimationSet.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationManage.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

@@ -62,9 +62,7 @@ public:
 	void setModel(Shape* model);
 
 	Parts* getChild(void);
-	//void setChild(Parts* child);
 	Parts* getNext(void);
-	//void setNext(Parts* next);
 private:
 	void releaseChild(void);
 	void releaseNext(void);

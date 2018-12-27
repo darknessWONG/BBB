@@ -35,4 +35,3 @@ private:
 	static LPDIRECT3DVERTEXBUFFER9 pVertexBuffer;
 	static LPDIRECT3DINDEXBUFFER9 pIndexBuffer;
 };
-

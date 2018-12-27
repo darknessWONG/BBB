@@ -257,8 +257,13 @@ void GameManage::gameStateInit(void)
 	map->addGameObject(mm);
 
 	AnimationTemplate animateTamp(1, { 0, 0, 0 }, { 0, 0, 0 }, { 10, 0, 0 }, { 0, 0, 0 }, 300);
-	Animation* animate = new Animation(&animateTamp, mm);
-	animates.push_back(animate);
+	AnimationTemplate animateTamp1(1, { 0, 0, 0 }, { 0, 120, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, 300);
+	vector<AnimationInfoTemplate> list;
+	list.push_back({ &animateTamp, 0 });
+	list.push_back({ &animateTamp1, 150 });
+	AnimationManage::addAnimateTemplate(list);
+	am.addAnimation(0, mm);
+
 
 	gs = GameState::GameStateGameRunning;
 }
@@ -365,11 +370,8 @@ void GameManage::enemyUpdate(void)
 
 void GameManage::animationUpdate(void)
 {
-	int animateNum = animates.size();
-	for (int i = 0; i < animateNum; i++)
-	{
-		animates[i]->play();
-	}
+	am.play();
+	am.cleanEndAnimation();
 }
 
 void GameManage::lockUnmoveObject(void)
