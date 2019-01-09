@@ -226,27 +226,34 @@ void GameManage::gameStateInit(void)
 	per->setVecStart(D3DXVECTOR3(player->getBoundingCenter().x, 0, player->getBoundingCenter().y));
 	pm.addPerforms(per);
 
-	UI* ui = new UI({ 0, 0 }, 200, 200, 0);
-	UI* ui1 = new UI({ 20, 20 }, 50, 50, 1);
-	UI* ui2 = new UI({ 80, 20 }, 50, 50, 1);
-	ui2->setStr("ATTACK");
-	UI* ui3 = new UI({ 80, 80 }, 50, 50, 1);
-	ui3->setStr("RUN");
-	MeumUI *meum = new MeumUI();
-	meum->addOptins(ui2);
-	meum->addOptins(ui3);
-	meum->setBackground(ui);
-	meum->setPointer(ui1);
-	meum->setPosition({ 0, 0 });
-	uis.push_back(meum);
-
 	Parts* par = new Parts();
 	par->setModel(new Cube());
+
 	Parts* par2 = new Parts();
 	par2->setModel(new Cube());
+	par2->setOffsetS({ 2, 2, 2 });
+	par2->setOffsetT({ 0, 0, 0 });
+	par2->setOffsetR({ 0, 0, 0 });
 	par->addChild(par2);
-	par2->setOffsetT({10, 2, 2 });
-	par2->setOffsetR({ 45, 0, 0 });
+
+	Parts* par3 = new Parts();
+	par3->setModel(new Cube());
+	par3->setOffsetT({ 5, 0, 0 });
+	par3->setOffsetR({ 0, 0, 0 });
+	par->addChild(par3);
+
+	Parts* par4 = new Parts();
+	par4->setModel(new Cube());
+	par4->setOffsetT({ -5, 0, 0 });
+	par4->setOffsetR({ 0, 0, 0 });
+	par->addChild(par4);
+
+	Parts* par5 = new Parts();
+	par5->setModel(new Cube());
+	par5->setOffsetT({ 0, 2, 0 });
+	par5->setOffsetR({ 0, 0, 0 });
+	par->addChild(par5);
+	
 	MyMesh* mm = new MyMesh();
 	mm->setParts(par);
 	mm->setVecNowPos(new D3DXVECTOR3(0, 0, -10));
@@ -256,8 +263,11 @@ void GameManage::gameStateInit(void)
 	others.push_back(mm);
 	map->addGameObject(mm);
 
-	AnimationTemplate animateTamp(1, { 0, 0, 0 }, { 0, 0, 0 }, { 10, 0, 0 }, { 0, 0, 0 }, 300);
-	AnimationTemplate animateTamp1(1, { 0, 0, 0 }, { 0, 120, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, 300);
+	AnimationTemplate animateTamp(1, { 0, 0, 0 }, { 0, 0, 0 }, { 5, 0, 0 }, { 0, 0, 0 }, 300);
+	AnimationTemplate animateTamp1(4, { 0, 0, 0 }, { 0, 120, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, 300);
+	AnimationTemplate animateTamp2(1, { 0, 0, 0 }, { 0, 120, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, 300);
+	AnimationTemplate animateTamp3(1, { 0, 0, 0 }, { 0, 120, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, 300);
+	AnimationTemplate animateTamp4(1, { 0, 0, 0 }, { 0, 120, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, 300);
 	vector<AnimationInfoTemplate> list;
 	list.push_back({ &animateTamp, 0 });
 	list.push_back({ &animateTamp1, 150 });

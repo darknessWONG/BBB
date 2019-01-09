@@ -21,6 +21,9 @@ public:
 	Battle();
 	~Battle();
 
+	/*===========================================
+	public function
+	============================================*/
 	void start(void);
 
 	void standbyPhase(void);
@@ -42,6 +45,8 @@ public:
 	bool checkDead(Chara* chara);
 	void addCharas(Chara* chara);
 
+	void createActionMeum(void);
+	void createSkillMeum(vector<BattleSkill*> list);
 	void createTagatMeum(vector<Chara*> list);
 	vector<Chara*> calTargetList(Chara* acvite, BattleSkill* skill);
 private:

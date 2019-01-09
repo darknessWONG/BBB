@@ -101,6 +101,16 @@ void BattleChara::calStatus(void)
 	}
 }
 
+string BattleChara::getName(void)
+{
+	return name;
+}
+
+void BattleChara::setName(string name)
+{
+	this->name = name;
+}
+
 int BattleChara::getHpMax(void)
 {
 	return hpMax;

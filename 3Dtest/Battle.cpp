@@ -91,6 +91,8 @@ void Battle::commandPhase(void)
 
 void Battle::taragetSelectPhase(void)
 {
+	vector<Chara*> taragetList = calTargetList(action->active, action->skill);
+	createTagatMeum(taragetList);
 }
 
 void Battle::movePhase(void)
@@ -185,15 +187,44 @@ void Battle::addCharas(Chara * chara)
 	charas.push_back(chara);
 }
 
+void Battle::createActionMeum(void)
+{
+	commandMeum->cleanOption();
+
+	UI* ui = new UI({ 0, 0 }, 200, 200, 0);
+	UI* ui1 = new UI({ 20, 20 }, 50, 50, 1);
+	UI* ui2 = new UI({ 80, 20 }, 50, 50, 1);
+	ui2->setStr("ATTACK");
+	UI* ui3 = new UI({ 80, 80 }, 50, 50, 1);
+	ui3->setStr("RUN");
+	//MeumUI *meum = new MeumUI();
+	commandMeum->addOptins(ui2);
+	commandMeum->addOptins(ui3);
+	commandMeum->setBackground(ui);
+	commandMeum->setPointer(ui1);
+	commandMeum->setPosition({ 0, 0 });
+	//uis.push_back(meum);
+}
+
+void Battle::createSkillMeum(vector<BattleSkill*> list)
+{
+}
+
 void Battle::createTagatMeum(vector<Chara*> list)
 {
 	commandMeum->cleanOption();
 	int listNum = list.size();
+	UI* ui = new UI({ 0, 0 }, 200, 200, 0);
+	commandMeum->setBackground(ui);
+	ui = new UI({ 20, 20 }, 50, 50, 1);
+	commandMeum->setPointer(ui);
 	for (int i = 0; i < listNum; i++)
 	{
-		UI* ui = new UI({ 0, 0 }, 200, 200, 0);
+		ui = new UI({ 80, i * 20 + 20 }, 50, 50, 1);
+		ui->setStr(list[i]->getBattleChara()->getName());
+		commandMeum->addOptins(ui);
 	}
-
+	commandMeum->setPosition({ 0, 0 });
 }
 
 vector<Chara*> Battle::calTargetList(Chara * acvite, BattleSkill * skill)

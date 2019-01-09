@@ -27,6 +27,8 @@ public:
 	/*===========================================
 	public geter / seter
 	============================================*/
+	string getName(void);
+	void setName(string name);
 	int getHpMax(void);
 	void setHpMax(int hp);
 	int getHpNow(void);
@@ -45,6 +47,8 @@ public:
 	void setCamp(CampType camp);
 
 private:
+	string name;
+
 	int hpMax;
 	int hpNow;
 	int mpMax;
