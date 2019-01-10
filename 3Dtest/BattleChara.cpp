@@ -195,3 +195,8 @@ void BattleChara::setCamp(CampType camp)
 {
 	this->camp = camp;
 }
+
+vector<BattleSkill*> BattleChara::getSkillList(void)
+{
+	return skill;
+}

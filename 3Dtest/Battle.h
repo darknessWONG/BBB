@@ -26,6 +26,10 @@ public:
 	============================================*/
 	void start(void);
 
+	//should only change bs by this function, 
+	//it will initialize other value it they should be initialize when new bs begin
+	void changeBattleState(BattleState newbs);
+
 	void standbyPhase(void);
 	void commandPhase(void);
 	void taragetSelectPhase(void);
@@ -37,9 +41,12 @@ public:
 
 	void calActionList(void);
 
-	void readCommand(void);
+	void selectAction(void);
+	void readActionCommand(void);
 	void selectTarget(void);
+	void readTargetCommand(void);
 	void seleteSkill(void);
+	void readSkillCommand(void);
 
 	//if is dead return true or return false
 	bool checkDead(Chara* chara);
@@ -52,6 +59,7 @@ public:
 private:
 	BattleState bs;
 	ActionPhaseStatus as;
+	ActionPhaseStatus lastAs;
 
 	vector<Chara*> charas;
 	vector<Chara*> actionList;

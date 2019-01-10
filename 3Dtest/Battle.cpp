@@ -57,6 +57,26 @@ void Battle::start(void)
 	}
 }
 
+void Battle::changeBattleState(BattleState newbs)
+{
+	bs = newbs;
+	switch (newbs)
+	{
+	case BattleState::BattleStateStandby:
+		if (action != NULL)
+		{
+			delete action;
+		}
+		action = new Action;
+		action->active = actionList[nowActionChara];
+		break;
+	case BattleState::BattleStateCommand:
+		as = ActionPhaseStatus::ActionPhaseStatusActionSelect;
+		lastAs = ActionPhaseStatusActionZero;
+		break;
+	}
+}
+
 void Battle::standbyPhase(void)
 {
 	actionList[nowActionChara]->getBattleChara()->calStatus();
@@ -64,12 +84,7 @@ void Battle::standbyPhase(void)
 	{
 		bs = BattleState::BattleStateEnd;
 	}
-	if (action != NULL)
-	{
-		delete action;
-	}
-	action = new Action;
-	action->active = actionList[nowActionChara];
+	changeBattleState(BattleState::BattleStateCommand);
 }
 
 void Battle::commandPhase(void)
@@ -78,7 +93,7 @@ void Battle::commandPhase(void)
 	switch (as)
 	{
 	case ActionPhaseStatus::ActionPhaseStatusActionSelect:
-		readCommand();
+		selectAction();
 		break;
 	case ActionPhaseStatus::ActionPhaseStatusTargetSelect:
 		selectTarget();
@@ -91,8 +106,7 @@ void Battle::commandPhase(void)
 
 void Battle::taragetSelectPhase(void)
 {
-	vector<Chara*> taragetList = calTargetList(action->active, action->skill);
-	createTagatMeum(taragetList);
+
 }
 
 void Battle::movePhase(void)
@@ -145,7 +159,16 @@ void Battle::calActionList(void)
 	}
 }
 
-void Battle::readCommand(void)
+void Battle::selectAction(void)
+{
+	if (as != lastAs)
+	{
+		createActionMeum();
+	}
+	readActionCommand();
+}
+
+void Battle::readActionCommand(void)
 {
 	if (Keyboard_IsTrigger(DIK_RETURN))
 	{
@@ -167,10 +190,42 @@ void Battle::readCommand(void)
 
 void Battle::selectTarget(void)
 {
+	if (as != lastAs)
+	{
+		vector<Chara*> taragetList = calTargetList(action->active, action->skill);
+		createTagatMeum(taragetList);
+	}
+	readTargetCommand();
+
+}
+
+void Battle::readTargetCommand(void)
+{
+	if (Keyboard_IsTrigger(DIK_RETURN))
+	{
+		vector<Chara*> list = calTargetList(action->active, action->skill);
+		action->passive.push_back(list[commandMeum->getNowPointing()]);
+		bs = BattleState::BattleStateDamage;
+	}
 }
 
 void Battle::seleteSkill(void)
 {
+	if (as != lastAs)
+	{
+		createSkillMeum(actionList[nowActionChara]->getBattleChara()->getSkillList());
+	}
+	readSkillCommand();
+}
+
+void Battle::readSkillCommand(void)
+{
+	if (Keyboard_IsTrigger(DIK_RETURN))
+	{
+		action->isUseSkill = true;
+		action->skill = actionList[nowActionChara]->getBattleChara()->getSkillList()[commandMeum->getNowPointing()];
+		as = ActionPhaseStatus::ActionPhaseStatusTargetSelect;
+	}
 }
 
 bool Battle::checkDead(Chara * chara)
@@ -204,27 +259,48 @@ void Battle::createActionMeum(void)
 	commandMeum->setPointer(ui1);
 	commandMeum->setPosition({ 0, 0 });
 	//uis.push_back(meum);
+
+	lastAs = ActionPhaseStatus::ActionPhaseStatusActionSelect;
 }
 
 void Battle::createSkillMeum(vector<BattleSkill*> list)
 {
+	commandMeum->cleanOption();
+	UI* ui = new UI({ 0, 0 }, 200, 200, 0);
+	commandMeum->setBackground(ui);
+	ui = new UI({ 20, 20 }, 50, 50, 1);
+	commandMeum->setPointer(ui);
+	commandMeum->setPosition({ 0, 0 });
+
+	int listNum = list.size();
+	for (int i = 0; i < listNum; i++)
+	{
+		ui = new UI({ 80, i * 20 + 20 }, 50, 50, 1);
+		ui->setStr(list[i]->getName());
+		commandMeum->addOptins(ui);
+	}
+
+	lastAs = ActionPhaseStatus::ActionPhaseStatusSkillSelect;
 }
 
 void Battle::createTagatMeum(vector<Chara*> list)
 {
 	commandMeum->cleanOption();
-	int listNum = list.size();
 	UI* ui = new UI({ 0, 0 }, 200, 200, 0);
 	commandMeum->setBackground(ui);
 	ui = new UI({ 20, 20 }, 50, 50, 1);
 	commandMeum->setPointer(ui);
+	commandMeum->setPosition({ 0, 0 });
+
+	int listNum = list.size();
 	for (int i = 0; i < listNum; i++)
 	{
 		ui = new UI({ 80, i * 20 + 20 }, 50, 50, 1);
 		ui->setStr(list[i]->getBattleChara()->getName());
 		commandMeum->addOptins(ui);
 	}
-	commandMeum->setPosition({ 0, 0 });
+
+	lastAs = ActionPhaseStatus::ActionPhaseStatusTargetSelect;
 }
 
 vector<Chara*> Battle::calTargetList(Chara * acvite, BattleSkill * skill)

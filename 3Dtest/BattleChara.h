@@ -45,6 +45,7 @@ public:
 	void setMovePoint(int movePoint);
 	CampType getCamp(void);
 	void setCamp(CampType camp);
+	vector<BattleSkill*> getSkillList(void);
 
 private:
 	string name;
