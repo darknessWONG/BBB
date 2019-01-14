@@ -2,6 +2,7 @@
 #include <vector>
 #include "Chara.h"
 #include "meumUI.h"
+#include "PerformManage.h"
 
 typedef struct action_st
 {
@@ -26,6 +27,12 @@ public:
 	============================================*/
 	void start(void);
 
+	/*===========================================
+	public geter / seter
+	============================================*/
+	void setSkillEfficiency(float se);
+	void setDefEfficiency(float de);
+private:
 	//should only change bs by this function, 
 	//it will initialize other value it they should be initialize when new bs begin
 	void changeBattleState(BattleState newbs);
@@ -56,7 +63,27 @@ public:
 	void createSkillMeum(vector<BattleSkill*> list);
 	void createTagatMeum(vector<Chara*> list);
 	vector<Chara*> calTargetList(Chara* acvite, BattleSkill* skill);
-private:
+
+	/*-------------------------
+	calDamageVal
+	Describe: calculate the damage of attack
+	Return value: list of damage
+	Parameter:
+	active: active of this attack
+	passive: list of passive
+	isUseSkill: ture if use skill, false if normal attack
+	skill: pointer of the skill which is using, NULL if isUseSkill is false
+	--------------------------*/
+	vector<int> calDamageList(Chara* active, vector<Chara*>passive, bool isUseSkill, BattleSkill* skill);
+	int calDamageSingle(BattleChara* active, BattleChara* passive, bool isUseSkill, BattleSkill* skill);
+	int calDamageVal(int atk, int def, int skillDamage);
+	//vector<int> calHealVal(void);
+
+	void addMovePerform(Chara* act, Chara* target);
+
+	void setPerformManager(PerformManage* pm);
+
+
 	BattleState bs;
 	ActionPhaseStatus as;
 	ActionPhaseStatus lastAs;
@@ -71,6 +98,10 @@ private:
 
 	Action* action;
 
+	PerformManage *pm;
 	MeumUI* commandMeum;
+
+	float skillEfficiency;
+	float defEfficiency;
 };
 

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Battle.h"
 #include "input.h"
+#include "MovePerform.h"
 
 
 Battle::Battle()
@@ -19,6 +20,17 @@ Battle::Battle()
 	commandMeum->setPosition({ 0, Common::screen_height - ui->getHeight() });
 
 	action = NULL;
+#ifdef SKILL_EFFICIENCY
+	skillEfficiency = SKILL_EFFICIENCY;
+#else
+	skillEfficiency = 1.0;
+#endif
+#ifdef DEFENSE_EFFICIENCY
+	defEfficiency = DEFENSE_EFFICIENCY;
+#else
+	defEfficiency = 1.0;
+#endif
+
 }
 
 
@@ -119,6 +131,7 @@ void Battle::placeSelectPhase(void)
 
 void Battle::damagePhase(void)
 {
+
 }
 
 void Battle::mapMovePhase(void)
@@ -205,6 +218,9 @@ void Battle::readTargetCommand(void)
 	{
 		vector<Chara*> list = calTargetList(action->active, action->skill);
 		action->passive.push_back(list[commandMeum->getNowPointing()]);
+		
+		addMovePerform(action->active, action->passive[0]);
+		
 		bs = BattleState::BattleStateDamage;
 	}
 }
@@ -350,4 +366,110 @@ vector<Chara*> Battle::calTargetList(Chara * acvite, BattleSkill * skill)
 	}
 
 	return list;
+}
+
+vector<int> Battle::calDamageList(Chara* active, vector<Chara*>passive, bool isUseSkill, BattleSkill* skill)
+{
+	int TargetNum = passive.size();
+	vector<int> damage;
+	int atk = 0, def = 0;
+	for (int i = 0; i < TargetNum; i++)
+	{
+		damage.push_back(calDamageSingle(active->getBattleChara(), passive[i]->getBattleChara(), isUseSkill, skill));
+	}
+	return damage;
+}
+
+int Battle::calDamageSingle(BattleChara * active, BattleChara * passive, bool isUseSkill, BattleSkill * skill)
+{
+	int damage = 0;
+	if (passive->checkEffect(SideEffectType::SideEffectTypeDamageImmune))
+	{
+		damage = -1;
+	}
+	else
+	{
+		if (!isUseSkill)
+		{
+			
+			int atk = active->getAtk();
+			int def = 0;
+			damage = calDamageVal(atk, def, 0);
+
+			/*int atk = active->getAtk();
+			int def = action->passive->getDefense();
+			damage = atk - def * DEFENSE_EFFICIENCY + 1 > 1 ?
+			atk - def * DEFENSE_EFFICIENCY + 1 : 1;*/
+		}
+		else
+		{
+			/*	int atk = skill->getSkillType() == magic ? active->getMAtk() : active->getAtk();
+
+			int def = skill->getSkillType() == magic ? passive->getMDefense() : passive->getDefense();
+
+			damage = atk + skill->getDamage() * SKILL_EFFICIENCY - def * DEFENSE_EFFICIENCY + 1 > 1 ?
+			atk + skill->getDamage() * SKILL_EFFICIENCY - def * DEFENSE_EFFICIENCY + 1 : 1);*/
+			int atk = active->getAtk();
+			int def = 0;
+			damage = calDamageVal(atk, def, skill->getDamage());
+		}
+	}
+	return damage;
+}
+
+int Battle::calDamageVal(int atk, int def, int skillDamage)
+{
+	int damage = 1;
+	damage = atk + skillDamage * skillEfficiency - def * defEfficiency + 1;
+	damage = damage > 1 ? 1 : damage;
+	return damage;
+}
+
+void Battle::addMovePerform(Chara * act, Chara * target)
+{
+	MovePerform *mvp = new MovePerform();
+	mvp->setActor(act);
+	D3DXVECTOR2 actCenter = act->getBoundingCenter();
+	D3DXVECTOR2 pasCenter = target->getBoundingCenter();
+	D3DXVECTOR2 dis = actCenter - pasCenter;
+	RECTF actRect = act->getBoundingRect();
+	RECTF pasRect = target->getBoundingRect();
+	if (dis.x > dis.y)
+	{
+		int flag = dis.x >= 0 ? 1 : -1;
+		float newX = pasCenter.x + flag * ((pasRect.right - pasRect.left) / 2 + (actRect.right - actRect.left) / 2);
+		mvp->setVecTarget({ newX, act->getVecNowPos()->y, target->getBoundingCenter().y });
+	}
+	else if (dis.x < dis.y)
+	{
+		int flag = dis.y >= 0 ? 1 : -1;
+		float newY = pasCenter.y + flag * ((pasRect.bottom - pasRect.top) / 2 + (actRect.bottom - actRect.top) / 2);
+		mvp->setVecTarget({ target->getBoundingCenter().x, act->getVecNowPos()->y, newY });
+	}
+	else if (dis.x == dis.y)
+	{
+		int flagX = dis.x >= 0 ? 1 : -1;
+		int flagY = dis.y >= 0 ? 1 : -1;
+		float newX = pasCenter.x + flagX * ((pasRect.right - pasRect.left) / 2 + (actRect.right - actRect.left) / 2);
+		float newY = pasCenter.y + flagY * ((pasRect.bottom - pasRect.top) / 2 + (actRect.bottom - actRect.top) / 2);
+		mvp->setVecTarget({ newX, act->getVecNowPos()->y, newY });
+	}
+	mvp->setVecStart(*act->getVecNowPos());
+	mvp->setMoveSpeed(0.1);
+	pm->addPerforms(mvp);
+}
+
+void Battle::setPerformManager(PerformManage * pm)
+{
+	this->pm = pm;
+}
+
+void Battle::setSkillEfficiency(float se)
+{
+	this->skillEfficiency = se;
+}
+
+void Battle::setDefEfficiency(float de)
+{
+	this->defEfficiency = de;
 }

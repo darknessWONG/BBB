@@ -21,6 +21,19 @@ void BattleChara::addEffect(SideEffect * effect)
 	this->effect.push_back(effect);
 }
 
+bool BattleChara::checkEffect(SideEffectType type)
+{
+	int effectNum = effect.size();
+	for (int i = 0; i < effectNum; i++)
+	{
+		if (effect[i]->getType() == type)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 void BattleChara::removeEffect(int index)
 {
 	if (index >= 0 && index < effect.size())

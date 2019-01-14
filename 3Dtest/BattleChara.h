@@ -15,7 +15,9 @@ public:
 	public function
 	============================================*/
 	void addSkill(BattleSkill* skill);
+
 	void addEffect(SideEffect* effect);
+	bool checkEffect(SideEffectType type);
 	void removeEffect(int index);
 	void removeEffect(SideEffect* effect);
 	void removeEffect(SideEffectType type);
@@ -24,6 +26,7 @@ public:
 	void takeDamage(int damage);
 	void removeOverdueStauts(void);
 	void calStatus(void);
+
 	/*===========================================
 	public geter / seter
 	============================================*/
