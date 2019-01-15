@@ -153,6 +153,16 @@ void GameManage::titleStateClean(void)
 
 void GameManage::gameStateInit(void)
 {
+	BattleChara* bc = new BattleChara();
+	bc->setAtk(10);
+	bc->setCamp(CampType::CampTypePlayer);
+	bc->setHpMax(100);
+	bc->setHpNow(100);
+	bc->setMovePoint(10);
+	bc->setMpMax(10);
+	bc->setMpNow(10);
+	bc->setName("wong");
+	bc->setSpeed(10);
 	Player* mesh = new Player("radio.x");
 	mesh->loadModel(pD3DDevice);
 	//mesh->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
@@ -162,6 +172,7 @@ void GameManage::gameStateInit(void)
 	mesh->setCanMove(true);
 	mesh->setVecNowPos(new D3DXVECTOR3(-10, 0, 0));
 	mesh->setOverlapLevel(1);
+	mesh->setBattleChara(bc);
 	player = mesh;
 	map->addGameObject(mesh);
 
@@ -176,15 +187,15 @@ void GameManage::gameStateInit(void)
 	others.push_back(tree);
 	map->addGameObject(tree);
 
-	Model* tree2 = new Model("tree.x");
-	tree2->loadModel(pD3DDevice);
-	tree2->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
-	//mesh1->setRotateSpeed(20);
-	tree2->setCanMove(false);
-	tree2->setVecNowPos(new D3DXVECTOR3(-7.5, 0, 0));
-	tree2->setOverlapLevel(1);
-	others.push_back(tree2);
-	map->addGameObject(tree2);
+	//Model* tree2 = new Model("tree.x");
+	//tree2->loadModel(pD3DDevice);
+	//tree2->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
+	////mesh1->setRotateSpeed(20);
+	//tree2->setCanMove(false);
+	//tree2->setVecNowPos(new D3DXVECTOR3(-7.5, 0, 0));
+	//tree2->setOverlapLevel(1);
+	//others.push_back(tree2);
+	//map->addGameObject(tree2);
 
 	Model* tree3 = new Ground("grass ground.blend.x");
 	tree3->loadModel(pD3DDevice);
@@ -196,7 +207,16 @@ void GameManage::gameStateInit(void)
 	others.push_back(tree3);
 	map->addGameObject(tree3);
 
-
+	BattleChara* bc1 = new BattleChara();
+	bc1->setAtk(10);
+	bc1->setCamp(CampType::CampTypeEnemy);
+	bc1->setHpMax(100);
+	bc1->setHpNow(100);
+	bc1->setMovePoint(10);
+	bc1->setMpMax(10);
+	bc1->setMpNow(10);
+	bc1->setName("enemy");
+	bc1->setSpeed(10);
 	Enemy* mesh3 = new Enemy("T-Rex.x");
 	mesh3->loadModel(pD3DDevice);
 	mesh3->setWalkSpeed(0.01);
@@ -206,8 +226,9 @@ void GameManage::gameStateInit(void)
 	mesh3->setVecPatrolStart(new D3DXVECTOR3(1, 0, 1));
 	mesh3->setVecPatrolEnd(new D3DXVECTOR3(1, 0, 5));
 	mesh3->setOverlapLevel(1);
-	//enemys.push_back(mesh3);
-	//map->addGameObject(mesh3);
+	mesh3->setBattleChara(bc1);
+	enemys.push_back(mesh3);
+	map->addGameObject(mesh3);
 
 	Vigilance* mesh4 = new Vigilance();
 	mesh4->setMaxSpeed(0.3);
@@ -219,99 +240,125 @@ void GameManage::gameStateInit(void)
 	vigliances.push_back(mesh4);
 	map->addGameObject(mesh4);
 
-	MovePerform *per = new MovePerform();
-	per->setActor(player);
-	per->setMoveSpeed(0.1);
-	per->setVecTarget(D3DXVECTOR3(-12, 0, 0));
-	per->setVecStart(D3DXVECTOR3(player->getBoundingCenter().x, 0, player->getBoundingCenter().y));
-	pm.addPerforms(per);
+	battle = new Battle();
+	battle->addCharas(player);
+	battle->addCharas(mesh3);
+	battle->setPerformManager(&pm);
+	MeumUI *cmdMeum = new MeumUI();
+	uis.push_back(cmdMeum);
+	battle->setCommandMeum(cmdMeum);
 
-	Parts* par = new Parts();
-	par->setModel(new Cube());
 
-	Parts* par2 = new Parts();
-	par2->setModel(new Cube());
-	par2->setOffsetS({ 2, 2, 2 });
-	par2->setOffsetT({ 0, 0, 0 });
-	par2->setOffsetR({ 0, 0, 0 });
-	par->addChild(par2);
+	//MovePerform *per = new MovePerform();
+	//per->setActor(player);
+	//per->setMoveSpeed(0.1);
+	//per->setVecTarget(D3DXVECTOR3(-12, 0, -10));
+	//per->setVecStart(D3DXVECTOR3(player->getBoundingCenter().x, 0, player->getBoundingCenter().y));
+	//pm.addPerforms(per);
 
-	Parts* par3 = new Parts();
-	par3->setModel(new Cube());
-	par3->setOffsetT({ 5, 0, 0 });
-	par3->setOffsetR({ 0, 0, 0 });
-	par->addChild(par3);
+	//Parts* par = new Parts();
+	//par->setModel(new Cube());
 
-	Parts* par4 = new Parts();
-	par4->setModel(new Cube());
-	par4->setOffsetT({ -5, 0, 0 });
-	par4->setOffsetR({ 0, 0, 0 });
-	par->addChild(par4);
+	//Parts* par2 = new Parts();
+	//par2->setModel(new Cube());
+	//par2->setOffsetS({ 2, 2, 2 });
+	//par2->setOffsetT({ 0, 0, 0 });
+	//par2->setOffsetR({ 0, 0, 0 });
+	//par->addChild(par2);
 
-	Parts* par5 = new Parts();
-	par5->setModel(new Cube());
-	par5->setOffsetT({ 0, 2, 0 });
-	par5->setOffsetR({ 0, 0, 0 });
-	par->addChild(par5);
-	
-	MyMesh* mm = new MyMesh();
-	mm->setParts(par);
-	mm->setVecNowPos(new D3DXVECTOR3(0, 0, -10));
-	mm->setMaxSpeed(0.3);
-	mm->setCanMove(true);
-	mm->setOverlapLevel(1);
-	others.push_back(mm);
-	map->addGameObject(mm);
+	//Parts* par3 = new Parts();
+	//par3->setModel(new Cube());
+	//par3->setOffsetT({ 5, 0, 0 });
+	//par3->setOffsetR({ 0, 0, 0 });
+	//par->addChild(par3);
 
-	AnimationTemplate animateTamp(1, { 0, 0, 0 }, { 0, 0, 0 }, { 5, 0, 0 }, { 0, 0, 0 }, 300);
-	AnimationTemplate animateTamp1(4, { 0, 0, 0 }, { 0, 120, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, 300);
-	AnimationTemplate animateTamp2(1, { 0, 0, 0 }, { 0, 120, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, 300);
-	AnimationTemplate animateTamp3(1, { 0, 0, 0 }, { 0, 120, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, 300);
-	AnimationTemplate animateTamp4(1, { 0, 0, 0 }, { 0, 120, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, 300);
-	vector<AnimationInfoTemplate> list;
-	list.push_back({ &animateTamp, 0 });
-	list.push_back({ &animateTamp1, 150 });
-	AnimationManage::addAnimateTemplate(list);
-	am.addAnimation(0, mm);
+	//Parts* par4 = new Parts();
+	//par4->setModel(new Cube());
+	//par4->setOffsetT({ -5, 0, 0 });
+	//par4->setOffsetR({ 0, 0, 0 });
+	//par->addChild(par4);
+
+	//Parts* par5 = new Parts();
+	//par5->setModel(new Cube());
+	//par5->setOffsetT({ 0, 2, 0 });
+	//par5->setOffsetR({ 0, 0, 0 });
+	//par->addChild(par5);
+	//
+	//MyMesh* mm = new MyMesh();
+	//mm->setParts(par);
+	//mm->setVecNowPos(new D3DXVECTOR3(0, 0, -10));
+	//mm->setMaxSpeed(0.3);
+	//mm->setCanMove(true);
+	//mm->setOverlapLevel(1);
+	//others.push_back(mm);
+	//map->addGameObject(mm);
+
+	//AnimationTemplate animateTamp(1, { 0, 0, 0 }, { 0, 0, 0 }, { 5, 0, 0 }, { 0, 0, 0 }, 300);
+	//AnimationTemplate animateTamp1(4, { 0, 0, 0 }, { 0, 120, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, 300);
+	//AnimationTemplate animateTamp2(1, { 0, 0, 0 }, { 0, 120, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, 300);
+	//AnimationTemplate animateTamp3(1, { 0, 0, 0 }, { 0, 120, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, 300);
+	//AnimationTemplate animateTamp4(1, { 0, 0, 0 }, { 0, 120, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, 300);
+	//vector<AnimationInfoTemplate> list;
+	//list.push_back({ &animateTamp, 0 });
+	//list.push_back({ &animateTamp1, 150 });
+	//AnimationManage::addAnimateTemplate(list);
+	//am.addAnimation(0, mm);
 
 
 	gs = GameState::GameStateGameRunning;
+	battleResult = BattleResultType::BattleResultTypeUnknow;
 }
 
 void GameManage::gameStateUpdate(void)
 {
+	player->setIsReadInput(true);
+	int enemyNum = enemys.size();
+	for (int i = 0; i < enemyNum; i++)
+	{
+		enemys[i]->setIsPatrol(true);
+	}
+
+
 	if (pm.playPerforms())
 	{
+		player->setIsReadInput(false);
 		lockUnmoveObject();
 		return;
 	}
 
-	if (Keyboard_IsTrigger(DIK_0))
+	//if (Keyboard_IsTrigger(DIK_0))
+	//{
+	//	MovePerform *per = new MovePerform();
+	//	per->setActor(player);
+	//	per->setMoveSpeed(0.1);
+	//	per->setVecTarget(D3DXVECTOR3(-12, 0, 0));
+	//	per->setVecStart(D3DXVECTOR3(player->getBoundingCenter().x, 0, player->getBoundingCenter().y));
+	//	pm.addPerforms(per);
+
+	//	per = new MovePerform();
+	//	per->setActor(player);
+	//	per->setMoveSpeed(0.1);
+	//	per->setVecTarget(D3DXVECTOR3(-12, 0, -10));
+	//	per->setVecStart(D3DXVECTOR3(-12, 0, 0));
+	//	pm.addPerforms(per);
+
+	//	per = new MovePerform();
+	//	per->setActor(player);
+	//	per->setMoveSpeed(0.1);
+	//	per->setVecTarget(D3DXVECTOR3(0, 0, -10));
+	//	per->setVecStart(D3DXVECTOR3(-12, 0, -10));
+	//	pm.addPerforms(per);
+	//}
+	if (checkIsInBattle())
 	{
-		MovePerform *per = new MovePerform();
-		per->setActor(player);
-		per->setMoveSpeed(0.1);
-		per->setVecTarget(D3DXVECTOR3(-12, 0, 0));
-		per->setVecStart(D3DXVECTOR3(player->getBoundingCenter().x, 0, player->getBoundingCenter().y));
-		pm.addPerforms(per);
-
-		per = new MovePerform();
-		per->setActor(player);
-		per->setMoveSpeed(0.1);
-		per->setVecTarget(D3DXVECTOR3(-12, 0, -10));
-		per->setVecStart(D3DXVECTOR3(-12, 0, 0));
-		pm.addPerforms(per);
-
-		per = new MovePerform();
-		per->setActor(player);
-		per->setMoveSpeed(0.1);
-		per->setVecTarget(D3DXVECTOR3(0, 0, -10));
-		per->setVecStart(D3DXVECTOR3(-12, 0, -10));
-		pm.addPerforms(per);
+		player->setIsReadInput(false);
+		battleUpdate();
 	}
-
-	animationUpdate();
-	enemyUpdate();
+	else
+	{
+		animationUpdate();
+		enemyUpdate();
+	}
 	checkEnd();
 }
 
@@ -384,10 +431,28 @@ void GameManage::animationUpdate(void)
 	am.cleanEndAnimation();
 }
 
+bool GameManage::checkIsInBattle(void)
+{
+	if (battle != NULL)
+	{
+		return battle->checkEnd() == 0 ? true : false;
+	}
+	return false;
+}
+
+void GameManage::battleUpdate(void)
+{
+	battle->start();
+}
+
 void GameManage::lockUnmoveObject(void)
 {
 	GameObject *actor = pm.getPlayingPerforms()->getActor();
 
+	if (actor != player)
+	{
+		player->lockThisTurn();
+	}
 	int gameObjectsNum = enemys.size();
 	for (int i = 0; i < gameObjectsNum; i++)
 	{

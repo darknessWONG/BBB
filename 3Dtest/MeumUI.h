@@ -32,6 +32,7 @@ public:
 	void setNowPointing(int nowPointing);
 	void setBackground(UI* ui);
 	void setPointer(UI* ui);
+	void setIsDisplay(bool isDisplay);
 
 private:
 	D3DXVECTOR2 position;
@@ -40,5 +41,7 @@ private:
 	UI* pointer;
 	int nowPointing;
 	vector<UI*> options;
+
+	bool isDisplay;
 };
 

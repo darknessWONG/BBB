@@ -13,6 +13,7 @@ UI::UI(D3DXVECTOR2 pos, float width, float height, int tex)
 	next = NULL;
 	identity = UIIdentity::UIIdentityMAX;
 	index = -1;
+	isDisplay = true;
 }
 
 
@@ -90,6 +91,11 @@ void UI::setIndex(int index)
 	this->index = index;
 }
 
+void UI::setIsDisplay(bool isDisplay)
+{
+	this->isDisplay = isDisplay;
+}
+
 void UI::calPoints(D3DXVECTOR2* basePoint)
 {
 	points[0] = position + *basePoint;
@@ -108,35 +114,39 @@ void UI::calTexPoint(void)
 
 void UI::draw(LPDIRECT3DDEVICE9 g_pD3DDevice, D3DXVECTOR2 *basePoint)
 {
-	calPoints(basePoint);
-	calTexPoint();
-
-	Vertex2D *f = new Vertex2D[4];
-	for (int i = 0; i < 4; i++)
+	if (isDisplay)
 	{
-		f[i].pos = { points[i].x, points[i].y, 0, 1 };
-		f[i].pos.x += 0.5;
-		f[i].pos.y += 0.5;
-		f[i].color = D3DCOLOR_RGBA(255, 255, 255, 255);
-		f[i].uv = uvPos[i];
+		calPoints(basePoint);
+		calTexPoint();
+
+		Vertex2D *f = new Vertex2D[4];
+		for (int i = 0; i < 4; i++)
+		{
+			f[i].pos = { points[i].x, points[i].y, 0, 1 };
+			f[i].pos.x += 0.5;
+			f[i].pos.y += 0.5;
+			f[i].color = D3DCOLOR_RGBA(255, 255, 255, 255);
+			f[i].uv = uvPos[i];
+		}
+		g_pD3DDevice->SetFVF(FVF_VERTEX2D);
+		g_pD3DDevice->SetTexture(0, TextureHandler2D::GetTexture(texture).tex_p);
+
+		g_pD3DDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, f, sizeof(Vertex2D));
+
+		char *tmpStr = new char[str.length() + 1];
+		strcpy_s(tmpStr, str.length() + 1, str.c_str());
+		Font_Draw(f[0].pos.x, f[0].pos.y, tmpStr);
+		delete[] tmpStr;
 	}
-	g_pD3DDevice->SetFVF(FVF_VERTEX2D);
-	g_pD3DDevice->SetTexture(0, TextureHandler2D::GetTexture(texture).tex_p);
-
-	g_pD3DDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, f, sizeof(Vertex2D));
-
-	char *tmpStr = new char[str.length() + 1];
-	strcpy_s(tmpStr, str.length() + 1, str.c_str());
-	Font_Draw(f[0].pos.x, f[0].pos.y, tmpStr);
-	delete[] tmpStr;
-
 	if (next != NULL)
 	{
+		next->setIsDisplay(isDisplay);
 		next->draw(g_pD3DDevice, basePoint);
 	}
 
 	if (child != NULL)
 	{
+		child->setIsDisplay(isDisplay);
 		child->draw(g_pD3DDevice, points);
 	}
 }

@@ -26,12 +26,21 @@ public:
 	public function
 	============================================*/
 	void start(void);
-
+	void addCharas(Chara* chara);
+	/*-------------------
+	return value:
+	0 if not end
+	1 if player win
+	-1 if enemy win
+	-------------------*/
+	BOOL checkEnd(void);
 	/*===========================================
 	public geter / seter
 	============================================*/
 	void setSkillEfficiency(float se);
 	void setDefEfficiency(float de);
+	void setCommandMeum(MeumUI* commandMeum);
+	void setPerformManager(PerformManage* pm);
 private:
 	//should only change bs by this function, 
 	//it will initialize other value it they should be initialize when new bs begin
@@ -57,7 +66,6 @@ private:
 
 	//if is dead return true or return false
 	bool checkDead(Chara* chara);
-	void addCharas(Chara* chara);
 
 	void createActionMeum(void);
 	void createSkillMeum(vector<BattleSkill*> list);
@@ -78,10 +86,10 @@ private:
 	int calDamageSingle(BattleChara* active, BattleChara* passive, bool isUseSkill, BattleSkill* skill);
 	int calDamageVal(int atk, int def, int skillDamage);
 	//vector<int> calHealVal(void);
+	void takeDamage(void);
 
 	void addMovePerform(Chara* act, Chara* target);
 
-	void setPerformManager(PerformManage* pm);
 
 
 	BattleState bs;

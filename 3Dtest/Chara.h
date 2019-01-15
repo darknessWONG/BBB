@@ -10,7 +10,7 @@ public:
 	virtual ~Chara();
 
 	BattleChara* getBattleChara(void);
-	void seBattleChara(BattleChara* bc);
+	void setBattleChara(BattleChara* bc);
 	float getWalkSpeed(void);
 	void setWalkSpeed(float walkSpeed);
 

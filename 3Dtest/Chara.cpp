@@ -22,7 +22,7 @@ BattleChara * Chara::getBattleChara(void)
 	return bc;
 }
 
-void Chara::seBattleChara(BattleChara * bc)
+void Chara::setBattleChara(BattleChara * bc)
 {
 	safe_delete<BattleChara>(this->bc);
 	this->bc = bc;

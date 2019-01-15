@@ -26,10 +26,12 @@ public:
 	void setIdentity(UIIdentity identity);
 	int getIndex(void);
 	void setIndex(int index);
-
+	void setIsDisplay(bool isDisplay);
 
 
 private:
+	bool isDisplay;
+
 	void calPoints(D3DXVECTOR2* basePoint);
 	void calTexPoint(void);
 

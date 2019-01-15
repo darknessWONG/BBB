@@ -7,12 +7,14 @@
 Enemy::Enemy()
 {
 	vecPatrolTarget = vecPatrolEnd;
+	isPatrol = true;
 }
 
 Enemy::Enemy(string modelPath)
 	:Chara(modelPath)
 {
 	vecPatrolTarget = vecPatrolEnd;
+	isPatrol = true;
 }
 
 
@@ -22,47 +24,51 @@ Enemy::~Enemy()
 
 void Enemy::dataUpdate(void)
 {
-	if (vecPatrolTarget == NULL)
+	if (isPatrol)
 	{
-		vecPatrolTarget = vecPatrolEnd;
-	}
-	if (!isTracking)
-	{
-		D3DXVECTOR3 patrolLine = *vecPatrolEnd - *vecPatrolStart;
-		if (vecPatrolTarget == vecPatrolStart)
+		if (vecPatrolTarget == NULL)
 		{
-			patrolLine = -patrolLine;
+			vecPatrolTarget = vecPatrolEnd;
+		}
+		if (!isTracking)
+		{
+			D3DXVECTOR3 patrolLine = *vecPatrolEnd - *vecPatrolStart;
+			if (vecPatrolTarget == vecPatrolStart)
+			{
+				patrolLine = -patrolLine;
+			}
+			D3DXVECTOR2 boundingCenter = getBoundingCenter();
+			D3DXVECTOR3 nowLine = *vecPatrolTarget - D3DXVECTOR3(boundingCenter.x, 0, boundingCenter.y);
+
+			float dot = D3DXVec3Dot(&patrolLine, &nowLine);
+			float length = D3DXVec3Length(&patrolLine) * D3DXVec3Length(&nowLine);
+			if (Physics::round(dot, FLOAT_BITS) == -Physics::round(length, FLOAT_BITS))
+			{
+				if (vecPatrolTarget == vecPatrolEnd)
+				{
+					vecPatrolTarget = vecPatrolStart;
+				}
+				else
+				{
+					vecPatrolTarget = vecPatrolEnd;
+				}
+
+			}
 		}
 		D3DXVECTOR2 boundingCenter = getBoundingCenter();
-		D3DXVECTOR3 nowLine = *vecPatrolTarget - D3DXVECTOR3(boundingCenter.x, 0, boundingCenter.y);
+		D3DXVECTOR3 speedDir = *vecPatrolTarget - D3DXVECTOR3(boundingCenter.x, 0, boundingCenter.y);
+		D3DXVec3Normalize(&speedDir, &speedDir);
+		setVecMoveSpeed(&D3DXVECTOR3(0, 0, 0));
+		addSpeed(&speedDir, getWalkSpeed());
 
-		float dot = D3DXVec3Dot(&patrolLine, &nowLine);
-		float length = D3DXVec3Length(&patrolLine) * D3DXVec3Length(&nowLine);
-		if (Physics::round(dot, FLOAT_BITS) == -Physics::round(length, FLOAT_BITS))
-		{
-			if (vecPatrolTarget == vecPatrolEnd)
-			{
-				vecPatrolTarget = vecPatrolStart;
-			}
-			else
-			{
-				vecPatrolTarget = vecPatrolEnd;
-			}
+		D3DXVECTOR2 newCenter = { vecPatrolTarget->x, vecPatrolTarget->z };
+		D3DXVECTOR2 newFront = boundingCenter - newCenter;
+		D3DXVECTOR3 newFront3 = { newFront.x, 0, newFront.y };
+		D3DXVec3Normalize(&newFront3, &newFront3);
+		setVecTargetFront(&newFront3);
 
-		}
+		isPatrol = false;
 	}
-	D3DXVECTOR2 boundingCenter = getBoundingCenter();
-	D3DXVECTOR3 speedDir = *vecPatrolTarget - D3DXVECTOR3(boundingCenter.x, 0, boundingCenter.y);
-	D3DXVec3Normalize(&speedDir, &speedDir);
-	setVecMoveSpeed(&D3DXVECTOR3(0, 0, 0));
-	addSpeed(&speedDir, getWalkSpeed());
-
-	D3DXVECTOR2 newCenter = { vecPatrolTarget->x, vecPatrolTarget->z };
-	D3DXVECTOR2 newFront = boundingCenter - newCenter;
-	D3DXVECTOR3 newFront3 = { newFront.x, 0, newFront.y };
-	D3DXVec3Normalize(&newFront3, &newFront3);
-	setVecTargetFront(&newFront3);
-
 	Chara::dataUpdate();
 }
 
@@ -112,4 +118,9 @@ void Enemy::setIsTracking(bool isTracking)
 		vecPatrolTarget = vecPatrolEnd;
 	}
 	this->isTracking = isTracking;
+}
+
+void Enemy::setIsPatrol(bool isPatrol)
+{
+	this->isPatrol = isPatrol;
 }

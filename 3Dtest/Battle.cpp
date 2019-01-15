@@ -1,11 +1,15 @@
 #include "stdafx.h"
 #include "Battle.h"
 #include "input.h"
+#include "Enemy.h"
+#include "math.h"
 #include "MovePerform.h"
 
 
 Battle::Battle()
 {
+	bs = BattleState::BattleStateStandby;
+
 	commandMeum = new MeumUI();
 	UI* ui = new UI({ 0, 0 }, 200, 200, 0);
 	UI* ui1 = new UI({ 20, 20 }, 50, 50, 1);
@@ -40,6 +44,14 @@ Battle::~Battle()
 
 void Battle::start(void)
 {
+	for (int i = 0; i < charas.size(); i++)
+	{
+		if (typeid(*charas[i]) == typeid(Enemy))
+		{
+			((Enemy*)charas[i])->setIsPatrol(false);
+		}
+	}
+
 	switch (bs)
 	{
 	case BattleStateStandby:
@@ -69,22 +81,56 @@ void Battle::start(void)
 	}
 }
 
+BOOL Battle::checkEnd(void)
+{
+	int playerNum = 0, enemyNum = 0;
+	int charaNum = charas.size();
+	for (int i = 0; i < charaNum; i++)
+	{
+		if (charas[i]->getBattleChara()->getHpNow() > 0)
+		{
+			switch (charas[i]->getBattleChara()->getCamp())
+			{
+			case CampType::CampTypePlayer:
+				playerNum++;
+				break;
+			case CampType::CampTypeEnemy:
+				enemyNum++;
+				break;
+			}
+		}
+		if (playerNum > 0 && enemyNum > 0)
+		{
+			return 0;
+		}
+	}
+	if (playerNum <= 0 && enemyNum > 0)
+	{
+		return -1;
+	}
+	if (playerNum > 0 && enemyNum <= 0)
+	{
+		return 1;
+	}
+	return 0;
+}
+
 void Battle::changeBattleState(BattleState newbs)
 {
 	bs = newbs;
 	switch (newbs)
 	{
 	case BattleState::BattleStateStandby:
+		break;
+	case BattleState::BattleStateCommand:
+		as = ActionPhaseStatus::ActionPhaseStatusActionSelect;
+		lastAs = ActionPhaseStatusActionZero;
 		if (action != NULL)
 		{
 			delete action;
 		}
 		action = new Action;
 		action->active = actionList[nowActionChara];
-		break;
-	case BattleState::BattleStateCommand:
-		as = ActionPhaseStatus::ActionPhaseStatusActionSelect;
-		lastAs = ActionPhaseStatusActionZero;
 		break;
 	}
 }
@@ -131,7 +177,9 @@ void Battle::placeSelectPhase(void)
 
 void Battle::damagePhase(void)
 {
-
+	action->damage = calDamageList(action->active, action->passive, action->isUseSkill, action->skill);
+	takeDamage();
+	changeBattleState(BattleState::BattleStateEnd);
 }
 
 void Battle::mapMovePhase(void)
@@ -140,6 +188,15 @@ void Battle::mapMovePhase(void)
 
 void Battle::endPhase(void)
 {
+	BOOL isEnd = checkEnd();
+	if (!isEnd)
+	{
+		nowActionChara = (nowActionChara + 1) % actionList.size();
+		if (nowActionChara == 0)
+		{
+			calActionList();
+		}
+	}
 }
 
 void Battle::calActionList(void)
@@ -256,6 +313,7 @@ bool Battle::checkDead(Chara * chara)
 void Battle::addCharas(Chara * chara)
 {
 	charas.push_back(chara);
+	calActionList();
 }
 
 void Battle::createActionMeum(void)
@@ -266,8 +324,10 @@ void Battle::createActionMeum(void)
 	UI* ui1 = new UI({ 20, 20 }, 50, 50, 1);
 	UI* ui2 = new UI({ 80, 20 }, 50, 50, 1);
 	ui2->setStr("ATTACK");
+	ui2->setIdentity(UIIdentity::UIIdentityAttack);
 	UI* ui3 = new UI({ 80, 80 }, 50, 50, 1);
 	ui3->setStr("RUN");
+	ui3->setIdentity(UIIdentity::UIIdentityRun);
 	//MeumUI *meum = new MeumUI();
 	commandMeum->addOptins(ui2);
 	commandMeum->addOptins(ui3);
@@ -275,6 +335,7 @@ void Battle::createActionMeum(void)
 	commandMeum->setPointer(ui1);
 	commandMeum->setPosition({ 0, 0 });
 	//uis.push_back(meum);
+	commandMeum->setIsDisplay(true);
 
 	lastAs = ActionPhaseStatus::ActionPhaseStatusActionSelect;
 }
@@ -291,7 +352,7 @@ void Battle::createSkillMeum(vector<BattleSkill*> list)
 	int listNum = list.size();
 	for (int i = 0; i < listNum; i++)
 	{
-		ui = new UI({ 80, i * 20 + 20 }, 50, 50, 1);
+		ui = new UI({ 80.0f, i * 20.0f + 20.0f }, 50.0f, 50.0f, 1);
 		ui->setStr(list[i]->getName());
 		commandMeum->addOptins(ui);
 	}
@@ -311,7 +372,7 @@ void Battle::createTagatMeum(vector<Chara*> list)
 	int listNum = list.size();
 	for (int i = 0; i < listNum; i++)
 	{
-		ui = new UI({ 80, i * 20 + 20 }, 50, 50, 1);
+		ui = new UI({ 80.0f, i * 20.0f + 20.0f }, 50.0f, 50.0f, 1);
 		ui->setStr(list[i]->getBattleChara()->getName());
 		commandMeum->addOptins(ui);
 	}
@@ -370,10 +431,10 @@ vector<Chara*> Battle::calTargetList(Chara * acvite, BattleSkill * skill)
 
 vector<int> Battle::calDamageList(Chara* active, vector<Chara*>passive, bool isUseSkill, BattleSkill* skill)
 {
-	int TargetNum = passive.size();
+	int targetNum = passive.size();
 	vector<int> damage;
 	int atk = 0, def = 0;
-	for (int i = 0; i < TargetNum; i++)
+	for (int i = 0; i < targetNum; i++)
 	{
 		damage.push_back(calDamageSingle(active->getBattleChara(), passive[i]->getBattleChara(), isUseSkill, skill));
 	}
@@ -425,6 +486,18 @@ int Battle::calDamageVal(int atk, int def, int skillDamage)
 	return damage;
 }
 
+void Battle::takeDamage(void)
+{
+	int targetNum = action->passive.size();
+	for (int i = 0; i < targetNum; i++)
+	{
+		if (action->damage[i] > 0)
+		{
+			action->passive[i]->getBattleChara()->takeDamage(action->damage[i]);
+		}
+	}
+}
+
 void Battle::addMovePerform(Chara * act, Chara * target)
 {
 	MovePerform *mvp = new MovePerform();
@@ -432,26 +505,27 @@ void Battle::addMovePerform(Chara * act, Chara * target)
 	D3DXVECTOR2 actCenter = act->getBoundingCenter();
 	D3DXVECTOR2 pasCenter = target->getBoundingCenter();
 	D3DXVECTOR2 dis = actCenter - pasCenter;
+	D3DXVECTOR2 absDis = { abs(dis.x), abs(dis.y) };
 	RECTF actRect = act->getBoundingRect();
 	RECTF pasRect = target->getBoundingRect();
-	if (dis.x > dis.y)
+	if (absDis.x > absDis.y)
 	{
 		int flag = dis.x >= 0 ? 1 : -1;
-		float newX = pasCenter.x + flag * ((pasRect.right - pasRect.left) / 2 + (actRect.right - actRect.left) / 2);
+		float newX = pasCenter.x + flag * (abs(pasRect.right - pasRect.left) / 2 + abs(actRect.right - actRect.left) / 2);
 		mvp->setVecTarget({ newX, act->getVecNowPos()->y, target->getBoundingCenter().y });
 	}
-	else if (dis.x < dis.y)
+	else if (absDis.x < absDis.y)
 	{
 		int flag = dis.y >= 0 ? 1 : -1;
-		float newY = pasCenter.y + flag * ((pasRect.bottom - pasRect.top) / 2 + (actRect.bottom - actRect.top) / 2);
+		float newY = pasCenter.y + flag * (abs(pasRect.bottom - pasRect.top) / 2 + abs(actRect.bottom - actRect.top) / 2);
 		mvp->setVecTarget({ target->getBoundingCenter().x, act->getVecNowPos()->y, newY });
 	}
-	else if (dis.x == dis.y)
+	else if (absDis.x == absDis.y)
 	{
 		int flagX = dis.x >= 0 ? 1 : -1;
 		int flagY = dis.y >= 0 ? 1 : -1;
-		float newX = pasCenter.x + flagX * ((pasRect.right - pasRect.left) / 2 + (actRect.right - actRect.left) / 2);
-		float newY = pasCenter.y + flagY * ((pasRect.bottom - pasRect.top) / 2 + (actRect.bottom - actRect.top) / 2);
+		float newX = pasCenter.x + flagX * (abs(pasRect.right - pasRect.left) / 2 + abs(actRect.right - actRect.left) / 2);
+		float newY = pasCenter.y + flagY * (abs(pasRect.bottom - pasRect.top) / 2 + abs(actRect.bottom - actRect.top) / 2);
 		mvp->setVecTarget({ newX, act->getVecNowPos()->y, newY });
 	}
 	mvp->setVecStart(*act->getVecNowPos());
@@ -472,4 +546,9 @@ void Battle::setSkillEfficiency(float se)
 void Battle::setDefEfficiency(float de)
 {
 	this->defEfficiency = de;
+}
+
+void Battle::setCommandMeum(MeumUI * commandMeum)
+{
+	this->commandMeum = commandMeum;
 }

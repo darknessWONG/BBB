@@ -25,7 +25,10 @@ public:
 	void setVecPatrolTarget(D3DXVECTOR3* vecPatrolTarget);
 	bool getIsTracking(void);
 	void setIsTracking(bool isTracking);
+	void setIsPatrol(bool isPatrol);
 private:
+	bool isPatrol;
+
 	D3DXVECTOR3* vecPatrolStart = NULL;
 	D3DXVECTOR3* vecPatrolEnd = NULL;
 	D3DXVECTOR3* vecPatrolTarget = NULL;

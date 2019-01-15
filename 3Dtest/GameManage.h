@@ -13,6 +13,7 @@
 #include "Animation.h"
 #include "AnimationSet.h"
 #include "AnimationManage.h"
+#include "Battle.h"
 
 class GameManage
 {
@@ -41,6 +42,12 @@ public:
 	void enemyUpdate(void);
 	void animationUpdate(void);
 
+	//return 1 if is in battle
+	//return 0 if is not in battle
+	bool checkIsInBattle(void);
+	void battleUpdate(void);
+
+
 	void lockUnmoveObject(void);
 
 	void setPD3DDevice(LPDIRECT3DDEVICE9 pD3DDevice);
@@ -56,6 +63,9 @@ private:
 	vector<GameObject*> others;
 	vector<MeumUI*> uis;
 	//vector<AnimationSet*> animates;
+
+	Battle* battle = NULL;
+	BattleResultType battleResult;
 
 	MapManage* map = NULL;
 

@@ -20,8 +20,10 @@ public:
 	/*===========================================
 	public geter / seter
 	============================================*/
-
+	void setIsReadInput(bool isi);
 private:
+	bool isReadInput;
+
 	float walkAccele;
 };
 

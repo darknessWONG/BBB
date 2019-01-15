@@ -131,7 +131,7 @@ int BattleChara::getHpMax(void)
 
 void BattleChara::setHpMax(int hp)
 {
-	this->hpMax;
+	this->hpMax = hp;
 }
 
 int BattleChara::getHpNow(void)
@@ -141,7 +141,7 @@ int BattleChara::getHpNow(void)
 
 void BattleChara::setHpNow(int hp)
 {
-	this->hpNow;
+	this->hpNow = hp;
 }
 
 int BattleChara::getMpMax(void)
@@ -151,7 +151,7 @@ int BattleChara::getMpMax(void)
 
 void BattleChara::setMpMax(int mp)
 {
-	this->mpMax;
+	this->mpMax = mp;
 }
 
 int BattleChara::getMpNow(void)
@@ -161,7 +161,7 @@ int BattleChara::getMpNow(void)
 
 void BattleChara::setMpNow(int mp)
 {
-	this->mpNow;
+	this->mpNow = mp;
 }
 
 void BattleChara::takeDamage(int damage)

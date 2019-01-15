@@ -14,32 +14,46 @@ MeumUI::~MeumUI()
 
 void MeumUI::assembleUIs(void)
 {
-	background->releaseChain();
-	background->addChild(pointer);
-	int optionsNum = options.size();
-	for (int i = 0; i < optionsNum; i++)
+	if (background != NULL)
 	{
-		background->addChild(options[i]);
+		background->releaseChain();
+		background->addChild(pointer);
+		int optionsNum = options.size();
+		for (int i = 0; i < optionsNum; i++)
+		{
+			background->addChild(options[i]);
+		}
 	}
 }
 
 void MeumUI::dataUpdate(void)
 {
-	if (Keyboard_IsTrigger(DIK_UP))
+	if (background != NULL)
 	{
-		setNowPointing(nowPointing - 1);
+		background->setIsDisplay(isDisplay);
 	}
-	else if (Keyboard_IsTrigger(DIK_DOWN))
+
+	if (isDisplay)
 	{
-		setNowPointing(nowPointing + 1);
+		if (Keyboard_IsTrigger(DIK_UP))
+		{
+			setNowPointing(nowPointing - 1);
+		}
+		else if (Keyboard_IsTrigger(DIK_DOWN))
+		{
+			setNowPointing(nowPointing + 1);
+		}
+		calPointerPosition();
 	}
-	calPointerPosition();
 }
 
 void MeumUI::draw(LPDIRECT3DDEVICE9 g_pD3DDevice)
 {
 	assembleUIs();
-	background->draw(g_pD3DDevice, &position);
+	if (background != NULL)
+	{
+		background->draw(g_pD3DDevice, &position);
+	}
 }
 
 void MeumUI::addOptins(UI * option)
@@ -65,14 +79,17 @@ int MeumUI::getNowPointingIndex(void)
 
 void MeumUI::cleanOption(void)
 {
-	background->releaseChain();
-	int optionNum = options.size();
-	for (int i = 0; i < optionNum; i++)
+	if (background != NULL)
 	{
-		delete options[optionNum - i - 1];
-		options.pop_back();
+		background->releaseChain();
+		int optionNum = options.size();
+		for (int i = 0; i < optionNum; i++)
+		{
+			delete options[optionNum - i - 1];
+			options.pop_back();
+		}
+		nowPointing = 0;
 	}
-	nowPointing = 0;
 }
 
 D3DXVECTOR2 MeumUI::getPosition(void)
@@ -108,5 +125,10 @@ void MeumUI::setBackground(UI * ui)
 void MeumUI::setPointer(UI * ui)
 {
 	pointer = ui;
+}
+
+void MeumUI::setIsDisplay(bool isDisplay)
+{
+	this->isDisplay = isDisplay;
 }
 

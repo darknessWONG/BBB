@@ -21,26 +21,30 @@ void Player::dataUpdate(void)
 {
 	D3DXVECTOR3 dir = { 0.0f, 0.0f, 0.0f };
 	bool isWalk = false;
-	if (Keyboard_IsPress(DIK_W))
+	if (isReadInput)
 	{
-		dir.z += 1;
-		isWalk = true;
+		if (Keyboard_IsPress(DIK_W))
+		{
+			dir.z += 1;
+			isWalk = true;
 
-	}
-	if (Keyboard_IsPress(DIK_S))
-	{
-		dir.z -= 1;
-		isWalk = true;
-	}
-	if (Keyboard_IsPress(DIK_A))
-	{
-		dir.x -= 1;
-		isWalk = true;
-	}
-	if (Keyboard_IsPress(DIK_D))
-	{
-		dir.x += 1;
-		isWalk = true;
+		}
+		if (Keyboard_IsPress(DIK_S))
+		{
+			dir.z -= 1;
+			isWalk = true;
+		}
+		if (Keyboard_IsPress(DIK_A))
+		{
+			dir.x -= 1;
+			isWalk = true;
+		}
+		if (Keyboard_IsPress(DIK_D))
+		{
+			dir.x += 1;
+			isWalk = true;
+		}
+		isReadInput = false;
 	}
 
 	if (true == isWalk)
@@ -52,4 +56,9 @@ void Player::dataUpdate(void)
 	}
 
 	Chara::dataUpdate();
+}
+
+void Player::setIsReadInput(bool isi)
+{
+	isReadInput = isi;
 }
