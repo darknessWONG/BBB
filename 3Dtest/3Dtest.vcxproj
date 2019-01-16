@@ -172,6 +172,7 @@
     <ClInclude Include="Light.h" />
     <ClInclude Include="MapManage.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="MyMesh.h" />
     <ClInclude Include="Parts.h" />
     <ClInclude Include="Physics.h" />
     <ClInclude Include="Player.h" />
@@ -209,6 +210,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapManage.cpp" />
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="MyMesh.cpp" />
     <ClCompile Include="Parts.cpp" />
     <ClCompile Include="Physics.cpp" />
     <ClCompile Include="Player.cpp" />
