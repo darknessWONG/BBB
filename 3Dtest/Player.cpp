@@ -15,6 +15,7 @@ Player::Player(string modelPath)
 
 Player::~Player()
 {
+	holdings = NULL;
 }
 
 void Player::dataUpdate(void)

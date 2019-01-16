@@ -44,6 +44,9 @@ Workbench::Workbench(int line, int column, float width, float length)
 
 Workbench::~Workbench()
 {
+	safe_delete<Item*>(items);
+	safe_delete<Vertex>(grid);
+
 }
 
 void Workbench::draw(LPDIRECT3DDEVICE9 pD3DDevice)

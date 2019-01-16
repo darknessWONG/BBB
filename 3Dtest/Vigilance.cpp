@@ -10,6 +10,7 @@ Vigilance::Vigilance()
 
 Vigilance::~Vigilance()
 {
+	belong = NULL;
 }
 
 void Vigilance::calWorldMatrix(void)

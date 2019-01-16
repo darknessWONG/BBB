@@ -18,6 +18,9 @@ Enemy::Enemy(string modelPath)
 
 Enemy::~Enemy()
 {
+	safe_delete<D3DXVECTOR3>(this->vecPatrolStart);
+	safe_delete<D3DXVECTOR3>(this->vecPatrolEnd);
+	safe_delete<D3DXVECTOR3>(this->vecPatrolTarget);
 }
 
 void Enemy::dataUpdate(void)

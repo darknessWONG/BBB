@@ -47,7 +47,10 @@ void GameManage::beforeUpdate(void)
 {
 	map->cleanGameObject();
 	cleanDead();
-	map->addGameObject(player);
+	if (player != NULL)
+	{
+		map->addGameObject(player);
+	}
 	int gameObjectsNum = others.size();
 	for (int i = 0; i < gameObjectsNum; i++)
 	{
@@ -233,23 +236,16 @@ void GameManage::game_state_init(void)
 void GameManage::game_state_update(void)
 {
 	pEmitter->Update();
-	//state_read_input(GameState_game_state_clean);
 
 	//state = GameState_game_state_clean;
 	ItemUpdate();
 	workbenchUpdate();
+
+	state_read_input(GameState_game_state_clean);
 }
 
 void GameManage::game_state_clean(void)
 {
-	//int idx = gameObjects.size();
-	//for (int i = 0; i < idx; i++)
-	//{
-	//	delete gameObjects[i];
-	//}
-	//gameObjects.clear();
-	//map->cleanGameObject();
-
 	map->cleanGameObject();
 	int gameObjectsNum = others.size();
 	for (int i = 0; i < gameObjectsNum; i++)
@@ -271,11 +267,18 @@ void GameManage::game_state_clean(void)
 	{
 		delete items[i];
 	}
+	gameObjectsNum = wbs.size();
+	for (int i = 0; i < gameObjectsNum; i++)
+	{
+		delete wbs[i];
+	}
 	safe_delete<Player>(player);
 	
 	enemys.clear();
 	others.clear();
+	items.clear();
 	vigliances.clear();
+	wbs.clear();
 	gs = GameState_result_state_init;
 }
 
@@ -411,7 +414,7 @@ void GameManage::setPD3DDevice(LPDIRECT3DDEVICE9 pD3DDevice)
 
 void GameManage::state_read_input(GameState name)
 {
-	if (Keyboard_IsPress(DIK_SPACE))
+	if (Keyboard_IsPress(DIK_RETURN))
 	{
 		gs = name;
 	}
