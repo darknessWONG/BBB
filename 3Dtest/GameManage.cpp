@@ -311,6 +311,7 @@ void GameManage::gameStateInit(void)
 
 void GameManage::gameStateUpdate(void)
 {
+	//battle = NULL;
 	player->setIsReadInput(true);
 	int enemyNum = enemys.size();
 	for (int i = 0; i < enemyNum; i++)
