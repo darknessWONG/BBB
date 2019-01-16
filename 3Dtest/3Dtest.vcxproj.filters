@@ -82,6 +82,24 @@
     <ClCompile Include="Vigilance.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
+    <ClCompile Include="Cube.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="Parts.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationManage.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationSet.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationTemplate.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3Dtest.h">
@@ -166,6 +184,24 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="Workbench.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Cube.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Parts.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationManage.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationSet.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationTemplate.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
