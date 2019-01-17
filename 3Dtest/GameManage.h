@@ -8,6 +8,7 @@
 #include "MapManage.h"
 #include "Workbench.h"
 #include "Emitter.h"
+#include "AnimationManage.h"
 
 class GameManage
 {
@@ -45,6 +46,7 @@ public:
 	void checkEnd(void);
 	void ItemUpdate(void);
 	void workbenchUpdate(void);
+	void animationUpdate(void);
 
 	void cleanDead(void);
 
@@ -68,6 +70,8 @@ private:
 	Emitter *pEmitter;
 
 	MapManage* map = NULL;
+
+	AnimationManage am;
 
 	GameState gs;
 };

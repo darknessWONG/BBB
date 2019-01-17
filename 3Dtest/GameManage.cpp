@@ -11,6 +11,11 @@
 #include "Emitter.h"
 #include "font.h"
 #include "texture.h"
+#include "Parts.h"
+#include "MyMesh.h"
+#include "Animation.h"
+#include "AnimationSet.h"
+
 
 GameManage::GameManage()
 {
@@ -227,6 +232,53 @@ void GameManage::game_state_init(void)
 	wbs.push_back(wb);
 	map->addGameObject(wb);
 
+	Model* model10 = new Model("mybody.x");
+	model10->loadModel(pD3DDevice);
+	Model* head = new Model("face.x");
+	head->loadModel(pD3DDevice);
+	Parts* par = new Parts();
+	par->setModel(model10);
+
+	Parts* par2 = new Parts();
+	par2->setModel(model10);
+	par2->setOffsetS({ 0.3f, 0.3f, 1.0f });
+	par2->setOffsetT({ 2, 1, 0 });
+	par2->setOffsetR({ 0, 0, 0 });
+	par->addChild(par2);
+
+	Parts* par3 = new Parts();
+	par3->setModel(model10);
+	par3->setOffsetS({ 0.3f, 0.3f, 1.0f });
+	par3->setOffsetT({ -2, 1, 0 });
+	par3->setOffsetR({ 0, 0, 0 });
+	par->addChild(par3);
+
+	Parts* par5 = new Parts();
+	par5->setModel(head);
+	par5->setOffsetT({ 0, 5, 0 });
+	par5->setOffsetR({ 0, 0, 0 });
+	par->addChild(par5);
+	
+	MyMesh* mm = new MyMesh();
+	mm->setParts(par);
+	mm->setVecNowPos(new D3DXVECTOR3(10, 0, -10));
+	mm->setMaxSpeed(0.3);
+	mm->setCanMove(true);
+	mm->setOverlapLevel(1);
+	others.push_back(mm);
+	map->addGameObject(mm);
+
+	AnimationTemplate animateTamp(1, { 0, 0, 0 }, { 90, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, 300);
+	AnimationTemplate animateTamp1(4, { 0, 0, 0 }, { 0, 90, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, 300);
+	/*AnimationTemplate animateTamp2(1, { 0, 0, 0 }, { 0, 120, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, 300);
+	AnimationTemplate animateTamp3(1, { 0, 0, 0 }, { 0, 120, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, 300);
+	AnimationTemplate animateTamp4(1, { 0, 0, 0 }, { 0, 120, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, 300);*/
+	vector<AnimationInfoTemplate> list;
+	list.push_back({ &animateTamp, 0 });
+	list.push_back({ &animateTamp1, 150 });
+	AnimationManage::addAnimateTemplate(list);
+	am.addAnimation(0, mm);
+
 
 	pEmitter = new Emitter();
 
@@ -240,6 +292,7 @@ void GameManage::game_state_update(void)
 	//state = GameState_game_state_clean;
 	ItemUpdate();
 	workbenchUpdate();
+	animationUpdate();
 
 	state_read_input(GameState_game_state_clean);
 }
@@ -385,6 +438,12 @@ void GameManage::workbenchUpdate(void)
 		}
 		wbs[i]->setItemsPosition();
 	}
+}
+
+void GameManage::animationUpdate(void)
+{
+	am.play();
+	am.cleanEndAnimation();
 }
 
 void GameManage::cleanDead(void)

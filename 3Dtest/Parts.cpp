@@ -30,7 +30,7 @@ Parts::~Parts()
 void Parts::draw(LPDIRECT3DDEVICE9 pD3DDevice, D3DXMATRIX parentMtx)
 {
 	mtxWorld *= parentMtx;
-	model->setMtxWorld(mtxWorld);
+	model->setMtxWorld(&mtxWorld);
 	model->draw(pD3DDevice);
 
 	if (next != NULL)
@@ -156,12 +156,12 @@ void Parts::setRotation(D3DXVECTOR3 rotation)
 	this->rotation = rotation;
 }
 
-Shape * Parts::getModel(void)
+Model* Parts::getModel(void)
 {
 	return model;
 }
 
-void Parts::setModel(Shape * model)
+void Parts::setModel(Model * model)
 {
 	this->model = model;
 }

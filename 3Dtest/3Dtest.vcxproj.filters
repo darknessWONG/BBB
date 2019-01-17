@@ -82,9 +82,6 @@
     <ClCompile Include="Vigilance.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
-    <ClCompile Include="Cube.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
     <ClCompile Include="Parts.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
@@ -187,9 +184,6 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="Workbench.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Cube.h">
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="Parts.h">

@@ -1,6 +1,5 @@
 #pragma once
-#include "Shape.h"
-#include "Cube.h"
+#include "Model.h"
 class Parts
 {
 public:
@@ -58,8 +57,8 @@ public:
 	//angle ofo revolution on axis x, y, z
 	void setRotation(D3DXVECTOR3 rotation);
 
-	Shape* getModel(void);
-	void setModel(Shape* model);
+	Model* getModel(void);
+	void setModel(Model* model);
 
 	Parts* getChild(void);
 	Parts* getNext(void);
@@ -89,7 +88,7 @@ private:
 	D3DXVECTOR3 offsetT;
 	D3DXVECTOR3 rotation;
 
-	Shape* model = NULL;
+	Model* model = NULL;
 
 	Parts* child = NULL;
 	Parts* next = NULL;
