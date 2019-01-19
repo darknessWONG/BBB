@@ -20,7 +20,10 @@ void MyMesh::dataUpdate(void)
 
 void MyMesh::draw(LPDIRECT3DDEVICE9 pD3DDevice)
 {
-	parts->draw(pD3DDevice, *getMtxWorld());
+	if (getIsDisplay())
+	{
+		parts->draw(pD3DDevice, *getMtxWorld());
+	}
 }
 
 RECTF MyMesh::getBoundingRect(void)

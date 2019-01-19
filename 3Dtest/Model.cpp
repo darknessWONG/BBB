@@ -47,34 +47,37 @@ void Model::dataUpdate(void)
 
 void Model::draw(LPDIRECT3DDEVICE9 pD3DDevice)
 {
-	pD3DDevice->SetFVF(FVF_VERTEX3D);
-	pD3DDevice->SetTransform(D3DTS_WORLD, getMtxWorld());
-	for (int i = 0; i < numMaterials; i++)
+	if (getIsDisplay())
 	{
-		pD3DDevice->SetMaterial(&meshMat[i]);
-		pD3DDevice->SetTexture(0, meshTexture[i]);
-		mesh->DrawSubset(i);
-	}
+		pD3DDevice->SetFVF(FVF_VERTEX3D);
+		pD3DDevice->SetTransform(D3DTS_WORLD, getMtxWorld());
+		for (int i = 0; i < numMaterials; i++)
+		{
+			pD3DDevice->SetMaterial(&meshMat[i]);
+			pD3DDevice->SetTexture(0, meshTexture[i]);
+			mesh->DrawSubset(i);
+		}
 
 #ifdef _DEBUG
-	D3DMATERIAL9 blue;
-	blue.Diffuse = { 1.0f, 1.0f, 1.0f, 0.5f };
-	blue.Ambient = blue.Diffuse;
-	pD3DDevice->SetMaterial(&blue);
-	pD3DDevice->SetTexture(0, 0); // disable texture
+		D3DMATERIAL9 blue;
+		blue.Diffuse = { 1.0f, 1.0f, 1.0f, 0.5f };
+		blue.Ambient = blue.Diffuse;
+		pD3DDevice->SetMaterial(&blue);
+		pD3DDevice->SetTexture(0, 0); // disable texture
 
-	LPD3DXMESH boxMesh;
+		LPD3DXMESH boxMesh;
 
-	D3DXMATRIX mtxBoxWorld = *getMtxWorld();
-	mtxBoxWorld._42 += (boundingBoxMax.y - boundingBoxMin.y) / 2;
+		D3DXMATRIX mtxBoxWorld = *getMtxWorld();
+		mtxBoxWorld._42 += (boundingBoxMax.y - boundingBoxMin.y) / 2;
 
-	D3DXCreateBox(pD3DDevice, boundingBoxMax.x - boundingBoxMin.x, boundingBoxMax.y - boundingBoxMin.y, boundingBoxMax.z - boundingBoxMin.z, &boxMesh, 0);
-	//D3DXCreateSphere(pD3DDevice, boundingSphereRadius, 20, 20, &sphereMesh, 0);
-	pD3DDevice->SetTransform(D3DTS_WORLD, &mtxBoxWorld);
-	boxMesh->DrawSubset(0);
+		D3DXCreateBox(pD3DDevice, boundingBoxMax.x - boundingBoxMin.x, boundingBoxMax.y - boundingBoxMin.y, boundingBoxMax.z - boundingBoxMin.z, &boxMesh, 0);
+		//D3DXCreateSphere(pD3DDevice, boundingSphereRadius, 20, 20, &sphereMesh, 0);
+		pD3DDevice->SetTransform(D3DTS_WORLD, &mtxBoxWorld);
+		boxMesh->DrawSubset(0);
 
-	boxMesh->Release();
+		boxMesh->Release();
 #endif
+	}
 }
 
 void Model::loadModel(LPDIRECT3DDEVICE9 pD3DDevice)

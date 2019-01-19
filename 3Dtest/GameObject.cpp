@@ -26,6 +26,7 @@ GameObject::GameObject()
 	canMove = false;
 
 	overlapLevel = 0;
+	isDisplay = true;
 }
 
 
@@ -273,6 +274,16 @@ int GameObject::getOverlapLevel(void)
 void GameObject::setOverlapLevel(int overlapLevel)
 {
 	this->overlapLevel = overlapLevel;
+}
+
+bool GameObject::getIsDisplay(void)
+{
+	return isDisplay;
+}
+
+void GameObject::setIsDisplay(bool isDisplay)
+{
+	this->isDisplay = isDisplay;
 }
 
 D3DXVECTOR3* GameObject::getVecRotateAxis(void)

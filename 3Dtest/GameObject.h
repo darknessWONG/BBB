@@ -57,6 +57,8 @@ public:
 	void setMoveDamping(float moveDamping);
 	int getOverlapLevel(void);
 	void setOverlapLevel(int overlapLevel);
+	bool getIsDisplay(void);
+	void setIsDisplay(bool isDisplay);
 	D3DXVECTOR3* getVecRotateAxis(void);
 	void setVecRotateAxis(D3DXVECTOR3* vecRotateAxis);
 	float getRotateSpeed(void);
@@ -85,6 +87,7 @@ private:
 	//if two object's overlap level's sum is gerther then 0, they will touch each other when near
 	//if lower the 0, will not
 	int overlapLevel;
+	bool isDisplay;
 
 	D3DXVECTOR3 *vecRotateAxis;
 	float rotateSpeed;

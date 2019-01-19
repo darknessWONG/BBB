@@ -132,6 +132,11 @@ void Battle::changeBattleState(BattleState newbs)
 		action = new Action;
 		action->active = actionList[nowActionChara];
 		break;
+	case BattleState::BattleStateMove:
+		ms = MovePhaseStatus::MovePhaseStatusPlaceSelect;
+		lastMs = MovePhaseStatus::MovePhaseStatusZero;
+		movePlace = { 0, 0 };
+		break;
 	}
 }
 
@@ -169,6 +174,15 @@ void Battle::taragetSelectPhase(void)
 
 void Battle::movePhase(void)
 {
+	switch (ms)
+	{
+	case MovePhaseStatus::MovePhaseStatusPlaceSelect:
+		plaseSelect();
+		break;
+	case MovePhaseStatus::MovePhaseStatusMove:
+		move();
+		break;
+	}
 }
 
 void Battle::placeSelectPhase(void)
@@ -196,6 +210,7 @@ void Battle::endPhase(void)
 		{
 			calActionList();
 		}
+		bs = BattleState::BattleStateStandby;
 	}
 }
 
@@ -254,6 +269,9 @@ void Battle::readActionCommand(void)
 			lastSelect = 0;
 			action->isUseSkill = true;
 			break;
+		case UIIdentity::UIIdentityMove:
+			changeBattleState(BattleState::BattleStateMove);
+			break;
 		}
 	}
 }
@@ -301,6 +319,43 @@ void Battle::readSkillCommand(void)
 	}
 }
 
+void Battle::plaseSelect(void)
+{
+	if (ms != lastMs)
+	{
+		resetMovePointer(actionList[nowActionChara]->getBoundingCenter());
+	}
+	movePointer->setIsReadInput(true);
+
+	readMovePlace();
+}
+
+void Battle::resetMovePointer(D3DXVECTOR2 center)
+{
+	movePointer->setBoundingCenter(center);
+	movePointer->setIsDisplay(true);
+	lastMs = MovePhaseStatus::MovePhaseStatusPlaceSelect;
+	//movePointer->setIsReadInput(true);
+}
+
+void Battle::readMovePlace(void)
+{
+	if (Keyboard_IsTrigger(DIK_RETURN))
+	{
+		float dis = D3DXVec2Length(&(actionList[nowActionChara]->getBoundingCenter() - movePointer->getBoundingCenter()));
+		if (dis <= actionList[nowActionChara]->getBattleChara()->getMovePoint())
+		{
+
+			addMovePerform(actionList[nowActionChara], movePointer);
+			changeBattleState(BattleState::BattleStateCommand);
+		}
+	}
+}
+
+void Battle::move(void)
+{
+}
+
 bool Battle::checkDead(Chara * chara)
 {
 	if (chara->getBattleChara()->getHpNow() <= 0)
@@ -328,9 +383,13 @@ void Battle::createActionMeum(void)
 	UI* ui3 = new UI({ 80, 80 }, 50, 50, 1);
 	ui3->setStr("RUN");
 	ui3->setIdentity(UIIdentity::UIIdentityRun);
+	UI* ui4 = new UI({ 80, 80 }, 50, 50, 1);
+	ui4->setStr("MOVE");
+	ui4->setIdentity(UIIdentity::UIIdentityMove);
 	//MeumUI *meum = new MeumUI();
 	commandMeum->addOptins(ui2);
 	commandMeum->addOptins(ui3);
+	commandMeum->addOptins(ui4);
 	commandMeum->setBackground(ui);
 	commandMeum->setPointer(ui1);
 	commandMeum->setPosition({ 0, 0 });
@@ -481,8 +540,8 @@ int Battle::calDamageSingle(BattleChara * active, BattleChara * passive, bool is
 int Battle::calDamageVal(int atk, int def, int skillDamage)
 {
 	int damage = 1;
-	damage = atk + skillDamage * skillEfficiency - def * defEfficiency + 1;
-	damage = damage > 1 ? 1 : damage;
+	damage = atk + skillDamage * skillEfficiency - def * defEfficiency;
+	damage = damage < 1 ? 1 : damage;
 	return damage;
 }
 
@@ -528,7 +587,7 @@ void Battle::addMovePerform(Chara * act, Chara * target)
 		float newY = pasCenter.y + flagY * (abs(pasRect.bottom - pasRect.top) / 2 + abs(actRect.bottom - actRect.top) / 2);
 		mvp->setVecTarget({ newX, act->getVecNowPos()->y, newY });
 	}
-	mvp->setVecStart(*act->getVecNowPos());
+	mvp->setVecStart({ actCenter.x, act->getVecNowPos()->y, actCenter.y});
 	mvp->setMoveSpeed(0.1);
 	pm->addPerforms(mvp);
 }
@@ -536,6 +595,11 @@ void Battle::addMovePerform(Chara * act, Chara * target)
 void Battle::setPerformManager(PerformManage * pm)
 {
 	this->pm = pm;
+}
+
+void Battle::setMovePointer(Player * pointer)
+{
+	this->movePointer = pointer;
 }
 
 void Battle::setSkillEfficiency(float se)

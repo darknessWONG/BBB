@@ -2,6 +2,7 @@
 #include <vector>
 #include "Chara.h"
 #include "meumUI.h"
+#include "Player.h"
 #include "PerformManage.h"
 
 typedef struct action_st
@@ -37,6 +38,7 @@ public:
 	/*===========================================
 	public geter / seter
 	============================================*/
+	void setMovePointer(Player* pointer);
 	void setSkillEfficiency(float se);
 	void setDefEfficiency(float de);
 	void setCommandMeum(MeumUI* commandMeum);
@@ -46,6 +48,9 @@ private:
 	//it will initialize other value it they should be initialize when new bs begin
 	void changeBattleState(BattleState newbs);
 
+	/*===========================================
+	phase function
+	============================================*/
 	void standbyPhase(void);
 	void commandPhase(void);
 	void taragetSelectPhase(void);
@@ -55,8 +60,9 @@ private:
 	void mapMovePhase(void);
 	void endPhase(void);
 
-	void calActionList(void);
-
+	/*===========================================
+	command phase
+	============================================*/
 	void selectAction(void);
 	void readActionCommand(void);
 	void selectTarget(void);
@@ -64,14 +70,32 @@ private:
 	void seleteSkill(void);
 	void readSkillCommand(void);
 
+	/*===========================================
+	move phase
+	============================================*/
+	void plaseSelect(void);
+	void resetMovePointer(D3DXVECTOR2 center);
+	void readMovePlace(void);
+	void move(void);
+
+	/*===========================================
+	end phase
+	============================================*/
+	void calActionList(void);
 	//if is dead return true or return false
 	bool checkDead(Chara* chara);
 
+	/*===========================================
+	UI
+	============================================*/
 	void createActionMeum(void);
 	void createSkillMeum(vector<BattleSkill*> list);
 	void createTagatMeum(vector<Chara*> list);
 	vector<Chara*> calTargetList(Chara* acvite, BattleSkill* skill);
 
+	/*===========================================
+	damage phase
+	============================================*/
 	/*-------------------------
 	calDamageVal
 	Describe: calculate the damage of attack
@@ -88,6 +112,9 @@ private:
 	//vector<int> calHealVal(void);
 	void takeDamage(void);
 
+	/*===========================================
+	tool function
+	============================================*/
 	void addMovePerform(Chara* act, Chara* target);
 
 
@@ -95,9 +122,12 @@ private:
 	BattleState bs;
 	ActionPhaseStatus as;
 	ActionPhaseStatus lastAs;
+	MovePhaseStatus ms;
+	MovePhaseStatus lastMs;
 
 	vector<Chara*> charas;
 	vector<Chara*> actionList;
+	Player* movePointer = NULL;
 
 	int nowActionChara;
 
@@ -105,9 +135,10 @@ private:
 	int nowSelect;
 
 	Action* action;
+	D3DXVECTOR2 movePlace;
 
-	PerformManage *pm;
-	MeumUI* commandMeum;
+	PerformManage *pm = NULL;
+	MeumUI* commandMeum = NULL;
 
 	float skillEfficiency;
 	float defEfficiency;

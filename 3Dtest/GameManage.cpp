@@ -176,6 +176,18 @@ void GameManage::gameStateInit(void)
 	player = mesh;
 	map->addGameObject(mesh);
 
+	Player* pointMesh = new Player("face.x");
+	pointMesh->loadModel(pD3DDevice);
+	//pointMesh->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
+	//pointMesh->setRotateSpeed(20);
+	pointMesh->setWalkSpeed(0.01);
+	pointMesh->setMaxSpeed(0.3);
+	pointMesh->setCanMove(true);
+	pointMesh->setVecNowPos(new D3DXVECTOR3(-10, 0, -10));
+	pointMesh->setOverlapLevel(-100);
+	pointMesh->setBattleChara(bc);
+	others.push_back(pointMesh);
+	map->addGameObject(pointMesh);
 
 	Model* tree = new Model("Rock1.blend.x");
 	tree->loadModel(pD3DDevice);
@@ -210,9 +222,9 @@ void GameManage::gameStateInit(void)
 	BattleChara* bc1 = new BattleChara();
 	bc1->setAtk(10);
 	bc1->setCamp(CampType::CampTypeEnemy);
-	bc1->setHpMax(100);
-	bc1->setHpNow(100);
-	bc1->setMovePoint(10);
+	bc1->setHpMax(10);
+	bc1->setHpNow(10);
+	bc1->setMovePoint(30);
 	bc1->setMpMax(10);
 	bc1->setMpNow(10);
 	bc1->setName("enemy");
@@ -244,6 +256,7 @@ void GameManage::gameStateInit(void)
 	battle->addCharas(player);
 	battle->addCharas(mesh3);
 	battle->setPerformManager(&pm);
+	battle->setMovePointer(pointMesh);
 	MeumUI *cmdMeum = new MeumUI();
 	uis.push_back(cmdMeum);
 	battle->setCommandMeum(cmdMeum);
@@ -322,6 +335,11 @@ void GameManage::gameStateUpdate(void)
 
 	if (pm.playPerforms())
 	{
+		int enemyNum = enemys.size();
+		for (int i = 0; i < enemyNum; i++)
+		{
+			enemys[i]->setIsPatrol(false);
+		}
 		player->setIsReadInput(false);
 		lockUnmoveObject();
 		return;
