@@ -8,6 +8,8 @@ Enemy::Enemy()
 {
 	vecPatrolTarget = vecPatrolEnd;
 	isPatrol = true;
+	trackingRadius = 0;
+	battleRadius = 0;
 }
 
 Enemy::Enemy(string modelPath)
@@ -15,6 +17,8 @@ Enemy::Enemy(string modelPath)
 {
 	vecPatrolTarget = vecPatrolEnd;
 	isPatrol = true;
+	trackingRadius = 0;
+	battleRadius = 0;
 }
 
 
@@ -103,6 +107,26 @@ void Enemy::setVecPatrolTarget(D3DXVECTOR3 * vecPatrolTarget)
 {
 	//safe_delete<D3DXVECTOR3>(this->vecPatrolTarget);
 	this->vecPatrolTarget = new D3DXVECTOR3(*vecPatrolTarget);
+}
+
+float Enemy::getTrackingRadius(void)
+{
+	return trackingRadius;
+}
+
+void Enemy::setTrackingRadius(float radius)
+{
+	this->trackingRadius = radius;
+}
+
+float Enemy::getBattleRadius(void)
+{
+	return battleRadius;
+}
+
+void Enemy::setBattleRadius(float radius)
+{
+	this->battleRadius = radius;
 }
 
 bool Enemy::getIsTracking(void)

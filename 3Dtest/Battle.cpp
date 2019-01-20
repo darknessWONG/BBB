@@ -10,18 +10,18 @@ Battle::Battle()
 {
 	bs = BattleState::BattleStateStandby;
 
-	commandMeum = new MeumUI();
-	UI* ui = new UI({ 0, 0 }, 200, 200, 0);
-	UI* ui1 = new UI({ 20, 20 }, 50, 50, 1);
-	UI* ui2 = new UI({ 80, 20 }, 50, 50, 1);
-	ui2->setStr("ATTACK");
-	UI* ui3 = new UI({ 80, 80 }, 50, 50, 1);
-	ui3->setStr("RUN");
-	commandMeum->addOptins(ui2);
-	commandMeum->addOptins(ui3);
-	commandMeum->setBackground(ui);
-	commandMeum->setPointer(ui1);
-	commandMeum->setPosition({ 0, Common::screen_height - ui->getHeight() });
+	//commandMeum = new MeumUI();
+	//UI* ui = new UI({ 0, 0 }, 200, 200, 0);
+	//UI* ui1 = new UI({ 20, 20 }, 50, 50, 1);
+	//UI* ui2 = new UI({ 80, 20 }, 50, 50, 1);
+	//ui2->setStr("ATTACK");
+	//UI* ui3 = new UI({ 80, 80 }, 50, 50, 1);
+	//ui3->setStr("RUN");
+	//commandMeum->addOptins(ui2);
+	//commandMeum->addOptins(ui3);
+	//commandMeum->setBackground(ui);
+	//commandMeum->setPointer(ui1);
+	//commandMeum->setPosition({ 0, Common::screen_height - ui->getHeight() });
 
 	action = NULL;
 #ifdef SKILL_EFFICIENCY
@@ -34,12 +34,43 @@ Battle::Battle()
 #else
 	defEfficiency = 1.0;
 #endif
+}
 
+Battle::Battle(MapManage * map, PerformManage * pm, MeumUI * commandMeum, Player * movePointer)
+	:map(map), pm(pm), commandMeum(commandMeum), movePointer(movePointer)
+{
+	bs = BattleState::BattleStateStandby;
+
+	//commandMeum = new MeumUI();
+	//UI* ui = new UI({ 0, 0 }, 200, 200, 0);
+	//UI* ui1 = new UI({ 20, 20 }, 50, 50, 1);
+	//UI* ui2 = new UI({ 80, 20 }, 50, 50, 1);
+	//ui2->setStr("ATTACK");
+	//UI* ui3 = new UI({ 80, 80 }, 50, 50, 1);
+	//ui3->setStr("RUN");
+	//commandMeum->addOptins(ui2);
+	//commandMeum->addOptins(ui3);
+	//commandMeum->setBackground(ui);
+	//commandMeum->setPointer(ui1);
+	//commandMeum->setPosition({ 0, Common::screen_height - ui->getHeight() });
+
+	action = NULL;
+#ifdef SKILL_EFFICIENCY
+	skillEfficiency = SKILL_EFFICIENCY;
+#else
+	skillEfficiency = 1.0;
+#endif
+#ifdef DEFENSE_EFFICIENCY
+	defEfficiency = DEFENSE_EFFICIENCY;
+#else
+	defEfficiency = 1.0;
+#endif
 }
 
 
 Battle::~Battle()
 {
+	safe_delete<Player>(movePointer);
 }
 
 void Battle::start(void)
@@ -325,6 +356,7 @@ void Battle::plaseSelect(void)
 	{
 		resetMovePointer(actionList[nowActionChara]->getBoundingCenter());
 	}
+	map->addGameObject(movePointer);
 	movePointer->setIsReadInput(true);
 
 	readMovePlace();
@@ -345,9 +377,12 @@ void Battle::readMovePlace(void)
 		float dis = D3DXVec2Length(&(actionList[nowActionChara]->getBoundingCenter() - movePointer->getBoundingCenter()));
 		if (dis <= actionList[nowActionChara]->getBattleChara()->getMovePoint())
 		{
-
-			addMovePerform(actionList[nowActionChara], movePointer);
-			changeBattleState(BattleState::BattleStateCommand);
+			vector<GameObject*> list = map->calObjectOnSight(actionList[nowActionChara], movePointer);
+			if (list.size() <= 0)
+			{
+				addMovePerform(actionList[nowActionChara], movePointer);
+				changeBattleState(BattleState::BattleStateCommand);
+			}
 		}
 	}
 }
@@ -367,6 +402,14 @@ bool Battle::checkDead(Chara * chara)
 
 void Battle::addCharas(Chara * chara)
 {
+	int charaNum = charas.size();
+	for (int i = 0; i < charaNum; i++)
+	{
+		if (charas[i] == chara)
+		{
+			return;
+		}
+	}
 	charas.push_back(chara);
 	calActionList();
 }
@@ -595,6 +638,11 @@ void Battle::addMovePerform(Chara * act, Chara * target)
 void Battle::setPerformManager(PerformManage * pm)
 {
 	this->pm = pm;
+}
+
+void Battle::setMap(MapManage * map)
+{
+	this->map = map;
 }
 
 void Battle::setMovePointer(Player * pointer)

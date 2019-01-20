@@ -107,7 +107,9 @@ TouchType Physics::rectTouchRect(D3DXVECTOR2 * rect1, D3DXVECTOR2 * rect2)
 
 bool Physics::pointInCycle(Cycle * cycle, D3DXVECTOR2 * point)
 {
-	float dis = (point->x - cycle->center_x) * (point->x - cycle->center_x) + (point->y - cycle->center_y) * (point->y - cycle->center_y);
+	//float dis = (point->x - cycle->center_x) * (point->x - cycle->center_x) + (point->y - cycle->center_y) * (point->y - cycle->center_y);
+	D3DXVECTOR2 vecDis = D3DXVECTOR2(cycle->center_x, cycle->center_y) - *point;
+	float dis = D3DXVec2LengthSq(&vecDis);
 	float ra2 = cycle->r * cycle->r;
 
 	if (round(dis, FLOAT_BITS) <= round(ra2, FLOAT_BITS))

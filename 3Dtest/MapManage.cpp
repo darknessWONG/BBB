@@ -209,7 +209,27 @@ vector<GameObject*> MapManage::calObjectInCycle(Vigilance * cycle)
 	return list;
 }
 
-vector<GameObject*> MapManage::calObjectOnSight(Enemy * enemy, Player * player)
+vector<GameObject*> MapManage::calObjectInCycle(D3DXVECTOR2 center, float radius)
+{
+	Cycle c;
+	c.center_x = center.x;
+	c.center_y = center.y;
+	c.r = radius;
+
+	int gameObjectNum = gameObjects.size();
+	vector<GameObject*> list;
+	for (int i = 0; i < gameObjectNum; i++)
+	{
+		D3DXVECTOR2 objCenter = gameObjects[i]->getBoundingCenter();
+		if (Physics::pointInCycle(&c, &objCenter))
+		{
+			list.push_back(gameObjects[i]);
+		}
+	}
+	return list;
+}
+
+vector<GameObject*> MapManage::calObjectOnSight(GameObject * enemy, GameObject * player) const
 {
 	line_segment sight = Physics::createLinesegment(enemy->getBoundingCenter(), player->getBoundingCenter());
 

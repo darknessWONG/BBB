@@ -40,8 +40,10 @@ public:
 	void checkEnd(void);
 
 	void enemyUpdate(void);
+	void enemyUpdate(Enemy* enemy);
 	void animationUpdate(void);
 
+	void battleInit(void);
 	//return 1 if is in battle
 	//return 0 if is not in battle
 	bool checkIsInBattle(void);

@@ -38,7 +38,8 @@ public:
 	vector<TouchStatus> collisionDetectionOvl(GameObject* gameObject);
 
 	vector<GameObject*> calObjectInCycle(Vigilance* cycle);
-	vector<GameObject*> calObjectOnSight(Enemy* enemy, Player* player);
+	vector<GameObject*> calObjectInCycle(D3DXVECTOR2 center, float radius);
+	vector<GameObject*> calObjectOnSight(GameObject* enemy, GameObject* player) const;
 	/*===========================================
 	public geter / seter
 	============================================*/

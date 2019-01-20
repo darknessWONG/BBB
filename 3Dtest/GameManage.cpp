@@ -165,8 +165,6 @@ void GameManage::gameStateInit(void)
 	bc->setSpeed(10);
 	Player* mesh = new Player("radio.x");
 	mesh->loadModel(pD3DDevice);
-	//mesh->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
-	//mesh->setRotateSpeed(20);
 	mesh->setWalkSpeed(0.01);
 	mesh->setMaxSpeed(0.3);
 	mesh->setCanMove(true);
@@ -176,23 +174,9 @@ void GameManage::gameStateInit(void)
 	player = mesh;
 	map->addGameObject(mesh);
 
-	Player* pointMesh = new Player("face.x");
-	pointMesh->loadModel(pD3DDevice);
-	//pointMesh->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
-	//pointMesh->setRotateSpeed(20);
-	pointMesh->setWalkSpeed(0.01);
-	pointMesh->setMaxSpeed(0.3);
-	pointMesh->setCanMove(true);
-	pointMesh->setVecNowPos(new D3DXVECTOR3(-10, 0, -10));
-	pointMesh->setOverlapLevel(-100);
-	pointMesh->setBattleChara(bc);
-	others.push_back(pointMesh);
-	map->addGameObject(pointMesh);
-
 	Model* tree = new Model("Rock1.blend.x");
 	tree->loadModel(pD3DDevice);
 	tree->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
-	//mesh1->setRotateSpeed(20);
 	tree->setCanMove(false);
 	tree->setVecNowPos(new D3DXVECTOR3(7.5, 0, 0));
 	tree->setOverlapLevel(1);
@@ -239,27 +223,32 @@ void GameManage::gameStateInit(void)
 	mesh3->setVecPatrolEnd(new D3DXVECTOR3(1, 0, 5));
 	mesh3->setOverlapLevel(1);
 	mesh3->setBattleChara(bc1);
+	mesh3->setTrackingRadius(10);
+	mesh3->setBattleRadius(5);
 	enemys.push_back(mesh3);
 	map->addGameObject(mesh3);
 
-	Vigilance* mesh4 = new Vigilance();
-	mesh4->setMaxSpeed(0.3);
-	mesh4->setCanMove(true);
-	mesh4->setVecNowPos(new D3DXVECTOR3(1, 0, 1));
-	mesh4->setBelong(mesh3);
-	mesh4->setRadius(10);
-	mesh4->setOverlapLevel(-5);
-	vigliances.push_back(mesh4);
-	map->addGameObject(mesh4);
+	//Vigilance* mesh4 = new Vigilance();
+	//mesh4->setMaxSpeed(0.3);
+	//mesh4->setCanMove(true);
+	//mesh4->setVecNowPos(new D3DXVECTOR3(1, 0, 1));
+	//mesh4->setBelong(mesh3);
+	//mesh4->setRadius(10);
+	//mesh4->setOverlapLevel(-5);
+	//vigliances.push_back(mesh4);
+	//map->addGameObject(mesh4);
 
-	battle = new Battle();
-	battle->addCharas(player);
-	battle->addCharas(mesh3);
-	battle->setPerformManager(&pm);
-	battle->setMovePointer(pointMesh);
-	MeumUI *cmdMeum = new MeumUI();
-	uis.push_back(cmdMeum);
-	battle->setCommandMeum(cmdMeum);
+	Vigilance* mesh5 = new Vigilance();
+	mesh5->setMaxSpeed(0.3);
+	mesh5->setCanMove(true);
+	mesh5->setVecNowPos(new D3DXVECTOR3(1, 0, 1));
+	mesh5->setBelong(mesh3);
+	mesh5->setRadius(5);
+	mesh5->setOverlapLevel(-5);
+	vigliances.push_back(mesh5);
+	map->addGameObject(mesh5);
+
+	//battleInit();
 
 
 	//MovePerform *per = new MovePerform();
@@ -319,7 +308,6 @@ void GameManage::gameStateInit(void)
 
 
 	gs = GameState::GameStateGameRunning;
-	battleResult = BattleResultType::BattleResultTypeUnknow;
 }
 
 void GameManage::gameStateUpdate(void)
@@ -345,29 +333,6 @@ void GameManage::gameStateUpdate(void)
 		return;
 	}
 
-	//if (Keyboard_IsTrigger(DIK_0))
-	//{
-	//	MovePerform *per = new MovePerform();
-	//	per->setActor(player);
-	//	per->setMoveSpeed(0.1);
-	//	per->setVecTarget(D3DXVECTOR3(-12, 0, 0));
-	//	per->setVecStart(D3DXVECTOR3(player->getBoundingCenter().x, 0, player->getBoundingCenter().y));
-	//	pm.addPerforms(per);
-
-	//	per = new MovePerform();
-	//	per->setActor(player);
-	//	per->setMoveSpeed(0.1);
-	//	per->setVecTarget(D3DXVECTOR3(-12, 0, -10));
-	//	per->setVecStart(D3DXVECTOR3(-12, 0, 0));
-	//	pm.addPerforms(per);
-
-	//	per = new MovePerform();
-	//	per->setActor(player);
-	//	per->setMoveSpeed(0.1);
-	//	per->setVecTarget(D3DXVECTOR3(0, 0, -10));
-	//	per->setVecStart(D3DXVECTOR3(-12, 0, -10));
-	//	pm.addPerforms(per);
-	//}
 	if (checkIsInBattle())
 	{
 		player->setIsReadInput(false);
@@ -411,36 +376,47 @@ void GameManage::checkEnd(void)
 
 void GameManage::enemyUpdate(void)
 {
-	int viNum = vigliances.size();
-	for (int i = 0; i < viNum; i++)
+	int enemyNum = enemys.size();
+	for (int i = 0; i < enemyNum; i++)
 	{
-		bool isPor = false;
-		if (typeid(Enemy) != typeid(*vigliances[i]->getBelong()))
+		enemyUpdate(enemys[i]);
+	}
+}
+
+void GameManage::enemyUpdate(Enemy* enemy)
+{
+	vector<GameObject*> battleList = map->calObjectInCycle(enemy->getBoundingCenter(), enemy->getBattleRadius());
+	int battleListNum = battleList.size();
+	for (int i = 0; i < battleListNum; i++)
+	{
+		if (player != battleList[i])
 		{
 			continue;
 		}
-		vector<GameObject*> list = map->calObjectInCycle(vigliances[i]);
-		if (list.size() > 0)
+		battleInit();
+		battle->addCharas(enemy);
+		return;
+	}
+
+	vector<GameObject*> trackingList = map->calObjectInCycle(enemy->getBoundingCenter(), enemy->getTrackingRadius());
+	int trackingListNum = trackingList.size();
+	for (int i = 0; i < trackingListNum; i++)
+	{
+		if (player != trackingList[i])
 		{
-			int num = list.size();
-			for (int j = 0; j < num; j++)
-			{
-				if (typeid(Player) == typeid(*list[j]))
-				{
-					D3DXVECTOR2 listObjCenter = list[j]->getBoundingCenter();
-					D3DXVECTOR3 targe = D3DXVECTOR3(listObjCenter.x, 0, listObjCenter.y);
-					
-					vector<GameObject*> sightList = map->calObjectOnSight(((Enemy*)(vigliances[i]->getBelong())), (Player*)list[j]);
-					if (sightList.size() == 0)
-					{
-						((Enemy*)(vigliances[i]->getBelong()))->setVecPatrolTarget(&targe);
-						isPor = true;;
-					}
-					
-				}
-			}
+			continue;
 		}
-		((Enemy*)(vigliances[i]->getBelong()))->setIsTracking(isPor);
+		D3DXVECTOR2 listObjCenter = trackingList[i]->getBoundingCenter();
+		D3DXVECTOR3 targe = D3DXVECTOR3(listObjCenter.x, 0, listObjCenter.y);
+
+		vector<GameObject*> sightList = map->calObjectOnSight(enemy, trackingList[i]);
+		if (sightList.size() != 0)
+		{
+			continue;
+		}
+		enemy->setVecPatrolTarget(&targe);
+		enemy->setIsTracking(true);
+		return;
 	}
 }
 
@@ -448,6 +424,28 @@ void GameManage::animationUpdate(void)
 {
 	am.play();
 	am.cleanEndAnimation();
+}
+
+void GameManage::battleInit(void)
+{
+	if (!checkIsInBattle())
+	{
+		Player* pointMesh = new Player("face.x");
+		pointMesh->loadModel(pD3DDevice);
+		pointMesh->setWalkSpeed(0.01);
+		pointMesh->setMaxSpeed(0.3);
+		pointMesh->setCanMove(true);
+		pointMesh->setIsDisplay(false);
+		pointMesh->setVecNowPos(new D3DXVECTOR3(-10, 0, -10));
+		pointMesh->setOverlapLevel(-100);
+
+		MeumUI *cmdMeum = new MeumUI();
+		uis.push_back(cmdMeum);
+
+		battle = new Battle(map, &pm, cmdMeum, pointMesh);
+		battle->addCharas(player);
+		battleResult = BattleResultType::BattleResultTypeUnknow;
+	}
 }
 
 bool GameManage::checkIsInBattle(void)
@@ -462,6 +460,10 @@ bool GameManage::checkIsInBattle(void)
 void GameManage::battleUpdate(void)
 {
 	battle->start();
+	if (!checkIsInBattle())
+	{
+		safe_delete<Battle>(battle);
+	}
 }
 
 void GameManage::lockUnmoveObject(void)

@@ -23,6 +23,10 @@ public:
 	void setVecPatrolEnd(D3DXVECTOR3* vecPatrolEnd);
 	D3DXVECTOR3* getVecPatrolTarget(void);
 	void setVecPatrolTarget(D3DXVECTOR3* vecPatrolTarget);
+	float getTrackingRadius(void);
+	void setTrackingRadius(float radius);
+	float getBattleRadius(void);
+	void setBattleRadius(float radius);
 	bool getIsTracking(void);
 	void setIsTracking(bool isTracking);
 	void setIsPatrol(bool isPatrol);
@@ -32,6 +36,9 @@ private:
 	D3DXVECTOR3* vecPatrolStart = NULL;
 	D3DXVECTOR3* vecPatrolEnd = NULL;
 	D3DXVECTOR3* vecPatrolTarget = NULL;
+
+	float trackingRadius;
+	float battleRadius;
 
 	bool isTracking;
 };

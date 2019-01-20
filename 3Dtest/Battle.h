@@ -4,6 +4,7 @@
 #include "meumUI.h"
 #include "Player.h"
 #include "PerformManage.h"
+#include "MapManage.h"
 
 typedef struct action_st
 {
@@ -21,6 +22,7 @@ class Battle
 {
 public:
 	Battle();
+	Battle(MapManage *map, PerformManage *pm, MeumUI* commandMeum, Player* movePointer);
 	~Battle();
 
 	/*===========================================
@@ -43,6 +45,7 @@ public:
 	void setDefEfficiency(float de);
 	void setCommandMeum(MeumUI* commandMeum);
 	void setPerformManager(PerformManage* pm);
+	void setMap(MapManage* map);
 private:
 	//should only change bs by this function, 
 	//it will initialize other value it they should be initialize when new bs begin
@@ -142,5 +145,7 @@ private:
 
 	float skillEfficiency;
 	float defEfficiency;
+
+	MapManage* map;
 };
 
