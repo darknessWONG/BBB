@@ -27,6 +27,7 @@ GameObject::GameObject()
 
 	overlapLevel = 0;
 	isDisplay = true;
+	isDelete = false;
 }
 
 
@@ -40,7 +41,7 @@ GameObject::~GameObject()
 
 	safe_delete<D3DXVECTOR3>(vecNowPos);
 	safe_delete<D3DXVECTOR3>(vecMoveSpeed);
-	safe_delete<D3DXVECTOR3>(vecTargetFront);
+	//safe_delete<D3DXVECTOR3>(vecTargetFront);
 
 	safe_delete<D3DXVECTOR3>(vecRotateAxis);
 
@@ -331,4 +332,14 @@ void GameObject::setVecTargetFront(D3DXVECTOR3 * vecTargetFront)
 bool GameObject::getMoveThisTurn(void)
 {
 	return moveThisTurn;
+}
+
+bool GameObject::getIsDelete(void)
+{
+	return isDelete;
+}
+
+void GameObject::setIsDelete(bool isDelete)
+{
+	this->isDelete = isDelete;
 }

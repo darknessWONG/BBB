@@ -71,6 +71,7 @@ Battle::Battle(MapManage * map, PerformManage * pm, MeumUI * commandMeum, Player
 Battle::~Battle()
 {
 	safe_delete<Player>(movePointer);
+	commandMeum->setIsDelete(true);
 }
 
 void Battle::start(void)
@@ -129,6 +130,10 @@ BOOL Battle::checkEnd(void)
 				enemyNum++;
 				break;
 			}
+		}
+		else
+		{
+			charas[i]->setIsDelete(true);
 		}
 		if (playerNum > 0 && enemyNum > 0)
 		{

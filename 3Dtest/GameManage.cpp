@@ -50,6 +50,7 @@ void GameManage::init(void)
 void GameManage::beforeUpdate(void)
 {
 	map->cleanGameObject();
+	cleanDeletedObject();
 
 	map->addGameObject(player);
 
@@ -463,6 +464,59 @@ void GameManage::battleUpdate(void)
 	if (!checkIsInBattle())
 	{
 		safe_delete<Battle>(battle);
+	}
+}
+
+void GameManage::cleanDeletedObject(void)
+{
+	for (vector<Vigilance*>::iterator it = vigliances.begin(); it != vigliances.end();)
+	{
+		if ((*it)->getIsDelete() || (*it)->getBelong()->getIsDelete())
+		{
+			Vigilance* vi = *it;
+			delete vi;
+			vigliances.erase(it);
+			it = vigliances.begin();
+			continue;
+		}
+		it++;
+	}
+
+	for (vector<Enemy*>::iterator it = enemys.begin(); it != enemys.end();)
+	{
+		if ((*it)->getIsDelete())
+		{
+			Enemy* enemy = *it;
+			delete enemy;
+			enemys.erase(it);
+			it = enemys.begin();
+			continue;
+		}
+		it++;
+	}
+
+	for (vector<GameObject*>::iterator it = others.begin(); it != others.end();)
+	{
+		if ((*it)->getIsDelete())
+		{
+			GameObject* go = *it;
+			delete go;
+			others.erase(it);
+			it = others.begin();
+			continue;
+		}
+		it++;
+	}
+
+	for (vector<MeumUI*>::iterator it = uis.begin(); it != uis.end();)
+	{
+		if ((*it)->getIsDelete())
+		{
+			uis.erase(it);
+			it = uis.begin();
+			continue;
+		}
+		it++;
 	}
 }
 

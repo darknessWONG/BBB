@@ -70,6 +70,8 @@ public:
 	bool getMoveThisTurn(void);
 	//D3DXVECTOR3 *getVecTargetPos(void);
 	//void setVecTargetPos(D3DXVECTOR3 * vecTargetPos);
+	bool getIsDelete(void);
+	void setIsDelete(bool isDelete);
 private:
 	D3DXMATRIX *mtxWorld;
 
@@ -96,5 +98,7 @@ private:
 	D3DXVECTOR3 *vecTargetFront;
 	//D3DXVECTOR3 *vecTargetPos;
 	static D3DXVECTOR3* zeroDirect;
+
+	bool isDelete;
 };
 

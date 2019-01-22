@@ -50,6 +50,8 @@ public:
 	void battleUpdate(void);
 
 
+	void cleanDeletedObject(void);
+
 	void lockUnmoveObject(void);
 
 	void setPD3DDevice(LPDIRECT3DDEVICE9 pD3DDevice);

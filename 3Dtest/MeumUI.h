@@ -33,6 +33,8 @@ public:
 	void setBackground(UI* ui);
 	void setPointer(UI* ui);
 	void setIsDisplay(bool isDisplay);
+	bool getIsDelete(void);
+	void setIsDelete(bool isDelete);
 
 private:
 	D3DXVECTOR2 position;
@@ -43,5 +45,6 @@ private:
 	vector<UI*> options;
 
 	bool isDisplay;
+	bool isDelete;
 };
 

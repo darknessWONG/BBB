@@ -5,6 +5,7 @@
 
 MeumUI::MeumUI()
 {
+	isDelete = false;
 }
 
 
@@ -130,5 +131,15 @@ void MeumUI::setPointer(UI * ui)
 void MeumUI::setIsDisplay(bool isDisplay)
 {
 	this->isDisplay = isDisplay;
+}
+
+bool MeumUI::getIsDelete(void)
+{
+	return isDelete;
+}
+
+void MeumUI::setIsDelete(bool isDelete)
+{
+	this->isDelete = isDelete;
 }
 
