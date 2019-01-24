@@ -9,20 +9,6 @@
 Battle::Battle()
 {
 	bs = BattleState::BattleStateStandby;
-
-	//commandMeum = new MeumUI();
-	//UI* ui = new UI({ 0, 0 }, 200, 200, 0);
-	//UI* ui1 = new UI({ 20, 20 }, 50, 50, 1);
-	//UI* ui2 = new UI({ 80, 20 }, 50, 50, 1);
-	//ui2->setStr("ATTACK");
-	//UI* ui3 = new UI({ 80, 80 }, 50, 50, 1);
-	//ui3->setStr("RUN");
-	//commandMeum->addOptins(ui2);
-	//commandMeum->addOptins(ui3);
-	//commandMeum->setBackground(ui);
-	//commandMeum->setPointer(ui1);
-	//commandMeum->setPosition({ 0, Common::screen_height - ui->getHeight() });
-
 	action = NULL;
 #ifdef SKILL_EFFICIENCY
 	skillEfficiency = SKILL_EFFICIENCY;
@@ -36,25 +22,15 @@ Battle::Battle()
 #endif
 }
 
-Battle::Battle(MapManage * map, PerformManage * pm, MeumUI * commandMeum, Player * movePointer)
-	:map(map), pm(pm), commandMeum(commandMeum), movePointer(movePointer)
+Battle::Battle(MapManage *map, PerformManage *pm, MeumUI* commandMeum, MeumUI* textBox, Player* movePointer)
+	:map(map), pm(pm), commandMeum(commandMeum), textBox(textBox),movePointer(movePointer)
 {
 	bs = BattleState::BattleStateStandby;
 
-	//commandMeum = new MeumUI();
-	//UI* ui = new UI({ 0, 0 }, 200, 200, 0);
-	//UI* ui1 = new UI({ 20, 20 }, 50, 50, 1);
-	//UI* ui2 = new UI({ 80, 20 }, 50, 50, 1);
-	//ui2->setStr("ATTACK");
-	//UI* ui3 = new UI({ 80, 80 }, 50, 50, 1);
-	//ui3->setStr("RUN");
-	//commandMeum->addOptins(ui2);
-	//commandMeum->addOptins(ui3);
-	//commandMeum->setBackground(ui);
-	//commandMeum->setPointer(ui1);
-	//commandMeum->setPosition({ 0, Common::screen_height - ui->getHeight() });
-
 	action = NULL;
+
+	createTextBox();
+
 #ifdef SKILL_EFFICIENCY
 	skillEfficiency = SKILL_EFFICIENCY;
 #else
@@ -72,6 +48,7 @@ Battle::~Battle()
 {
 	safe_delete<Player>(movePointer);
 	commandMeum->setIsDelete(true);
+	textBox->setIsDelete(true);
 }
 
 void Battle::start(void)
@@ -176,6 +153,14 @@ void Battle::changeBattleState(BattleState newbs)
 	}
 }
 
+void Battle::createTextBox(void)
+{
+	UI* ui = new UI({ 0, 0 }, 200, 200, 0);
+	textBox->setBackground(ui);
+	textBox->setPosition({ 300, Common::screen_height - ui->getHeight() });
+	textBox->setIsDisplay(true);
+}
+
 void Battle::standbyPhase(void)
 {
 	actionList[nowActionChara]->getBattleChara()->calStatus();
@@ -188,7 +173,7 @@ void Battle::standbyPhase(void)
 
 void Battle::commandPhase(void)
 {
-
+	textBox->setIsDisplay(true);
 	switch (as)
 	{
 	case ActionPhaseStatus::ActionPhaseStatusActionSelect:
@@ -285,6 +270,7 @@ void Battle::selectAction(void)
 	if (as != lastAs)
 	{
 		createActionMeum();
+		displayMessage("");
 	}
 	readActionCommand();
 }
@@ -341,6 +327,7 @@ void Battle::seleteSkill(void)
 	if (as != lastAs)
 	{
 		createSkillMeum(actionList[nowActionChara]->getBattleChara()->getSkillList());
+		displayMessage("");
 	}
 	readSkillCommand();
 }
@@ -360,6 +347,7 @@ void Battle::plaseSelect(void)
 	if (ms != lastMs)
 	{
 		resetMovePointer(actionList[nowActionChara]->getBoundingCenter());
+		displayMessage("");
 	}
 	map->addGameObject(movePointer);
 	movePointer->setIsReadInput(true);
@@ -372,7 +360,6 @@ void Battle::resetMovePointer(D3DXVECTOR2 center)
 	movePointer->setBoundingCenter(center);
 	movePointer->setIsDisplay(true);
 	lastMs = MovePhaseStatus::MovePhaseStatusPlaceSelect;
-	//movePointer->setIsReadInput(true);
 }
 
 void Battle::readMovePlace(void)
@@ -388,6 +375,10 @@ void Battle::readMovePlace(void)
 				addMovePerform(actionList[nowActionChara], movePointer);
 				changeBattleState(BattleState::BattleStateCommand);
 			}
+		}
+		else
+		{
+			displayMessage("too far");
 		}
 	}
 }
@@ -612,32 +603,28 @@ void Battle::addMovePerform(Chara * act, Chara * target)
 	D3DXVECTOR2 actCenter = act->getBoundingCenter();
 	D3DXVECTOR2 pasCenter = target->getBoundingCenter();
 	D3DXVECTOR2 dis = actCenter - pasCenter;
-	D3DXVECTOR2 absDis = { abs(dis.x), abs(dis.y) };
 	RECTF actRect = act->getBoundingRect();
 	RECTF pasRect = target->getBoundingRect();
-	if (absDis.x > absDis.y)
+	if (actCenter.x < pasRect.left || actCenter.x > pasRect.right)
 	{
 		int flag = dis.x >= 0 ? 1 : -1;
 		float newX = pasCenter.x + flag * (abs(pasRect.right - pasRect.left) / 2 + abs(actRect.right - actRect.left) / 2);
 		mvp->setVecTarget({ newX, act->getVecNowPos()->y, target->getBoundingCenter().y });
 	}
-	else if (absDis.x < absDis.y)
+	else
 	{
 		int flag = dis.y >= 0 ? 1 : -1;
-		float newY = pasCenter.y + flag * (abs(pasRect.bottom - pasRect.top) / 2 + abs(actRect.bottom - actRect.top) / 2);
+		float newY = pasCenter.y + flag * (abs(pasRect.top - pasRect.bottom) / 2 + abs(actRect.top - actRect.bottom) / 2);
 		mvp->setVecTarget({ target->getBoundingCenter().x, act->getVecNowPos()->y, newY });
-	}
-	else if (absDis.x == absDis.y)
-	{
-		int flagX = dis.x >= 0 ? 1 : -1;
-		int flagY = dis.y >= 0 ? 1 : -1;
-		float newX = pasCenter.x + flagX * (abs(pasRect.right - pasRect.left) / 2 + abs(actRect.right - actRect.left) / 2);
-		float newY = pasCenter.y + flagY * (abs(pasRect.bottom - pasRect.top) / 2 + abs(actRect.bottom - actRect.top) / 2);
-		mvp->setVecTarget({ newX, act->getVecNowPos()->y, newY });
 	}
 	mvp->setVecStart({ actCenter.x, act->getVecNowPos()->y, actCenter.y});
 	mvp->setMoveSpeed(0.1);
 	pm->addPerforms(mvp);
+}
+
+void Battle::displayMessage(string str)
+{
+	textBox->setDisplayStr(str);
 }
 
 void Battle::setPerformManager(PerformManage * pm)
@@ -668,4 +655,10 @@ void Battle::setDefEfficiency(float de)
 void Battle::setCommandMeum(MeumUI * commandMeum)
 {
 	this->commandMeum = commandMeum;
+}
+
+void Battle::setTextBox(MeumUI * textBox)
+{
+	this->textBox = textBox;
+	createTextBox();
 }

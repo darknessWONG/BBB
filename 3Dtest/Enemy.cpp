@@ -36,7 +36,21 @@ void Enemy::dataUpdate(void)
 		}
 		if (!isTracking)
 		{
-			D3DXVECTOR3 patrolLine = *vecPatrolEnd - *vecPatrolStart;
+			D3DXVECTOR2 boundingCenter = getBoundingCenter();
+			D3DXVECTOR3 nowLine = *vecPatrolTarget - D3DXVECTOR3(boundingCenter.x, 0, boundingCenter.y);
+			float dis = D3DXVec3LengthSq(&nowLine);
+			if (dis <= 0.25)
+			{
+				if (vecPatrolTarget == vecPatrolEnd)
+				{
+					vecPatrolTarget = vecPatrolStart;
+				}
+				else
+				{
+					vecPatrolTarget = vecPatrolEnd;
+				}
+			}
+		/*	D3DXVECTOR3 patrolLine = *vecPatrolEnd - *vecPatrolStart;
 			if (vecPatrolTarget == vecPatrolStart)
 			{
 				patrolLine = -patrolLine;
@@ -57,7 +71,7 @@ void Enemy::dataUpdate(void)
 					vecPatrolTarget = vecPatrolEnd;
 				}
 
-			}
+			}*/
 		}
 		D3DXVECTOR2 boundingCenter = getBoundingCenter();
 		D3DXVECTOR3 speedDir = *vecPatrolTarget - D3DXVECTOR3(boundingCenter.x, 0, boundingCenter.y);

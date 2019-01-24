@@ -35,7 +35,7 @@ public:
 	void setIsDisplay(bool isDisplay);
 	bool getIsDelete(void);
 	void setIsDelete(bool isDelete);
-
+	void setDisplayStr(string str);
 private:
 	D3DXVECTOR2 position;
 
@@ -43,6 +43,8 @@ private:
 	UI* pointer;
 	int nowPointing;
 	vector<UI*> options;
+	
+	string displayStr;
 
 	bool isDisplay;
 	bool isDelete;

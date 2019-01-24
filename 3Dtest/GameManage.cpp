@@ -229,6 +229,31 @@ void GameManage::gameStateInit(void)
 	enemys.push_back(mesh3);
 	map->addGameObject(mesh3);
 
+
+	BattleChara* bc2 = new BattleChara();
+	bc2->setAtk(10);
+	bc2->setCamp(CampType::CampTypeEnemy);
+	bc2->setHpMax(10);
+	bc2->setHpNow(10);
+	bc2->setMovePoint(30);
+	bc2->setMpMax(10);
+	bc2->setMpNow(10);
+	bc2->setName("enemy1");
+	bc2->setSpeed(10);
+	Enemy* enemy4 = new Enemy("T-Rex.x");
+	enemy4->loadModel(pD3DDevice);
+	enemy4->setWalkSpeed(0.01);
+	enemy4->setMaxSpeed(0.3);
+	enemy4->setCanMove(true);
+	enemy4->setVecNowPos(new D3DXVECTOR3(13, 0, 10));
+	enemy4->setVecPatrolStart(new D3DXVECTOR3(13, 0, 1));
+	enemy4->setVecPatrolEnd(new D3DXVECTOR3(13, 0, 5));
+	enemy4->setOverlapLevel(1);
+	enemy4->setBattleChara(bc2);
+	enemy4->setTrackingRadius(10);
+	enemy4->setBattleRadius(5);
+	enemys.push_back(enemy4);
+	map->addGameObject(enemy4);
 	//Vigilance* mesh4 = new Vigilance();
 	//mesh4->setMaxSpeed(0.3);
 	//mesh4->setCanMove(true);
@@ -336,6 +361,11 @@ void GameManage::gameStateUpdate(void)
 
 	if (checkIsInBattle())
 	{
+		int enemyNum = enemys.size();
+		for (int i = 0; i < enemyNum; i++)
+		{
+			enemys[i]->setIsPatrol(false);
+		}
 		player->setIsReadInput(false);
 		battleUpdate();
 	}
@@ -419,6 +449,8 @@ void GameManage::enemyUpdate(Enemy* enemy)
 		enemy->setIsTracking(true);
 		return;
 	}
+	//enemy->setVecPatrolTarget(NULL);
+	enemy->setIsTracking(false);
 }
 
 void GameManage::animationUpdate(void)
@@ -443,8 +475,12 @@ void GameManage::battleInit(void)
 		MeumUI *cmdMeum = new MeumUI();
 		uis.push_back(cmdMeum);
 
-		battle = new Battle(map, &pm, cmdMeum, pointMesh);
+		MeumUI *textBox = new MeumUI();
+		uis.push_back(textBox);
+
+		battle = new Battle(map, &pm, cmdMeum, textBox, pointMesh);
 		battle->addCharas(player);
+		battle->setTextBox(textBox);
 		battleResult = BattleResultType::BattleResultTypeUnknow;
 	}
 }

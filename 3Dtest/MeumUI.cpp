@@ -1,22 +1,32 @@
 #include "stdafx.h"
 #include "MeumUI.h"
+#include "Common.h"
 #include "input.h"
 
 
 MeumUI::MeumUI()
 {
 	isDelete = false;
+	displayStr = "";
 }
 
 
 MeumUI::~MeumUI()
 {
+	safe_delete<UI>(background);
+	safe_delete<UI>(pointer);
+	for (int i = 0; i < options.size(); i++)
+	{
+		safe_delete<UI>(options[i]);
+	}
+
 }
 
 void MeumUI::assembleUIs(void)
 {
 	if (background != NULL)
 	{
+		background->setStr(displayStr);
 		background->releaseChain();
 		background->addChild(pointer);
 		int optionsNum = options.size();
@@ -34,7 +44,7 @@ void MeumUI::dataUpdate(void)
 		background->setIsDisplay(isDisplay);
 	}
 
-	if (isDisplay)
+	if (isDisplay && options.size() > 0)
 	{
 		if (Keyboard_IsTrigger(DIK_UP))
 		{
@@ -141,5 +151,10 @@ bool MeumUI::getIsDelete(void)
 void MeumUI::setIsDelete(bool isDelete)
 {
 	this->isDelete = isDelete;
+}
+
+void MeumUI::setDisplayStr(string str)
+{
+	this->displayStr = str;
 }
 
