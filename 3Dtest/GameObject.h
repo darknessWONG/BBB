@@ -34,6 +34,9 @@ public:
 	void calFront(void);
 	void lockThisTurn(void);
 	void unlockThisTurn(void);
+	//if isDisappear is true, will setIsDisplay to false and setOverlapLevel to -100(is unrelated to ovl)
+	//if isDisappear is false, will setIsDisplay to true and setOverlapLevel to ovl
+	void setDisappear(bool isDisappear, int ovl = 10);
 	/*===========================================
 	public geter / seter
 	============================================*/

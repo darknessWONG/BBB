@@ -253,6 +253,7 @@ bool Initialize(HINSTANCE hInstance, HWND hWnd)
 // ゲームの更新関数
 void Update(void)
 {
+	Common::frameCount++;
 	// キーボードモジュールの更新
 	Keyboard_Update();
 

@@ -171,6 +171,20 @@ void GameObject::unlockThisTurn(void)
 	moveThisTurn = true;
 }
 
+void GameObject::setDisappear(bool isDisappear, int ovl)
+{
+	if (isDisappear)
+	{
+		setIsDisplay(false);
+		setOverlapLevel(-100);
+	}
+	else
+	{
+		setIsDisplay(true);
+		setOverlapLevel(ovl);
+	}
+}
+
 D3DXMATRIX* GameObject::getMtxWorld(void)
 {
 	return mtxWorld;

@@ -47,6 +47,7 @@ public:
 	void setTextBox(MeumUI* textBox);
 	void setPerformManager(PerformManage* pm);
 	void setMap(MapManage* map);
+	BattleState getBattleState(void);
 private:
 	/*===========================================
 	phase function
@@ -121,6 +122,7 @@ private:
 	void createTextBox(void);
 	void addMovePerform(Chara* act, Chara* target);
 	void displayMessage(string str);
+	void tabDeadEnemy(void);
 
 	BattleState bs;
 	ActionPhaseStatus as;
@@ -131,12 +133,14 @@ private:
 	vector<Chara*> charas;
 	vector<Chara*> actionList;
 	Player* movePointer = NULL;
+	D3DXVECTOR2 primitivePosition;
 
 	int nowActionChara;
 
 	int lastSelect;
 	int nowSelect;
 
+	int mapMoveStartFrame;
 	Action* action;
 	D3DXVECTOR2 movePlace;
 

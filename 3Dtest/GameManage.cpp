@@ -157,9 +157,9 @@ void GameManage::gameStateInit(void)
 	BattleChara* bc = new BattleChara();
 	bc->setAtk(10);
 	bc->setCamp(CampType::CampTypePlayer);
-	bc->setHpMax(100);
-	bc->setHpNow(100);
-	bc->setMovePoint(10);
+	bc->setHpMax(1000);
+	bc->setHpNow(1000);
+	bc->setMovePoint(100);
 	bc->setMpMax(10);
 	bc->setMpNow(10);
 	bc->setName("wong");
@@ -175,14 +175,14 @@ void GameManage::gameStateInit(void)
 	player = mesh;
 	map->addGameObject(mesh);
 
-	Model* tree = new Model("Rock1.blend.x");
+	/*Model* tree = new Model("Rock1.blend.x");
 	tree->loadModel(pD3DDevice);
 	tree->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
 	tree->setCanMove(false);
 	tree->setVecNowPos(new D3DXVECTOR3(7.5, 0, 0));
 	tree->setOverlapLevel(1);
 	others.push_back(tree);
-	map->addGameObject(tree);
+	map->addGameObject(tree);*/
 
 	//Model* tree2 = new Model("tree.x");
 	//tree2->loadModel(pD3DDevice);
@@ -207,8 +207,8 @@ void GameManage::gameStateInit(void)
 	BattleChara* bc1 = new BattleChara();
 	bc1->setAtk(10);
 	bc1->setCamp(CampType::CampTypeEnemy);
-	bc1->setHpMax(10);
-	bc1->setHpNow(10);
+	bc1->setHpMax(50);
+	bc1->setHpNow(50);
 	bc1->setMovePoint(30);
 	bc1->setMpMax(10);
 	bc1->setMpNow(10);
@@ -361,19 +361,19 @@ void GameManage::gameStateUpdate(void)
 
 	if (checkIsInBattle())
 	{
-		int enemyNum = enemys.size();
-		for (int i = 0; i < enemyNum; i++)
+		if (battle->getBattleState() != BattleState::BattleStateMapMove)
 		{
-			enemys[i]->setIsPatrol(false);
+			int enemyNum = enemys.size();
+			for (int i = 0; i < enemyNum; i++)
+			{
+				enemys[i]->setIsPatrol(false);
+			}
 		}
 		player->setIsReadInput(false);
 		battleUpdate();
 	}
-	else
-	{
-		animationUpdate();
-		enemyUpdate();
-	}
+	animationUpdate();
+	enemyUpdate();
 	checkEnd();
 }
 
@@ -410,7 +410,10 @@ void GameManage::enemyUpdate(void)
 	int enemyNum = enemys.size();
 	for (int i = 0; i < enemyNum; i++)
 	{
-		enemyUpdate(enemys[i]);
+		if (!enemys[i]->getIsDelete())
+		{
+			enemyUpdate(enemys[i]);
+		}
 	}
 }
 

@@ -46,6 +46,7 @@ Battle::Battle(MapManage *map, PerformManage *pm, MeumUI* commandMeum, MeumUI* t
 
 Battle::~Battle()
 {
+	tabDeadEnemy();
 	safe_delete<Player>(movePointer);
 	commandMeum->setIsDelete(true);
 	textBox->setIsDelete(true);
@@ -81,11 +82,11 @@ void Battle::start(void)
 	case BattleStateDamage:
 		damagePhase();
 		break;
-	case BattleStateMapMove:
-		mapMovePhase();
-		break;
 	case BattleStateEnd:
 		endPhase();
+		break;
+	case BattleStateMapMove:
+		mapMovePhase();
 		break;
 	}
 }
@@ -107,10 +108,6 @@ BOOL Battle::checkEnd(void)
 				enemyNum++;
 				break;
 			}
-		}
-		else
-		{
-			charas[i]->setIsDelete(true);
 		}
 		if (playerNum > 0 && enemyNum > 0)
 		{
@@ -134,6 +131,7 @@ void Battle::changeBattleState(BattleState newbs)
 	switch (newbs)
 	{
 	case BattleState::BattleStateStandby:
+		primitivePosition = actionList[nowActionChara]->getBoundingCenter();
 		break;
 	case BattleState::BattleStateCommand:
 		as = ActionPhaseStatus::ActionPhaseStatusActionSelect;
@@ -149,6 +147,9 @@ void Battle::changeBattleState(BattleState newbs)
 		ms = MovePhaseStatus::MovePhaseStatusPlaceSelect;
 		lastMs = MovePhaseStatus::MovePhaseStatusZero;
 		movePlace = { 0, 0 };
+		break;
+	case BattleState::BattleStateMapMove:
+		mapMoveStartFrame = Common::frameCount;
 		break;
 	}
 }
@@ -219,19 +220,27 @@ void Battle::damagePhase(void)
 
 void Battle::mapMovePhase(void)
 {
+	if (Common::frameCount - mapMoveStartFrame >= 60)
+	{
+		changeBattleState(BattleState::BattleStateStandby);
+	}
 }
 
 void Battle::endPhase(void)
 {
-	BOOL isEnd = checkEnd();
-	if (!isEnd)
+	if (!checkEnd())
 	{
-		nowActionChara = (nowActionChara + 1) % actionList.size();
+		do
+		{
+			nowActionChara = (nowActionChara + 1) % actionList.size();
+		} while (nowActionChara > 0 && actionList[nowActionChara]->getBattleChara()->getHpNow() <= 0);
 		if (nowActionChara == 0)
 		{
 			calActionList();
+			changeBattleState(BattleState::BattleStateMapMove);
+			return;
 		}
-		bs = BattleState::BattleStateStandby;
+		changeBattleState(BattleState::BattleStateStandby);
 	}
 }
 
@@ -239,18 +248,15 @@ void Battle::calActionList(void)
 {
 	int charaNum = charas.size();
 	actionList.clear();
-	if (actionList.size() <= 0)
+	for (int i = 0; i < charaNum; i++)
 	{
-		for (int i = 0; i < charaNum; i++)
+		if (charas[i]->getBattleChara()->getHpNow() > 0)
 		{
-			if (charas[i]->getBattleChara()->getHpNow() >= 0)
-			{
-				actionList.push_back(charas[i]);
-			}
+			actionList.push_back(charas[i]);
 		}
 	}
 
-	int actionNum = charas.size();
+	int actionNum = actionList.size();
 	for (int i = 0; i < actionNum; i++)
 	{
 		for (int j = i + 1; j < actionNum; j++)
@@ -270,7 +276,7 @@ void Battle::selectAction(void)
 	if (as != lastAs)
 	{
 		createActionMeum();
-		displayMessage("");
+		displayMessage("Is your turn now, please select a action");
 	}
 	readActionCommand();
 }
@@ -304,6 +310,7 @@ void Battle::selectTarget(void)
 	{
 		vector<Chara*> taragetList = calTargetList(action->active, action->skill);
 		createTagatMeum(taragetList);
+		displayMessage("Please select a target");
 	}
 	readTargetCommand();
 
@@ -314,12 +321,31 @@ void Battle::readTargetCommand(void)
 	if (Keyboard_IsTrigger(DIK_RETURN))
 	{
 		vector<Chara*> list = calTargetList(action->active, action->skill);
-		action->passive.push_back(list[commandMeum->getNowPointing()]);
-		
-		addMovePerform(action->active, action->passive[0]);
-		
-		bs = BattleState::BattleStateDamage;
+		//D3DXVECTOR2 actionCenter = actionList[nowActionChara]->getBoundingCenter();
+		D3DXVECTOR2 targetCenter = list[commandMeum->getNowPointing()]->getBoundingCenter();
+		//float dis = D3DXVec2Length(&(actionCenter - targetCenter));
+		float dis = D3DXVec2Length(&(primitivePosition - targetCenter));
+		if (dis <= actionList[nowActionChara]->getBattleChara()->getMovePoint())
+		{
+			vector<GameObject*> visionList = map->calObjectOnSight(actionList[nowActionChara], list[commandMeum->getNowPointing()]);
+			if (visionList.size() <= 0)
+			{
+				action->passive.push_back(list[commandMeum->getNowPointing()]);
+				addMovePerform(action->active, action->passive[0]);
+				bs = BattleState::BattleStateDamage;
+			}
+		}
+		else
+		{
+			displayMessage("Is too far");
+		}
 	}
+
+	if (Keyboard_IsTrigger(DIK_Z))
+	{
+		as = ActionPhaseStatus::ActionPhaseStatusActionSelect;
+	}
+
 }
 
 void Battle::seleteSkill(void)
@@ -327,7 +353,7 @@ void Battle::seleteSkill(void)
 	if (as != lastAs)
 	{
 		createSkillMeum(actionList[nowActionChara]->getBattleChara()->getSkillList());
-		displayMessage("");
+		displayMessage("Please select a skill to use");
 	}
 	readSkillCommand();
 }
@@ -347,7 +373,7 @@ void Battle::plaseSelect(void)
 	if (ms != lastMs)
 	{
 		resetMovePointer(actionList[nowActionChara]->getBoundingCenter());
-		displayMessage("");
+		displayMessage("Please select a place to go");
 	}
 	map->addGameObject(movePointer);
 	movePointer->setIsReadInput(true);
@@ -366,7 +392,9 @@ void Battle::readMovePlace(void)
 {
 	if (Keyboard_IsTrigger(DIK_RETURN))
 	{
-		float dis = D3DXVec2Length(&(actionList[nowActionChara]->getBoundingCenter() - movePointer->getBoundingCenter()));
+	//	float dis = D3DXVec2Length(&(actionList[nowActionChara]->getBoundingCenter() - movePointer->getBoundingCenter()));
+		float dis = D3DXVec2Length(&(primitivePosition - movePointer->getBoundingCenter()));
+
 		if (dis <= actionList[nowActionChara]->getBattleChara()->getMovePoint())
 		{
 			vector<GameObject*> list = map->calObjectOnSight(actionList[nowActionChara], movePointer);
@@ -375,11 +403,20 @@ void Battle::readMovePlace(void)
 				addMovePerform(actionList[nowActionChara], movePointer);
 				changeBattleState(BattleState::BattleStateCommand);
 			}
+			else
+			{
+				displayMessage("Is not in vision");
+			}
 		}
 		else
 		{
 			displayMessage("too far");
 		}
+	}
+
+	if (Keyboard_IsTrigger(DIK_Z))
+	{
+		changeBattleState(BattleState::BattleStateCommand);
 	}
 }
 
@@ -592,6 +629,10 @@ void Battle::takeDamage(void)
 		if (action->damage[i] > 0)
 		{
 			action->passive[i]->getBattleChara()->takeDamage(action->damage[i]);
+			if (action->passive[i]->getBattleChara()->getHpNow() <= 0)
+			{
+				action->passive[i]->setDisappear(true);
+			}
 		}
 	}
 }
@@ -627,6 +668,18 @@ void Battle::displayMessage(string str)
 	textBox->setDisplayStr(str);
 }
 
+void Battle::tabDeadEnemy(void)
+{
+	int charaNum = charas.size();
+	for (int i = 0; i < charaNum; i++)
+	{
+		if (charas[i]->getBattleChara()->getHpNow() <= 0)
+		{
+			charas[i]->setIsDelete(true);
+		}
+	}
+}
+
 void Battle::setPerformManager(PerformManage * pm)
 {
 	this->pm = pm;
@@ -635,6 +688,11 @@ void Battle::setPerformManager(PerformManage * pm)
 void Battle::setMap(MapManage * map)
 {
 	this->map = map;
+}
+
+BattleState Battle::getBattleState(void)
+{
+	return bs;
 }
 
 void Battle::setMovePointer(Player * pointer)
