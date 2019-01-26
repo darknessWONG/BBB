@@ -36,7 +36,8 @@ bool BattleChara::checkEffect(SideEffectType type)
 
 void BattleChara::removeEffect(int index)
 {
-	if (index >= 0 && index < effect.size())
+	int effectNum = effect.size();
+	if (index >= 0 && index < effectNum)
 	{
 		vector<SideEffect*>::iterator it = effect.begin() + index;
 		effect.erase(it);
@@ -109,7 +110,7 @@ void BattleChara::calStatus(void)
 		switch (effect[i]->getType())
 		{
 		case SideEffectType::SideEffectTypePoison:
-			takeDamage(effect[i]->getValue());
+			takeDamage((int)effect[i]->getValue());
 		}
 	}
 }

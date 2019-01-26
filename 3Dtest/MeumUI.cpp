@@ -8,6 +8,7 @@ MeumUI::MeumUI()
 {
 	isDelete = false;
 	displayStr = "";
+	isReadInput = true;
 }
 
 
@@ -15,7 +16,9 @@ MeumUI::~MeumUI()
 {
 	safe_delete<UI>(background);
 	safe_delete<UI>(pointer);
-	for (int i = 0; i < options.size(); i++)
+	
+	int optionsNum = options.size();
+	for (int i = 0; i < optionsNum; i++)
 	{
 		safe_delete<UI>(options[i]);
 	}
@@ -44,7 +47,7 @@ void MeumUI::dataUpdate(void)
 		background->setIsDisplay(isDisplay);
 	}
 
-	if (isDisplay && options.size() > 0)
+	if (isDisplay && options.size() > 0 && isReadInput)
 	{
 		if (Keyboard_IsTrigger(DIK_UP))
 		{
@@ -141,6 +144,16 @@ void MeumUI::setPointer(UI * ui)
 void MeumUI::setIsDisplay(bool isDisplay)
 {
 	this->isDisplay = isDisplay;
+}
+
+bool MeumUI::getIsReadInput(void)
+{
+	return isReadInput;
+}
+
+void MeumUI::setIsReadInput(bool isReadInput)
+{
+	this->isReadInput = isReadInput;
 }
 
 bool MeumUI::getIsDelete(void)

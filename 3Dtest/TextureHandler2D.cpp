@@ -16,7 +16,8 @@ TextureHandler2D::~TextureHandler2D()
 
 void TextureHandler2D::LoadTextures(LPDIRECT3DDEVICE9 g_pD3DDevice)
 {
-	for (int i = 0; i < textures.size(); i++)
+	int texturesNum = textures.size();
+	for (int i = 0; i < texturesNum; i++)
 	{
 		if (FAILED(D3DXCreateTextureFromFile(g_pD3DDevice, textures[i].paths.c_str(), &textures[i].tex_p)))
 		{

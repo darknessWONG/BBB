@@ -90,7 +90,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	DWORD window_style = WS_OVERLAPPEDWINDOW & ~(WS_MAXIMIZEBOX | WS_THICKFRAME);
 
 	// 基本矩形座標
-	RECT window_rect = { 0, 0, Common::screen_width, Common::screen_height };
+	RECT window_rect = { 0, 0, (LONG)Common::screen_width, (LONG)Common::screen_height };
 
 	// 指定したクライアント領域を確保するために新たな矩形座標を計算
 	AdjustWindowRect(&window_rect, window_style, FALSE);

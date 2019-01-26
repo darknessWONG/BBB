@@ -5,6 +5,7 @@
 
 void Font_Initialize(void);
 void Font_Finalize(void);
+int Font_GetSize(void);
 void Font_SetSize(int size);
 void Font_SetColor(int r, int g, int b, int a);
 void Font_Draw(float x, float y, char * text);

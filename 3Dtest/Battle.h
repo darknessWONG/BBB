@@ -22,7 +22,7 @@ class Battle
 {
 public:
 	Battle();
-	Battle(MapManage *map, PerformManage *pm, MeumUI* commandMeum, MeumUI* textBox, Player* movePointer);
+	Battle(MapManage *map, PerformManage *pm, MeumUI* commandMeum, MeumUI* textBox, MeumUI* statusBox, Player* movePointer);
 	~Battle();
 
 	/*===========================================
@@ -45,6 +45,7 @@ public:
 	void setDefEfficiency(float de);
 	void setCommandMeum(MeumUI* commandMeum);
 	void setTextBox(MeumUI* textBox);
+	void setStatusBox(MeumUI* statusBox);
 	void setPerformManager(PerformManage* pm);
 	void setMap(MapManage* map);
 	BattleState getBattleState(void);
@@ -120,9 +121,11 @@ private:
 	//it will initialize other value it they should be initialize when new bs begin
 	void changeBattleState(BattleState newbs);
 	void createTextBox(void);
+	void createStatusBox(void);
 	void addMovePerform(Chara* act, Chara* target);
 	void displayMessage(string str);
 	void tabDeadEnemy(void);
+	void calStatusMessage(void);
 
 	BattleState bs;
 	ActionPhaseStatus as;
@@ -147,6 +150,7 @@ private:
 	PerformManage *pm = NULL;
 	MeumUI* commandMeum = NULL;
 	MeumUI* textBox = NULL;
+	MeumUI* statusBox = NULL;
 
 	float skillEfficiency;
 	float defEfficiency;

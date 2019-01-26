@@ -18,7 +18,7 @@ void PerformManage::addPerforms(Perform * perform)
 
 void PerformManage::removePerforms(int index)
 {
-	if (index >= 0 && index < performs.size())
+	if (index >= 0 && index < (int)performs.size())
 	{
 		delete performs[index];
 		vector<Perform*>::iterator it = performs.begin() + index;

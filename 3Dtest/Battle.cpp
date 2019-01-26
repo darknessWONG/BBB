@@ -22,14 +22,15 @@ Battle::Battle()
 #endif
 }
 
-Battle::Battle(MapManage *map, PerformManage *pm, MeumUI* commandMeum, MeumUI* textBox, Player* movePointer)
-	:map(map), pm(pm), commandMeum(commandMeum), textBox(textBox),movePointer(movePointer)
+Battle::Battle(MapManage *map, PerformManage *pm, MeumUI* commandMeum, MeumUI* textBox, MeumUI* statusBox, Player* movePointer)
+	:map(map), pm(pm), commandMeum(commandMeum), textBox(textBox), statusBox(statusBox), movePointer(movePointer)
 {
 	bs = BattleState::BattleStateStandby;
 
 	action = NULL;
 
 	createTextBox();
+	createStatusBox();
 
 #ifdef SKILL_EFFICIENCY
 	skillEfficiency = SKILL_EFFICIENCY;
@@ -50,17 +51,20 @@ Battle::~Battle()
 	safe_delete<Player>(movePointer);
 	commandMeum->setIsDelete(true);
 	textBox->setIsDelete(true);
+	statusBox->setIsDelete(true);
 }
 
 void Battle::start(void)
 {
-	for (int i = 0; i < charas.size(); i++)
+	int charasNum = charas.size();
+	for (int i = 0; i < charasNum; i++)
 	{
 		if (typeid(*charas[i]) == typeid(Enemy))
 		{
 			((Enemy*)charas[i])->setIsPatrol(false);
 		}
 	}
+	commandMeum->setIsReadInput(false);
 
 	switch (bs)
 	{
@@ -89,6 +93,7 @@ void Battle::start(void)
 		mapMovePhase();
 		break;
 	}
+	calStatusMessage();
 }
 
 BOOL Battle::checkEnd(void)
@@ -160,6 +165,14 @@ void Battle::createTextBox(void)
 	textBox->setBackground(ui);
 	textBox->setPosition({ 300, Common::screen_height - ui->getHeight() });
 	textBox->setIsDisplay(true);
+}
+
+void Battle::createStatusBox(void)
+{
+	UI* ui = new UI({ 0, 0 }, 200, 200, 0);
+	statusBox->setBackground(ui);
+	statusBox->setPosition({ 600, Common::screen_height - ui->getHeight() });
+	statusBox->setIsDisplay(true);
 }
 
 void Battle::standbyPhase(void)
@@ -278,6 +291,7 @@ void Battle::selectAction(void)
 		createActionMeum();
 		displayMessage("Is your turn now, please select a action");
 	}
+	commandMeum->setIsReadInput(true);
 	readActionCommand();
 }
 
@@ -300,6 +314,9 @@ void Battle::readActionCommand(void)
 		case UIIdentity::UIIdentityMove:
 			changeBattleState(BattleState::BattleStateMove);
 			break;
+		case UIIdentity::UIIdentitySkip:
+			changeBattleState(BattleState::BattleStateEnd);
+			break;
 		}
 	}
 }
@@ -312,6 +329,7 @@ void Battle::selectTarget(void)
 		createTagatMeum(taragetList);
 		displayMessage("Please select a target");
 	}
+	commandMeum->setIsReadInput(true);
 	readTargetCommand();
 
 }
@@ -397,7 +415,7 @@ void Battle::readMovePlace(void)
 
 		if (dis <= actionList[nowActionChara]->getBattleChara()->getMovePoint())
 		{
-			vector<GameObject*> list = map->calObjectOnSight(actionList[nowActionChara], movePointer);
+			vector<GameObject*> list = map->calObjectOnSightOvl(actionList[nowActionChara], movePointer);
 			if (list.size() <= 0)
 			{
 				addMovePerform(actionList[nowActionChara], movePointer);
@@ -457,19 +475,17 @@ void Battle::createActionMeum(void)
 	ui2->setStr("ATTACK");
 	ui2->setIdentity(UIIdentity::UIIdentityAttack);
 	UI* ui3 = new UI({ 80, 80 }, 50, 50, 1);
-	ui3->setStr("RUN");
-	ui3->setIdentity(UIIdentity::UIIdentityRun);
-	UI* ui4 = new UI({ 80, 80 }, 50, 50, 1);
+	ui3->setStr("SKIP");
+	ui3->setIdentity(UIIdentity::UIIdentitySkip);
+	UI* ui4 = new UI({ 80, 140 }, 50, 50, 1);
 	ui4->setStr("MOVE");
 	ui4->setIdentity(UIIdentity::UIIdentityMove);
-	//MeumUI *meum = new MeumUI();
 	commandMeum->addOptins(ui2);
 	commandMeum->addOptins(ui3);
 	commandMeum->addOptins(ui4);
 	commandMeum->setBackground(ui);
 	commandMeum->setPointer(ui1);
 	commandMeum->setPosition({ 0, 0 });
-	//uis.push_back(meum);
 	commandMeum->setIsDisplay(true);
 
 	lastAs = ActionPhaseStatus::ActionPhaseStatusActionSelect;
@@ -607,7 +623,7 @@ int Battle::calDamageSingle(BattleChara * active, BattleChara * passive, bool is
 			atk + skill->getDamage() * SKILL_EFFICIENCY - def * DEFENSE_EFFICIENCY + 1 : 1);*/
 			int atk = active->getAtk();
 			int def = 0;
-			damage = calDamageVal(atk, def, skill->getDamage());
+			damage = calDamageVal(atk, def, (int)skill->getDamage());
 		}
 	}
 	return damage;
@@ -616,7 +632,7 @@ int Battle::calDamageSingle(BattleChara * active, BattleChara * passive, bool is
 int Battle::calDamageVal(int atk, int def, int skillDamage)
 {
 	int damage = 1;
-	damage = atk + skillDamage * skillEfficiency - def * defEfficiency;
+	damage = (int)(atk + skillDamage * skillEfficiency - def * defEfficiency);
 	damage = damage < 1 ? 1 : damage;
 	return damage;
 }
@@ -659,7 +675,7 @@ void Battle::addMovePerform(Chara * act, Chara * target)
 		mvp->setVecTarget({ target->getBoundingCenter().x, act->getVecNowPos()->y, newY });
 	}
 	mvp->setVecStart({ actCenter.x, act->getVecNowPos()->y, actCenter.y});
-	mvp->setMoveSpeed(0.1);
+	mvp->setMoveSpeed(0.1f);
 	pm->addPerforms(mvp);
 }
 
@@ -678,6 +694,34 @@ void Battle::tabDeadEnemy(void)
 			charas[i]->setIsDelete(true);
 		}
 	}
+}
+
+void Battle::calStatusMessage(void)
+{
+	int charasNum = charas.size();
+	string displayStr;
+	stringstream ss;
+	string tmpStr;
+	for (int i = 0; i < charasNum; i++)
+	{
+		displayStr += charas[i]->getBattleChara()->getName();
+		displayStr += "         ";
+
+		ss.clear();
+		ss << charas[i]->getBattleChara()->getHpNow();
+		ss >> tmpStr;
+		displayStr += tmpStr;
+
+		displayStr += "/";
+
+		ss.clear();
+		ss << charas[i]->getBattleChara()->getHpMax();
+		ss >> tmpStr;
+		displayStr += tmpStr;
+
+		displayStr += "%";
+	}
+	statusBox->setDisplayStr(displayStr);
 }
 
 void Battle::setPerformManager(PerformManage * pm)
@@ -719,4 +763,9 @@ void Battle::setTextBox(MeumUI * textBox)
 {
 	this->textBox = textBox;
 	createTextBox();
+}
+
+void Battle::setStatusBox(MeumUI * statusBox)
+{
+	this->statusBox = statusBox;
 }

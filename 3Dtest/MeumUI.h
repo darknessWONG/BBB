@@ -33,6 +33,8 @@ public:
 	void setBackground(UI* ui);
 	void setPointer(UI* ui);
 	void setIsDisplay(bool isDisplay);
+	bool getIsReadInput(void);
+	void setIsReadInput(bool isReadInput);
 	bool getIsDelete(void);
 	void setIsDelete(bool isDelete);
 	void setDisplayStr(string str);
@@ -47,6 +49,7 @@ private:
 	string displayStr;
 
 	bool isDisplay;
+	bool isReadInput;
 	bool isDelete;
 };
 

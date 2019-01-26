@@ -6,10 +6,10 @@ Animation::Animation(AnimationTemplate* temp, MyMesh* mesh)
 {
 	target = mesh->getPartsByIndex(temp->getIndex());
 
-	scalePerFream = temp->getScale() / temp->getTotalFream();
-	rotationPerFream = temp->getRotation() / temp->getTotalFream();
-	transportPerFream = temp->getTransport() / temp->getTotalFream();
-	revolutionPerFream = temp->getRevolution() / temp->getTotalFream();
+	scalePerFream = temp->getScale() / (float)temp->getTotalFream();
+	rotationPerFream = temp->getRotation() / (float)temp->getTotalFream();
+	transportPerFream = temp->getTransport() / (float)temp->getTotalFream();
+	revolutionPerFream = temp->getRevolution() / (float)temp->getTotalFream();
 	totalFream = temp->getTotalFream();
 
 	nowFream = 0;

@@ -56,7 +56,15 @@ Parts * MyMesh::getPartsByIndex(int index)
 		vector<bool> list;
 		while (index != 1)
 		{
-			list.push_back(index % 2);
+			int flag = index % 2;
+			if (flag == 1)
+			{
+				list.push_back(true);
+			}
+			else
+			{
+				list.push_back(false);
+			}
 			index /= 2;
 		}
 

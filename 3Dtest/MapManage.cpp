@@ -19,9 +19,18 @@ void MapManage::addGameObject(GameObject * gameObject)
 	}
 }
 
+void MapManage::addGameObject2D(MeumUI * gameObject2D)
+{
+	if (gameObject2D != NULL)
+	{
+		gameObjects2D.push_back(gameObject2D);
+	}
+}
+
 void MapManage::cleanGameObject(void)
 {
 	gameObjects.clear();
+	gameObjects2D.clear();
 }
 
 void MapManage::updateGameObejcts(void)
@@ -42,11 +51,12 @@ void MapManage::updateGameObejcts(void)
 		while (list.size() != 0)
 		{
 			int j = 0;
-			while (j < list.size() && list[j].touchType != TouchType::cover)
+			int listNum = list.size();
+			while (j < listNum && list[j].touchType != TouchType::cover)
 			{
 				j++;
 			}
-			if (j >= list.size())
+			if (j >= listNum)
 			{
 				break;
 			}
@@ -58,11 +68,11 @@ void MapManage::updateGameObejcts(void)
 			float gameObjCenterPos = gameObjects[i]->getBoundingCenter().x - new_point.x;
 			if (xSpeed.x > 0)
 			{
-				new_point.x = (list[0].obj->getBoundingCenter().x - ((gameObjLength + listObjLength) / 2.0) - gameObjCenterPos);
+				new_point.x = (list[0].obj->getBoundingCenter().x - ((gameObjLength + listObjLength) / 2.0f) - gameObjCenterPos);
 			}
 			else
 			{
-				new_point.x = (list[0].obj->getBoundingCenter().x + ((gameObjLength + listObjLength) / 2.0) - gameObjCenterPos);
+				new_point.x = (list[0].obj->getBoundingCenter().x + ((gameObjLength + listObjLength) / 2.0f) - gameObjCenterPos);
 			}
 			D3DXVECTOR3 newSpeed = *gameObjects[i]->getVecMoveSpeed();
 			newSpeed.x = 0.0f;
@@ -78,11 +88,12 @@ void MapManage::updateGameObejcts(void)
 		while (list.size() != 0)
 		{
 			int j = 0;
-			while (j < list.size() && list[j].touchType != TouchType::cover)
+			int listNum = list.size();
+			while (j < listNum && list[j].touchType != TouchType::cover)
 			{
 				j++;
 			}
-			if (j >= list.size())
+			if (j >= listNum)
 			{
 				break;
 			}
@@ -94,11 +105,11 @@ void MapManage::updateGameObejcts(void)
 			float gameObjCenterPos = gameObjects[i]->getBoundingCenter().y - new_point.z;
 			if (zSpeed.z > 0)
 			{
-				new_point.z = list[0].obj->getBoundingCenter().y - ((gameObjWidth + listObjWidth) / 2.0) - gameObjCenterPos;
+				new_point.z = list[0].obj->getBoundingCenter().y - ((gameObjWidth + listObjWidth) / 2.0f) - gameObjCenterPos;
 			}
 			else
 			{
-				new_point.z = list[0].obj->getBoundingCenter().y + ((gameObjWidth + listObjWidth) / 2.0) - gameObjCenterPos;
+				new_point.z = list[0].obj->getBoundingCenter().y + ((gameObjWidth + listObjWidth) / 2.0f) - gameObjCenterPos;
 			}
 			D3DXVECTOR3 newSpeed = *gameObjects[i]->getVecMoveSpeed();
 			newSpeed.z = 0.0f;
@@ -106,6 +117,12 @@ void MapManage::updateGameObejcts(void)
 			gameObjects[i]->setVecNowPos(&new_point);
 			list = collisionDetectionOvl(gameObjects[i]);
 		}
+	}
+
+	gameObjectNum = gameObjects2D.size();
+	for (int i = 0; i < gameObjectNum; i++)
+	{
+		gameObjects2D[i]->dataUpdate();
 	}
 }
 
@@ -116,6 +133,12 @@ void MapManage::drawGameObjects(LPDIRECT3DDEVICE9 pD3DDevice)
 	{
 		gameObjects[i]->calWorldMatrix();
 		gameObjects[i]->draw(pD3DDevice);
+	}
+
+	gameObjectNum = gameObjects2D.size();
+	for (int i = 0; i < gameObjectNum; i++)
+	{
+		gameObjects2D[i]->draw(pD3DDevice);
 	}
 }
 
@@ -239,6 +262,32 @@ vector<GameObject*> MapManage::calObjectOnSight(GameObject * enemy, GameObject *
 	for (int i = 0; i < gameObjNum; i++)
 	{
 		if (gameObjects[i] == enemy || gameObjects[i] == player || typeid(Vigilance) == typeid(*gameObjects[i]))
+		{
+			continue;
+		}
+		RECTF rect = gameObjects[i]->getBoundingRect();
+		line_segment diagonal1 = Physics::createLinesegment(D3DXVECTOR2(rect.left, rect.top), D3DXVECTOR2(rect.right, rect.bottom));
+		line_segment diagonal2 = Physics::createLinesegment(D3DXVECTOR2(rect.right, rect.top), D3DXVECTOR2(rect.left, rect.bottom));
+		if (Physics::linesegmentTouchLinesegment(sight, diagonal1) || Physics::linesegmentTouchLinesegment(sight, diagonal2))
+		{
+			list.push_back(gameObjects[i]);
+		}
+	}
+
+	return list;
+}
+
+vector<GameObject*> MapManage::calObjectOnSightOvl(GameObject * active, GameObject * target) const
+{
+	line_segment sight = Physics::createLinesegment(active->getBoundingCenter(), target->getBoundingCenter());
+
+	vector<GameObject*> list;
+
+	int gameObjNum = gameObjects.size();
+	for (int i = 0; i < gameObjNum; i++)
+	{
+		if (gameObjects[i] == active || gameObjects[i] == target || typeid(Vigilance) == typeid(*gameObjects[i]) 
+			|| gameObjects[i]->getOverlapLevel() + active->getOverlapLevel() <= 0)
 		{
 			continue;
 		}

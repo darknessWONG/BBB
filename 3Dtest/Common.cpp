@@ -34,8 +34,8 @@ bool Common::MyDirect3D_Initialize(HWND hWnd)
 	// デバイスの生成に利用する情報構造体の作成
 	D3DPRESENT_PARAMETERS d3dpp = {};
 
-	d3dpp.BackBufferWidth = screen_width;                       // バックバッファの横幅				
-	d3dpp.BackBufferHeight = screen_height;                     // バックバッファの縦幅
+	d3dpp.BackBufferWidth = (UINT)screen_width;                       // バックバッファの横幅				
+	d3dpp.BackBufferHeight = (UINT)screen_height;                     // バックバッファの縦幅
 	d3dpp.BackBufferFormat = D3DFMT_UNKNOWN;                    // バックバッファのフォーマット指定
 	d3dpp.BackBufferCount = 1;                                  // バックバッファの数
 	d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;                   // スワップエフェクト（スワップ方法）の設定		
@@ -93,26 +93,3 @@ void Common::MyDirect3D_Finalize(void)
 		g_pD3D = NULL;
 	}
 }
-
-//template <typename T>
-//void Common::safe_delete(T *&target) {
-//	if (nullptr != target) {
-//		delete[] target;
-//		target = nullptr;
-//	}
-//}
-//
-//template<typename T>
-//void Common::safe_delete_arr(T *& target, int num)
-//{
-//	if (nullptr != target) {
-//		for (int i = 0; i < num; i++)
-//		{
-//			if(nullprt != target[i])
-//				delete target[i];
-//				target[i] = nullptr;
-//		}
-//		delete[] target;
-//		target = nullptr;
-//	}
-//}

@@ -23,7 +23,7 @@ Model::~Model()
 	adacencyBuffer->Release();
 	adacencyBuffer = NULL;
 
-	for (int i = 0; i < numMaterials; i++)
+	for (DWORD i = 0; i < numMaterials; i++)
 	{
 		if (meshTexture[i] != NULL)
 		{
@@ -51,7 +51,7 @@ void Model::draw(LPDIRECT3DDEVICE9 pD3DDevice)
 	{
 		pD3DDevice->SetFVF(FVF_VERTEX3D);
 		pD3DDevice->SetTransform(D3DTS_WORLD, getMtxWorld());
-		for (int i = 0; i < numMaterials; i++)
+		for (int i = 0; i < (int)numMaterials; i++)
 		{
 			pD3DDevice->SetMaterial(&meshMat[i]);
 			pD3DDevice->SetTexture(0, meshTexture[i]);
@@ -101,7 +101,7 @@ void Model::loadModel(LPDIRECT3DDEVICE9 pD3DDevice)
 	meshMat = new D3DMATERIAL9[numMaterials];
 	materials = (D3DXMATERIAL*)mtrlBuffer->GetBufferPointer();
 
-	for (int i = 0; i < numMaterials; i++)
+	for (DWORD i = 0; i < numMaterials; i++)
 	{
 		meshMat[i] = materials[i].MatD3D;
 		meshColor[i] = materials[i].MatD3D.Diffuse;

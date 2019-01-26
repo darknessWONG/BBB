@@ -70,6 +70,11 @@ void GameManage::beforeUpdate(void)
 		map->addGameObject(vigliances[i]);
 	}
 
+	gameObjectsNum = uis.size();
+	for (int i = 0; i < gameObjectsNum; i++)
+	{
+		map->addGameObject2D(uis[i]);
+	}
 
 }
 
@@ -125,12 +130,12 @@ void GameManage::draw(void)
 		map->drawGameObjects(pD3DDevice);
 	}
 
-	int uiNum = uis.size();
-	for (int i = 0; i < uiNum; i++)
-	{
-		uis[i]->dataUpdate();
-		uis[i]->draw(pD3DDevice);
-	}
+	//int uiNum = uis.size();
+	//for (int i = 0; i < uiNum; i++)
+	//{
+	//	uis[i]->dataUpdate();
+	//	uis[i]->draw(pD3DDevice);
+	//}
 }
 
 void GameManage::release(void)
@@ -166,8 +171,8 @@ void GameManage::gameStateInit(void)
 	bc->setSpeed(10);
 	Player* mesh = new Player("radio.x");
 	mesh->loadModel(pD3DDevice);
-	mesh->setWalkSpeed(0.01);
-	mesh->setMaxSpeed(0.3);
+	mesh->setWalkSpeed(0.01f);
+	mesh->setMaxSpeed(0.3f);
 	mesh->setCanMove(true);
 	mesh->setVecNowPos(new D3DXVECTOR3(-10, 0, 0));
 	mesh->setOverlapLevel(1);
@@ -216,8 +221,8 @@ void GameManage::gameStateInit(void)
 	bc1->setSpeed(10);
 	Enemy* mesh3 = new Enemy("T-Rex.x");
 	mesh3->loadModel(pD3DDevice);
-	mesh3->setWalkSpeed(0.01);
-	mesh3->setMaxSpeed(0.3);
+	mesh3->setWalkSpeed(0.01f);
+	mesh3->setMaxSpeed(0.3f);
 	mesh3->setCanMove(true);
 	mesh3->setVecNowPos(new D3DXVECTOR3(1, 0, 1));
 	mesh3->setVecPatrolStart(new D3DXVECTOR3(1, 0, 1));
@@ -242,8 +247,8 @@ void GameManage::gameStateInit(void)
 	bc2->setSpeed(10);
 	Enemy* enemy4 = new Enemy("T-Rex.x");
 	enemy4->loadModel(pD3DDevice);
-	enemy4->setWalkSpeed(0.01);
-	enemy4->setMaxSpeed(0.3);
+	enemy4->setWalkSpeed(0.01f);
+	enemy4->setMaxSpeed(0.3f);
 	enemy4->setCanMove(true);
 	enemy4->setVecNowPos(new D3DXVECTOR3(13, 0, 10));
 	enemy4->setVecPatrolStart(new D3DXVECTOR3(13, 0, 1));
@@ -265,7 +270,7 @@ void GameManage::gameStateInit(void)
 	//map->addGameObject(mesh4);
 
 	Vigilance* mesh5 = new Vigilance();
-	mesh5->setMaxSpeed(0.3);
+	mesh5->setMaxSpeed(0.3f);
 	mesh5->setCanMove(true);
 	mesh5->setVecNowPos(new D3DXVECTOR3(1, 0, 1));
 	mesh5->setBelong(mesh3);
@@ -468,8 +473,8 @@ void GameManage::battleInit(void)
 	{
 		Player* pointMesh = new Player("face.x");
 		pointMesh->loadModel(pD3DDevice);
-		pointMesh->setWalkSpeed(0.01);
-		pointMesh->setMaxSpeed(0.3);
+		pointMesh->setWalkSpeed(0.01f);
+		pointMesh->setMaxSpeed(0.3f);
 		pointMesh->setCanMove(true);
 		pointMesh->setIsDisplay(false);
 		pointMesh->setVecNowPos(new D3DXVECTOR3(-10, 0, -10));
@@ -481,9 +486,12 @@ void GameManage::battleInit(void)
 		MeumUI *textBox = new MeumUI();
 		uis.push_back(textBox);
 
-		battle = new Battle(map, &pm, cmdMeum, textBox, pointMesh);
+		MeumUI *statusBox = new MeumUI();
+		uis.push_back(statusBox);
+
+		battle = new Battle(map, &pm, cmdMeum, textBox, statusBox, pointMesh);
 		battle->addCharas(player);
-		battle->setTextBox(textBox);
+		//battle->setTextBox(textBox);
 		battleResult = BattleResultType::BattleResultTypeUnknow;
 	}
 }
@@ -513,7 +521,7 @@ void GameManage::cleanDeletedObject(void)
 		if ((*it)->getIsDelete() || (*it)->getBelong()->getIsDelete())
 		{
 			Vigilance* vi = *it;
-			delete vi;
+			safe_delete<Vigilance>(vi);
 			vigliances.erase(it);
 			it = vigliances.begin();
 			continue;
@@ -526,7 +534,7 @@ void GameManage::cleanDeletedObject(void)
 		if ((*it)->getIsDelete())
 		{
 			Enemy* enemy = *it;
-			delete enemy;
+			safe_delete<Enemy>(enemy);
 			enemys.erase(it);
 			it = enemys.begin();
 			continue;
@@ -539,7 +547,7 @@ void GameManage::cleanDeletedObject(void)
 		if ((*it)->getIsDelete())
 		{
 			GameObject* go = *it;
-			delete go;
+			safe_delete<GameObject>(go);
 			others.erase(it);
 			it = others.begin();
 			continue;
@@ -551,6 +559,8 @@ void GameManage::cleanDeletedObject(void)
 	{
 		if ((*it)->getIsDelete())
 		{
+			MeumUI* ui = *it;
+			safe_delete<MeumUI>(ui);
 			uis.erase(it);
 			it = uis.begin();
 			continue;

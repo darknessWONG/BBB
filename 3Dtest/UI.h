@@ -28,7 +28,6 @@ public:
 	void setIndex(int index);
 	void setIsDisplay(bool isDisplay);
 
-
 private:
 	bool isDisplay;
 
@@ -37,6 +36,8 @@ private:
 
 	void releaseChild(void);
 	void releaseNext(void);
+
+	vector<string> cutStr(void);
 
 	D3DXVECTOR2 position;
 	D3DXVECTOR2 points[4];

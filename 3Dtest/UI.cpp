@@ -133,10 +133,20 @@ void UI::draw(LPDIRECT3DDEVICE9 g_pD3DDevice, D3DXVECTOR2 *basePoint)
 
 		g_pD3DDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, f, sizeof(Vertex2D));
 
-		char *tmpStr = new char[str.length() + 1];
-		strcpy_s(tmpStr, str.length() + 1, str.c_str());
-		Font_Draw(f[0].pos.x, f[0].pos.y, tmpStr);
-		delete[] tmpStr;
+		vector<string> list = cutStr();
+		int listNum = list.size();
+		int fontSize = Font_GetSize();
+		for (int i = 0; i < listNum; i++)
+		{
+		/*	char *tmpStr = new char[str.length() + 1];
+			strcpy_s(tmpStr, str.length() + 1, str.c_str());
+			Font_Draw(f[0].pos.x, f[0].pos.y + fontSize * i, tmpStr);
+			delete[] tmpStr;*/
+			char *tmpStr = new char[list[i].length() + 1];
+			strcpy_s(tmpStr, list[i].length() + 1, list[i].c_str());
+			Font_Draw(f[0].pos.x, f[0].pos.y + fontSize * i, tmpStr);
+			delete[] tmpStr;
+		}
 	}
 	if (next != NULL)
 	{
@@ -213,4 +223,34 @@ void UI::releaseNext(void)
 	{
 		next = NULL;
 	}
+}
+
+vector<string> UI::cutStr(void)
+{
+	int fontSize = Font_GetSize() / 2.25;
+	int letterPerLine = width / fontSize;
+	int lineNum = height / fontSize;
+	vector<string> list;
+	string tmp = "";
+	for (int i = 0, j = 0, k = 0; i < str.length(); i++, j++)
+	{
+		if (str[i] == '%' || j >= letterPerLine)
+		{
+			list.push_back(tmp);
+			tmp = "";
+			j = -1;
+			if (++k >= lineNum)
+			{
+				break;
+			}
+			if (str[i] != '%')
+			{
+				i--;
+			}
+			continue;
+		}
+		tmp += str[i];
+	}
+	list.push_back(tmp);
+	return list;
 }
