@@ -152,6 +152,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3Dtest.h" />
+    <ClInclude Include="AllocateHierarchy.h" />
     <ClInclude Include="Animation.h" />
     <ClInclude Include="AnimationManage.h" />
     <ClInclude Include="AnimationSet.h" />
@@ -194,6 +195,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3Dtest.cpp" />
+    <ClCompile Include="AllocateHierarchy.cpp" />
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="AnimationManage.cpp" />
     <ClCompile Include="AnimationSet.cpp" />

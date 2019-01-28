@@ -192,6 +192,22 @@ float Physics::round(float src, int bits)
 	return src;
 }
 
+D3DXVECTOR3 Physics::takeSmallerVaule(D3DXVECTOR3 a, D3DXVECTOR3 b)
+{
+	float x = a.x < b.x ? a.x : b.x;
+	float y = a.y < b.y ? a.y : b.y;
+	float z = a.z < b.z ? a.z : b.z;
+	return D3DXVECTOR3(x, y, z);
+}
+
+D3DXVECTOR3 Physics::takebiggerVaule(D3DXVECTOR3 a, D3DXVECTOR3 b)
+{
+	float x = a.x > b.x ? a.x : b.x;
+	float y = a.y > b.y ? a.y : b.y;
+	float z = a.z > b.z ? a.z : b.z;
+	return D3DXVECTOR3(x, y, z);
+}
+
 void Physics::sortLinesegmentPoint(line_segment & line)
 {
 	if (line.pointAX > line.pointBX)

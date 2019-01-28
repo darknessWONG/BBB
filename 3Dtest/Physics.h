@@ -62,6 +62,11 @@ public:
 	static line createLine(D3DXVECTOR2 point1, D3DXVECTOR2 point2);
 	static line_segment createLinesegment(D3DXVECTOR2 point1, D3DXVECTOR2 point2);
 	static float round(float src, int bits);
+
+	//it will return a vector which element are the smaller one between a and b
+	static D3DXVECTOR3 takeSmallerVaule(D3DXVECTOR3 a, D3DXVECTOR3 b);
+	//it will return a vector which element are the bigger one between a and b
+	static D3DXVECTOR3 takebiggerVaule(D3DXVECTOR3 a, D3DXVECTOR3 b);
 private:
 	static void sortLinesegmentPoint(line_segment& line);
 };

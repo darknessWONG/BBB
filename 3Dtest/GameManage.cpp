@@ -170,6 +170,7 @@ void GameManage::gameStateInit(void)
 	bc->setName("wong");
 	bc->setSpeed(10);
 	Player* mesh = new Player("radio.x");
+	mesh->setIsWithAnimation(false);
 	mesh->loadModel(pD3DDevice);
 	mesh->setWalkSpeed(0.01f);
 	mesh->setMaxSpeed(0.3f);
@@ -200,6 +201,7 @@ void GameManage::gameStateInit(void)
 	//map->addGameObject(tree2);
 
 	Model* tree3 = new Ground("grass ground.blend.x");
+	tree3->setIsWithAnimation(false);
 	tree3->loadModel(pD3DDevice);
 	tree3->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
 	//mesh1->setRotateSpeed(20);
@@ -220,6 +222,7 @@ void GameManage::gameStateInit(void)
 	bc1->setName("enemy");
 	bc1->setSpeed(10);
 	Enemy* mesh3 = new Enemy("T-Rex.x");
+	mesh3->setIsWithAnimation(false);
 	mesh3->loadModel(pD3DDevice);
 	mesh3->setWalkSpeed(0.01f);
 	mesh3->setMaxSpeed(0.3f);
@@ -246,6 +249,7 @@ void GameManage::gameStateInit(void)
 	bc2->setName("enemy1");
 	bc2->setSpeed(10);
 	Enemy* enemy4 = new Enemy("T-Rex.x");
+	enemy4->setIsWithAnimation(false);
 	enemy4->loadModel(pD3DDevice);
 	enemy4->setWalkSpeed(0.01f);
 	enemy4->setMaxSpeed(0.3f);
