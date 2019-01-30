@@ -178,6 +178,7 @@
     <ClInclude Include="MeumUI.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="MovePerform.h" />
+    <ClInclude Include="NameTap.h" />
     <ClInclude Include="Parts.h" />
     <ClInclude Include="Perform.h" />
     <ClInclude Include="PerformManage.h" />
@@ -223,6 +224,7 @@
     <ClCompile Include="MeumUI.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="MovePerform.cpp" />
+    <ClCompile Include="NameTap.cpp" />
     <ClCompile Include="Parts.cpp" />
     <ClCompile Include="Perform.cpp" />
     <ClCompile Include="PerformManage.cpp" />

@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "PerformManage.h"
 #include "MapManage.h"
+#include "NameTap.h"
 
 typedef struct action_st
 {
@@ -30,6 +31,7 @@ public:
 	============================================*/
 	void start(void);
 	void addCharas(Chara* chara);
+	bool checkCharaIsInBattle(Chara* chara);
 	/*-------------------
 	return value:
 	0 if not end
@@ -37,6 +39,7 @@ public:
 	-1 if enemy win
 	-------------------*/
 	BOOL checkEnd(void);
+
 	/*===========================================
 	public geter / seter
 	============================================*/

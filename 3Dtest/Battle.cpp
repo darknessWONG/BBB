@@ -453,16 +453,24 @@ bool Battle::checkDead(Chara * chara)
 
 void Battle::addCharas(Chara * chara)
 {
+	if (!checkCharaIsInBattle(chara))
+	{
+		charas.push_back(chara);
+		calActionList();
+	}
+}
+
+bool Battle::checkCharaIsInBattle(Chara * chara)
+{
 	int charaNum = charas.size();
 	for (int i = 0; i < charaNum; i++)
 	{
 		if (charas[i] == chara)
 		{
-			return;
+			return true;
 		}
 	}
-	charas.push_back(chara);
-	calActionList();
+	return false;
 }
 
 void Battle::createActionMeum(void)

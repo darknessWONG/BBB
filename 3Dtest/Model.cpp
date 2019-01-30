@@ -257,12 +257,44 @@ RECTF Model::getBoundingRect(void)
 	return rect;
 }
 
+BOXF Model::getBoundingBox(void)
+{
+	BOXF box;
+	float maxX = Physics::round(boundingBoxMax.x, FLOAT_BITS);
+	float minX = Physics::round(boundingBoxMin.x, FLOAT_BITS);
+	float maxY = Physics::round(boundingBoxMax.y, FLOAT_BITS);
+	float minY = Physics::round(boundingBoxMin.y, FLOAT_BITS);
+	float maxZ = Physics::round(boundingBoxMax.z, FLOAT_BITS);
+	float minZ = Physics::round(boundingBoxMin.z, FLOAT_BITS);
+	float posX = Physics::round(getVecNowPos()->x, FLOAT_BITS);
+	float posY = Physics::round(getVecNowPos()->y, FLOAT_BITS);
+	float posZ = Physics::round(getVecNowPos()->z, FLOAT_BITS); 
+
+	box.left = minX + posX;
+	box.right = maxX + posX;
+	box.bottom = minY + posY;
+	box.top = maxY + posY;
+	box.front = minZ + posZ;
+	box.back = maxZ + posZ;
+	return box;
+}
+
 D3DXVECTOR2 Model::getBoundingCenter(void)
 {
 	RECTF rect = getBoundingRect();
 	D3DXVECTOR2 center = { 0, 0 };
 	center.x = Physics::round((rect.left + rect.right) / 2, FLOAT_BITS);
 	center.y = Physics::round((rect.bottom + rect.top) / 2, FLOAT_BITS);
+	return center;
+}
+
+D3DXVECTOR3 Model::getBoundingCenter3D(void)
+{
+	BOXF box = getBoundingBox();
+	D3DXVECTOR3 center = { 0, 0, 0 };
+	center.x = Physics::round((box.left + box.right) / 2, FLOAT_BITS);
+	center.y = Physics::round((box.bottom + box.top) / 2, FLOAT_BITS);
+	center.z = Physics::round((box.front + box.back) / 2, FLOAT_BITS);
 	return center;
 }
 
@@ -273,6 +305,16 @@ void Model::setBoundingCenter(D3DXVECTOR2 center)
 	D3DXVECTOR2 offset = { nowPos.x - boundingCenter.x, nowPos.z - boundingCenter.y };
 
 	nowPos = { center.x + offset.x, nowPos.y, center.y + offset.y };
+	setVecNowPos(&nowPos);
+}
+
+void Model::setBoundingCenter3D(D3DXVECTOR3 center)
+{
+	D3DXVECTOR3 boundingCenter3D = getBoundingCenter3D();
+	D3DXVECTOR3 nowPos = *getVecNowPos();
+	D3DXVECTOR3 offset = { nowPos.x - boundingCenter3D.x, nowPos.y - boundingCenter3D.y, nowPos.z - boundingCenter3D.z };
+
+	nowPos = { center.x + offset.x, center.y + offset.y, center.y + offset.y };
 	setVecNowPos(&nowPos);
 }
 

@@ -12,7 +12,7 @@
 #include "UI.h"
 #include "MyMesh.h"
 #include "AnimationSet.h"
-#include "Billboard.h"
+#include "NameTap.h"
 
 GameManage::GameManage()
 {
@@ -280,19 +280,6 @@ void GameManage::gameStateInit(void)
 	vigliances.push_back(mesh5);
 	map->addGameObject(mesh5);
 
-	Billboard* billboard = new Billboard();
-	billboard->setCamera(camera);
-	billboard->setIsDisplay(true);
-	billboard->setMaxSpeed(0.3f);
-	billboard->setCanMove(true);
-	billboard->setVecNowPos(new D3DXVECTOR3(0, 3, 0));
-	billboard->setOverlapLevel(-5);
-	billboard->setTextureIndex(0);
-	billboard->setIsDelete(false);
-	billboard->setVecScale(new D3DXVECTOR3(5, 5, 5));
-	others.push_back(billboard);
-	map->addGameObject(billboard);
-
 	//battleInit();
 
 
@@ -394,6 +381,7 @@ void GameManage::gameStateUpdate(void)
 	cameraUpdate();
 	animationUpdate();
 	enemyUpdate();
+	othersUpdate();
 	checkEnd();
 }
 
@@ -457,7 +445,8 @@ void GameManage::enemyUpdate(Enemy* enemy)
 			continue;
 		}
 		battleInit();
-		battle->addCharas(enemy);
+		addCharaToBattle(battle, enemy);
+		//battle->addCharas(enemy);
 		return;
 	}
 
@@ -491,6 +480,21 @@ void GameManage::animationUpdate(void)
 	am.cleanEndAnimation();
 }
 
+void GameManage::othersUpdate(void)
+{
+	if (!checkIsInBattle())
+	{
+		int othersNum = others.size();
+		for (int i = 0; i < othersNum; i++)
+		{
+			if (typeid(*others[i]) == typeid(NameTap))
+			{
+				others[i]->setIsDelete(true);
+			}
+		}
+	}
+}
+
 void GameManage::battleInit(void)
 {
 	if (!checkIsInBattle())
@@ -515,7 +519,8 @@ void GameManage::battleInit(void)
 		uis.push_back(statusBox);
 
 		battle = new Battle(map, &pm, cmdMeum, textBox, statusBox, pointMesh);
-		battle->addCharas(player);
+		addCharaToBattle(battle, player);
+		//battle->addCharas(player);
 		battleResult = BattleResultType::BattleResultTypeUnknow;
 	}
 }
@@ -535,6 +540,29 @@ void GameManage::battleUpdate(void)
 	if (!checkIsInBattle())
 	{
 		safe_delete<Battle>(battle);
+	}
+}
+
+void GameManage::addCharaToBattle(Battle * battle, Chara* chara)
+{
+	if (!battle->checkCharaIsInBattle(chara))
+	{
+
+		NameTap* billboard = new NameTap();
+		billboard->setCamera(camera);
+		billboard->setIsDisplay(true);
+		billboard->setMaxSpeed(0.3f);
+		billboard->setCanMove(true);
+		billboard->setVecNowPos(new D3DXVECTOR3(0, 3, 0));
+		billboard->setOverlapLevel(-10);
+		billboard->setIsDelete(false);
+		billboard->setBelong(chara);
+		billboard->initName(pD3DDevice);
+		//billboard->setVecScale(new D3DXVECTOR3(5, 5, 5));
+		others.push_back(billboard);
+		map->addGameObject(billboard);
+
+		battle->addCharas(chara);
 	}
 }
 

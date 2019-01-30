@@ -55,11 +55,11 @@ bool Physics::pointTouchRect(D3DXVECTOR2 point, D3DXVECTOR2 * rectPoints)
 	return false;
 }
 
-bool Physics::rectInRect(D3DXVECTOR2 * rectPoints1, D3DXVECTOR2 * rectPoints2)
-{
-
-	return false;
-}
+//bool Physics::rectInRect(D3DXVECTOR2 * rectPoints1, D3DXVECTOR2 * rectPoints2)
+//{
+//
+//	return false;
+//}
 
 TouchType Physics::rectTouchRect(D3DXVECTOR2 * rect1, D3DXVECTOR2 * rect2)
 {

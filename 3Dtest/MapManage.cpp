@@ -117,6 +117,9 @@ void MapManage::updateGameObejcts(void)
 			gameObjects[i]->setVecNowPos(&new_point);
 			list = collisionDetectionOvl(gameObjects[i]);
 		}
+
+		//y position update
+		gameObjects[i]->positionUpdateY();
 	}
 
 	gameObjectNum = gameObjects2D.size();

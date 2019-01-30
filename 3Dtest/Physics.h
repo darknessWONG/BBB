@@ -30,6 +30,16 @@ typedef struct
 	float center_y;
 }Cycle;
 
+typedef struct
+{
+	float left;
+	float right;
+	float top;
+	float bottom;
+	float front;
+	float back;
+}BOXF;
+
 enum TouchType
 {
 	noTouch,
@@ -51,7 +61,7 @@ public:
 	static bool pointInRect(D3DXVECTOR2 point, D3DXVECTOR2* rectPoints);
 	//Is point on the rect's edege 
 	static bool pointTouchRect(D3DXVECTOR2 point, D3DXVECTOR2* rectPoints);
-	static bool rectInRect(D3DXVECTOR2* rectPoints1, D3DXVECTOR2* rectPoints2);
+	//static bool rectInRect(D3DXVECTOR2* rectPoints1, D3DXVECTOR2* rectPoints2);
 	static TouchType rectTouchRect(D3DXVECTOR2* rectPoints1, D3DXVECTOR2* rectPoints2);
 	static bool pointInCycle(Cycle* cycle, D3DXVECTOR2* point);
 	//Is two line intersect
