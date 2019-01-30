@@ -21,29 +21,35 @@ Model::Model(string modelPath)
 
 Model::~Model()
 {
-	mesh->Release();
-	mesh = NULL;
-	adacencyBuffer->Release();
-	adacencyBuffer = NULL;
-
-	for (DWORD i = 0; i < numMaterials; i++)
+	if (!isWithAnimation)
 	{
-		if (meshTexture[i] != NULL)
+		mesh->Release();
+		mesh = NULL;
+		adacencyBuffer->Release();
+		adacencyBuffer = NULL;
+
+		for (DWORD i = 0; i < numMaterials; i++)
 		{
-			meshTexture[i]->Release();
-			meshTexture[i] = NULL;
+			if (meshTexture[i] != NULL)
+			{
+				meshTexture[i]->Release();
+				meshTexture[i] = NULL;
+			}
 		}
+		delete[] meshColor;
+		meshColor = NULL;
+		delete[] meshTexture;
+		meshTexture = NULL;
+
+		materials = NULL;
 	}
-	delete[] meshColor;
-	meshColor = NULL;
-	delete[] meshTexture;
-	meshTexture = NULL;
+	else
+	{
 
-	materials = NULL;
-
-	D3DXFrameDestroy(m_pFrameRoot, m_pAllocateHier);
-	SAFE_RELEASE(m_pAnimController);
-	SAFE_DELETE(m_pAllocateHier);
+		D3DXFrameDestroy(m_pFrameRoot, m_pAllocateHier);
+		SAFE_RELEASE(m_pAnimController);
+		SAFE_DELETE(m_pAllocateHier);
+	}
 }
 
 void Model::dataUpdate(void)
@@ -83,7 +89,6 @@ void Model::draw(LPDIRECT3DDEVICE9 pD3DDevice)
 			updateFrameMatrices(m_pFrameRoot, getMtxWorld());
 			drawFrame(pD3DDevice, m_pFrameRoot);
 		}
-
 
 #ifdef _DEBUG
 		D3DMATERIAL9 blue;

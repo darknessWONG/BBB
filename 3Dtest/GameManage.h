@@ -58,6 +58,9 @@ public:
 	void lockUnmoveObject(void);
 
 	void setPD3DDevice(LPDIRECT3DDEVICE9 pD3DDevice);
+
+	void setIsFade(BOOL isFade);
+	void fade(void);
 private:
 	LPDIRECT3DDEVICE9 pD3DDevice = NULL;
 
@@ -80,4 +83,8 @@ private:
 	AnimationManage am;
 
 	GameState gs;
+
+	MeumUI* fadeFrame;
+	BOOL isFade;
+	int fadeAlpha;
 };

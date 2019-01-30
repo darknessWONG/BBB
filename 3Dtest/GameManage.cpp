@@ -43,10 +43,13 @@ void GameManage::init(void)
 
 	TextureHandler2D::AddTexture("net.jpg", 383, 300);
 	TextureHandler2D::AddTexture("grass.jpg", 1024, 987);
+	TextureHandler2D::AddTexture("shadow000.jpg", 80, 80);
 	TextureHandler2D::LoadTextures(pD3DDevice);
 
 	Cube::initStaticMember(pD3DDevice);
 	Billboard::initStaticMember(pD3DDevice);
+
+	fadeFrame = new MeumUI();
 }
 
 void GameManage::beforeUpdate(void)
@@ -95,6 +98,7 @@ void GameManage::update(void)
 		break;
 	case GameState::GameStateTitleRunning:
 		titleStateUpdate();
+		map->updateGameObejcts();
 		break;
 	case GameState::GameStateTitleClean:
 		titleStateClean();
@@ -104,6 +108,7 @@ void GameManage::update(void)
 		break;
 	case GameState::GameStateGameRunning:
 		gameStateUpdate();
+		map->updateGameObejcts();
 		break;
 	case GameState::GameStateGameClean:
 		gameStateClean();
@@ -113,13 +118,15 @@ void GameManage::update(void)
 		break;
 	case GameState::GameStateEndRunning:
 		endStateUpdate();
+		map->updateGameObejcts();
 		break;
 	case GameState::GameStateEndClean:
 		endStateClean();
 		break;
 	}
 
-	map->updateGameObejcts();
+	//map->updateGameObejcts();
+
 }
 
 void GameManage::draw(void)
@@ -127,10 +134,11 @@ void GameManage::draw(void)
 	light->lightSet(pD3DDevice);
 	camera->draw(pD3DDevice);
 
-	if (gs == GameState::GameStateGameRunning)
+	if (gs == GameState::GameStateGameRunning || gs == GameState::GameStateTitleRunning)
 	{
 		map->drawGameObjects(pD3DDevice);
 	}
+	fade();
 }
 
 void GameManage::release(void)
@@ -139,254 +147,319 @@ void GameManage::release(void)
 
 void GameManage::titleStateInit(void)
 {
+	UI* ui = new UI({ 0, 0 }, Common::screen_width, Common::screen_height, 0);
+
+	MeumUI *title = new MeumUI();
+	title->setBackground(ui);
+	title->setPosition({ 0, 0 });
+	title->setIsDisplay(true);
+
+	uis.push_back(title);
 	gs = GameState::GameStateTitleRunning;
 }
 
 void GameManage::titleStateUpdate(void)
 {
-	gs = GameState::GameStateTitleClean;
+	if (isFade == 0)
+	{
+		if (Keyboard_IsTrigger(DIK_SPACE))
+		{
+			setIsFade(1);
+			
+		}
+	}
+	if (fadeAlpha == 255)
+	{
+		//setIsFade(0);
+		gs = GameState::GameStateTitleClean;
+	}
 }
 
 void GameManage::titleStateClean(void)
 {
+	safe_delete<MeumUI>(uis[0]);
+	uis.clear();
+
 	gs = GameState::GameStateGameInit;
 }
 
 void GameManage::gameStateInit(void)
 {
-	BattleChara* bc = new BattleChara();
-	bc->setAtk(10);
-	bc->setCamp(CampType::CampTypePlayer);
-	bc->setHpMax(1000);
-	bc->setHpNow(1000);
-	bc->setMovePoint(100);
-	bc->setMpMax(10);
-	bc->setMpNow(10);
-	bc->setName("wong");
-	bc->setSpeed(10);
-	Player* mesh = new Player("tiny_4anim.x");
-	mesh->setIsWithAnimation(true);
-	mesh->loadModel(pD3DDevice);
-	mesh->setVecScale(new D3DXVECTOR3(0.01, 0.01, 0.01));
-	mesh->setWalkSpeed(0.01f);
-	mesh->setMaxSpeed(0.3f);
-	mesh->setCanMove(true);
-	mesh->setVecNowPos(new D3DXVECTOR3(-10, 0, 0));
-	mesh->setOverlapLevel(1);
-	mesh->setBattleChara(bc);
-	player = mesh;
-	map->addGameObject(mesh);
+		BattleChara* bc = new BattleChara();
+		bc->setAtk(10);
+		bc->setCamp(CampType::CampTypePlayer);
+		bc->setHpMax(1000);
+		bc->setHpNow(1000);
+		bc->setMovePoint(100);
+		bc->setMpMax(10);
+		bc->setMpNow(10);
+		bc->setName("wong");
+		bc->setSpeed(10);
+		Player* mesh = new Player("tiny_4anim.x");
+		mesh->setIsWithAnimation(true);
+		mesh->loadModel(pD3DDevice);
+		mesh->setVecScale(new D3DXVECTOR3(0.01, 0.01, 0.01));
+		mesh->setWalkSpeed(0.01f);
+		mesh->setMaxSpeed(0.3f);
+		mesh->setCanMove(true);
+		mesh->setVecNowPos(new D3DXVECTOR3(-10, 0, 0));
+		mesh->setOverlapLevel(1);
+		mesh->setBattleChara(bc);
+		player = mesh;
+		map->addGameObject(mesh);
 
-	/*Model* tree = new Model("Rock1.blend.x");
-	tree->loadModel(pD3DDevice);
-	tree->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
-	tree->setCanMove(false);
-	tree->setVecNowPos(new D3DXVECTOR3(7.5, 0, 0));
-	tree->setOverlapLevel(1);
-	others.push_back(tree);
-	map->addGameObject(tree);*/
+		/*Model* tree = new Model("Rock1.blend.x");
+		tree->loadModel(pD3DDevice);
+		tree->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
+		tree->setCanMove(false);
+		tree->setVecNowPos(new D3DXVECTOR3(7.5, 0, 0));
+		tree->setOverlapLevel(1);
+		others.push_back(tree);
+		map->addGameObject(tree);*/
 
-	//Model* tree2 = new Model("tree.x");
-	//tree2->loadModel(pD3DDevice);
-	//tree2->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
-	////mesh1->setRotateSpeed(20);
-	//tree2->setCanMove(false);
-	//tree2->setVecNowPos(new D3DXVECTOR3(-7.5, 0, 0));
-	//tree2->setOverlapLevel(1);
-	//others.push_back(tree2);
-	//map->addGameObject(tree2);
+		//Model* tree2 = new Model("tree.x");
+		//tree2->loadModel(pD3DDevice);
+		//tree2->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
+		////mesh1->setRotateSpeed(20);
+		//tree2->setCanMove(false);
+		//tree2->setVecNowPos(new D3DXVECTOR3(-7.5, 0, 0));
+		//tree2->setOverlapLevel(1);
+		//others.push_back(tree2);
+		//map->addGameObject(tree2);
 
-	Model* tree3 = new Ground("grass ground.blend.x");
-	tree3->setIsWithAnimation(false);
-	tree3->loadModel(pD3DDevice);
-	tree3->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
-	//mesh1->setRotateSpeed(20);
-	tree3->setCanMove(false);
-	tree3->setVecNowPos(new D3DXVECTOR3(0, 0, 0));
-	tree3->setOverlapLevel(-5);
-	others.push_back(tree3);
-	map->addGameObject(tree3);
+		Model* tree3 = new Ground("grass ground.blend.x");
+		tree3->setIsWithAnimation(false);
+		tree3->loadModel(pD3DDevice);
+		tree3->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
+		//mesh1->setRotateSpeed(20);
+		tree3->setCanMove(false);
+		tree3->setVecNowPos(new D3DXVECTOR3(0, 0, 0));
+		tree3->setOverlapLevel(-5);
+		others.push_back(tree3);
+		map->addGameObject(tree3);
 
-	BattleChara* bc1 = new BattleChara();
-	bc1->setAtk(10);
-	bc1->setCamp(CampType::CampTypeEnemy);
-	bc1->setHpMax(50);
-	bc1->setHpNow(50);
-	bc1->setMovePoint(30);
-	bc1->setMpMax(10);
-	bc1->setMpNow(10);
-	bc1->setName("enemy");
-	bc1->setSpeed(10);
-	Enemy* mesh3 = new Enemy("T-Rex.x");
-	mesh3->setIsWithAnimation(false);
-	mesh3->loadModel(pD3DDevice);
-	mesh3->setWalkSpeed(0.01f);
-	mesh3->setMaxSpeed(0.3f);
-	mesh3->setCanMove(true);
-	mesh3->setVecNowPos(new D3DXVECTOR3(1, 0, 1));
-	mesh3->setVecPatrolStart(new D3DXVECTOR3(1, 0, 1));
-	mesh3->setVecPatrolEnd(new D3DXVECTOR3(1, 0, 5));
-	mesh3->setOverlapLevel(1);
-	mesh3->setBattleChara(bc1);
-	mesh3->setTrackingRadius(10);
-	mesh3->setBattleRadius(5);
-	enemys.push_back(mesh3);
-	map->addGameObject(mesh3);
-
-
-	BattleChara* bc2 = new BattleChara();
-	bc2->setAtk(10);
-	bc2->setCamp(CampType::CampTypeEnemy);
-	bc2->setHpMax(10);
-	bc2->setHpNow(10);
-	bc2->setMovePoint(30);
-	bc2->setMpMax(10);
-	bc2->setMpNow(10);
-	bc2->setName("enemy1");
-	bc2->setSpeed(10);
-	Enemy* enemy4 = new Enemy("T-Rex.x");
-	enemy4->setIsWithAnimation(false);
-	enemy4->loadModel(pD3DDevice);
-	enemy4->setWalkSpeed(0.01f);
-	enemy4->setMaxSpeed(0.3f);
-	enemy4->setCanMove(true);
-	enemy4->setVecNowPos(new D3DXVECTOR3(13, 0, 10));
-	enemy4->setVecPatrolStart(new D3DXVECTOR3(13, 0, 1));
-	enemy4->setVecPatrolEnd(new D3DXVECTOR3(13, 0, 5));
-	enemy4->setOverlapLevel(1);
-	enemy4->setBattleChara(bc2);
-	enemy4->setTrackingRadius(10);
-	enemy4->setBattleRadius(5);
-	enemys.push_back(enemy4);
-	map->addGameObject(enemy4);
-
-	//Vigilance* mesh4 = new Vigilance();
-	//mesh4->setMaxSpeed(0.3);
-	//mesh4->setCanMove(true);
-	//mesh4->setVecNowPos(new D3DXVECTOR3(1, 0, 1));
-	//mesh4->setBelong(mesh3);
-	//mesh4->setRadius(10);
-	//mesh4->setOverlapLevel(-5);
-	//vigliances.push_back(mesh4);
-	//map->addGameObject(mesh4);
-
-	Vigilance* mesh5 = new Vigilance();
-	mesh5->setMaxSpeed(0.3f);
-	mesh5->setCanMove(true);
-	mesh5->setVecNowPos(new D3DXVECTOR3(1, 0, 1));
-	mesh5->setBelong(mesh3);
-	mesh5->setRadius(5);
-	mesh5->setOverlapLevel(-5);
-	vigliances.push_back(mesh5);
-	map->addGameObject(mesh5);
-
-	//battleInit();
+		BattleChara* bc1 = new BattleChara();
+		bc1->setAtk(10);
+		bc1->setCamp(CampType::CampTypeEnemy);
+		bc1->setHpMax(50);
+		bc1->setHpNow(50);
+		bc1->setMovePoint(30);
+		bc1->setMpMax(10);
+		bc1->setMpNow(10);
+		bc1->setName("enemy");
+		bc1->setSpeed(10);
+		Enemy* mesh3 = new Enemy("T-Rex.x");
+		mesh3->setIsWithAnimation(false);
+		mesh3->loadModel(pD3DDevice);
+		mesh3->setWalkSpeed(0.01f);
+		mesh3->setMaxSpeed(0.3f);
+		mesh3->setCanMove(true);
+		mesh3->setVecNowPos(new D3DXVECTOR3(1, 0, 1));
+		mesh3->setVecPatrolStart(new D3DXVECTOR3(1, 0, 1));
+		mesh3->setVecPatrolEnd(new D3DXVECTOR3(1, 0, 5));
+		mesh3->setOverlapLevel(1);
+		mesh3->setBattleChara(bc1);
+		mesh3->setTrackingRadius(10);
+		mesh3->setBattleRadius(5);
+		enemys.push_back(mesh3);
+		map->addGameObject(mesh3);
 
 
-	//MovePerform *per = new MovePerform();
-	//per->setActor(player);
-	//per->setMoveSpeed(0.1);
-	//per->setVecTarget(D3DXVECTOR3(-12, 0, -10));
-	//per->setVecStart(D3DXVECTOR3(player->getBoundingCenter().x, 0, player->getBoundingCenter().y));
-	//pm.addPerforms(per);
+		BattleChara* bc2 = new BattleChara();
+		bc2->setAtk(10);
+		bc2->setCamp(CampType::CampTypeEnemy);
+		bc2->setHpMax(10);
+		bc2->setHpNow(10);
+		bc2->setMovePoint(30);
+		bc2->setMpMax(10);
+		bc2->setMpNow(10);
+		bc2->setName("enemy1");
+		bc2->setSpeed(10);
+		Enemy* enemy4 = new Enemy("T-Rex.x");
+		enemy4->setIsWithAnimation(false);
+		enemy4->loadModel(pD3DDevice);
+		enemy4->setWalkSpeed(0.01f);
+		enemy4->setMaxSpeed(0.3f);
+		enemy4->setCanMove(true);
+		enemy4->setVecNowPos(new D3DXVECTOR3(13, 0, 10));
+		enemy4->setVecPatrolStart(new D3DXVECTOR3(13, 0, 1));
+		enemy4->setVecPatrolEnd(new D3DXVECTOR3(13, 0, 5));
+		enemy4->setOverlapLevel(1);
+		enemy4->setBattleChara(bc2);
+		enemy4->setTrackingRadius(10);
+		enemy4->setBattleRadius(5);
+		enemys.push_back(enemy4);
+		map->addGameObject(enemy4);
 
-	//Parts* par = new Parts();
-	//par->setModel(new Cube());
+		//Vigilance* mesh4 = new Vigilance();
+		//mesh4->setMaxSpeed(0.3);
+		//mesh4->setCanMove(true);
+		//mesh4->setVecNowPos(new D3DXVECTOR3(1, 0, 1));
+		//mesh4->setBelong(mesh3);
+		//mesh4->setRadius(10);
+		//mesh4->setOverlapLevel(-5);
+		//vigliances.push_back(mesh4);
+		//map->addGameObject(mesh4);
 
-	//Parts* par2 = new Parts();
-	//par2->setModel(new Cube());
-	//par2->setOffsetS({ 2, 2, 2 });
-	//par2->setOffsetT({ 0, 0, 0 });
-	//par2->setOffsetR({ 0, 0, 0 });
-	//par->addChild(par2);
+		Vigilance* mesh5 = new Vigilance();
+		mesh5->setMaxSpeed(0.3f);
+		mesh5->setCanMove(true);
+		mesh5->setVecNowPos(new D3DXVECTOR3(1, 0, 1));
+		mesh5->setBelong(mesh3);
+		mesh5->setRadius(5);
+		mesh5->setOverlapLevel(-5);
+		vigliances.push_back(mesh5);
+		map->addGameObject(mesh5);
 
-	//Parts* par3 = new Parts();
-	//par3->setModel(new Cube());
-	//par3->setOffsetT({ 5, 0, 0 });
-	//par3->setOffsetR({ 0, 0, 0 });
-	//par->addChild(par3);
-
-	//Parts* par4 = new Parts();
-	//par4->setModel(new Cube());
-	//par4->setOffsetT({ -5, 0, 0 });
-	//par4->setOffsetR({ 0, 0, 0 });
-	//par->addChild(par4);
-
-	//Parts* par5 = new Parts();
-	//par5->setModel(new Cube());
-	//par5->setOffsetT({ 0, 2, 0 });
-	//par5->setOffsetR({ 0, 0, 0 });
-	//par->addChild(par5);
-	//
-	//MyMesh* mm = new MyMesh();
-	//mm->setParts(par);
-	//mm->setVecNowPos(new D3DXVECTOR3(0, 0, -10));
-	//mm->setMaxSpeed(0.3);
-	//mm->setCanMove(true);
-	//mm->setOverlapLevel(1);
-	//others.push_back(mm);
-	//map->addGameObject(mm);
-
-	//AnimationTemplate animateTamp(1, { 0, 0, 0 }, { 0, 0, 0 }, { 5, 0, 0 }, { 0, 0, 0 }, 300);
-	//AnimationTemplate animateTamp1(4, { 0, 0, 0 }, { 0, 120, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, 300);
-	//AnimationTemplate animateTamp2(1, { 0, 0, 0 }, { 0, 120, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, 300);
-	//AnimationTemplate animateTamp3(1, { 0, 0, 0 }, { 0, 120, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, 300);
-	//AnimationTemplate animateTamp4(1, { 0, 0, 0 }, { 0, 120, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, 300);
-	//vector<AnimationInfoTemplate> list;
-	//list.push_back({ &animateTamp, 0 });
-	//list.push_back({ &animateTamp1, 150 });
-	//AnimationManage::addAnimateTemplate(list);
-	//am.addAnimation(0, mm);
+		//battleInit();
 
 
-	gs = GameState::GameStateGameRunning;
+		//MovePerform *per = new MovePerform();
+		//per->setActor(player);
+		//per->setMoveSpeed(0.1);
+		//per->setVecTarget(D3DXVECTOR3(-12, 0, -10));
+		//per->setVecStart(D3DXVECTOR3(player->getBoundingCenter().x, 0, player->getBoundingCenter().y));
+		//pm.addPerforms(per);
+
+		//Parts* par = new Parts();
+		//par->setModel(new Cube());
+
+		//Parts* par2 = new Parts();
+		//par2->setModel(new Cube());
+		//par2->setOffsetS({ 2, 2, 2 });
+		//par2->setOffsetT({ 0, 0, 0 });
+		//par2->setOffsetR({ 0, 0, 0 });
+		//par->addChild(par2);
+
+		//Parts* par3 = new Parts();
+		//par3->setModel(new Cube());
+		//par3->setOffsetT({ 5, 0, 0 });
+		//par3->setOffsetR({ 0, 0, 0 });
+		//par->addChild(par3);
+
+		//Parts* par4 = new Parts();
+		//par4->setModel(new Cube());
+		//par4->setOffsetT({ -5, 0, 0 });
+		//par4->setOffsetR({ 0, 0, 0 });
+		//par->addChild(par4);
+
+		//Parts* par5 = new Parts();
+		//par5->setModel(new Cube());
+		//par5->setOffsetT({ 0, 2, 0 });
+		//par5->setOffsetR({ 0, 0, 0 });
+		//par->addChild(par5);
+		//
+		//MyMesh* mm = new MyMesh();
+		//mm->setParts(par);
+		//mm->setVecNowPos(new D3DXVECTOR3(0, 0, -10));
+		//mm->setMaxSpeed(0.3);
+		//mm->setCanMove(true);
+		//mm->setOverlapLevel(1);
+		//others.push_back(mm);
+		//map->addGameObject(mm);
+
+		//AnimationTemplate animateTamp(1, { 0, 0, 0 }, { 0, 0, 0 }, { 5, 0, 0 }, { 0, 0, 0 }, 300);
+		//AnimationTemplate animateTamp1(4, { 0, 0, 0 }, { 0, 120, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, 300);
+		//AnimationTemplate animateTamp2(1, { 0, 0, 0 }, { 0, 120, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, 300);
+		//AnimationTemplate animateTamp3(1, { 0, 0, 0 }, { 0, 120, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, 300);
+		//AnimationTemplate animateTamp4(1, { 0, 0, 0 }, { 0, 120, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, 300);
+		//vector<AnimationInfoTemplate> list;
+		//list.push_back({ &animateTamp, 0 });
+		//list.push_back({ &animateTamp1, 150 });
+		//AnimationManage::addAnimateTemplate(list);
+		//am.addAnimation(0, mm);
+		
+		gs = GameState::GameStateGameRunning;
 }
 
 void GameManage::gameStateUpdate(void)
 {
-	//battle = NULL;
-	player->setIsReadInput(true);
-	int enemyNum = enemys.size();
-	for (int i = 0; i < enemyNum; i++)
+	if (fadeAlpha >= 255 && isFade != -1)
 	{
-		enemys[i]->setIsPatrol(true);
+		setIsFade(-1);
 	}
-
-
-	if (pm.playPerforms())
+	if (isFade == 0)
 	{
+		//battle = NULL;
+		player->setIsReadInput(true);
 		int enemyNum = enemys.size();
 		for (int i = 0; i < enemyNum; i++)
 		{
-			enemys[i]->setIsPatrol(false);
+			enemys[i]->setIsPatrol(true);
 		}
-		player->setIsReadInput(false);
-		lockUnmoveObject();
-		return;
-	}
 
-	if (checkIsInBattle())
-	{
-		if (battle->getBattleState() != BattleState::BattleStateMapMove)
+
+		if (pm.playPerforms())
 		{
 			int enemyNum = enemys.size();
 			for (int i = 0; i < enemyNum; i++)
 			{
 				enemys[i]->setIsPatrol(false);
 			}
+			player->setIsReadInput(false);
+			lockUnmoveObject();
+			return;
 		}
-		player->setIsReadInput(false);
-		battleUpdate();
+
+		if (checkIsInBattle())
+		{
+			if (battle->getBattleState() != BattleState::BattleStateMapMove)
+			{
+				int enemyNum = enemys.size();
+				for (int i = 0; i < enemyNum; i++)
+				{
+					enemys[i]->setIsPatrol(false);
+				}
+			}
+			player->setIsReadInput(false);
+			battleUpdate();
+		}
+		cameraUpdate();
+		animationUpdate();
+		enemyUpdate();
+		othersUpdate();
+		checkEnd();
+
+		if (Keyboard_IsTrigger(DIK_SPACE))
+		{
+			gs = GameState::GameStateGameClean;
+		}
 	}
-	cameraUpdate();
-	animationUpdate();
-	enemyUpdate();
-	othersUpdate();
-	checkEnd();
+	if (fadeAlpha == 0)
+	{
+		setIsFade(0);
+	}
 }
 
 void GameManage::gameStateClean(void)
 {
+	int gameObjectsNum = others.size();
+	for (int i = 0; i < gameObjectsNum; i++)
+	{
+		SAFE_DELETE(others[i]);
+	}
+	gameObjectsNum = vigliances.size();
+	for (int i = 0; i < gameObjectsNum; i++)
+	{
+		SAFE_DELETE(vigliances[i]);
+	}
+	gameObjectsNum = enemys.size();
+	for (int i = 0; i < gameObjectsNum; i++)
+	{
+		SAFE_DELETE(enemys[i]);
+	}
+	gameObjectsNum = uis.size();
+	for (int i = 0; i < gameObjectsNum; i++)
+	{
+		SAFE_DELETE(uis[i]);
+	}
+	safe_delete<Player>(player);
+
+	enemys.clear();
+	others.clear();
+	vigliances.clear();
+	uis.clear();
+
 	gs = GameState::GameStateEndInit;
 }
 
@@ -662,4 +735,38 @@ void GameManage::lockUnmoveObject(void)
 void GameManage::setPD3DDevice(LPDIRECT3DDEVICE9 pD3DDevice)
 {
 	this->pD3DDevice = pD3DDevice;
+}
+
+void GameManage::setIsFade(BOOL isFade)
+{
+	this->isFade = isFade;
+	if (isFade == 1)
+	{
+		fadeAlpha = 0;
+	}
+	else if (isFade == -1)
+	{
+		fadeAlpha = 255;
+	}
+}
+
+void GameManage::fade(void)
+{
+	if (isFade != 0)
+	{
+		if (isFade == 1)
+		{
+			fadeAlpha = fadeAlpha + 1 > 255 ? 255 : fadeAlpha + 1;
+		}
+		else
+		{
+			fadeAlpha = fadeAlpha - 1 < 0 ? 0 : fadeAlpha - 1;
+		}
+
+		UI *ui = new UI({ 0, 0 }, Common::screen_width, Common::screen_height, -1);
+		ui->setColor(D3DCOLOR_RGBA(0, 0, 0, fadeAlpha));
+		fadeFrame->setBackground(ui);
+		fadeFrame->draw(pD3DDevice);
+		delete ui;
+	}
 }
