@@ -53,7 +53,7 @@ void Model::dataUpdate(void)
 		boundingBoxMin = { FLT_MAX, FLT_MAX ,FLT_MAX };
 		boundingBoxMax = { FLT_MIN, FLT_MIN, FLT_MIN };
 		calBoundingBox(m_pFrameRoot, boundingBoxMin, boundingBoxMax);
-		UpdateAnimation(0.01);
+		updateAnimation(0.01);
 	}
 	else
 	{
@@ -80,8 +80,8 @@ void Model::draw(LPDIRECT3DDEVICE9 pD3DDevice)
 		}
 		else
 		{		
-			UpdateFrameMatrices(m_pFrameRoot, getMtxWorld());
-			DrawFrame(pD3DDevice, m_pFrameRoot);
+			updateFrameMatrices(m_pFrameRoot, getMtxWorld());
+			drawFrame(pD3DDevice, m_pFrameRoot);
 		}
 
 
@@ -96,8 +96,11 @@ void Model::draw(LPDIRECT3DDEVICE9 pD3DDevice)
 
 		D3DXMATRIX mtxBoxWorld = *getMtxWorld();
 		mtxBoxWorld._42 += (boundingBoxMax.y - boundingBoxMin.y) / 2;
-
-		D3DXCreateBox(pD3DDevice, boundingBoxMax.x - boundingBoxMin.x, boundingBoxMax.y - boundingBoxMin.y, boundingBoxMax.z - boundingBoxMin.z, &boxMesh, 0);
+		D3DXVECTOR3 scale = *getVecScale();
+		float x = (boundingBoxMax.x - boundingBoxMin.x) / scale.x;
+		float y = (boundingBoxMax.y - boundingBoxMin.y) / scale.y;
+		float z = (boundingBoxMax.z - boundingBoxMin.z) / scale.z;
+		D3DXCreateBox(pD3DDevice, x, y, z, &boxMesh, 0);
 		//D3DXCreateSphere(pD3DDevice, boundingSphereRadius, 20, 20, &sphereMesh, 0);
 		pD3DDevice->SetTransform(D3DTS_WORLD, &mtxBoxWorld);
 		boxMesh->DrawSubset(0);
@@ -121,7 +124,7 @@ void Model::loadModel(LPDIRECT3DDEVICE9 pD3DDevice)
 	{
 		m_pAllocateHier = new CAllocateHierarchy();
 		D3DXLoadMeshHierarchyFromX(modelPath.c_str(), D3DXMESH_MANAGED, pD3DDevice, m_pAllocateHier, NULL, &m_pFrameRoot, &m_pAnimController);
-		SetupBoneMatrixPointers(m_pFrameRoot, m_pFrameRoot);
+		setupBoneMatrixPointers(m_pFrameRoot, m_pFrameRoot);
 
 		boundingBoxMin = { FLT_MAX, FLT_MAX ,FLT_MAX };
 		boundingBoxMax = { FLT_MIN, FLT_MIN, FLT_MIN };
@@ -174,6 +177,10 @@ void Model::calBoundingBox(void)
 	D3DXComputeBoundingBox((D3DXVECTOR3*)v, num, D3DXGetFVFVertexSize(mesh->GetFVF()), &boundingBoxMin, &boundingBoxMax);
 	//D3DXComputeBoundingSphere((D3DXVECTOR3*)v, num, D3DXGetFVFVertexSize(mesh->GetFVF()), &boundingSphereCenter, &boundingSphereRadius);
 	mesh->UnlockVertexBuffer();
+
+	D3DXVECTOR3 scale = *getVecScale();
+	boundingBoxMax = { scale.x * boundingBoxMax.x, scale.y * boundingBoxMax.y, scale.z * boundingBoxMax.z };
+	boundingBoxMin = { scale.x * boundingBoxMin.x, scale.y * boundingBoxMin.y, scale.z * boundingBoxMin.z };
 }
 
 void Model::calBoundingBox(LPD3DXFRAME pFrameBase, D3DXVECTOR3 &boundingBoxMin, D3DXVECTOR3 &boundingBoxMax)
@@ -192,6 +199,9 @@ void Model::calBoundingBox(LPD3DXFRAME pFrameBase, D3DXVECTOR3 &boundingBoxMin, 
 		D3DXComputeBoundingBox((D3DXVECTOR3*)v, num, D3DXGetFVFVertexSize(pMesh->GetFVF()), &boxMin, &boxMax);
 		pMesh->UnlockVertexBuffer();
 
+		D3DXVECTOR3 scale = *getVecScale();
+		boxMax = { scale.x * boxMax.x, scale.y * boxMax.y, scale.z * boxMax.z };
+		boxMin = { scale.x * boxMin.x, scale.y * boxMin.y, scale.z * boxMin.z };
 		boundingBoxMin = Physics::takeSmallerVaule(boxMin, boundingBoxMin);
 		boundingBoxMax = Physics::takebiggerVaule(boxMax, boundingBoxMax);
 	}
@@ -270,7 +280,7 @@ void Model::setBoundingCenter(D3DXVECTOR2 center)
 // Name: SetupBoneMatrixPointers()
 // Desc: 设置好各级框架的组合变换矩阵。
 //--------------------------------------------------------------------------------------
-HRESULT Model::SetupBoneMatrixPointers(LPD3DXFRAME pFrameBase, LPD3DXFRAME pFrameRoot)
+HRESULT Model::setupBoneMatrixPointers(LPD3DXFRAME pFrameBase, LPD3DXFRAME pFrameRoot)
 {
 	if (pFrameBase->pMeshContainer != NULL)
 	{
@@ -293,13 +303,13 @@ HRESULT Model::SetupBoneMatrixPointers(LPD3DXFRAME pFrameBase, LPD3DXFRAME pFram
 
 	if (pFrameBase->pFrameSibling != NULL)
 	{
-		if (FAILED(SetupBoneMatrixPointers(pFrameBase->pFrameSibling, pFrameRoot)))
+		if (FAILED(setupBoneMatrixPointers(pFrameBase->pFrameSibling, pFrameRoot)))
 			return E_FAIL;
 	}
 
 	if (pFrameBase->pFrameFirstChild != NULL)
 	{
-		if (FAILED(SetupBoneMatrixPointers(pFrameBase->pFrameFirstChild, pFrameRoot)))
+		if (FAILED(setupBoneMatrixPointers(pFrameBase->pFrameFirstChild, pFrameRoot)))
 			return E_FAIL;
 	}
 
@@ -310,26 +320,26 @@ HRESULT Model::SetupBoneMatrixPointers(LPD3DXFRAME pFrameBase, LPD3DXFRAME pFram
 // Name: DrawFrame()
 // Desc: 绘制骨骼
 //--------------------------------------------------------------------------------------
-void Model::DrawFrame(IDirect3DDevice9* pd3dDevice, LPD3DXFRAME pFrame)
+void Model::drawFrame(IDirect3DDevice9* pd3dDevice, LPD3DXFRAME pFrame)
 {
 	if (pFrame == NULL) return;
 	LPD3DXMESHCONTAINER pMeshContainer;
 	pMeshContainer = pFrame->pMeshContainer;                    // 取得网格容器
 	while (pMeshContainer != NULL)
 	{
-		DrawMeshContainer(pd3dDevice, pMeshContainer, pFrame);  // 绘制非空蒙皮网格
+		drawMeshContainer(pd3dDevice, pMeshContainer, pFrame);  // 绘制非空蒙皮网格
 		pMeshContainer = pMeshContainer->pNextMeshContainer;    // 遍历所有网格容器
 	}
 
-	DrawFrame(pd3dDevice, pFrame->pFrameSibling);               // 绘制兄弟框架
-	DrawFrame(pd3dDevice, pFrame->pFrameFirstChild);            // 绘制子框架
+	drawFrame(pd3dDevice, pFrame->pFrameSibling);               // 绘制兄弟框架
+	drawFrame(pd3dDevice, pFrame->pFrameFirstChild);            // 绘制子框架
 }
 
 //--------------------------------------------------------------------------------------
 // Name: DrawMeshContainer()
 // Desc: 绘制蒙皮容器中的蒙皮网格
 //--------------------------------------------------------------------------------------
-void Model::DrawMeshContainer(IDirect3DDevice9* pd3dDevice, LPD3DXMESHCONTAINER pMeshContainerBase, LPD3DXFRAME pFrameBase)
+void Model::drawMeshContainer(IDirect3DDevice9* pd3dDevice, LPD3DXMESHCONTAINER pMeshContainerBase, LPD3DXFRAME pFrameBase)
 {
 	D3DXMESHCONTAINER_DERIVED* pMeshContainer = (D3DXMESHCONTAINER_DERIVED*)pMeshContainerBase;
 	D3DXFRAME_DERIVED* pFrame = (D3DXFRAME_DERIVED*)pFrameBase;
@@ -409,7 +419,7 @@ void Model::DrawMeshContainer(IDirect3DDevice9* pd3dDevice, LPD3DXMESHCONTAINER 
 // Name: UpdateFrameMatrics()
 // Desc: 更新框架中的变换矩阵
 //--------------------------------------------------------------------------------------
-void Model::UpdateFrameMatrices(LPD3DXFRAME pFrameBase, LPD3DXMATRIX pParentMatrix)
+void Model::updateFrameMatrices(LPD3DXFRAME pFrameBase, LPD3DXMATRIX pParentMatrix)
 {
 	if (pFrameBase == NULL || pParentMatrix == NULL) return;
 	D3DXFRAME_DERIVED* pFrame = (D3DXFRAME_DERIVED*)pFrameBase;
@@ -417,8 +427,8 @@ void Model::UpdateFrameMatrices(LPD3DXFRAME pFrameBase, LPD3DXMATRIX pParentMatr
 	// 将当前骨骼的相对于父骨骼的偏移矩阵作累积运算
 	D3DXMatrixMultiply(&pFrame->CombinedTransformationMatrix, &pFrame->TransformationMatrix, pParentMatrix);
 
-	UpdateFrameMatrices(pFrame->pFrameSibling, pParentMatrix);                              // 更新兄弟骨骼
-	UpdateFrameMatrices(pFrame->pFrameFirstChild, &pFrame->CombinedTransformationMatrix);   // 更新子骨骼
+	updateFrameMatrices(pFrame->pFrameSibling, pParentMatrix);                              // 更新兄弟骨骼
+	updateFrameMatrices(pFrame->pFrameFirstChild, &pFrame->CombinedTransformationMatrix);   // 更新子骨骼
 }
 
 //---------------------------------------------------------
@@ -426,7 +436,7 @@ void Model::UpdateFrameMatrices(LPD3DXFRAME pFrameBase, LPD3DXMATRIX pParentMatr
 //Desc:关于动画的创建，更新，绘制
 //---------------------------------------------------------
 
-void Model::SetAnimationByName(LPCTSTR name)
+void Model::setAnimationByName(LPCTSTR name)
 {
 	//m_pAnimController->SetTrackPosition(0, 0.5);
 	LPD3DXANIMATIONSET pAnimationSet = NULL;
@@ -436,7 +446,7 @@ void Model::SetAnimationByName(LPCTSTR name)
 	m_pAnimController->SetTrackEnable(0, true);
 }
 
-void Model::SetAnimationByName(LPCTSTR name, int track, float wigth)
+void Model::setAnimationByName(LPCTSTR name, int track, float wigth)
 {
 	//m_pAnimController->SetTrackPosition(0, 0.5);
 	LPD3DXANIMATIONSET pAnimationSet = NULL;
@@ -449,7 +459,14 @@ void Model::SetAnimationByName(LPCTSTR name, int track, float wigth)
 
 }
 
-void Model::UpdateAnimation(double timeDelay)
+LPD3DXANIMATIONSET Model::getAnimationSetByName(LPCTSTR name)
+{
+	LPD3DXANIMATIONSET pAnimationSet = NULL;
+	m_pAnimController->GetAnimationSetByName(name, &pAnimationSet);
+	return pAnimationSet;
+}
+
+void Model::updateAnimation(double timeDelay)
 {
 	m_pAnimController->AdvanceTime(timeDelay, NULL);
 }

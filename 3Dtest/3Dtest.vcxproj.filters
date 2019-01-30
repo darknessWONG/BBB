@@ -141,6 +141,9 @@
     <ClInclude Include="AllocateHierarchy.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Billboard.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -261,6 +264,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="AllocateHierarchy.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Billboard.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

@@ -36,21 +36,21 @@ public:
 	//提供给外界的接口
 
 	//通过名字设置要播放的骨骼动画
-	void SetAnimationByName(LPCTSTR name);
-	void SetAnimationByName(LPCTSTR name, int track, float wigth);
-
+	void setAnimationByName(LPCTSTR name);
+	void setAnimationByName(LPCTSTR name, int track, float wigth);
+	LPD3DXANIMATIONSET getAnimationSetByName(LPCTSTR name);
 	//更新动画
-	void UpdateAnimation(double timeDelay);
+	void updateAnimation(double timeDelay);
 
 
 
 private:
 	//一些微软自带函数，关于骨骼动画加载与绘制更新的函数，将其封装，不使用这些接口
 
-	void DrawMeshContainer(IDirect3DDevice9* pd3dDevice, LPD3DXMESHCONTAINER pMeshContainerBase, LPD3DXFRAME pFrameBase);
-	void DrawFrame(IDirect3DDevice9* pd3dDevice, LPD3DXFRAME pFrame);
-	HRESULT SetupBoneMatrixPointers(LPD3DXFRAME pFrameBase, LPD3DXFRAME pFrameRoot);
-	void UpdateFrameMatrices(LPD3DXFRAME pFrameBase, LPD3DXMATRIX pParentMatrix);
+	void drawMeshContainer(IDirect3DDevice9* pd3dDevice, LPD3DXMESHCONTAINER pMeshContainerBase, LPD3DXFRAME pFrameBase);
+	void drawFrame(IDirect3DDevice9* pd3dDevice, LPD3DXFRAME pFrame);
+	HRESULT setupBoneMatrixPointers(LPD3DXFRAME pFrameBase, LPD3DXFRAME pFrameRoot);
+	void updateFrameMatrices(LPD3DXFRAME pFrameBase, LPD3DXMATRIX pParentMatrix);
 
 
 

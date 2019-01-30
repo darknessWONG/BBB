@@ -17,13 +17,13 @@ void Light::init(LPDIRECT3DDEVICE9 pD3DDevice)
 	pD3DDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
 	ZeroMemory(&light, sizeof(light));
 	light.Type = D3DLIGHT_DIRECTIONAL;
-	D3DXVECTOR3 vecDirLight(-1.0f, -1.0f, -1.0f);
+	D3DXVECTOR3 vecDirLight(-1.0f, -1.0f, 1.0f);
 	D3DXVec3Normalize(&vecDirLight, &vecDirLight);
 	light.Direction = vecDirLight;
 	light.Diffuse.r = 10.0f;
 	light.Diffuse.g = 10.0f;
 	light.Diffuse.b = 10.0f;
-	light.Diffuse.a = 255.0f;
+	light.Diffuse.a = 255;
 }
 
 void Light::lightSet(LPDIRECT3DDEVICE9 pD3DDevice)
@@ -36,11 +36,7 @@ void Light::lightSet(LPDIRECT3DDEVICE9 pD3DDevice)
 	//normalize the normals which scaled when scaling
 	pD3DDevice->SetRenderState(D3DRS_NORMALIZENORMALS, TRUE);
 	//Ambient light
-	pD3DDevice->SetRenderState(D3DRS_AMBIENT, D3DCOLOR_RGBA(128, 128, 128, 255));
+	pD3DDevice->SetRenderState(D3DRS_AMBIENT, D3DCOLOR_RGBA(255, 255, 255, 255));
 	//pD3DDevice->SetRenderState(D3DRS_AMBIENTMATERIALSOURCE, D3DMCS_COLOR1);
 	pD3DDevice->SetRenderState(D3DRS_AMBIENTMATERIALSOURCE, D3DMCS_MATERIAL);
-
-	//MyDirect3D_GetDevice()->SetRenderState(D3DRS_AMBIENT, D3DCOLOR_RGBA(255, 255, 255, 255));
-	//MyDirect3D_GetDevice()->SetRenderState(D3DRS_AMBIENTMATERIALSOURCE, D3DMCS_COLOR1);
-
 }

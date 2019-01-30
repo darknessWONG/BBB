@@ -41,6 +41,11 @@ void Camera::draw(LPDIRECT3DDEVICE9 pD3DDevice)
 	D3DXMatrixIdentity(&mtxView);
 
 	D3DXMatrixLookAtLH(&mtxView, getVecNowPos(), vecWatchAt, getVecUp());
+	D3DXMatrixInverse(&invMatrix, NULL, &mtxView);
+	invMatrix._41 = 0;
+	invMatrix._42 = 0;
+	invMatrix._43 = 0;
+	//invMatrix = mtxView;
 
 	//projection matirx
 	D3DXMATRIX mtxProjection;
@@ -73,6 +78,17 @@ void Camera::calWatchAt(void)
 {
 	D3DXVECTOR3 watchAt(*getVecNowPos() + *geteVecFront() * distance);
 	setVecWatchAt(&watchAt);
+}
+
+void Camera::calPosition(void)
+{
+	D3DXVECTOR3 position(*vecWatchAt - *geteVecFront() * distance);
+	setVecNowPos(&position);
+}
+
+D3DXMATRIX Camera::getInvMatrix(void) const
+{
+	return invMatrix;
 }
 
 D3DXVECTOR3* Camera::getVecWatchAt(void)

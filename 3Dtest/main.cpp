@@ -298,7 +298,14 @@ void draw(void)
 
 #if defined(_DEBUG) || defined(DEBUG)
 	// FPSのデバック表示
-	//DebugFont_Draw(8, 8, "FPS : %.2f", g_FPS);
+	//Font_Draw(8, 8, "FPS : %.2f", g_FPS);
+	stringstream ss;
+	ss << g_FPS;
+	string text;
+	ss >> text;
+	char a[100];
+	strcpy_s(a, text.c_str());
+	Font_Draw(8, 8, a);
 #endif // _DEBUG || DEBUG
 
 	// 描画バッチ命令の終了

@@ -62,6 +62,8 @@ public:
 	void setOverlapLevel(int overlapLevel);
 	bool getIsDisplay(void);
 	void setIsDisplay(bool isDisplay);
+	D3DXVECTOR3 *getVecScale(void);
+	void setVecScale(D3DXVECTOR3* vecScale);
 	D3DXVECTOR3* getVecRotateAxis(void);
 	void setVecRotateAxis(D3DXVECTOR3* vecRotateAxis);
 	float getRotateSpeed(void);
@@ -93,6 +95,8 @@ private:
 	//if lower the 0, will not
 	int overlapLevel;
 	bool isDisplay;
+
+	D3DXVECTOR3 *vecScale;
 
 	D3DXVECTOR3 *vecRotateAxis;
 	float rotateSpeed;

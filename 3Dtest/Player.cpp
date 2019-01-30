@@ -53,6 +53,23 @@ void Player::dataUpdate(void)
 		D3DXVECTOR3 nowSpeed = *getVecMoveSpeed();
 		D3DXVec3Normalize(&nowSpeed, &nowSpeed);
 		setVecTargetFront(&nowSpeed);
+
+	}
+
+	float speedSum = D3DXVec3LengthSq(getVecMoveSpeed());
+	if (Physics::round(speedSum, FLOAT_BITS) != 0)
+	{
+		if (getIsWithAnimation())
+		{
+			setAnimationByName("Jog");
+		}
+	}
+	else
+	{
+		if (getIsWithAnimation())
+		{
+			setAnimationByName("Loiter");
+		}
 	}
 
 	Chara::dataUpdate();

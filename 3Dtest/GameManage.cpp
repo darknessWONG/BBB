@@ -12,6 +12,7 @@
 #include "UI.h"
 #include "MyMesh.h"
 #include "AnimationSet.h"
+#include "Billboard.h"
 
 GameManage::GameManage()
 {
@@ -45,6 +46,7 @@ void GameManage::init(void)
 	TextureHandler2D::LoadTextures(pD3DDevice);
 
 	Cube::initStaticMember(pD3DDevice);
+	Billboard::initStaticMember(pD3DDevice);
 }
 
 void GameManage::beforeUpdate(void)
@@ -129,13 +131,6 @@ void GameManage::draw(void)
 	{
 		map->drawGameObjects(pD3DDevice);
 	}
-
-	//int uiNum = uis.size();
-	//for (int i = 0; i < uiNum; i++)
-	//{
-	//	uis[i]->dataUpdate();
-	//	uis[i]->draw(pD3DDevice);
-	//}
 }
 
 void GameManage::release(void)
@@ -169,9 +164,10 @@ void GameManage::gameStateInit(void)
 	bc->setMpNow(10);
 	bc->setName("wong");
 	bc->setSpeed(10);
-	Player* mesh = new Player("radio.x");
-	mesh->setIsWithAnimation(false);
+	Player* mesh = new Player("tiny_4anim.x");
+	mesh->setIsWithAnimation(true);
 	mesh->loadModel(pD3DDevice);
+	mesh->setVecScale(new D3DXVECTOR3(0.01, 0.01, 0.01));
 	mesh->setWalkSpeed(0.01f);
 	mesh->setMaxSpeed(0.3f);
 	mesh->setCanMove(true);
@@ -263,6 +259,7 @@ void GameManage::gameStateInit(void)
 	enemy4->setBattleRadius(5);
 	enemys.push_back(enemy4);
 	map->addGameObject(enemy4);
+
 	//Vigilance* mesh4 = new Vigilance();
 	//mesh4->setMaxSpeed(0.3);
 	//mesh4->setCanMove(true);
@@ -282,6 +279,19 @@ void GameManage::gameStateInit(void)
 	mesh5->setOverlapLevel(-5);
 	vigliances.push_back(mesh5);
 	map->addGameObject(mesh5);
+
+	Billboard* billboard = new Billboard();
+	billboard->setCamera(camera);
+	billboard->setIsDisplay(true);
+	billboard->setMaxSpeed(0.3f);
+	billboard->setCanMove(true);
+	billboard->setVecNowPos(new D3DXVECTOR3(0, 3, 0));
+	billboard->setOverlapLevel(-5);
+	billboard->setTextureIndex(0);
+	billboard->setIsDelete(false);
+	billboard->setVecScale(new D3DXVECTOR3(5, 5, 5));
+	others.push_back(billboard);
+	map->addGameObject(billboard);
 
 	//battleInit();
 
@@ -381,6 +391,7 @@ void GameManage::gameStateUpdate(void)
 		player->setIsReadInput(false);
 		battleUpdate();
 	}
+	cameraUpdate();
 	animationUpdate();
 	enemyUpdate();
 	checkEnd();
@@ -411,6 +422,15 @@ void GameManage::checkEnd(void)
 	if (player->getBattleChara() != NULL && player->getBattleChara()->getHpNow() <= 0)
 	{
 		gs = GameState::GameStateGameClean;
+	}
+}
+
+void GameManage::cameraUpdate(void)
+{
+	if (gs == GameState::GameStateGameRunning && player != NULL)
+	{
+		camera->setVecWatchAt(player->getVecNowPos());
+		camera->calPosition();
 	}
 }
 
@@ -476,6 +496,7 @@ void GameManage::battleInit(void)
 	if (!checkIsInBattle())
 	{
 		Player* pointMesh = new Player("face.x");
+		pointMesh->setIsWithAnimation(false);
 		pointMesh->loadModel(pD3DDevice);
 		pointMesh->setWalkSpeed(0.01f);
 		pointMesh->setMaxSpeed(0.3f);
@@ -495,7 +516,6 @@ void GameManage::battleInit(void)
 
 		battle = new Battle(map, &pm, cmdMeum, textBox, statusBox, pointMesh);
 		battle->addCharas(player);
-		//battle->setTextBox(textBox);
 		battleResult = BattleResultType::BattleResultTypeUnknow;
 	}
 }

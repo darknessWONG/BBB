@@ -39,6 +39,7 @@ public:
 	void endStateClean(void);
 	void checkEnd(void);
 
+	void cameraUpdate(void);
 	void enemyUpdate(void);
 	void enemyUpdate(Enemy* enemy);
 	void animationUpdate(void);

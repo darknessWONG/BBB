@@ -21,6 +21,8 @@ public:
 	public function
 	============================================*/
 	void calWatchAt(void);
+	void calPosition(void);
+	D3DXMATRIX getInvMatrix(void) const;
 
 	/*===========================================
 	public geter / seter
@@ -32,5 +34,6 @@ public:
 private:
 	D3DXVECTOR3* vecWatchAt;
 	float distance;   //distance form camera to At(bigger than 1)
+	D3DXMATRIX invMatrix;
 };
 

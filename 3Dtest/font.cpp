@@ -46,10 +46,8 @@ void Font_SetColor(int r, int g, int b, int a)
 
 void Font_Draw(float x, float y, char * text)
 {
-#ifdef _DEBUG
 	RECT rect = { (LONG)x, (LONG)y, (LONG)Common::screen_width, (LONG)Common::screen_height };
 	g_pD3DXFont->DrawText(NULL, text, -1, &rect, DT_LEFT, color);
-#endif // _DEBUG
 }
 
 void Font_Draw(float x, float y, float width, float height, char * text)

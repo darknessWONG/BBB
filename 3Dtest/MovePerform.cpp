@@ -38,10 +38,11 @@ void MovePerform::play(void)
 
 	D3DXVECTOR2 boundingCenter = actor->getBoundingCenter();
 	D3DXVECTOR2 newCenter = { vecTarget.x, vecTarget.z };
-	D3DXVECTOR2 newFront = boundingCenter - newCenter;
+	D3DXVECTOR2 newFront = newCenter - boundingCenter;
 	D3DXVECTOR3 newFront3 = { newFront.x, 0, newFront.y };
 	D3DXVec3Normalize(&newFront3, &newFront3);
 	actor->setVecTargetFront(&newFront3);
+
 }
 
 bool MovePerform::checkEnd(void)
