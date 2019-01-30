@@ -58,13 +58,10 @@ void Model::dataUpdate(void)
 	{
 		boundingBoxMin = { FLT_MAX, FLT_MAX ,FLT_MAX };
 		boundingBoxMax = { FLT_MIN, FLT_MIN, FLT_MIN };
-		calBoundingBox(m_pFrameRoot, boundingBoxMin, boundingBoxMax);
 		updateAnimation(0.01);
 	}
-	else
-	{
-		calBoundingBox();
-	}
+
+	calBounding();
 
 	GameObject::dataUpdate();
 }
@@ -133,7 +130,6 @@ void Model::loadModel(LPDIRECT3DDEVICE9 pD3DDevice)
 
 		boundingBoxMin = { FLT_MAX, FLT_MAX ,FLT_MAX };
 		boundingBoxMax = { FLT_MIN, FLT_MIN, FLT_MIN };
-		calBoundingBox(m_pFrameRoot, boundingBoxMin, boundingBoxMax);
 	}
 	else
 	{
@@ -163,8 +159,9 @@ void Model::loadModel(LPDIRECT3DDEVICE9 pD3DDevice)
 				hr = D3DXCreateTextureFromFile(pD3DDevice, materials[i].pTextureFilename, &meshTexture[i]);
 			}
 		}
-		calBoundingBox();
 	}
+
+	calBounding();
 
 	if (mtrlBuffer != NULL)
 	{
@@ -239,6 +236,18 @@ bool Model::getIsWithAnimation(void)
 void Model::setIsWithAnimation(bool isWithAnimation)
 {
 	this->isWithAnimation = isWithAnimation;
+}
+
+void Model::calBounding(void)
+{
+	if (isWithAnimation)
+	{
+		calBoundingBox(m_pFrameRoot, boundingBoxMin, boundingBoxMax);
+	}
+	else
+	{
+		calBoundingBox();
+	}
 }
 
 RECTF Model::getBoundingRect(void)

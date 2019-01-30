@@ -68,16 +68,17 @@ void MapManage::updateGameObejcts(void)
 			float gameObjCenterPos = gameObjects[i]->getBoundingCenter().x - new_point.x;
 			if (xSpeed.x > 0)
 			{
-				new_point.x = (list[0].obj->getBoundingCenter().x - ((gameObjLength + listObjLength) / 2.0f) - gameObjCenterPos);
+				new_point.x = (list[0].obj->getBoundingCenter().x - ((gameObjLength + listObjLength) / 2.0f) - pow(0.1, FLOAT_BITS) - gameObjCenterPos);
 			}
 			else
 			{
-				new_point.x = (list[0].obj->getBoundingCenter().x + ((gameObjLength + listObjLength) / 2.0f) - gameObjCenterPos);
+				new_point.x = (list[0].obj->getBoundingCenter().x + ((gameObjLength + listObjLength) / 2.0f) + pow(0.1, FLOAT_BITS) - gameObjCenterPos);
 			}
 			D3DXVECTOR3 newSpeed = *gameObjects[i]->getVecMoveSpeed();
 			newSpeed.x = 0.0f;
 			gameObjects[i]->setVecMoveSpeed(&newSpeed);
 			gameObjects[i]->setVecNowPos(&new_point);
+			gameObjects[i]->calBounding();
 			list = collisionDetectionOvl(gameObjects[i]);
 		}
 
@@ -105,16 +106,17 @@ void MapManage::updateGameObejcts(void)
 			float gameObjCenterPos = gameObjects[i]->getBoundingCenter().y - new_point.z;
 			if (zSpeed.z > 0)
 			{
-				new_point.z = list[0].obj->getBoundingCenter().y - ((gameObjWidth + listObjWidth) / 2.0f) - gameObjCenterPos;
+				new_point.z = list[0].obj->getBoundingCenter().y - ((gameObjWidth + listObjWidth) / 2.0f) - pow(0.1, FLOAT_BITS) - gameObjCenterPos;
 			}
 			else
 			{
-				new_point.z = list[0].obj->getBoundingCenter().y + ((gameObjWidth + listObjWidth) / 2.0f) - gameObjCenterPos;
+				new_point.z = list[0].obj->getBoundingCenter().y + ((gameObjWidth + listObjWidth) / 2.0f) + pow(0.1, FLOAT_BITS) - gameObjCenterPos;
 			}
 			D3DXVECTOR3 newSpeed = *gameObjects[i]->getVecMoveSpeed();
 			newSpeed.z = 0.0f;
 			gameObjects[i]->setVecMoveSpeed(&newSpeed);
 			gameObjects[i]->setVecNowPos(&new_point);
+			gameObjects[i]->calBounding();
 			list = collisionDetectionOvl(gameObjects[i]);
 		}
 

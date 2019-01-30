@@ -18,6 +18,9 @@ public:
 	virtual void positionUpdateZ(void);
 	virtual void positionUpdate(void);
 	virtual void draw(LPDIRECT3DDEVICE9 pD3DDevice) = 0;
+	/*cal the new bounding box
+	so that you should call it every time you set a new position or bounding center*/
+	virtual void calBounding(void);
 	virtual RECTF getBoundingRect(void) = 0;
 	//the center of the bounding box
 	//position may not be the center of the bounding box, so it have to be calculate

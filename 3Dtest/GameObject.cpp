@@ -123,6 +123,10 @@ void GameObject::positionUpdate(void)
 	setVecNowPos(&newPos);
 }
 
+void GameObject::calBounding(void)
+{
+}
+
 void GameObject::addSpeed(D3DXVECTOR3 * speedDir, float speed)
 {
 	D3DXVECTOR3 norSpeed;
