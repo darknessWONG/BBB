@@ -161,6 +161,7 @@
     <ClInclude Include="BattleChara.h" />
     <ClInclude Include="BattleSkill.h" />
     <ClInclude Include="Billboard.h" />
+    <ClInclude Include="Bird.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Chara.h" />
     <ClInclude Include="Common.h" />
@@ -206,6 +207,7 @@
     <ClCompile Include="BattleChara.cpp" />
     <ClCompile Include="BattleSkill.cpp" />
     <ClCompile Include="Billboard.cpp" />
+    <ClCompile Include="Bird.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Chara.cpp" />
     <ClCompile Include="Common.cpp" />

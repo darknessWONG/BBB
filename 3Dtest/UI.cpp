@@ -14,6 +14,7 @@ UI::UI(D3DXVECTOR2 pos, float width, float height, int tex)
 	identity = UIIdentity::UIIdentityMAX;
 	index = -1;
 	isDisplay = true;
+	color = 0xFFFFFFFF;
 }
 
 
@@ -59,6 +60,16 @@ int UI::getTexture(void)
 void UI::setTexture(int index)
 {
 	this->texture = index;
+}
+
+D3DCOLOR UI::getColor(void)
+{
+	return color;
+}
+
+void UI::setColor(D3DCOLOR color)
+{
+	this->color = color;
 }
 
 string UI::getStr(void)
@@ -125,11 +136,18 @@ void UI::draw(LPDIRECT3DDEVICE9 g_pD3DDevice, D3DXVECTOR2 *basePoint)
 			f[i].pos = { points[i].x, points[i].y, 0, 1 };
 			f[i].pos.x += 0.5;
 			f[i].pos.y += 0.5;
-			f[i].color = D3DCOLOR_RGBA(255, 255, 255, 255);
+			f[i].color = color;
 			f[i].uv = uvPos[i];
 		}
 		g_pD3DDevice->SetFVF(FVF_VERTEX2D);
-		g_pD3DDevice->SetTexture(0, TextureHandler2D::GetTexture(texture).tex_p);
+		if (texture == -1)
+		{
+			g_pD3DDevice->SetTexture(0, NULL);
+		}
+		else
+		{
+			g_pD3DDevice->SetTexture(0, TextureHandler2D::GetTexture(texture).tex_p);
+		}
 
 		g_pD3DDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, f, sizeof(Vertex2D));
 
@@ -144,6 +162,7 @@ void UI::draw(LPDIRECT3DDEVICE9 g_pD3DDevice, D3DXVECTOR2 *basePoint)
 			delete[] tmpStr;*/
 			char *tmpStr = new char[list[i].length() + 1];
 			strcpy_s(tmpStr, list[i].length() + 1, list[i].c_str());
+			Font_SetColor(255, 255, 255, 255);
 			Font_Draw(f[0].pos.x, f[0].pos.y + fontSize * i, tmpStr);
 			delete[] tmpStr;
 		}

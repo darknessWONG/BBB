@@ -67,15 +67,15 @@ TouchType Physics::rectTouchRect(D3DXVECTOR2 * rect1, D3DXVECTOR2 * rect2)
 	D3DXVECTOR2 rectPoints2[4];
 	for (int i = 0; i < 4; i++)
 	{
-		/*rectPoints1[i].x = round(rect1[i].x, FLOATBITS);
-		rectPoints1[i].y = round(rect1[i].y, FLOATBITS);
-		rectPoints2[i].x = round(rect2[i].x, FLOATBITS);
-		rectPoints2[i].y = round(rect2[i].y, FLOATBITS);*/
+		rectPoints1[i].x = round(rect1[i].x, FLOAT_BITS);
+		rectPoints1[i].y = round(rect1[i].y, FLOAT_BITS);
+		rectPoints2[i].x = round(rect2[i].x, FLOAT_BITS);
+		rectPoints2[i].y = round(rect2[i].y, FLOAT_BITS);
 
-		rectPoints1[i].x = rect1[i].x;
-		rectPoints1[i].y = rect1[i].y;
-		rectPoints2[i].x = rect2[i].x;
-		rectPoints2[i].y = rect2[i].y;
+		//rectPoints1[i].x = rect1[i].x;
+		//rectPoints1[i].y = rect1[i].y;
+		//rectPoints2[i].x = rect2[i].x;
+		//rectPoints2[i].y = rect2[i].y;
 	}
 	float lengthx = fabs((rectPoints1[1].x - rectPoints1[0].x) + (rectPoints2[1].x - rectPoints2[0].x));
 	float lengthy = fabs((rectPoints1[2].y - rectPoints1[0].y) + (rectPoints2[2].y - rectPoints2[0].y));

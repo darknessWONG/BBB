@@ -27,6 +27,8 @@ Date   : 2018/09/05
 #define CLASS_NAME     "GameWindow"       // ウインドウクラスの名前
 #define WINDOW_CAPTION "ゲームウィンドウ" // ウィンドウの名前
 
+#define DEBUG 0
+
 #if defined(_DEBUG) || defined(DEBUG)
 #define FPS_MEASUREMENT_TIME (1.0f)       // FPS計測時間
 #endif // _DEBUG || DEBUG
@@ -305,6 +307,7 @@ void draw(void)
 	ss >> text;
 	char a[100];
 	strcpy_s(a, text.c_str());
+	Font_SetColor(0, 0, 255, 255);
 	Font_Draw(8, 8, a);
 #endif // _DEBUG || DEBUG
 

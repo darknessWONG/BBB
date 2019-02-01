@@ -89,6 +89,11 @@ void GameObject::calWorldMatrix(void)
 
 }
 
+void GameObject::beforeUpdate(void)
+{
+	setVecMoveSpeed(&D3DXVECTOR3(0, 0, 0));
+}
+
 void GameObject::dataUpdate(void)
 {
 	calSpeed();
@@ -123,6 +128,10 @@ void GameObject::positionUpdate(void)
 	setVecNowPos(&newPos);
 }
 
+void GameObject::calBounding(void)
+{
+}
+
 void GameObject::addSpeed(D3DXVECTOR3 * speedDir, float speed)
 {
 	D3DXVECTOR3 norSpeed;
@@ -132,25 +141,12 @@ void GameObject::addSpeed(D3DXVECTOR3 * speedDir, float speed)
 
 void GameObject::calSpeed(void)
 {
-	//if (vecTargetPos != NULL)
+	//if (D3DXVec3Length(vecMoveSpeed) > maxSpeed)
 	//{
-	//	D3DXVECTOR2 boundingCenter = getBoundingCenter();
-	//	D3DXVECTOR3 newSpeed = *vecTargetPos - D3DXVECTOR3(boundingCenter.x, 0, boundingCenter.y);
-	//	D3DXVECTOR3 nowSpeed;
-	//	D3DXVec3Normalize(&nowSpeed, vecMoveSpeed);
-	//	D3DXVec3Normalize(&newSpeed, &newSpeed);
-	//	if (nowSpeed != newSpeed)
-	//	{
-	//		setVecMoveSpeed(&nowSpeed);
-	//	}
+	//	D3DXVec3Normalize(vecMoveSpeed, vecMoveSpeed);
+	//	*vecMoveSpeed *= maxSpeed;
 	//}
-
-	if (D3DXVec3Length(vecMoveSpeed) > maxSpeed)
-	{
-		D3DXVec3Normalize(vecMoveSpeed, vecMoveSpeed);
-		*vecMoveSpeed *= maxSpeed;
-	}
-	*vecMoveSpeed *= moveDamping;
+	//*vecMoveSpeed *= moveDamping;
 }
 
 void GameObject::calFront(void)
@@ -166,7 +162,7 @@ void GameObject::calFront(void)
 	if (vecTargetFront != NULL && *vecFront != *vecTargetFront)
 	{
 		vecFront = vecTargetFront;
-		D3DXVec3Cross(vecRight, vecFront, vecUp);
+		D3DXVec3Cross(vecRight, vecUp, vecFront);
 	}
 }
 
@@ -205,12 +201,12 @@ void GameObject::setMtxWorld(D3DXMATRIX* mtxWorld)
 	this->mtxWorld = new D3DXMATRIX(*mtxWorld);
 }
 
-D3DXVECTOR3* GameObject::geteVecFront(void)
+D3DXVECTOR3* GameObject::getVecFront(void)
 {
 	return vecFront;
 }
 
-void GameObject::seteVecFront(D3DXVECTOR3* vecFront)
+void GameObject::setVecFront(D3DXVECTOR3* vecFront)
 {
 	safe_delete<D3DXVECTOR3>(this->vecFront);
 	this->vecFront = new D3DXVECTOR3(*vecFront);

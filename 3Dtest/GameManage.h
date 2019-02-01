@@ -37,7 +37,7 @@ public:
 	void endStateInit(void);
 	void endStateUpdate(void);
 	void endStateClean(void);
-	void checkEnd(void);
+	BOOL checkEnd(void);
 
 	void cameraUpdate(void);
 	void enemyUpdate(void);
@@ -58,6 +58,9 @@ public:
 	void lockUnmoveObject(void);
 
 	void setPD3DDevice(LPDIRECT3DDEVICE9 pD3DDevice);
+
+	void setIsFade(BOOL isFade);
+	void fade(void);
 private:
 	LPDIRECT3DDEVICE9 pD3DDevice = NULL;
 
@@ -80,4 +83,11 @@ private:
 	AnimationManage am;
 
 	GameState gs;
+	BOOL winStatus;
+
+	MeumUI* fadeFrame;
+	BOOL isFade;
+	int fadeAlpha;
+	bool fadeinFlage;
+	bool fadeoutFlage;
 };

@@ -21,29 +21,35 @@ Model::Model(string modelPath)
 
 Model::~Model()
 {
-	mesh->Release();
-	mesh = NULL;
-	adacencyBuffer->Release();
-	adacencyBuffer = NULL;
-
-	for (DWORD i = 0; i < numMaterials; i++)
+	if (!isWithAnimation)
 	{
-		if (meshTexture[i] != NULL)
+		mesh->Release();
+		mesh = NULL;
+		adacencyBuffer->Release();
+		adacencyBuffer = NULL;
+
+		for (DWORD i = 0; i < numMaterials; i++)
 		{
-			meshTexture[i]->Release();
-			meshTexture[i] = NULL;
+			if (meshTexture[i] != NULL)
+			{
+				meshTexture[i]->Release();
+				meshTexture[i] = NULL;
+			}
 		}
+		delete[] meshColor;
+		meshColor = NULL;
+		delete[] meshTexture;
+		meshTexture = NULL;
+
+		materials = NULL;
 	}
-	delete[] meshColor;
-	meshColor = NULL;
-	delete[] meshTexture;
-	meshTexture = NULL;
+	else
+	{
 
-	materials = NULL;
-
-	D3DXFrameDestroy(m_pFrameRoot, m_pAllocateHier);
-	SAFE_RELEASE(m_pAnimController);
-	SAFE_DELETE(m_pAllocateHier);
+		D3DXFrameDestroy(m_pFrameRoot, m_pAllocateHier);
+		SAFE_RELEASE(m_pAnimController);
+		SAFE_DELETE(m_pAllocateHier);
+	}
 }
 
 void Model::dataUpdate(void)
@@ -52,14 +58,9 @@ void Model::dataUpdate(void)
 	{
 		boundingBoxMin = { FLT_MAX, FLT_MAX ,FLT_MAX };
 		boundingBoxMax = { FLT_MIN, FLT_MIN, FLT_MIN };
-		calBoundingBox(m_pFrameRoot, boundingBoxMin, boundingBoxMax);
 		updateAnimation(0.01);
 	}
-	else
-	{
-		calBoundingBox();
-	}
-
+	calBounding();
 	GameObject::dataUpdate();
 }
 
@@ -69,7 +70,6 @@ void Model::draw(LPDIRECT3DDEVICE9 pD3DDevice)
 	{
 		if (!isWithAnimation)
 		{
-			pD3DDevice->SetFVF(FVF_VERTEX3D);
 			pD3DDevice->SetTransform(D3DTS_WORLD, getMtxWorld());
 			for (int i = 0; i < (int)numMaterials; i++)
 			{
@@ -83,7 +83,6 @@ void Model::draw(LPDIRECT3DDEVICE9 pD3DDevice)
 			updateFrameMatrices(m_pFrameRoot, getMtxWorld());
 			drawFrame(pD3DDevice, m_pFrameRoot);
 		}
-
 
 #ifdef _DEBUG
 		D3DMATERIAL9 blue;
@@ -110,6 +109,18 @@ void Model::draw(LPDIRECT3DDEVICE9 pD3DDevice)
 	}
 }
 
+void Model::calBounding(void)
+{
+	if (isWithAnimation)
+	{
+		calBoundingBox(m_pFrameRoot, boundingBoxMin, boundingBoxMax);
+	}
+	else
+	{
+		calBoundingBox();
+	}
+}
+
 void Model::loadModel(LPDIRECT3DDEVICE9 pD3DDevice)
 {
 	if (modelPath == "")
@@ -128,7 +139,6 @@ void Model::loadModel(LPDIRECT3DDEVICE9 pD3DDevice)
 
 		boundingBoxMin = { FLT_MAX, FLT_MAX ,FLT_MAX };
 		boundingBoxMax = { FLT_MIN, FLT_MIN, FLT_MIN };
-		calBoundingBox(m_pFrameRoot, boundingBoxMin, boundingBoxMax);
 	}
 	else
 	{
@@ -158,8 +168,9 @@ void Model::loadModel(LPDIRECT3DDEVICE9 pD3DDevice)
 				hr = D3DXCreateTextureFromFile(pD3DDevice, materials[i].pTextureFilename, &meshTexture[i]);
 			}
 		}
-		calBoundingBox();
 	}
+
+	calBounding();
 
 	if (mtrlBuffer != NULL)
 	{
@@ -171,6 +182,7 @@ void Model::loadModel(LPDIRECT3DDEVICE9 pD3DDevice)
 
 void Model::calBoundingBox(void)
 {
+
 	BYTE* v = 0;
 	mesh->LockVertexBuffer(0, (void**)&v);
 	int num = mesh->GetNumVertices();

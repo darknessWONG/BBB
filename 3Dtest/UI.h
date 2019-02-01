@@ -20,6 +20,8 @@ public:
 	void setHeight(float height);
 	int getTexture(void);
 	void setTexture(int index);
+	D3DCOLOR getColor(void);
+	void setColor(D3DCOLOR color);
 	string getStr(void);
 	void setStr(string str);
 	UIIdentity getIdentity(void);
@@ -45,6 +47,7 @@ private:
 	float width;
 	float height;
 	int texture;
+	D3DCOLOR color;
 	string str;
 
 	UIIdentity identity;

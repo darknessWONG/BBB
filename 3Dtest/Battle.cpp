@@ -48,7 +48,7 @@ Battle::Battle(MapManage *map, PerformManage *pm, MeumUI* commandMeum, MeumUI* t
 Battle::~Battle()
 {
 	tabDeadEnemy();
-	safe_delete<Player>(movePointer);
+	movePointer->setIsDelete(true);
 	commandMeum->setIsDelete(true);
 	textBox->setIsDelete(true);
 	statusBox->setIsDelete(true);
@@ -161,17 +161,17 @@ void Battle::changeBattleState(BattleState newbs)
 
 void Battle::createTextBox(void)
 {
-	UI* ui = new UI({ 0, 0 }, 200, 200, 0);
+	UI* ui = new UI({ 0, 0 }, Common::screen_width / 3, Common::screen_height / 5, 0);
 	textBox->setBackground(ui);
-	textBox->setPosition({ 300, Common::screen_height - ui->getHeight() });
+	textBox->setPosition({ Common::screen_width / 3, Common::screen_height - ui->getHeight() });
 	textBox->setIsDisplay(true);
 }
 
 void Battle::createStatusBox(void)
 {
-	UI* ui = new UI({ 0, 0 }, 200, 200, 0);
+	UI* ui = new UI({ 0, 0 }, Common::screen_width / 3, Common::screen_height / 5, 0);
 	statusBox->setBackground(ui);
-	statusBox->setPosition({ 600, Common::screen_height - ui->getHeight() });
+	statusBox->setPosition({ (Common::screen_width / 3) * 2, Common::screen_height - ui->getHeight() });
 	statusBox->setIsDisplay(true);
 }
 
@@ -286,13 +286,22 @@ void Battle::calActionList(void)
 
 void Battle::selectAction(void)
 {
-	if (as != lastAs)
+	if (typeid(*actionList[nowActionChara]) == typeid(Player))
 	{
-		createActionMeum();
-		displayMessage("Is your turn now, please select a action");
+		if (as != lastAs)
+		{
+			createActionMeum();
+			displayMessage("Is your turn now, please select a action");
+		}
+		commandMeum->setIsReadInput(true);
+		readActionCommand();
 	}
-	commandMeum->setIsReadInput(true);
-	readActionCommand();
+	else
+	{
+		as = ActionPhaseStatus::ActionPhaseStatusTargetSelect;
+		lastSelect = -1;
+		action->isUseSkill = false;
+	}
 }
 
 void Battle::readActionCommand(void)
@@ -323,14 +332,32 @@ void Battle::readActionCommand(void)
 
 void Battle::selectTarget(void)
 {
-	if (as != lastAs)
+	if (typeid(*actionList[nowActionChara]) == typeid(Player))
 	{
-		vector<Chara*> taragetList = calTargetList(action->active, action->skill);
-		createTagatMeum(taragetList);
-		displayMessage("Please select a target");
+		if (as != lastAs)
+		{
+			vector<Chara*> taragetList = calTargetList(action->active, action->skill);
+			createTagatMeum(taragetList);
+			displayMessage("Please select a target");
+		}
+		commandMeum->setIsReadInput(true);
+		readTargetCommand();
 	}
-	commandMeum->setIsReadInput(true);
-	readTargetCommand();
+	else
+	{
+		float dis = D3DXVec2Length(&(actionList[0]->getBoundingCenter() - actionList[nowActionChara]->getBoundingCenter()));
+		vector<GameObject*> visionList = map->calObjectOnSight(actionList[nowActionChara], actionList[0]);
+		if (dis <= actionList[nowActionChara]->getBattleChara()->getMovePoint() && visionList.size() <= 0)
+		{	
+			action->passive.push_back(actionList[0]);
+			addMovePerform(action->active, action->passive[0]);
+			bs = BattleState::BattleStateDamage;
+		}
+		else
+		{
+			bs = BattleState::BattleStateEnd;
+		}
+	}
 
 }
 
@@ -419,6 +446,7 @@ void Battle::readMovePlace(void)
 			if (list.size() <= 0)
 			{
 				addMovePerform(actionList[nowActionChara], movePointer);
+				movePointer->setIsDisplay(false);
 				changeBattleState(BattleState::BattleStateCommand);
 			}
 			else
@@ -434,6 +462,7 @@ void Battle::readMovePlace(void)
 
 	if (Keyboard_IsTrigger(DIK_Z))
 	{
+		movePointer->setIsDisplay(false);
 		changeBattleState(BattleState::BattleStateCommand);
 	}
 }
@@ -477,15 +506,15 @@ void Battle::createActionMeum(void)
 {
 	commandMeum->cleanOption();
 
-	UI* ui = new UI({ 0, 0 }, 200, 200, 0);
-	UI* ui1 = new UI({ 20, 20 }, 50, 50, 1);
-	UI* ui2 = new UI({ 80, 20 }, 50, 50, 1);
+	UI* ui = new UI({ 0, 0 }, Common::screen_width / 3, Common::screen_height / 5, 0);
+	UI* ui1 = new UI({ 0, 0 }, ui->getWidth() / 4, ui->getHeight() / 5, 1);
+	UI* ui2 = new UI({ (ui->getWidth() / 4 * 2), (ui->getHeight() / 5) * 1 }, ui->getWidth() / 4, ui->getHeight() / 5, 1);
 	ui2->setStr("ATTACK");
 	ui2->setIdentity(UIIdentity::UIIdentityAttack);
-	UI* ui3 = new UI({ 80, 80 }, 50, 50, 1);
+	UI* ui3 = new UI({ (ui->getWidth() / 4 * 2), (ui->getHeight() / 5) * 2 }, ui->getWidth() / 4, ui->getHeight() / 5, 1);
 	ui3->setStr("SKIP");
 	ui3->setIdentity(UIIdentity::UIIdentitySkip);
-	UI* ui4 = new UI({ 80, 140 }, 50, 50, 1);
+	UI* ui4 = new UI({ (ui->getWidth() / 4 * 2), (ui->getHeight() / 5) * 3 }, ui->getWidth() / 4, ui->getHeight() / 5, 1);
 	ui4->setStr("MOVE");
 	ui4->setIdentity(UIIdentity::UIIdentityMove);
 	commandMeum->addOptins(ui2);
@@ -493,7 +522,7 @@ void Battle::createActionMeum(void)
 	commandMeum->addOptins(ui4);
 	commandMeum->setBackground(ui);
 	commandMeum->setPointer(ui1);
-	commandMeum->setPosition({ 0, 0 });
+	commandMeum->setPosition({ 0, Common::screen_height - ui->getHeight() });
 	commandMeum->setIsDisplay(true);
 
 	lastAs = ActionPhaseStatus::ActionPhaseStatusActionSelect;
@@ -502,16 +531,16 @@ void Battle::createActionMeum(void)
 void Battle::createSkillMeum(vector<BattleSkill*> list)
 {
 	commandMeum->cleanOption();
-	UI* ui = new UI({ 0, 0 }, 200, 200, 0);
+	UI* ui = new UI({ 0, 0 }, Common::screen_width / 3, Common::screen_height / 5, 0);
 	commandMeum->setBackground(ui);
-	ui = new UI({ 20, 20 }, 50, 50, 1);
-	commandMeum->setPointer(ui);
-	commandMeum->setPosition({ 0, 0 });
+	UI* ui1 = new UI({ 0, 0 }, ui->getWidth() / 4, ui->getHeight() / 5, 1);
+	commandMeum->setPointer(ui1);
+	//commandMeum->setPosition({ 0, 0 });
 
 	int listNum = list.size();
 	for (int i = 0; i < listNum; i++)
 	{
-		ui = new UI({ 80.0f, i * 20.0f + 20.0f }, 50.0f, 50.0f, 1);
+		ui = new UI({ (ui->getWidth() / 4 * 2), (ui->getHeight() / (listNum + 2)) * (i + 1) }, ui->getWidth() / 4, ui->getHeight() / (listNum + 2), 1);
 		ui->setStr(list[i]->getName());
 		commandMeum->addOptins(ui);
 	}
@@ -522,18 +551,18 @@ void Battle::createSkillMeum(vector<BattleSkill*> list)
 void Battle::createTagatMeum(vector<Chara*> list)
 {
 	commandMeum->cleanOption();
-	UI* ui = new UI({ 0, 0 }, 200, 200, 0);
+	UI* ui = new UI({ 0, 0 }, Common::screen_width / 3, Common::screen_height / 5, 0);
 	commandMeum->setBackground(ui);
-	ui = new UI({ 20, 20 }, 50, 50, 1);
-	commandMeum->setPointer(ui);
-	commandMeum->setPosition({ 0, 0 });
+	UI* ui1 = new UI({ 0, 0 }, ui->getWidth() / 4, ui->getHeight() / 5, 1);
+	commandMeum->setPointer(ui1);
+//	commandMeum->setPosition({ 0, 0 });
 
 	int listNum = list.size();
 	for (int i = 0; i < listNum; i++)
 	{
-		ui = new UI({ 80.0f, i * 20.0f + 20.0f }, 50.0f, 50.0f, 1);
-		ui->setStr(list[i]->getBattleChara()->getName());
-		commandMeum->addOptins(ui);
+		ui1 = new UI({ (ui->getWidth() / 4 * 2), (ui->getHeight() / (listNum + 2)) * (i + 1) }, ui->getWidth() / 4, ui->getHeight() / (listNum + 2), 1);
+		ui1->setStr(list[i]->getBattleChara()->getName());
+		commandMeum->addOptins(ui1);
 	}
 
 	lastAs = ActionPhaseStatus::ActionPhaseStatusTargetSelect;

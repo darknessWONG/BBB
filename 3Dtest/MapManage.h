@@ -32,6 +32,7 @@ public:
 	void cleanGameObject(void);
 	void updateGameObejcts(void);
 	void drawGameObjects(LPDIRECT3DDEVICE9 pD3DDevice);
+	void gameObjectsBeforeUpdate(void);
 
 	TouchType collisionDetection(GameObject* gameObject1, GameObject* gameObject2);
 	//do collision dectection without overlap level, can expressed the absolute positional relations
