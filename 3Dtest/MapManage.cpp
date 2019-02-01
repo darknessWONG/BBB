@@ -146,7 +146,6 @@ void MapManage::drawGameObjects(LPDIRECT3DDEVICE9 pD3DDevice)
 		gameObjects2D[i]->draw(pD3DDevice);
 	}
 
-
 }
 
 void MapManage::gameObjectsBeforeUpdate(void)

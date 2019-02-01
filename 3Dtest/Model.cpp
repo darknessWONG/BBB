@@ -60,6 +60,7 @@ void Model::dataUpdate(void)
 		boundingBoxMax = { FLT_MIN, FLT_MIN, FLT_MIN };
 		updateAnimation(0.01);
 	}
+
 	calBounding();
 	GameObject::dataUpdate();
 }
@@ -106,18 +107,6 @@ void Model::draw(LPDIRECT3DDEVICE9 pD3DDevice)
 
 		boxMesh->Release();
 #endif
-	}
-}
-
-void Model::calBounding(void)
-{
-	if (isWithAnimation)
-	{
-		calBoundingBox(m_pFrameRoot, boundingBoxMin, boundingBoxMax);
-	}
-	else
-	{
-		calBoundingBox();
 	}
 }
 
@@ -246,6 +235,18 @@ bool Model::getIsWithAnimation(void)
 void Model::setIsWithAnimation(bool isWithAnimation)
 {
 	this->isWithAnimation = isWithAnimation;
+}
+
+void Model::calBounding(void)
+{
+	if (isWithAnimation)
+	{
+		calBoundingBox(m_pFrameRoot, boundingBoxMin, boundingBoxMax);
+	}
+	else
+	{
+		calBoundingBox();
+	}
 }
 
 RECTF Model::getBoundingRect(void)

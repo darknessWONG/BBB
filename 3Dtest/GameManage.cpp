@@ -165,12 +165,11 @@ void GameManage::titleStateInit(void)
 	title->setIsDisplay(true);
 
 	uis.push_back(title);
-
-
 	if (isFade == 1)
 	{
 		fadeoutFlage = false;
 	}
+
 	gs = GameState::GameStateTitleRunning;
 }
 
@@ -181,6 +180,7 @@ void GameManage::titleStateUpdate(void)
 		setIsFade(-1);
 		fadeoutFlage = true;
 	}
+
 	if (isFade == 0)
 	{
 		if (Keyboard_IsTrigger(DIK_SPACE))
@@ -211,7 +211,6 @@ void GameManage::titleStateClean(void)
 
 void GameManage::gameStateInit(void)
 {
-
 	BattleChara* bc = new BattleChara();
 	bc->setAtk(10);
 	bc->setCamp(CampType::CampTypePlayer);

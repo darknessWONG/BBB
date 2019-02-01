@@ -83,7 +83,9 @@ private:
 	AnimationManage am;
 
 	GameState gs;
+
 	BOOL winStatus;
+
 
 	MeumUI* fadeFrame;
 	BOOL isFade;
