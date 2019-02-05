@@ -275,7 +275,7 @@ void GameManage::gameStateInit(void)
 	bc1->setMpNow(10);
 	bc1->setName("enemy");
 	bc1->setSpeed(10);
-	Enemy* mesh3 = new Enemy("T-Rex.x");
+	Enemy* mesh3 = new Enemy("moster.blend.x");
 	mesh3->setIsWithAnimation(false);
 	mesh3->loadModel(pD3DDevice);
 	mesh3->setWalkSpeed(0.05f);
@@ -302,7 +302,7 @@ void GameManage::gameStateInit(void)
 	bc2->setMpNow(10);
 	bc2->setName("enemy1");
 	bc2->setSpeed(10);
-	Enemy* enemy4 = new Enemy("T-Rex.x");
+	Enemy* enemy4 = new Enemy("moster.blend.x");
 	enemy4->setIsWithAnimation(false);
 	enemy4->loadModel(pD3DDevice);
 	enemy4->setWalkSpeed(0.05f);
