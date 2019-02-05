@@ -160,6 +160,7 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="font.h" />
     <ClInclude Include="GameManage.h" />
+    <ClInclude Include="GameTutorial.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="input.h" />
@@ -167,6 +168,7 @@
     <ClInclude Include="Light.h" />
     <ClInclude Include="MapManage.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="Particle2D.h" />
     <ClInclude Include="Physics.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Recipe.h" />
@@ -192,6 +194,7 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="font.cpp" />
     <ClCompile Include="GameManage.cpp" />
+    <ClCompile Include="GameTutorial.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="input.cpp" />
@@ -200,6 +203,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapManage.cpp" />
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="Particle2D.cpp" />
     <ClCompile Include="Physics.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Recipe.cpp" />

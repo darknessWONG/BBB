@@ -88,6 +88,12 @@
     <ClCompile Include="GameResult.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
+    <ClCompile Include="GameTutorial.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="Particle2D.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3Dtest.h">
@@ -178,6 +184,12 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="GameResult.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GameTutorial.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Particle2D.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>

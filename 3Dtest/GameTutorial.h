@@ -6,16 +6,16 @@
 #include "input.h"
 #include "Common.h"
 
-class GameResult
+class GameTutorial
 {
 public:
-	GameResult();
-	~GameResult();
+	GameTutorial();
+	~GameTutorial();
 
 	void Update();
 	void Draw();
 
-	bool isEnd();	// check is result flag is end or not
+	bool isEnd();	// check is tutorial flag is end or not
 private:
 	// scene end flag
 	bool bEnd;
@@ -23,6 +23,4 @@ private:
 	// texture index
 	int texture_background;
 
-	// result grade
-	int grade;
 };

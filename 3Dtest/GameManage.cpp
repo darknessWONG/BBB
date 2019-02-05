@@ -153,6 +153,11 @@ void GameManage::draw(void)
 		pTitle->Draw();
 	}
 
+	if (gs == GameState::GameState_tutorial_state_running)
+	{
+		pTutorial->Draw();
+	}
+
 	if (gs == GameState::GameState_game_state_running)
 	{
 		map->drawGameObjects(pD3DDevice);
@@ -195,16 +200,25 @@ void GameManage::title_state_clean(void)
 
 void GameManage::tutorial_state_init(void)
 {
+	pTutorial = new GameTutorial();
+
 	gs = GameState_tutorial_state_running;
 }
 
 void GameManage::tutorial_state_update(void)
 {
-	gs = GameState_tutorial_state_clean;
+	pTutorial->Update();
+
+	if (pTutorial->isEnd()) {
+		gs = GameState_tutorial_state_clean;
+	}
+
 }
 
 void GameManage::tutorial_state_clean(void)
 {
+	delete pTutorial;
+
 	gs = GameState_game_state_init;
 }
 

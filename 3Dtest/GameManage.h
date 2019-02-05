@@ -9,6 +9,7 @@
 #include "Workbench.h"
 #include "Emitter.h"
 #include "GameTitle.h"
+#include "GameTutorial.h"
 #include "GameResult.h"
 
 class GameManage
@@ -70,6 +71,7 @@ private:
 	Emitter *pEmitter;
 	
 	GameTitle *pTitle;
+	GameTutorial *pTutorial;
 	GameResult *pResult;
 
 	MapManage* map = NULL;

@@ -5,6 +5,7 @@
 #include "sprite.h"
 #include "input.h"
 #include "Common.h"
+#include "Particle2D.h"
 
 class GameTitle
 {
@@ -20,9 +21,13 @@ private:
 	// scene end flag
 	bool bEnd;
 
+	int counter;				// alphaとballoonがだすためのフラックス
+	int increment;				// counter が増やす値
+	Particle2D *pParticle;
+	D3DXCOLOR gColor;			// start iconのdiffuse color
+
 	// texture index
 	int texture_logo;
 	int texture_background;
 	int texture_startgame;
-	int texture_cursor;
 };

@@ -223,6 +223,45 @@ void Sprite_Draw_Background(int texture_index, float moveX, float moveY) {
 
 }
 
+void Sprite_Draw_Background(int texture_index, int tx, int ty, int tw, int th)
+{
+	float w = (float)Texture_GetWidth(texture_index);
+	float h = (float)Texture_GetHeight(texture_index);
+
+	float u0 = (float)tx / w;
+	float v0 = (float)ty / h;
+	float u1 = (float)(tx + tw) / w;
+	float v1 = (float)(ty + th) / h;
+
+	Vertex2D v[] = {
+		{
+			D3DXVECTOR4(0.0f , 0.0f, 0.0f, 1.0f),
+			g_Color,
+			D3DXVECTOR2(u0, v0)
+		},
+
+		{
+			D3DXVECTOR4(SCREEN_WIDTH, 0.0f, 0.0f, 1.0f),
+			g_Color,
+			D3DXVECTOR2(u1, v0)
+		},
+
+		{
+			D3DXVECTOR4(0.0f , SCREEN_HEIGHT, 0.0f, 1.0f),
+			g_Color,
+			D3DXVECTOR2(u0, v1)
+		},
+
+		{
+			D3DXVECTOR4(SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f, 1.0f),
+			g_Color,
+			D3DXVECTOR2(u1, v1)
+		},
+	};
+
+	render_sprite(texture_index, v);
+}
+
 // without color
 void Sprite_Draw_Size(int texture_index, float dx, float dy, int sx, int sy) {
 
