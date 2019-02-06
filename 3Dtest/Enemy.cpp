@@ -80,14 +80,26 @@ void Enemy::dataUpdate(void)
 		addSpeed(&speedDir, getWalkSpeed());
 
 		D3DXVECTOR2 newCenter = { vecPatrolTarget->x, vecPatrolTarget->z };
-		D3DXVECTOR2 newFront = boundingCenter - newCenter;
-		//D3DXVECTOR2 newFront = newCenter - boundingCenter;
+		//D3DXVECTOR2 newFront = boundingCenter - newCenter;
+		D3DXVECTOR2 newFront = newCenter - boundingCenter;
 		D3DXVECTOR3 newFront3 = { newFront.x, 0, newFront.y };
 		D3DXVec3Normalize(&newFront3, &newFront3);
 		setVecTargetFront(&newFront3);
 
 		isPatrol = false;
 	}
+
+	float speedSum = D3DXVec3LengthSq(getVecMoveSpeed());
+	if (Physics::round(speedSum, FLOAT_BITS) != 0 && getIsWithAnimation())
+	{
+		setIsPlayAnimation(true);
+	}
+	else
+	{
+		setIsPlayAnimation(false);
+		resetAnimation();
+	}
+
 	Chara::dataUpdate();
 }
 

@@ -41,6 +41,8 @@ public:
 	void setModelPath(string modelPath);
 	bool getIsWithAnimation(void);
 	void setIsWithAnimation(bool isWithAnimation);
+	bool getIsPlayAnimation(void);
+	void setIsPlayAnimation(bool isPlayAnimation);
 
 	//提供给外界的接口
 
@@ -50,6 +52,7 @@ public:
 	LPD3DXANIMATIONSET getAnimationSetByName(LPCTSTR name);
 	//更新动画
 	void updateAnimation(double timeDelay);
+	void resetAnimation(void);
 
 
 
@@ -65,6 +68,8 @@ private:
 
 	string modelPath;
 	bool isWithAnimation;
+
+	bool isPlayAnimation;
 
 	//mesh
 	LPD3DXMESH mesh = NULL;

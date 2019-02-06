@@ -7,6 +7,9 @@ Model::Model()
 {
 	boundingBoxMin = { 0.0f, 0.0f, 0.0f };
 	boundingBoxMax = { 0.0f, 0.0f, 0.0f };
+
+	isWithAnimation = false;
+	isPlayAnimation = true;
 }
 
 Model::Model(string modelPath)
@@ -16,6 +19,9 @@ Model::Model(string modelPath)
 	this->modelPath = modelPath;
 	boundingBoxMin = { 0.0f, 0.0f, 0.0f };
 	boundingBoxMax = { 0.0f, 0.0f, 0.0f };
+
+	isWithAnimation = false;
+	isPlayAnimation = true;
 }
 
 
@@ -58,7 +64,11 @@ void Model::dataUpdate(void)
 	{
 		boundingBoxMin = { FLT_MAX, FLT_MAX ,FLT_MAX };
 		boundingBoxMax = { FLT_MIN, FLT_MIN, FLT_MIN };
-		updateAnimation(0.01);
+
+		if (isPlayAnimation)
+		{
+			updateAnimation(0.001);
+		}
 	}
 
 	calBounding();
@@ -235,6 +245,16 @@ bool Model::getIsWithAnimation(void)
 void Model::setIsWithAnimation(bool isWithAnimation)
 {
 	this->isWithAnimation = isWithAnimation;
+}
+
+bool Model::getIsPlayAnimation(void)
+{
+	return isPlayAnimation;
+}
+
+void Model::setIsPlayAnimation(bool isPlayAnimation)
+{
+	this->isPlayAnimation = isPlayAnimation;
 }
 
 void Model::calBounding(void)
@@ -496,7 +516,6 @@ void Model::setAnimationByName(LPCTSTR name)
 	//m_pAnimController->SetTrackPosition(0, 0.5);
 	LPD3DXANIMATIONSET pAnimationSet = NULL;
 	m_pAnimController->GetAnimationSetByName(name, &pAnimationSet);
-	//m_pAnimController->SetTrackAnimationSet((UINT)1.0, pAnimationSet);
 	m_pAnimController->SetTrackAnimationSet((UINT)0.0, pAnimationSet);
 	m_pAnimController->SetTrackEnable(0, true);
 }
@@ -524,4 +543,10 @@ LPD3DXANIMATIONSET Model::getAnimationSetByName(LPCTSTR name)
 void Model::updateAnimation(double timeDelay)
 {
 	m_pAnimController->AdvanceTime(timeDelay, NULL);
+}
+
+void Model::resetAnimation(void)
+{
+	m_pAnimController->SetTrackPosition(0, 0);
+
 }

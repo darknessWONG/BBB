@@ -276,7 +276,7 @@ void GameManage::gameStateInit(void)
 	bc1->setName("enemy");
 	bc1->setSpeed(10);
 	Enemy* mesh3 = new Enemy("moster.blend.x");
-	mesh3->setIsWithAnimation(false);
+	mesh3->setIsWithAnimation(true);
 	mesh3->loadModel(pD3DDevice);
 	mesh3->setWalkSpeed(0.05f);
 	mesh3->setMaxSpeed(0.05f);
@@ -303,7 +303,8 @@ void GameManage::gameStateInit(void)
 	bc2->setName("enemy1");
 	bc2->setSpeed(10);
 	Enemy* enemy4 = new Enemy("moster.blend.x");
-	enemy4->setIsWithAnimation(false);
+	//Enemy* enemy4 = new Enemy("funtest.x");
+	enemy4->setIsWithAnimation(true);
 	enemy4->loadModel(pD3DDevice);
 	enemy4->setWalkSpeed(0.05f);
 	enemy4->setMaxSpeed(0.05f);
@@ -355,19 +356,21 @@ void GameManage::gameStateUpdate(void)
 			lockUnmoveObject();
 			return;
 		}
-
-		if (checkIsInBattle())
+		else
 		{
-			if (battle->getBattleState() != BattleState::BattleStateMapMove)
+			if (checkIsInBattle())
 			{
-				int enemyNum = enemys.size();
-				for (int i = 0; i < enemyNum; i++)
+				if (battle->getBattleState() != BattleState::BattleStateMapMove)
 				{
-					enemys[i]->setIsPatrol(false);
+					int enemyNum = enemys.size();
+					for (int i = 0; i < enemyNum; i++)
+					{
+						enemys[i]->setIsPatrol(false);
+					}
 				}
+				player->setIsReadInput(false);
+				battleUpdate();
 			}
-			player->setIsReadInput(false);
-			battleUpdate();
 		}
 		cameraUpdate();
 		animationUpdate();
@@ -503,6 +506,10 @@ void GameManage::cameraUpdate(void)
 	{
 		camera->setVecWatchAt(player->getVecNowPos());
 		camera->calPosition();
+
+		D3DXVECTOR3 dir = *camera->getVecFront();
+		dir.y = 0;
+		player->setVecSpeedFront(&dir);
 	}
 }
 
@@ -713,6 +720,7 @@ void GameManage::lockUnmoveObject(void)
 	if (actor != player)
 	{
 		player->lockThisTurn();
+		player->setIsPlayAnimation(false);
 	}
 	int gameObjectsNum = enemys.size();
 	for (int i = 0; i < gameObjectsNum; i++)
@@ -722,6 +730,7 @@ void GameManage::lockUnmoveObject(void)
 			continue;
 		}
 		enemys[i]->lockThisTurn();
+		enemys[i]->setIsPlayAnimation(false);
 	}
 	gameObjectsNum = others.size();
 	for (int i = 0; i < gameObjectsNum; i++)
