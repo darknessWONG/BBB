@@ -8,7 +8,7 @@
 
 Battle::Battle()
 {
-	bs = BattleState::BattleStateStandby;
+	bs = BattleState::BattleStateBegin;
 	action = NULL;
 #ifdef SKILL_EFFICIENCY
 	skillEfficiency = SKILL_EFFICIENCY;
@@ -25,7 +25,7 @@ Battle::Battle()
 Battle::Battle(MapManage *map, PerformManage *pm, MeumUI* commandMeum, MeumUI* textBox, MeumUI* statusBox, Player* movePointer)
 	:map(map), pm(pm), commandMeum(commandMeum), textBox(textBox), statusBox(statusBox), movePointer(movePointer)
 {
-	bs = BattleState::BattleStateStandby;
+	bs = BattleState::BattleStateBegin;
 
 	action = NULL;
 
@@ -68,6 +68,9 @@ void Battle::start(void)
 
 	switch (bs)
 	{
+	case BattleStateBegin:
+		beginPhase();
+		break;
 	case BattleStateStandby:
 		standbyPhase();
 		break;
@@ -173,6 +176,11 @@ void Battle::createStatusBox(void)
 	statusBox->setBackground(ui);
 	statusBox->setPosition({ (Common::screen_width / 3) * 2, Common::screen_height - ui->getHeight() });
 	statusBox->setIsDisplay(true);
+}
+
+void Battle::beginPhase(void)
+{
+	changeBattleState(BattleState::BattleStateStandby);
 }
 
 void Battle::standbyPhase(void)
@@ -422,6 +430,7 @@ void Battle::plaseSelect(void)
 	}
 	map->addGameObject(movePointer);
 	movePointer->setIsReadInput(true);
+	movePointer->setVecSpeedFront(((Player*)actionList[nowActionChara])->getVecSpeedFront());
 
 	readMovePlace();
 }

@@ -56,6 +56,7 @@ private:
 	/*===========================================
 	phase function
 	============================================*/
+	void beginPhase(void);
 	void standbyPhase(void);
 	void commandPhase(void);
 	void taragetSelectPhase(void);
