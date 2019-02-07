@@ -89,16 +89,19 @@ void Enemy::dataUpdate(void)
 		isPatrol = false;
 	}
 
-	float speedSum = D3DXVec3LengthSq(getVecMoveSpeed());
-	if (Physics::round(speedSum, FLOAT_BITS) != 0 && getIsWithAnimation())
-	{
-		setIsPlayAnimation(true);
-	}
-	else
-	{
-		setIsPlayAnimation(false);
-		resetAnimation();
-	}
+	//float speedSum = D3DXVec3LengthSq(getVecMoveSpeed());
+	//if (getIsWithAnimation())
+	//{
+	//	if (Physics::round(speedSum, FLOAT_BITS) != 0)
+	//	{
+	//		setIsPlayAnimation(true);
+	//	}
+	//	else
+	//	{
+	//		setIsPlayAnimation(false);
+	//		resetAnimation();
+	//	}
+	//}
 
 	Chara::dataUpdate();
 }

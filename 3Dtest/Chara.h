@@ -9,6 +9,8 @@ public:
 	Chara(string modelPath);
 	virtual ~Chara();
 
+	virtual void dataUpdate(void);
+
 	BattleChara* getBattleChara(void);
 	void setBattleChara(BattleChara* bc);
 	float getWalkSpeed(void);

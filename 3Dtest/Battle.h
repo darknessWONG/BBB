@@ -1,11 +1,12 @@
 #pragma once
-#include <vector>
+#include "stdafx.h"
 #include "Chara.h"
 #include "meumUI.h"
 #include "Player.h"
 #include "PerformManage.h"
 #include "MapManage.h"
 #include "NameTap.h"
+#include "Billboard.h"
 
 typedef struct action_st
 {
@@ -50,6 +51,7 @@ public:
 	void setTextBox(MeumUI* textBox);
 	void setStatusBox(MeumUI* statusBox);
 	void setPerformManager(PerformManage* pm);
+	void setSkillBillboard(Billboard* billboard);
 	void setMap(MapManage* map);
 	BattleState getBattleState(void);
 private:
@@ -59,9 +61,7 @@ private:
 	void beginPhase(void);
 	void standbyPhase(void);
 	void commandPhase(void);
-	void taragetSelectPhase(void);
 	void movePhase(void);
-	void placeSelectPhase(void);
 	void damagePhase(void);
 	void mapMovePhase(void);
 	void endPhase(void);
@@ -82,7 +82,6 @@ private:
 	void plaseSelect(void);
 	void resetMovePointer(D3DXVECTOR2 center);
 	void readMovePlace(void);
-	void move(void);
 
 	/*===========================================
 	end phase
@@ -127,15 +126,16 @@ private:
 	void createTextBox(void);
 	void createStatusBox(void);
 	void addMovePerform(Chara* act, Chara* target);
+	void addSkillPerform(GameObject* act, D3DXVECTOR3 start, D3DXVECTOR3 target);
 	void displayMessage(string str);
 	void tabDeadEnemy(void);
 	void calStatusMessage(void);
+	void createSkillModel(int textureIndex, D3DXVECTOR3 position);
 
 	BattleState bs;
+	BattleState lastBs;
 	ActionPhaseStatus as;
 	ActionPhaseStatus lastAs;
-	MovePhaseStatus ms;
-	MovePhaseStatus lastMs;
 
 	vector<Chara*> charas;
 	vector<Chara*> actionList;
@@ -158,6 +158,8 @@ private:
 
 	float skillEfficiency;
 	float defEfficiency;
+
+	Billboard* skillBillboard;
 
 	MapManage* map;
 };

@@ -53,28 +53,31 @@ void Billboard::calWorldMatrix(void)
 
 void Billboard::draw(LPDIRECT3DDEVICE9 pD3DDevice)
 {
-	Vertex3D *pv;
-	pVertexBuffer->Lock(0, 0, (void**)&pv, 0);
-	memcpy(pv, point, sizeof(point));
-	pVertexBuffer->Unlock();
+	if (getIsDisplay())
+	{
+		Vertex3D *pv;
+		pVertexBuffer->Lock(0, 0, (void**)&pv, 0);
+		memcpy(pv, point, sizeof(point));
+		pVertexBuffer->Unlock();
 
-	WORD* pIndex;
-	pIndexBuffer->Lock(0, 0, (void**)&pIndex, 0);
-	memcpy(pIndex, index, sizeof(index));
-	pIndexBuffer->Unlock();
+		WORD* pIndex;
+		pIndexBuffer->Lock(0, 0, (void**)&pIndex, 0);
+		memcpy(pIndex, index, sizeof(index));
+		pIndexBuffer->Unlock();
 
-	//set FVF
-	pD3DDevice->SetFVF(FVF_VERTEX3D);
-	pD3DDevice->SetTexture(0, TextureHandler2D::GetTexture(textureIndex).tex_p);
+		//set FVF
+		pD3DDevice->SetFVF(FVF_VERTEX3D);
+		pD3DDevice->SetTexture(0, TextureHandler2D::GetTexture(textureIndex).tex_p);
 
-	pD3DDevice->SetStreamSource(0, Billboard::pVertexBuffer, 0, sizeof(Vertex3D));
-	pD3DDevice->SetIndices(Billboard::pIndexBuffer);
-	//set world matrix
-	pD3DDevice->SetTransform(D3DTS_WORLD, getMtxWorld());
-	//draw
-	pD3DDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
-	pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, 4, 0, 2);
-	pD3DDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
+		pD3DDevice->SetStreamSource(0, Billboard::pVertexBuffer, 0, sizeof(Vertex3D));
+		pD3DDevice->SetIndices(Billboard::pIndexBuffer);
+		//set world matrix
+		pD3DDevice->SetTransform(D3DTS_WORLD, getMtxWorld());
+		//draw
+		pD3DDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
+		pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, 4, 0, 2);
+		pD3DDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
+	}
 }
 
 RECTF Billboard::getBoundingRect(void)
@@ -84,11 +87,16 @@ RECTF Billboard::getBoundingRect(void)
 
 D3DXVECTOR2 Billboard::getBoundingCenter(void)
 {
-	return D3DXVECTOR2(0.0f, 0.0f);
+	D3DXVECTOR3 nowPos = *getVecNowPos();
+	D3DXVECTOR2 pos = { nowPos.x, nowPos.z };
+	return pos;
 }
 
 void Billboard::setBoundingCenter(D3DXVECTOR2 center)
 {
+	D3DXVECTOR3 pos = *getVecNowPos();
+	D3DXVECTOR3 newPos = { center.x, pos.y, center.y };
+	setVecNowPos(&newPos);
 }
 
 void Billboard::setCamera(Camera const* camera)

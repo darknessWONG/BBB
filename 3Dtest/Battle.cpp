@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Battle.h"
+#include "Common.h"
 #include "input.h"
 #include "Enemy.h"
 #include "math.h"
@@ -9,6 +10,7 @@
 Battle::Battle()
 {
 	bs = BattleState::BattleStateBegin;
+	lastBs = BattleState::BattleStateBegin;
 	action = NULL;
 #ifdef SKILL_EFFICIENCY
 	skillEfficiency = SKILL_EFFICIENCY;
@@ -26,6 +28,7 @@ Battle::Battle(MapManage *map, PerformManage *pm, MeumUI* commandMeum, MeumUI* t
 	:map(map), pm(pm), commandMeum(commandMeum), textBox(textBox), statusBox(statusBox), movePointer(movePointer)
 {
 	bs = BattleState::BattleStateBegin;
+	lastBs = BattleState::BattleStateBegin;
 
 	action = NULL;
 
@@ -52,6 +55,7 @@ Battle::~Battle()
 	commandMeum->setIsDelete(true);
 	textBox->setIsDelete(true);
 	statusBox->setIsDelete(true);
+	skillBillboard->setIsDelete(true);
 }
 
 void Battle::start(void)
@@ -64,6 +68,7 @@ void Battle::start(void)
 			((Enemy*)charas[i])->setIsPatrol(false);
 		}
 	}
+
 	commandMeum->setIsReadInput(false);
 
 	switch (bs)
@@ -77,14 +82,8 @@ void Battle::start(void)
 	case BattleStateCommand:
 		commandPhase();
 		break;
-	case BattleStateTaragetSelect:
-		taragetSelectPhase();
-		break;
 	case BattleStateMove:
 		movePhase();
-		break;
-	case BattleStatePlaceSelect:
-		placeSelectPhase();
 		break;
 	case BattleStateDamage:
 		damagePhase();
@@ -152,8 +151,6 @@ void Battle::changeBattleState(BattleState newbs)
 		action->active = actionList[nowActionChara];
 		break;
 	case BattleState::BattleStateMove:
-		ms = MovePhaseStatus::MovePhaseStatusPlaceSelect;
-		lastMs = MovePhaseStatus::MovePhaseStatusZero;
 		movePlace = { 0, 0 };
 		break;
 	case BattleState::BattleStateMapMove:
@@ -180,6 +177,7 @@ void Battle::createStatusBox(void)
 
 void Battle::beginPhase(void)
 {
+	lastBs = bs;
 	changeBattleState(BattleState::BattleStateStandby);
 }
 
@@ -190,11 +188,15 @@ void Battle::standbyPhase(void)
 	{
 		bs = BattleState::BattleStateEnd;
 	}
+
+	lastBs = bs;
 	changeBattleState(BattleState::BattleStateCommand);
 }
 
 void Battle::commandPhase(void)
 {
+	lastBs = bs;
+
 	textBox->setIsDisplay(true);
 	switch (as)
 	{
@@ -210,37 +212,24 @@ void Battle::commandPhase(void)
 	}
 }
 
-void Battle::taragetSelectPhase(void)
-{
-
-}
-
 void Battle::movePhase(void)
 {
-	switch (ms)
-	{
-	case MovePhaseStatus::MovePhaseStatusPlaceSelect:
-		plaseSelect();
-		break;
-	case MovePhaseStatus::MovePhaseStatusMove:
-		move();
-		break;
-	}
-}
-
-void Battle::placeSelectPhase(void)
-{
+	plaseSelect();
+	lastBs = bs;
 }
 
 void Battle::damagePhase(void)
 {
 	action->damage = calDamageList(action->active, action->passive, action->isUseSkill, action->skill);
 	takeDamage();
+
+	lastBs = bs;
 	changeBattleState(BattleState::BattleStateEnd);
 }
 
 void Battle::mapMovePhase(void)
 {
+	lastBs = bs;
 	if (Common::frameCount - mapMoveStartFrame >= 60)
 	{
 		changeBattleState(BattleState::BattleStateStandby);
@@ -249,6 +238,8 @@ void Battle::mapMovePhase(void)
 
 void Battle::endPhase(void)
 {
+	lastBs = bs;
+	skillBillboard->setIsDisplay(false);
 	if (!checkEnd())
 	{
 		do
@@ -374,18 +365,33 @@ void Battle::readTargetCommand(void)
 	if (Keyboard_IsTrigger(DIK_RETURN))
 	{
 		vector<Chara*> list = calTargetList(action->active, action->skill);
-		//D3DXVECTOR2 actionCenter = actionList[nowActionChara]->getBoundingCenter();
 		D3DXVECTOR2 targetCenter = list[commandMeum->getNowPointing()]->getBoundingCenter();
-		//float dis = D3DXVec2Length(&(actionCenter - targetCenter));
 		float dis = D3DXVec2Length(&(primitivePosition - targetCenter));
-		if (dis <= actionList[nowActionChara]->getBattleChara()->getMovePoint())
+		float disLimit = action->isUseSkill ? action->skill->getDistance() : actionList[nowActionChara]->getBattleChara()->getMovePoint();
+		if (dis <= disLimit)
 		{
 			vector<GameObject*> visionList = map->calObjectOnSight(actionList[nowActionChara], list[commandMeum->getNowPointing()]);
 			if (visionList.size() <= 0)
 			{
 				action->passive.push_back(list[commandMeum->getNowPointing()]);
-				addMovePerform(action->active, action->passive[0]);
+				if (!action->isUseSkill)
+				{
+					addMovePerform(action->active, action->passive[0]);
+				}
+				else
+				{
+					D3DXVECTOR3 pos = action->active->getBoundingCenter3D();
+					pos.y = 3;
+					D3DXVECTOR3 targetPos = action->passive[0]->getBoundingCenter3D();
+					targetPos.y = 3;
+					createSkillModel(action->skill->getTextureIndex(), pos);
+					addSkillPerform(skillBillboard, pos, targetPos);
+				}
 				bs = BattleState::BattleStateDamage;
+			}
+			else
+			{
+				displayMessage("Is not in vision");
 			}
 		}
 		else
@@ -408,6 +414,7 @@ void Battle::seleteSkill(void)
 		createSkillMeum(actionList[nowActionChara]->getBattleChara()->getSkillList());
 		displayMessage("Please select a skill to use");
 	}
+	commandMeum->setIsReadInput(true);
 	readSkillCommand();
 }
 
@@ -419,11 +426,15 @@ void Battle::readSkillCommand(void)
 		action->skill = actionList[nowActionChara]->getBattleChara()->getSkillList()[commandMeum->getNowPointing()];
 		as = ActionPhaseStatus::ActionPhaseStatusTargetSelect;
 	}
+	if (Keyboard_IsTrigger(DIK_Z))
+	{
+		as = ActionPhaseStatus::ActionPhaseStatusActionSelect;
+	}
 }
 
 void Battle::plaseSelect(void)
 {
-	if (ms != lastMs)
+	if (bs != lastBs)
 	{
 		resetMovePointer(actionList[nowActionChara]->getBoundingCenter());
 		displayMessage("Please select a place to go");
@@ -439,7 +450,6 @@ void Battle::resetMovePointer(D3DXVECTOR2 center)
 {
 	movePointer->setBoundingCenter(center);
 	movePointer->setIsDisplay(true);
-	lastMs = MovePhaseStatus::MovePhaseStatusPlaceSelect;
 }
 
 void Battle::readMovePlace(void)
@@ -474,10 +484,6 @@ void Battle::readMovePlace(void)
 		movePointer->setIsDisplay(false);
 		changeBattleState(BattleState::BattleStateCommand);
 	}
-}
-
-void Battle::move(void)
-{
 }
 
 bool Battle::checkDead(Chara * chara)
@@ -526,9 +532,13 @@ void Battle::createActionMeum(void)
 	UI* ui4 = new UI({ (ui->getWidth() / 4 * 2), (ui->getHeight() / 5) * 3 }, ui->getWidth() / 4, ui->getHeight() / 5, 1);
 	ui4->setStr("MOVE");
 	ui4->setIdentity(UIIdentity::UIIdentityMove);
+	UI* ui5 = new UI({ (ui->getWidth() / 4 * 2), (ui->getHeight() / 5) * 4 }, ui->getWidth() / 4, ui->getHeight() / 5, 1);
+	ui5->setStr("SKILL");
+	ui5->setIdentity(UIIdentity::UIIdentityUseSkill);
 	commandMeum->addOptins(ui2);
 	commandMeum->addOptins(ui3);
 	commandMeum->addOptins(ui4);
+	commandMeum->addOptins(ui5);
 	commandMeum->setBackground(ui);
 	commandMeum->setPointer(ui1);
 	commandMeum->setPosition({ 0, Common::screen_height - ui->getHeight() });
@@ -549,9 +559,9 @@ void Battle::createSkillMeum(vector<BattleSkill*> list)
 	int listNum = list.size();
 	for (int i = 0; i < listNum; i++)
 	{
-		ui = new UI({ (ui->getWidth() / 4 * 2), (ui->getHeight() / (listNum + 2)) * (i + 1) }, ui->getWidth() / 4, ui->getHeight() / (listNum + 2), 1);
-		ui->setStr(list[i]->getName());
-		commandMeum->addOptins(ui);
+		ui1 = new UI({ (ui->getWidth() / 4 * 2), (ui->getHeight() / (listNum + 2)) * (i + 1) }, ui->getWidth() / 4, ui->getHeight() / (listNum + 2), 1);
+		ui1->setStr(list[i]->getName());
+		commandMeum->addOptins(ui1);
 	}
 
 	lastAs = ActionPhaseStatus::ActionPhaseStatusSkillSelect;
@@ -725,6 +735,16 @@ void Battle::addMovePerform(Chara * act, Chara * target)
 	pm->addPerforms(mvp);
 }
 
+void Battle::addSkillPerform(GameObject * act, D3DXVECTOR3 start, D3DXVECTOR3 target)
+{
+	MovePerform *mvp = new MovePerform();
+	mvp->setActor(act);
+	mvp->setVecTarget(target);
+	mvp->setVecStart(start);
+	mvp->setMoveSpeed(0.1f);
+	pm->addPerforms(mvp);
+}
+
 void Battle::displayMessage(string str)
 {
 	textBox->setDisplayStr(str);
@@ -770,9 +790,22 @@ void Battle::calStatusMessage(void)
 	statusBox->setDisplayStr(displayStr);
 }
 
+void Battle::createSkillModel(int textureIndex, D3DXVECTOR3 position)
+{
+	skillBillboard->setTextureIndex(textureIndex);
+	skillBillboard->setVecNowPos(&position);
+	skillBillboard->setIsDisplay(true);
+	skillBillboard->setCanMove(true);
+}
+
 void Battle::setPerformManager(PerformManage * pm)
 {
 	this->pm = pm;
+}
+
+void Battle::setSkillBillboard(Billboard * billboard)
+{
+	this->skillBillboard = billboard;
 }
 
 void Battle::setMap(MapManage * map)

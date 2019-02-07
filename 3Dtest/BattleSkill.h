@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "SideEffect.h"
 #include "Common.h"
+#include "Model.h"
 class BattleSkill
 {
 public:
@@ -26,8 +27,12 @@ public:
 	void setSideEffect(const SideEffect* sideEffect);
 	DamageType getSkillType(void);
 	void setSkillType(DamageType skillType);
+	float getDistance(void);
+	void setDistance(float distance);
 	string getDescribe(void);
 	void setDescribe(string describe);
+	int getTextureIndex(void);
+	void setTextureIndex(int textureIndex);
 
 private:
 	string name;
@@ -39,6 +44,9 @@ private:
 	EffectTarget healTarget;
 	SideEffect *sideEffect;
 	DamageType skillType;
+	float distance;
 	string describe;
+
+	int textureIndex;
 };
 

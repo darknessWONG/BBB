@@ -13,6 +13,7 @@ BattleSkill::BattleSkill()
 	EffectTarget healTarget = EffectTarget::EffectTargetNoTarget;;
 	sideEffect = NULL;
 	skillType = DamageType::physics;
+	distance = 0;
 	describe = "";
 }
 
@@ -98,8 +99,11 @@ SideEffect * BattleSkill::getSideEffect(void)
 
 void BattleSkill::setSideEffect(const SideEffect * sideEffect)
 {
-	safe_delete<SideEffect>(this->sideEffect);
-	this->sideEffect = new SideEffect(*sideEffect);
+	if (sideEffect != NULL)
+	{
+		safe_delete<SideEffect>(this->sideEffect);
+		this->sideEffect = new SideEffect(*sideEffect);
+	}
 }
 
 DamageType BattleSkill::getSkillType(void)
@@ -112,6 +116,16 @@ void BattleSkill::setSkillType(DamageType skillType)
 	this->skillType = skillType;
 }
 
+float BattleSkill::getDistance(void)
+{
+	return distance;
+}
+
+void BattleSkill::setDistance(float distance)
+{
+	this->distance = distance;
+}
+
 string BattleSkill::getDescribe(void)
 {
 	return describe;
@@ -120,4 +134,14 @@ string BattleSkill::getDescribe(void)
 void BattleSkill::setDescribe(string describe)
 {
 	this->describe;
+}
+
+int BattleSkill::getTextureIndex(void)
+{
+	return textureIndex;
+}
+
+void BattleSkill::setTextureIndex(int textureIndex)
+{
+	this->textureIndex = textureIndex;
 }

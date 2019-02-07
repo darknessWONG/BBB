@@ -211,6 +211,18 @@ void GameManage::titleStateClean(void)
 
 void GameManage::gameStateInit(void)
 {
+	BattleSkill* fireBall = new BattleSkill();
+	fireBall->setTextureIndex(5);
+	fireBall->setCost(1);
+	fireBall->setDamage(5);
+	fireBall->setDamageTarget(EffectTarget::EffectTargetEnemy);
+	fireBall->setDistance(10);
+	fireBall->setHeal(0);
+	fireBall->setHealTarget(EffectTarget::EffectTargetNoTarget);
+	fireBall->setMainTarget(EffectTarget::EffectTargetEnemy);
+	fireBall->setName("fire Ball");
+	fireBall->setSideEffect(NULL);
+	fireBall->setSkillType(DamageType::magic);
 	BattleChara* bc = new BattleChara();
 	bc->setAtk(10);
 	bc->setCamp(CampType::CampTypePlayer);
@@ -221,8 +233,9 @@ void GameManage::gameStateInit(void)
 	bc->setMpNow(10);
 	bc->setName("Player");
 	bc->setSpeed(10);
-	Player* mesh = new Player("tiny_4anim.x");
-	mesh->setVecScale(new D3DXVECTOR3(0.01, 0.01, 0.01));
+	bc->addSkill(fireBall);
+	Player* mesh = new Player("player.blend.x");
+	//mesh->setVecScale(new D3DXVECTOR3(0.01, 0.01, 0.01));
 	mesh->setIsWithAnimation(true);
 	mesh->loadModel(pD3DDevice);
 	mesh->setWalkSpeed(0.3f);
@@ -610,8 +623,21 @@ void GameManage::battleInit(void)
 		MeumUI *statusBox = new MeumUI();
 		uis.push_back(statusBox);
 
+		Billboard* billboard = new Billboard();
+		billboard->setCamera(camera);
+		billboard->setIsDisplay(false);
+		billboard->setMaxSpeed(0.3f);
+		billboard->setCanMove(true);
+		billboard->setVecNowPos(new D3DXVECTOR3(0, 3, 0));
+		billboard->setOverlapLevel(-10);
+		billboard->setIsDelete(false);
+		//billboard->setVecScale(new D3DXVECTOR3(5, 5, 5));
+		others.push_back(billboard);
+		map->addGameObject(billboard);
+
 		battle = new Battle(map, &pm, cmdMeum, textBox, statusBox, pointMesh);
 		addCharaToBattle(battle, player);
+		battle->setSkillBillboard(billboard);
 		//battle->addCharas(player);
 		battleResult = BattleResultType::BattleResultTypeUnknow;
 	}
