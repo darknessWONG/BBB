@@ -80,6 +80,7 @@ void MapManage::updateGameObejcts(void)
 			gameObjects[i]->setVecNowPos(&new_point);
 			gameObjects[i]->calBounding();
 			list = collisionDetectionOvl(gameObjects[i]);
+			//list.clear();
 		}
 
 		//z position update
@@ -118,6 +119,7 @@ void MapManage::updateGameObejcts(void)
 			gameObjects[i]->setVecNowPos(&new_point);
 			gameObjects[i]->calBounding();
 			list = collisionDetectionOvl(gameObjects[i]);
+			//list.clear();
 		}
 
 		//y position update

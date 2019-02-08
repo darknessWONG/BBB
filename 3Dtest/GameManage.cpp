@@ -36,7 +36,7 @@ void GameManage::init(void)
 {
 	map = new MapManage();
 
-	D3DXVECTOR3* cameraPos = new D3DXVECTOR3(0, 20, -20);
+	D3DXVECTOR3* cameraPos = new D3DXVECTOR3(0, 6, -15);
 	D3DXVECTOR3* cameraWatchAt = new D3DXVECTOR3(0, 0, 0);
 	D3DXVECTOR3* cameraUp = new D3DXVECTOR3(0, 1, 0);
 	camera = new Camera(cameraPos, cameraWatchAt, cameraUp);
@@ -53,6 +53,7 @@ void GameManage::init(void)
 	TextureHandler2D::AddTexture("win.png", 2736, 1824);
 	TextureHandler2D::AddTexture("lose.png", 2736, 1824);
 	TextureHandler2D::AddTexture("title.png", 580, 326);
+	TextureHandler2D::AddTexture("fire ball.png", 2736, 1824);
 	TextureHandler2D::LoadTextures(pD3DDevice);
 
 	Cube::initStaticMember(pD3DDevice);
@@ -215,7 +216,7 @@ void GameManage::gameStateInit(void)
 	se->setType(SideEffectType::SideEffectTypePull);
 	se->setTarget(EffectTarget::EffectTargetEnemy);
 	BattleSkill* fireBall = new BattleSkill();
-	fireBall->setTextureIndex(5);
+	fireBall->setTextureIndex(8);
 	fireBall->setCost(1);
 	fireBall->setDamage(5);
 	fireBall->setDamageTarget(EffectTarget::EffectTargetEnemy);
@@ -238,36 +239,100 @@ void GameManage::gameStateInit(void)
 	bc->setSpeed(10);
 	bc->addSkill(fireBall);
 	Player* mesh = new Player("player.blend.x");
-	//mesh->setVecScale(new D3DXVECTOR3(0.01, 0.01, 0.01));
 	mesh->setIsWithAnimation(true);
 	mesh->loadModel(pD3DDevice);
 	mesh->setWalkSpeed(0.3f);
 	mesh->setMaxSpeed(0.3f);
 	mesh->setCanMove(true);
-	mesh->setVecNowPos(new D3DXVECTOR3(-10, 0, 0));
+	mesh->setVecNowPos(new D3DXVECTOR3(-90, 0, -85));
 	mesh->setOverlapLevel(1);
 	mesh->setBattleChara(bc);
 	player = mesh;
 	map->addGameObject(mesh);
 
-	//Model* tree = new Model("Rock1.blend.x");
-	//tree->loadModel(pD3DDevice);
-	//tree->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
-	//tree->setCanMove(false);
-	//tree->setVecNowPos(new D3DXVECTOR3(7.5, 0, -15));
-	//tree->setOverlapLevel(1);
-	//others.push_back(tree);
-	//map->addGameObject(tree);
+	Model* tree = new Model("rock wall.blend.x");
+	tree->loadModel(pD3DDevice);
+	tree->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
+	tree->setCanMove(false);
+	tree->setIsDisplay(true);
+	tree->setVecNowPos(new D3DXVECTOR3(100, 0, 0));
+	tree->setOverlapLevel(500);
+	others.push_back(tree);
+	map->addGameObject(tree);
 
-	//Model* tree2 = new Model("tree.x");
-	//tree2->loadModel(pD3DDevice);
-	//tree2->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
-	////mesh1->setRotateSpeed(20);
-	//tree2->setCanMove(false);
-	//tree2->setVecNowPos(new D3DXVECTOR3(-7.5, 0, 0));
-	//tree2->setOverlapLevel(1);
-	//others.push_back(tree2);
-	//map->addGameObject(tree2);
+	Model* tree10 = new Model("rock wall.blend.x");
+	tree10->loadModel(pD3DDevice);
+	tree10->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
+	tree10->setCanMove(false);
+	tree10->setIsDisplay(true);
+	tree10->setVecNowPos(new D3DXVECTOR3(-100, 0, 0));
+	tree10->setOverlapLevel(500);
+	others.push_back(tree10);
+	map->addGameObject(tree10);
+
+	Model* tree100 = new Model("rock wall.blend.x");
+	tree100->setVecScale(new D3DXVECTOR3(0.5, 1, 0.3));
+	tree100->loadModel(pD3DDevice);
+	tree100->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
+	tree100->setCanMove(false);
+	tree100->setIsDisplay(true);
+	tree100->setVecNowPos(new D3DXVECTOR3(-50, 0, 80));
+	tree100->setOverlapLevel(500);
+	others.push_back(tree100);
+	map->addGameObject(tree100);
+
+	Model* tree8 = new Model("rock wall2.blend.x");
+	tree8->loadModel(pD3DDevice);
+	tree8->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
+	tree8->setCanMove(false);
+	tree8->setIsDisplay(true);
+	tree8->setVecNowPos(new D3DXVECTOR3(0, 0, 100));
+	tree8->setOverlapLevel(500);
+	others.push_back(tree8);
+	map->addGameObject(tree8);
+
+	Model* tree9 = new Model("rock wall2.blend.x");
+	tree9->loadModel(pD3DDevice);
+	tree9->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
+	tree9->setCanMove(false);
+	tree9->setIsDisplay(true);
+	tree9->setVecNowPos(new D3DXVECTOR3(0, 0, -100));
+	tree9->setOverlapLevel(500);
+	others.push_back(tree9);
+	map->addGameObject(tree9);
+
+	Model* tree18 = new Model("rock wall2.blend.x");
+	tree18->setVecScale(new D3DXVECTOR3(0.8, 1, 0.5));
+	tree18->loadModel(pD3DDevice);
+	tree18->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
+	tree18->setCanMove(false);
+	tree18->setIsDisplay(true);
+	tree18->setVecNowPos(new D3DXVECTOR3(-90, 0, -60));
+	tree18->setOverlapLevel(500);
+	others.push_back(tree18);
+	map->addGameObject(tree18);
+
+	Model* tree19 = new Model("rock wall2.blend.x");
+	tree19->setVecScale(new D3DXVECTOR3(0.8, 1, 0.5));
+	tree19->loadModel(pD3DDevice);
+	tree19->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
+	tree19->setCanMove(false);
+	tree19->setIsDisplay(true);
+	tree19->setVecNowPos(new D3DXVECTOR3(90, 0, 0));
+	tree19->setOverlapLevel(500);
+	others.push_back(tree19);
+	map->addGameObject(tree19);
+
+	Model* tree20 = new Model("rock wall2.blend.x");
+	tree20->setVecScale(new D3DXVECTOR3(0.25, 1, 0.5));
+	tree20->loadModel(pD3DDevice);
+	tree20->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
+	tree20->setCanMove(false);
+	tree20->setIsDisplay(true);
+	tree20->setVecNowPos(new D3DXVECTOR3(0, 0, 50));
+	tree20->setOverlapLevel(500);
+	others.push_back(tree20);
+	map->addGameObject(tree20);
 
 	Model* tree3 = new Ground("aaa.blend.x");
 	tree3->setIsWithAnimation(false);
@@ -281,59 +346,85 @@ void GameManage::gameStateInit(void)
 	others.push_back(tree3);
 	map->addGameObject(tree3);
 
-	BattleChara* bc1 = new BattleChara();
-	bc1->setAtk(10);
-	bc1->setCamp(CampType::CampTypeEnemy);
-	bc1->setHpMax(50);
-	bc1->setHpNow(50);
-	bc1->setMovePoint(30);
-	bc1->setMpMax(10);
-	bc1->setMpNow(10);
-	bc1->setName("enemy");
-	bc1->setSpeed(10);
-	Enemy* mesh3 = new Enemy("moster.blend.x");
-	mesh3->setIsWithAnimation(true);
-	mesh3->loadModel(pD3DDevice);
-	mesh3->setWalkSpeed(0.05f);
-	mesh3->setMaxSpeed(0.05f);
-	mesh3->setCanMove(true);
-	mesh3->setVecNowPos(new D3DXVECTOR3(1, 0, 1));
-	mesh3->setVecPatrolStart(new D3DXVECTOR3(1, 0, 1));
-	mesh3->setVecPatrolEnd(new D3DXVECTOR3(1, 0, 20));
-	mesh3->setOverlapLevel(1);
-	mesh3->setBattleChara(bc1);
-	mesh3->setTrackingRadius(10);
-	mesh3->setBattleRadius(5);
-	enemys.push_back(mesh3);
-	map->addGameObject(mesh3);
+	//BattleChara* bc1 = new BattleChara();
+	//bc1->setAtk(10);
+	//bc1->setCamp(CampType::CampTypeEnemy);
+	//bc1->setHpMax(50);
+	//bc1->setHpNow(50);
+	//bc1->setMovePoint(30);
+	//bc1->setMpMax(10);
+	//bc1->setMpNow(10);
+	//bc1->setName("enemy");
+	//bc1->setSpeed(10);
+	//Enemy* mesh3 = new Enemy("moster.blend.x");
+	//mesh3->setIsWithAnimation(true);
+	//mesh3->loadModel(pD3DDevice);
+	//mesh3->setWalkSpeed(0.05f);
+	//mesh3->setMaxSpeed(0.05f);
+	//mesh3->setCanMove(true);
+	//mesh3->setVecNowPos(new D3DXVECTOR3(1, 0, 1));
+	//mesh3->setVecPatrolStart(new D3DXVECTOR3(1, 0, 1));
+	//mesh3->setVecPatrolEnd(new D3DXVECTOR3(1, 0, 20));
+	//mesh3->setOverlapLevel(1);
+	//mesh3->setBattleChara(bc1);
+	//mesh3->setTrackingRadius(10);
+	//mesh3->setBattleRadius(5);
+	//enemys.push_back(mesh3);
+	//map->addGameObject(mesh3);
+
+	BattleChara* bc3 = new BattleChara();
+	bc3->setAtk(10);
+	bc3->setCamp(CampType::CampTypeEnemy);
+	bc3->setHpMax(10);
+	bc3->setHpNow(10);
+	bc3->setMovePoint(30);
+	bc3->setMpMax(10);
+	bc3->setMpNow(10);
+	bc3->setName("enemy2");
+	bc3->setSpeed(10);
+	Enemy* mesh9 = new Enemy("moster.blend.x");
+	mesh9->setIsWithAnimation(true);
+	mesh9->loadModel(pD3DDevice);
+	mesh9->setWalkSpeed(0.05f);
+	mesh9->setMaxSpeed(0.05f);
+	mesh9->setCanMove(true);
+	mesh9->setVecNowPos(new D3DXVECTOR3(-30, 0, -85));
+	mesh9->setVecPatrolStart(new D3DXVECTOR3(0, 0, -85));
+	mesh9->setVecPatrolEnd(new D3DXVECTOR3(-30, 0, -85));
+	mesh9->setOverlapLevel(1);
+	mesh9->setBattleChara(bc3);
+	mesh9->setTrackingRadius(10);
+	mesh9->setBattleRadius(5);
+	enemys.push_back(mesh9);
+	map->addGameObject(mesh9);
 
 
-	BattleChara* bc2 = new BattleChara();
-	bc2->setAtk(10);
-	bc2->setCamp(CampType::CampTypeEnemy);
-	bc2->setHpMax(10);
-	bc2->setHpNow(10);
-	bc2->setMovePoint(30);
-	bc2->setMpMax(10);
-	bc2->setMpNow(10);
-	bc2->setName("enemy1");
-	bc2->setSpeed(10);
-	Enemy* enemy4 = new Enemy("moster.blend.x");
-	//Enemy* enemy4 = new Enemy("funtest.x");
-	enemy4->setIsWithAnimation(true);
-	enemy4->loadModel(pD3DDevice);
-	enemy4->setWalkSpeed(0.05f);
-	enemy4->setMaxSpeed(0.05f);
-	enemy4->setCanMove(true);
-	enemy4->setVecNowPos(new D3DXVECTOR3(13, 0, 10));
-	enemy4->setVecPatrolStart(new D3DXVECTOR3(13, 0, 1));
-	enemy4->setVecPatrolEnd(new D3DXVECTOR3(13, 0, 20));
-	enemy4->setOverlapLevel(1);
-	enemy4->setBattleChara(bc2);
-	enemy4->setTrackingRadius(10);
-	enemy4->setBattleRadius(5);
-	enemys.push_back(enemy4);
-	map->addGameObject(enemy4);
+	//BattleChara* bc2 = new BattleChara();
+	//bc2->setAtk(10);
+	//bc2->setCamp(CampType::CampTypeEnemy);
+	//bc2->setHpMax(10);
+	//bc2->setHpNow(10);
+	//bc2->setMovePoint(30);
+	//bc2->setMpMax(10);
+	//bc2->setMpNow(10);
+	//bc2->setName("enemy1");
+	//bc2->setSpeed(10);
+	//Enemy* enemy4 = new Enemy("moster.blend.x");
+	////Enemy* enemy4 = new Enemy("funtest.x");
+	//enemy4->setIsWithAnimation(true);
+	//enemy4->loadModel(pD3DDevice);
+	//enemy4->setWalkSpeed(0.05f);
+	//enemy4->setMaxSpeed(0.05f);
+	//enemy4->setCanMove(true);
+	//enemy4->setVecNowPos(new D3DXVECTOR3(13, 0, 10));
+	//enemy4->setVecPatrolStart(new D3DXVECTOR3(13, 0, 1));
+	//enemy4->setVecPatrolEnd(new D3DXVECTOR3(13, 0, 20));
+	//enemy4->setOverlapLevel(1);
+	//enemy4->setBattleChara(bc2);
+	//enemy4->setTrackingRadius(10);
+	//enemy4->setBattleRadius(5);
+	//enemys.push_back(enemy4);
+	//map->addGameObject(enemy4);
 
 
 	if (isFade == 1)
@@ -438,6 +529,7 @@ void GameManage::gameStateClean(void)
 	others.clear();
 	vigliances.clear();
 	uis.clear();
+	//safe_delete<Battle>(battle);
 
 	gs = GameState::GameStateEndInit;
 }
@@ -547,13 +639,12 @@ void GameManage::enemyUpdate(Enemy* enemy)
 	int battleListNum = battleList.size();
 	for (int i = 0; i < battleListNum; i++)
 	{
-		if (player != battleList[i])
+		if (player != battleList[i] || player->getIsDelete())
 		{
 			continue;
 		}
 		battleInit();
 		addCharaToBattle(battle, enemy);
-		//battle->addCharas(enemy);
 		return;
 	}
 
@@ -632,7 +723,7 @@ void GameManage::battleInit(void)
 		billboard->setMaxSpeed(0.3f);
 		billboard->setCanMove(true);
 		billboard->setVecNowPos(new D3DXVECTOR3(0, 3, 0));
-		billboard->setOverlapLevel(-10);
+		billboard->setOverlapLevel(-1000);
 		billboard->setIsDelete(false);
 		//billboard->setVecScale(new D3DXVECTOR3(5, 5, 5));
 		others.push_back(billboard);
@@ -675,7 +766,7 @@ void GameManage::addCharaToBattle(Battle * battle, Chara* chara)
 		billboard->setMaxSpeed(0.3f);
 		billboard->setCanMove(true);
 		billboard->setVecNowPos(new D3DXVECTOR3(0, 3, 0));
-		billboard->setOverlapLevel(-10);
+		billboard->setOverlapLevel(-1000);
 		billboard->setIsDelete(false);
 		billboard->setBelong(chara);
 		billboard->initName(pD3DDevice);

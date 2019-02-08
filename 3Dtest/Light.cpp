@@ -36,7 +36,7 @@ void Light::lightSet(LPDIRECT3DDEVICE9 pD3DDevice)
 	//normalize the normals which scaled when scaling
 	pD3DDevice->SetRenderState(D3DRS_NORMALIZENORMALS, TRUE);
 	//Ambient light
-	pD3DDevice->SetRenderState(D3DRS_AMBIENT, D3DCOLOR_RGBA(255, 255, 255, 255));
+	pD3DDevice->SetRenderState(D3DRS_AMBIENT, D3DCOLOR_RGBA(128, 128, 128, 255));
 	//pD3DDevice->SetRenderState(D3DRS_AMBIENTMATERIALSOURCE, D3DMCS_COLOR1);
 	pD3DDevice->SetRenderState(D3DRS_AMBIENTMATERIALSOURCE, D3DMCS_MATERIAL);
 }

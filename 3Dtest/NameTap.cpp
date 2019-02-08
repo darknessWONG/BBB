@@ -35,7 +35,7 @@ void NameTap::positionUpdateY(void)
 {
 	D3DXVECTOR3 pos = *getVecNowPos();
 	BOXF box = belong->getBoundingBox();
-	pos.y = belong->getBoundingCenter3D().y + (box.top - box.bottom) / 2;
+	pos.y = belong->getBoundingCenter3D().y + (box.top - box.bottom);
 	setVecNowPos(&pos);
 }
 

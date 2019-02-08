@@ -53,7 +53,7 @@ void Camera::draw(LPDIRECT3DDEVICE9 pD3DDevice)
 	D3DXMATRIX mtxProjection;
 	D3DXMatrixIdentity(&mtxProjection);
 	//visual angle, Screen ratio, near point, far point
-	D3DXMatrixPerspectiveFovLH(&mtxProjection, D3DXToRadian(60), (float)Common::screen_width/ Common::screen_height, 0.1f, 100.0f);
+	D3DXMatrixPerspectiveFovLH(&mtxProjection, D3DXToRadian(60), (float)Common::screen_width/ Common::screen_height, 0.1f, 200.0f);
 
 	//set the view matirx to the device
 	pD3DDevice->SetTransform(D3DTS_VIEW, &mtxView);
