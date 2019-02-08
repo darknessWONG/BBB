@@ -5,6 +5,7 @@
 #include "Enemy.h"
 #include "math.h"
 #include "MovePerform.h"
+#include "ForceMovePerform.h"
 
 
 Battle::Battle()
@@ -349,7 +350,7 @@ void Battle::selectTarget(void)
 		if (dis <= actionList[nowActionChara]->getBattleChara()->getMovePoint() && visionList.size() <= 0)
 		{	
 			action->passive.push_back(actionList[0]);
-			addMovePerform(action->active, action->passive[0]);
+			addMovePerform(action->active, action->passive[0], 0);
 			bs = BattleState::BattleStateDamage;
 		}
 		else
@@ -376,7 +377,7 @@ void Battle::readTargetCommand(void)
 				action->passive.push_back(list[commandMeum->getNowPointing()]);
 				if (!action->isUseSkill)
 				{
-					addMovePerform(action->active, action->passive[0]);
+					addMovePerform(action->active, action->passive[0], 0);
 				}
 				else
 				{
@@ -386,6 +387,10 @@ void Battle::readTargetCommand(void)
 					targetPos.y = 3;
 					createSkillModel(action->skill->getTextureIndex(), pos);
 					addSkillPerform(skillBillboard, pos, targetPos);
+					if (action->skill->getSideEffect()->getType() == SideEffectType::SideEffectTypePull)
+					{
+						addMovePerform(action->passive[0], action->active, 1);
+					}
 				}
 				bs = BattleState::BattleStateDamage;
 			}
@@ -464,7 +469,7 @@ void Battle::readMovePlace(void)
 			vector<GameObject*> list = map->calObjectOnSightOvl(actionList[nowActionChara], movePointer);
 			if (list.size() <= 0)
 			{
-				addMovePerform(actionList[nowActionChara], movePointer);
+				addMovePerform(actionList[nowActionChara], movePointer, 0);
 				movePointer->setIsDisplay(false);
 				changeBattleState(BattleState::BattleStateCommand);
 			}
@@ -709,9 +714,17 @@ void Battle::takeDamage(void)
 	}
 }
 
-void Battle::addMovePerform(Chara * act, Chara * target)
+void Battle::addMovePerform(Chara * act, Chara * target, int flag)
 {
-	MovePerform *mvp = new MovePerform();
+	MovePerform *mvp;
+	if (flag == 0)
+	{
+		mvp = new MovePerform();
+	}
+	else
+	{
+		mvp = new ForceMovePerform();
+	}
 	mvp->setActor(act);
 	D3DXVECTOR2 actCenter = act->getBoundingCenter();
 	D3DXVECTOR2 pasCenter = target->getBoundingCenter();

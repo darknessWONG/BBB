@@ -169,6 +169,7 @@
     <ClInclude Include="debugPrintf.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="font.h" />
+    <ClInclude Include="ForceMovePerform.h" />
     <ClInclude Include="GameManage.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Ground.h" />
@@ -215,6 +216,7 @@
     <ClCompile Include="debugPrintf.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="font.cpp" />
+    <ClCompile Include="ForceMovePerform.cpp" />
     <ClCompile Include="GameManage.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Ground.cpp" />

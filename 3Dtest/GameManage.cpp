@@ -211,6 +211,9 @@ void GameManage::titleStateClean(void)
 
 void GameManage::gameStateInit(void)
 {
+	SideEffect* se = new SideEffect();
+	se->setType(SideEffectType::SideEffectTypePull);
+	se->setTarget(EffectTarget::EffectTargetEnemy);
 	BattleSkill* fireBall = new BattleSkill();
 	fireBall->setTextureIndex(5);
 	fireBall->setCost(1);
@@ -221,7 +224,7 @@ void GameManage::gameStateInit(void)
 	fireBall->setHealTarget(EffectTarget::EffectTargetNoTarget);
 	fireBall->setMainTarget(EffectTarget::EffectTargetEnemy);
 	fireBall->setName("fire Ball");
-	fireBall->setSideEffect(NULL);
+	fireBall->setSideEffect(se);
 	fireBall->setSkillType(DamageType::magic);
 	BattleChara* bc = new BattleChara();
 	bc->setAtk(10);
@@ -281,8 +284,8 @@ void GameManage::gameStateInit(void)
 	BattleChara* bc1 = new BattleChara();
 	bc1->setAtk(10);
 	bc1->setCamp(CampType::CampTypeEnemy);
-	bc1->setHpMax(10);
-	bc1->setHpNow(10);
+	bc1->setHpMax(50);
+	bc1->setHpNow(50);
 	bc1->setMovePoint(30);
 	bc1->setMpMax(10);
 	bc1->setMpNow(10);

@@ -125,7 +125,9 @@ private:
 	void changeBattleState(BattleState newbs);
 	void createTextBox(void);
 	void createStatusBox(void);
-	void addMovePerform(Chara* act, Chara* target);
+	/*if flag is 0, it will add a normal move perform
+	if flag is 1, it will add a force move perform*/
+	void addMovePerform(Chara* act, Chara* target, int flag);
 	void addSkillPerform(GameObject* act, D3DXVECTOR3 start, D3DXVECTOR3 target);
 	void displayMessage(string str);
 	void tabDeadEnemy(void);

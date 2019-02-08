@@ -26,7 +26,7 @@ string SideEffect::getName(void)
 	return name;
 }
 
-void SideEffect::seetName(string name)
+void SideEffect::setName(string name)
 {
 	this->name = name;
 }

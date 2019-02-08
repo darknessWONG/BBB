@@ -8,7 +8,7 @@ public:
 	~SideEffect();
 
 	string getName(void);
-	void seetName(string name);
+	void setName(string name);
 	SideEffectType getType(void);
 	void setType(SideEffectType type);
 	int getDuration(void);
