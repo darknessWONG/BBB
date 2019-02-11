@@ -180,12 +180,12 @@ void GameObject::setDisappear(bool isDisappear, int ovl)
 {
 	if (isDisappear)
 	{
-		setIsDisplay(false);
+		setIsDisplay(!isDisappear);
 		setOverlapLevel(-100);
 	}
 	else
 	{
-		setIsDisplay(true);
+		setIsDisplay(!isDisappear);
 		setOverlapLevel(ovl);
 	}
 }

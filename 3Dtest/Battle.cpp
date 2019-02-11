@@ -346,7 +346,7 @@ void Battle::selectTarget(void)
 	else
 	{
 		float dis = D3DXVec2Length(&(actionList[0]->getBoundingCenter() - actionList[nowActionChara]->getBoundingCenter()));
-		vector<GameObject*> visionList = map->calObjectOnSight(actionList[nowActionChara], actionList[0]);
+		vector<GameObject*> visionList = map->calObjectOnSightOvl(actionList[nowActionChara], actionList[0]);
 		if (dis <= actionList[nowActionChara]->getBattleChara()->getMovePoint() && visionList.size() <= 0)
 		{	
 			action->passive.push_back(actionList[0]);
@@ -371,7 +371,7 @@ void Battle::readTargetCommand(void)
 		float disLimit = action->isUseSkill ? action->skill->getDistance() : actionList[nowActionChara]->getBattleChara()->getMovePoint();
 		if (dis <= disLimit)
 		{
-			vector<GameObject*> visionList = map->calObjectOnSight(actionList[nowActionChara], list[commandMeum->getNowPointing()]);
+			vector<GameObject*> visionList = map->calObjectOnSightOvl(actionList[nowActionChara], list[commandMeum->getNowPointing()]);
 			if (visionList.size() <= 0)
 			{
 				action->passive.push_back(list[commandMeum->getNowPointing()]);
