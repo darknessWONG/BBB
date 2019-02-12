@@ -69,6 +69,7 @@ private:
 
 	Player *player = NULL;
 	vector<Enemy*> enemys;
+	Enemy* boss = NULL;
 	vector<Vigilance*> vigliances;
 	vector<GameObject*> others;
 	vector<MeumUI*> uis;

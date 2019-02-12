@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Light.h"
+#include "Common.h"
 
 
 Light::Light()
@@ -28,6 +29,8 @@ void Light::init(LPDIRECT3DDEVICE9 pD3DDevice)
 
 void Light::lightSet(LPDIRECT3DDEVICE9 pD3DDevice)
 {
+	light.Direction = direction == NULL ? light.Direction : *direction;
+
 	pD3DDevice->SetLight(0, &light);
 	pD3DDevice->LightEnable(0, TRUE);
 	//pD3DDevice->SetRenderState(D3DRS_DIFFUSEMATERIALSOURCE, D3DMCS_COLOR1);
@@ -39,4 +42,10 @@ void Light::lightSet(LPDIRECT3DDEVICE9 pD3DDevice)
 	pD3DDevice->SetRenderState(D3DRS_AMBIENT, D3DCOLOR_RGBA(128, 128, 128, 255));
 	//pD3DDevice->SetRenderState(D3DRS_AMBIENTMATERIALSOURCE, D3DMCS_COLOR1);
 	pD3DDevice->SetRenderState(D3DRS_AMBIENTMATERIALSOURCE, D3DMCS_MATERIAL);
+}
+
+void Light::setDirection(D3DXVECTOR3* direction)
+{
+	safe_delete<D3DXVECTOR3>(this->direction);
+	this->direction = new D3DXVECTOR3(*direction);
 }

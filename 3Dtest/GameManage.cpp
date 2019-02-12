@@ -597,7 +597,7 @@ void GameManage::gameStateInit(void)
 	enemy10->setWalkSpeed(0.05f);
 	enemy10->setMaxSpeed(0.05f);
 	enemy10->setCanMove(true);
-	enemy10->setVecNowPos(new D3DXVECTOR3(-10, 0, -20));
+	enemy10->setVecNowPos(new D3DXVECTOR3(-10, 0, -10));
 	enemy10->setVecPatrolStart(new D3DXVECTOR3(-30, 0, -10));
 	enemy10->setVecPatrolEnd(new D3DXVECTOR3(30, 0, -10));
 	enemy10->setOverlapLevel(1);
@@ -606,6 +606,34 @@ void GameManage::gameStateInit(void)
 	enemy10->setBattleRadius(5);
 	enemys.push_back(enemy10);
 	map->addGameObject(enemy10);
+
+	BattleChara* bc13 = new BattleChara();
+	bc13->setAtk(10);
+	bc13->setCamp(CampType::CampTypeEnemy);
+	bc13->setHpMax(10);
+	bc13->setHpNow(10);
+	bc13->setMovePoint(10);
+	bc13->setMpMax(10);
+	bc13->setMpNow(10);
+	bc13->setName("enemy11");
+	bc13->setSpeed(10);
+	Enemy* enemy11 = new Enemy("moster.blend.x");
+	enemy11->setVecScale(new D3DXVECTOR3( 5.0, 5.0, 5.0 ));
+	enemy11->setIsWithAnimation(true);
+	enemy11->loadModel(pD3DDevice);
+	enemy11->setWalkSpeed(0.05f);
+	enemy11->setMaxSpeed(0.05f);
+	enemy11->setCanMove(true);
+	enemy11->setVecNowPos(new D3DXVECTOR3(30, 0, 40));
+	enemy11->setVecPatrolStart(new D3DXVECTOR3(30, 0, 20));
+	enemy11->setVecPatrolEnd(new D3DXVECTOR3(30, 0, 40));
+	enemy11->setOverlapLevel(1);
+	enemy11->setBattleChara(bc13);
+	enemy11->setTrackingRadius(20);
+	enemy11->setBattleRadius(10);
+	enemys.push_back(enemy11);
+	boss = enemy11;
+	map->addGameObject(enemy11);
 
 	if (isFade == 1)
 	{
@@ -663,6 +691,10 @@ void GameManage::gameStateUpdate(void)
 		animationUpdate();
 		enemyUpdate();
 		othersUpdate();
+		if (boss != NULL)
+		{
+			//boss->setIsPatrol(false);
+		}
 		winStatus = checkEnd();
 		if (winStatus)
 		{
@@ -781,7 +813,7 @@ BOOL GameManage::checkEnd(void)
 	{
 		return 1;
 	}
-	else if(enemys.size() <= 0)
+	else if(boss == NULL)
 	{
 		return 2;
 	}
@@ -799,6 +831,7 @@ void GameManage::cameraUpdate(void)
 		dir.y = 0;
 		player->setVecSpeedFront(&dir);
 	}
+	light->setDirection(camera->getVecFront());
 }
 
 void GameManage::enemyUpdate(void)
@@ -988,6 +1021,10 @@ void GameManage::cleanDeletedObject(void)
 	{
 		if ((*it)->getIsDelete())
 		{
+			if (boss == *it)
+			{
+				boss = NULL;
+			}
 			Enemy* enemy = *it;
 			safe_delete<Enemy>(enemy);
 			enemys.erase(it);
