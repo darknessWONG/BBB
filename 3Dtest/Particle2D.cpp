@@ -3,8 +3,8 @@
 #include "texture.h"
 #include "sprite.h"
 
-#define BALLOON_X		(40)
-#define BALLOON_Y		(40)
+#define BALLOON_X		(30)
+#define BALLOON_Y		(75)
 
 Particle2D::Particle2D()
 {
@@ -68,7 +68,7 @@ void Particle2D::Draw()
 			switch (pList[i].type)
 			{
 			case 1:
-				Sprite_Draw_Size(TEX_NONE, pList[i].position.x, pList[i].position.y, BALLOON_X, BALLOON_Y);
+				Sprite_Draw_Size(TEX_BALLOON, pList[i].position.x, pList[i].position.y, BALLOON_X, BALLOON_Y);
 				break;
 			default:
 				break;

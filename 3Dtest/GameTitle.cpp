@@ -25,8 +25,8 @@ void GameTitle::Update()
 		bEnd = true;
 	}
 	counter += increment;
-	gColor.a = (float)counter / 30;
-	if (counter == 60 || counter == 0) {
+	gColor.a = (float)counter / 60;
+	if (counter == 90 || counter == 0) {
 		pParticle->Spawn(1);
 		increment = -increment;
 	}
@@ -40,6 +40,7 @@ void GameTitle::Draw()
 	pParticle->Draw();
 	Sprite_Draw_Size(texture_logo, Common::screen_width * 0.5f, Common::screen_height * 0.3f, 600, 250);
 	Sprite_Draw_Size(texture_startgame, Common::screen_width * 0.5f, Common::screen_height * 0.7f, 200, 50, gColor);
+	//Number::Draw(192387129, 10, D3DXVECTOR2(100.0f, 100.0f), 1.0f);
 }
 
 bool GameTitle::isEnd()

@@ -18,6 +18,8 @@ static const TextureFileData TEXTURE_FILES[] = {
 	{ "asset/sprite/logo.png", 1280, 670 },
 	{ "asset/sprite/result.jpg", 2000, 1686 },		// size 1000x562 each ëΩï™Åc
 	{ "asset/sprite/start.png", 600, 100 },
+	{ "asset/sprite/number.png", 728, 95 },
+	{ "asset/sprite/balloon.png", 1218, 3059 },
 	{ "asset/sprite/marry.png", 1583, 2155 },
 	{ "asset/sprite/roller.png", 2666, 1488 },
 	{ "asset/sprite/ferris.png", 1889, 1974 },

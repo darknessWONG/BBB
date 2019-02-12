@@ -94,6 +94,9 @@
     <ClCompile Include="Particle2D.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
+    <ClCompile Include="Number.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3Dtest.h">
@@ -190,6 +193,9 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="Particle2D.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Number.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
