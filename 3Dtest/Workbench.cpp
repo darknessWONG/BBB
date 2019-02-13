@@ -3,6 +3,7 @@
 #include "ItemFactory.h"
 #include "input.h"
 #include "Common.h"
+#include "Recipe.h"
 
 int** Workbench::recipe = NULL;
 int Workbench::recipeNum = 0;
@@ -156,7 +157,9 @@ void Workbench::fuseItems(void)
 			{
 				if (!fused)
 				{
-					items[j]->setStatusNow(recipe[i][itemNum]);
+					
+					//items[j]->setStatusNow(recipe[i][itemNum]);
+					ItemFactory::setItemStatus(items[j], (ResourceM)recipe[i][itemNum]);
 					items[j]->setBoundingCenter(getBoundingCenter());
 					fused = true;
 				}
@@ -166,6 +169,11 @@ void Workbench::fuseItems(void)
 				}
 			}
 		}
+		/*for (int j = 0; j < itemNum; j++)
+		{
+			items[j]->setIsDestory(true);
+		}
+		return ItemFactory::create_item(getBoundingCenter().x, getBoundingCenter().y, recipe[i][itemNum]);*/
 	}
 
 	releaseItems();
@@ -242,11 +250,26 @@ void Workbench::setLength(float length)
 
 void Workbench::initRecipe(void)
 {
-	recipeNum = 1;
+	recipeNum = 4;
 	recipe = new int*[1];
 	recipe[0] = new int[10]{
-		-1, -1, 1,
-		-1, -1, -1,
-		2, -1, -1, 3
-	};
+		ResourceM::RESOURCEM_NONE,		ResourceM::RESOURCEM_IRON,		ResourceM::RESOURCEM_NONE,
+		ResourceM::RESOURCEM_NONE,		ResourceM::RESOURCEM_WOOD,		ResourceM::RESOURCEM_NONE,
+		ResourceM::RESOURCEM_IRON,		ResourceM::RESOURCEM_IRON,		ResourceM::RESOURCEM_IRON,
+	3};
+	recipe[1] = new int[10]{
+		ResourceM::RESOURCEM_WOOD,		ResourceM::RESOURCEM_BRICK,		ResourceM::RESOURCEM_WOOD,
+		ResourceM::RESOURCEM_NONE,		ResourceM::RESOURCEM_NONE,		ResourceM::RESOURCEM_NONE,
+		ResourceM::RESOURCEM_IRON,		ResourceM::RESOURCEM_IRON,		ResourceM::RESOURCEM_IRON, 
+	4};
+	recipe[2] = new int[10]{
+		ResourceM::RESOURCEM_NONE,		ResourceM::RESOURCEM_BRICK,		ResourceM::RESOURCEM_NONE,
+		ResourceM::RESOURCEM_BRICK,		ResourceM::RESOURCEM_IRON,		ResourceM::RESOURCEM_BRICK,
+		ResourceM::RESOURCEM_NONE,		ResourceM::RESOURCEM_BRICK,		ResourceM::RESOURCEM_NONE,
+	5 };
+	recipe[3] = new int[10]{
+		ResourceM::RESOURCEM_NONE,		ResourceM::RESOURCEM_BRICK,		ResourceM::RESOURCEM_NONE,
+		ResourceM::RESOURCEM_BRICK,		ResourceM::RESOURCEM_IRON,		ResourceM::RESOURCEM_BRICK,
+		ResourceM::RESOURCEM_NONE,		ResourceM::RESOURCEM_BRICK,		ResourceM::RESOURCEM_NONE,
+	6};
 }

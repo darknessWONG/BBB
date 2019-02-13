@@ -13,6 +13,7 @@
 #include "texture.h"
 #include "Parts.h"
 #include "MyMesh.h"
+#include "factoryModel.h"
 #include "Animation.h"
 #include "AnimationSet.h"
 
@@ -80,6 +81,16 @@ void GameManage::beforeUpdate(void)
 	for (int i = 0; i < gameObjectsNum; i++)
 	{
 		map->addGameObject(vigliances[i]);
+	}
+	gameObjectsNum = factorys.size();
+	for (int i = 0; i < gameObjectsNum; i++)
+	{
+		map->addGameObject(factorys[i]);
+	}
+	gameObjectsNum = handOutbox.size();
+	for (int i = 0; i < gameObjectsNum; i++)
+	{
+		map->addGameObject(handOutbox[i]);
 	}
 }
 
@@ -202,26 +213,31 @@ void GameManage::game_state_init(void)
 	ItemFactory::setDevice(pD3DDevice);
 	Workbench::initRecipe();
 
-	Player* mesh = new Player("radio.x");
+	Player* mesh = new Player("hew_char.blend.x");
+	mesh->setIsWithAnimation(true);
 	mesh->loadModel(pD3DDevice);
-	//mesh->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
-	//mesh->setRotateSpeed(20);
 	mesh->setWalkSpeed(0.01);
 	mesh->setMaxSpeed(0.3);
 	mesh->setCanMove(true);
 	mesh->setVecNowPos(new D3DXVECTOR3(0, 0, 0));
-	//gameObjects.push_back(mesh);
 	player = mesh;
 	map->addGameObject(mesh);
 
+	factoryModel* fm = new factoryModel("radio.x");
+	fm->loadModel(pD3DDevice);
+	fm->setItemType(ResourceM::RESOURCEM_WOOD);
+	fm->setCanMove(false);
+	fm->setVecNowPos(new D3DXVECTOR3(3, 0, 3));
+	factorys.push_back(fm);
+	map->addGameObject(fm);
 
-	Item *abc = ItemFactory::create_item(-7, -7, 1);
-	map->addGameObject(abc);
-	items.push_back(abc);
-
-	Item *abc1 = ItemFactory::create_item(-8, 7, 2);
-	map->addGameObject(abc1);
-	items.push_back(abc1);
+	Model* box = new Model("face.x");
+	box->loadModel(pD3DDevice);
+	box->setCanMove(false);
+	box->setOverlapLevel(-10);
+	box->setVecNowPos(new D3DXVECTOR3(5, 0, 5));
+	handOutbox.push_back(box);
+	map->addGameObject(box);
 
 
 	Workbench *wb = new Workbench(3, 3, 6, 6);
@@ -232,52 +248,6 @@ void GameManage::game_state_init(void)
 	wbs.push_back(wb);
 	map->addGameObject(wb);
 
-	Model* model10 = new Model("mybody.x");
-	model10->loadModel(pD3DDevice);
-	Model* head = new Model("face.x");
-	head->loadModel(pD3DDevice);
-	Parts* par = new Parts();
-	par->setModel(model10);
-
-	Parts* par2 = new Parts();
-	par2->setModel(model10);
-	par2->setOffsetS({ 0.3f, 0.3f, 1.0f });
-	par2->setOffsetT({ 2, 1, 0 });
-	par2->setOffsetR({ 0, 0, 0 });
-	par->addChild(par2);
-
-	Parts* par3 = new Parts();
-	par3->setModel(model10);
-	par3->setOffsetS({ 0.3f, 0.3f, 1.0f });
-	par3->setOffsetT({ -2, 1, 0 });
-	par3->setOffsetR({ 0, 0, 0 });
-	par->addChild(par3);
-
-	Parts* par5 = new Parts();
-	par5->setModel(head);
-	par5->setOffsetT({ 0, 5, 0 });
-	par5->setOffsetR({ 0, 0, 0 });
-	par->addChild(par5);
-	
-	MyMesh* mm = new MyMesh();
-	mm->setParts(par);
-	mm->setVecNowPos(new D3DXVECTOR3(10, 0, -10));
-	mm->setMaxSpeed(0.3);
-	mm->setCanMove(true);
-	mm->setOverlapLevel(1);
-	others.push_back(mm);
-	map->addGameObject(mm);
-
-	AnimationTemplate animateTamp(1, { 0, 0, 0 }, { 90, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, 300);
-	AnimationTemplate animateTamp1(4, { 0, 0, 0 }, { 0, 90, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, 300);
-	/*AnimationTemplate animateTamp2(1, { 0, 0, 0 }, { 0, 120, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, 300);
-	AnimationTemplate animateTamp3(1, { 0, 0, 0 }, { 0, 120, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, 300);
-	AnimationTemplate animateTamp4(1, { 0, 0, 0 }, { 0, 120, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, 300);*/
-	vector<AnimationInfoTemplate> list;
-	list.push_back({ &animateTamp, 0 });
-	list.push_back({ &animateTamp1, 150 });
-	AnimationManage::addAnimateTemplate(list);
-	am.addAnimation(0, mm);
 
 
 	pEmitter = new Emitter();
@@ -293,6 +263,8 @@ void GameManage::game_state_update(void)
 	ItemUpdate();
 	workbenchUpdate();
 	animationUpdate();
+	handOutBoxUpdate();
+	factoryUpdate();
 
 	state_read_input(GameState_game_state_clean);
 }
@@ -325,6 +297,16 @@ void GameManage::game_state_clean(void)
 	{
 		delete wbs[i];
 	}
+	gameObjectsNum = factorys.size();
+	for (int i = 0; i < gameObjectsNum; i++)
+	{
+		delete factorys[i];
+	}
+	gameObjectsNum = handOutbox.size();
+	for (int i = 0; i < gameObjectsNum; i++)
+	{
+		delete handOutbox[i];
+	}
 	safe_delete<Player>(player);
 	
 	enemys.clear();
@@ -332,6 +314,8 @@ void GameManage::game_state_clean(void)
 	items.clear();
 	vigliances.clear();
 	wbs.clear();
+	factorys.clear();
+	handOutbox.clear();
 	gs = GameState_result_state_init;
 }
 
@@ -446,6 +430,44 @@ void GameManage::animationUpdate(void)
 	am.cleanEndAnimation();
 }
 
+void GameManage::factoryUpdate(void)
+{
+	int factorysNum = factorys.size();
+	for (int i = 0; i < factorysNum; i++)
+	{
+		vector<TouchStatus> list = map->collisionDetectionOvl(factorys[i]);
+		int listNum = list.size();
+		for (int i = 0; i < listNum; i++)
+		{
+			if (list[i].obj == player && player->getFindHoldings())
+			{
+				D3DXVECTOR2 pos = player->getBoundingCenter();
+				Item* item = factorys[i]->createItem(pos.x, pos.y);
+				map->addGameObject(item);
+				items.push_back(item);
+			}
+		}
+	}
+}
+void GameManage::handOutBoxUpdate(void)
+{
+	int handOutboxNum = handOutbox.size();
+	for (int i = 0; i < handOutboxNum; i++)
+	{
+		vector<TouchStatus> list = map->collisionDetection(handOutbox[i]);
+		int listNum = list.size();
+		for (int i = 0; i < listNum; i++)
+		{
+			if (typeid(*list[i].obj) == typeid(Item) && list[i].touchType == TouchType::cover
+				&& ((Item*)list[i].obj)->getBelong() == NULL)
+			{
+				list[i].obj->setIsDisplay(false);
+				list[i].obj->setIsDelete(true);
+				pEmitter->Submit(((Item*)list[i].obj)->getStatusNow());
+			}
+		}
+	}
+}
 void GameManage::cleanDead(void)
 {
 	for (int i = 0; i < items.size(); i++)

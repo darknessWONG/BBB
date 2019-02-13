@@ -17,7 +17,7 @@ Camera::Camera(D3DXVECTOR3* position, D3DXVECTOR3* watchAt, D3DXVECTOR3* up)
 	D3DXVECTOR3 vecFront = *watchAt - *position;
 	distance = D3DXVec3Length(&vecFront);
 	D3DXVec3Normalize(&vecFront, &vecFront);
-	seteVecFront(&vecFront);
+	setVecFront(&vecFront);
 
 	D3DXVECTOR3 vecRight;
 	D3DXVec3Cross(&vecRight, &vecFront, up);
@@ -71,7 +71,7 @@ void Camera::setBoundingCenter(D3DXVECTOR2 center)
 
 void Camera::calWatchAt(void)
 {
-	D3DXVECTOR3 watchAt(*getVecNowPos() + *geteVecFront() * distance);
+	D3DXVECTOR3 watchAt(*getVecNowPos() + *getVecFront() * distance);
 	setVecWatchAt(&watchAt);
 }
 

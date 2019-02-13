@@ -15,34 +15,50 @@ GameObject::GameObject()
 
 	vecNowPos = new D3DXVECTOR3(0, 0, 0);
 	vecMoveSpeed = new D3DXVECTOR3(0, 0, 0);
-	moveDamping = MOVEDAMPING;
+	moveDamping = MOVE_DAMPING;
 
-	vecTargetFront = NULL;
+	vecScale = new D3DXVECTOR3(1, 1, 1);
+
 	vecRotateAxis = new D3DXVECTOR3(0, 0, 0);
 	rotateSpeed = 0;
-	rotateDamping = ROTATEDAMPING;
+	rotateDamping = ROTATE_DAMPING;
+	vecTargetFront = NULL;
 
+	moveThisTurn = false;
 	canMove = false;
+
+	overlapLevel = 0;
+	isDisplay = true;
+	isDelete = false;
 }
 
 
 GameObject::~GameObject()
 {
 	safe_delete<D3DXMATRIX>(mtxWorld);
+
 	safe_delete<D3DXVECTOR3>(vecFront);    //the up direct of camera(normalize vector)
 	safe_delete<D3DXVECTOR3>(vecRight);    //the front direct of camera(normalize vector)
 	safe_delete<D3DXVECTOR3>(vecUp);	     //the right direct of camera(normalize vector)
 
 	safe_delete<D3DXVECTOR3>(vecNowPos);
 	safe_delete<D3DXVECTOR3>(vecMoveSpeed);
+	//safe_delete<D3DXVECTOR3>(vecTargetFront);
 
-	safe_delete<D3DXVECTOR3>(vecTargetFront);
 	safe_delete<D3DXVECTOR3>(vecRotateAxis);
+
 }
 
 void GameObject::calWorldMatrix(void)
 {
+
 	D3DXMatrixIdentity(mtxWorld);
+
+	D3DXMATRIX mtxScale;
+	D3DXMatrixIdentity(&mtxScale);
+	mtxScale._11 = vecScale->x;
+	mtxScale._22 = vecScale->y;
+	mtxScale._33 = vecScale->z;
 
 	D3DXMATRIX mtxTrans;
 	D3DXMatrixIdentity(&mtxTrans);
@@ -50,9 +66,8 @@ void GameObject::calWorldMatrix(void)
 	mtxTrans._42 = vecNowPos->y;
 	mtxTrans._43 = vecNowPos->z;
 
-	D3DXMatrixIdentity(mtxWorld);
-	D3DXMATRIX mtxRotate;
-	D3DXMatrixIdentity(&mtxRotate);
+	//D3DXMATRIX mtxRotate;
+	//D3DXMatrixIdentity(&mtxRotate);
 	//D3DXMatrixRotationAxis(&mtxRotate, vecRotateAxis, rotateSpeed);
 
 	float cosFront = vecFront->z;
@@ -61,20 +76,29 @@ void GameObject::calWorldMatrix(void)
 	{
 		sinFront = -sinFront;
 	}
+	D3DXMATRIX mtxRotate;
+	D3DXMatrixIdentity(&mtxRotate);
 	mtxRotate._11 = cosFront;
 	mtxRotate._13 = sinFront;
 	mtxRotate._31 = -sinFront;
 	mtxRotate._33 = cosFront;
 
+	D3DXMatrixMultiply(mtxWorld, mtxWorld, &mtxScale);
 	D3DXMatrixMultiply(mtxWorld, mtxWorld, &mtxRotate);
 	D3DXMatrixMultiply(mtxWorld, mtxWorld, &mtxTrans);
 
+}
+
+void GameObject::beforeUpdate(void)
+{
+	setVecMoveSpeed(&D3DXVECTOR3(0, 0, 0));
 }
 
 void GameObject::dataUpdate(void)
 {
 	calSpeed();
 	calFront();
+
 }
 
 void GameObject::positionUpdateX(void)
@@ -104,16 +128,15 @@ void GameObject::positionUpdate(void)
 	setVecNowPos(&newPos);
 }
 
+void GameObject::calBounding(void)
+{
+}
+
 void GameObject::addSpeed(D3DXVECTOR3 * speedDir, float speed)
 {
 	D3DXVECTOR3 norSpeed;
 	D3DXVec3Normalize(&norSpeed, speedDir);
 	*vecMoveSpeed += norSpeed * speed;
-}
-
-D3DXMATRIX* GameObject::getMtxWorld(void)
-{
-	return mtxWorld;
 }
 
 void GameObject::calSpeed(void)
@@ -126,7 +149,6 @@ void GameObject::calSpeed(void)
 	*vecMoveSpeed *= moveDamping;
 }
 
-
 void GameObject::calFront(void)
 {
 	rotateSpeed *= rotateDamping;
@@ -136,12 +158,41 @@ void GameObject::calFront(void)
 	D3DXVec3TransformNormal(vecFront, vecFront, &mtxRotate);
 	D3DXVec3TransformNormal(vecRight, vecRight, &mtxRotate);
 	D3DXVec3TransformNormal(vecUp, vecUp, &mtxRotate);
-	
+
 	if (vecTargetFront != NULL && *vecFront != *vecTargetFront)
 	{
 		vecFront = vecTargetFront;
-		D3DXVec3Cross(vecRight, vecFront, vecUp);
+		D3DXVec3Cross(vecRight, vecUp, vecFront);
 	}
+}
+
+void GameObject::lockThisTurn(void)
+{
+	moveThisTurn = false;
+}
+
+void GameObject::unlockThisTurn(void)
+{
+	moveThisTurn = true;
+}
+
+void GameObject::setDisappear(bool isDisappear, int ovl)
+{
+	if (isDisappear)
+	{
+		setIsDisplay(!isDisappear);
+		setOverlapLevel(-100);
+	}
+	else
+	{
+		setIsDisplay(!isDisappear);
+		setOverlapLevel(ovl);
+	}
+}
+
+D3DXMATRIX* GameObject::getMtxWorld(void)
+{
+	return mtxWorld;
 }
 
 void GameObject::setMtxWorld(D3DXMATRIX* mtxWorld)
@@ -150,12 +201,12 @@ void GameObject::setMtxWorld(D3DXMATRIX* mtxWorld)
 	this->mtxWorld = new D3DXMATRIX(*mtxWorld);
 }
 
-D3DXVECTOR3* GameObject::geteVecFront(void)
+D3DXVECTOR3* GameObject::getVecFront(void)
 {
 	return vecFront;
 }
 
-void GameObject::seteVecFront(D3DXVECTOR3* vecFront)
+void GameObject::setVecFront(D3DXVECTOR3* vecFront)
 {
 	safe_delete<D3DXVECTOR3>(this->vecFront);
 	this->vecFront = new D3DXVECTOR3(*vecFront);
@@ -235,6 +286,37 @@ void GameObject::setMoveDamping(float moveDamping)
 	this->moveDamping = moveDamping;
 }
 
+int GameObject::getOverlapLevel(void)
+{
+	return overlapLevel;
+}
+
+void GameObject::setOverlapLevel(int overlapLevel)
+{
+	this->overlapLevel = overlapLevel;
+}
+
+bool GameObject::getIsDisplay(void)
+{
+	return isDisplay;
+}
+
+void GameObject::setIsDisplay(bool isDisplay)
+{
+	this->isDisplay = isDisplay;
+}
+
+D3DXVECTOR3 * GameObject::getVecScale(void)
+{
+	return vecScale;
+}
+
+void GameObject::setVecScale(D3DXVECTOR3 * vecScale)
+{
+	safe_delete<D3DXVECTOR3>(this->vecScale);
+	this->vecScale = new D3DXVECTOR3(*vecScale);
+}
+
 D3DXVECTOR3* GameObject::getVecRotateAxis(void)
 {
 	return vecRotateAxis;
@@ -266,16 +348,6 @@ void GameObject::setRotateDamping(float rotateDamping)
 	this->rotateDamping = rotateDamping;
 }
 
-int GameObject::getOverlapLevel(void)
-{
-	return overlapLevel;
-}
-
-void GameObject::setOverlapLevel(int overlapLevel)
-{
-	this->overlapLevel = overlapLevel;
-}
-
 D3DXVECTOR3 * GameObject::getVecTargetFront(void)
 {
 	return vecTargetFront;
@@ -285,4 +357,19 @@ void GameObject::setVecTargetFront(D3DXVECTOR3 * vecTargetFront)
 {
 	safe_delete<D3DXVECTOR3>(this->vecTargetFront);
 	this->vecTargetFront = new D3DXVECTOR3(*vecTargetFront);
+}
+
+bool GameObject::getMoveThisTurn(void)
+{
+	return moveThisTurn;
+}
+
+bool GameObject::getIsDelete(void)
+{
+	return isDelete;
+}
+
+void GameObject::setIsDelete(bool isDelete)
+{
+	this->isDelete = isDelete;
 }

@@ -152,6 +152,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3Dtest.h" />
+    <ClInclude Include="AllocateHierarchy.h" />
     <ClInclude Include="Animation.h" />
     <ClInclude Include="AnimationManage.h" />
     <ClInclude Include="AnimationSet.h" />
@@ -162,6 +163,7 @@
     <ClInclude Include="debugPrintf.h" />
     <ClInclude Include="Emitter.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="factoryModel.h" />
     <ClInclude Include="font.h" />
     <ClInclude Include="GameManage.h" />
     <ClInclude Include="Item.h" />
@@ -188,6 +190,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3Dtest.cpp" />
+    <ClCompile Include="AllocateHierarchy.cpp" />
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="AnimationManage.cpp" />
     <ClCompile Include="AnimationSet.cpp" />
@@ -198,6 +201,7 @@
     <ClCompile Include="debugPrintf.cpp" />
     <ClCompile Include="Emitter.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="factoryModel.cpp" />
     <ClCompile Include="font.cpp" />
     <ClCompile Include="GameManage.cpp" />
     <ClCompile Include="Item.cpp" />

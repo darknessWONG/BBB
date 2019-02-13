@@ -146,7 +146,7 @@ void Emitter::Submit(int index)
 {
 	for (int i = 0; i < MAX_ORDER; i++) {
 		if (list[i].isActive == 1) {
-			if (list[i].recipe == index) {
+			if (list[i].recipe + 3 == index) {
 				// TODO Plus Score
 				score += Recipe::getScore(i);
 				// Delete this Order

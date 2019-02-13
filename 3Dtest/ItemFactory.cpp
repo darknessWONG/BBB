@@ -12,11 +12,40 @@ ItemFactory::~ItemFactory()
 {
 }
 
-Item * ItemFactory::create_item(float x, float y, int type)
+Item * ItemFactory::create_item(float x, float y, ResourceM type)
 {
-
 	Item* item = new Item("radio.x");
-	item->loadModel(ItemFactory::g_pD3DDevice);
+	switch (type)
+	{
+	case RESOURCEM_WOOD:
+		item->setModelPath("radio.x");
+		item->loadModel(ItemFactory::g_pD3DDevice);
+		break;
+	case RESOURCEM_IRON:
+		item->setModelPath("radio.x");
+		item->loadModel(ItemFactory::g_pD3DDevice);
+		break;
+	case RESOURCEM_BRICK:
+		item->setModelPath("radio.x");
+		item->loadModel(ItemFactory::g_pD3DDevice);
+		break;
+	case RESOURCEM_MARRY:
+		item->setModelPath("radio.x");
+		item->loadModel(ItemFactory::g_pD3DDevice);
+		break;
+	case RESOURCEM_ROLLER:
+		item->setModelPath("radio.x");
+		item->loadModel(ItemFactory::g_pD3DDevice);
+		break;
+	case RESOURCEM_FERRIS:
+		item->setModelPath("radio.x");
+		item->loadModel(ItemFactory::g_pD3DDevice);
+		break;
+	case RESOURCEM_VIKING:
+		item->setModelPath("radio.x");
+		item->loadModel(ItemFactory::g_pD3DDevice);
+		break;
+	}
 	item->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
 	item->setCanMove(true);
 	item->setOverlapLevel(-10);
@@ -40,6 +69,43 @@ BOOL ItemFactory::item_unite(Item * ia, Item * ib)
 		return true;
 	}
 	return false;
+}
+
+void ItemFactory::setItemStatus(Item * item, ResourceM type)
+{
+
+	item->setStatusNow(type);
+	switch (type)
+	{
+	case RESOURCEM_WOOD:
+		item->setModelPath("radio.x");
+		item->loadModel(ItemFactory::g_pD3DDevice);
+		break;
+	case RESOURCEM_IRON:
+		item->setModelPath("radio.x");
+		item->loadModel(ItemFactory::g_pD3DDevice);
+		break;
+	case RESOURCEM_BRICK:
+		item->setModelPath("radio.x");
+		item->loadModel(ItemFactory::g_pD3DDevice);
+		break;
+	case RESOURCEM_MARRY:
+		item->setModelPath("radio.x");
+		item->loadModel(ItemFactory::g_pD3DDevice);
+		break;
+	case RESOURCEM_ROLLER:
+		item->setModelPath("radio.x");
+		item->loadModel(ItemFactory::g_pD3DDevice);
+		break;
+	case RESOURCEM_FERRIS:
+		item->setModelPath("radio.x");
+		item->loadModel(ItemFactory::g_pD3DDevice);
+		break;
+	case RESOURCEM_VIKING:
+		item->setModelPath("radio.x");
+		item->loadModel(ItemFactory::g_pD3DDevice);
+		break;
+	}
 }
 
 void ItemFactory::setDevice(LPDIRECT3DDEVICE9 device)

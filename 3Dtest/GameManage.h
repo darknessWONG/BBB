@@ -8,6 +8,7 @@
 #include "MapManage.h"
 #include "Workbench.h"
 #include "Emitter.h"
+#include "factoryModel.h"
 #include "AnimationManage.h"
 
 class GameManage
@@ -47,6 +48,8 @@ public:
 	void ItemUpdate(void);
 	void workbenchUpdate(void);
 	void animationUpdate(void);
+	void factoryUpdate(void);
+	void handOutBoxUpdate(void);
 
 	void cleanDead(void);
 
@@ -64,6 +67,8 @@ private:
 	vector<Vigilance*> vigliances;
 	vector<Item*> items;
 	vector<Workbench*> wbs;
+	vector<factoryModel*> factorys;
+	vector<Model*> handOutbox;
 	
 	vector<GameObject*> others;
 

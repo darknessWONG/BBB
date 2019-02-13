@@ -24,14 +24,6 @@ bool Physics::pointOnRect(D3DXVECTOR2 point, D3DXVECTOR2 * rectPoints)
 	}
 }
 
-bool Physics::pointOnRect(D3DXVECTOR2 point, RECTF rect)
-{
-	D3DXVECTOR2* points = createRectPointsFromRECTF(&rect);
-	bool result = pointOnRect(point, points);
-	delete points;
-	return result;
-}
-
 bool Physics::pointInRect(D3DXVECTOR2 point, D3DXVECTOR2 * rectPoints)
 {
 	if (point.x > rectPoints[0].x && point.x < rectPoints[1].x)
@@ -63,7 +55,7 @@ bool Physics::pointTouchRect(D3DXVECTOR2 point, D3DXVECTOR2 * rectPoints)
 	}
 	if (point.x == rectPoints[0].x || point.x == rectPoints[1].x)
 	{
-		if (point.y <= rectPoints[0].y && point.y >= rectPoints[3].y)
+		if (point.y >= rectPoints[0].y && point.y <= rectPoints[3].y)
 		{
 			return true;
 		}
@@ -71,19 +63,11 @@ bool Physics::pointTouchRect(D3DXVECTOR2 point, D3DXVECTOR2 * rectPoints)
 	return false;
 }
 
-bool Physics::pointTouchRect(D3DXVECTOR2 point, RECTF rect)
-{
-	D3DXVECTOR2* points = createRectPointsFromRECTF(&rect);
-	bool result = pointTouchRect(point, points);
-	delete points;
-	return result;
-}
-
-bool Physics::rectInRect(D3DXVECTOR2 * rectPoints1, D3DXVECTOR2 * rectPoints2)
-{
-
-	return false;
-}
+//bool Physics::rectInRect(D3DXVECTOR2 * rectPoints1, D3DXVECTOR2 * rectPoints2)
+//{
+//
+//	return false;
+//}
 
 TouchType Physics::rectTouchRect(D3DXVECTOR2 * rect1, D3DXVECTOR2 * rect2)
 {
@@ -91,34 +75,38 @@ TouchType Physics::rectTouchRect(D3DXVECTOR2 * rect1, D3DXVECTOR2 * rect2)
 	D3DXVECTOR2 rectPoints2[4];
 	for (int i = 0; i < 4; i++)
 	{
-		//rectPoints1[i].x = round(rect1[i].x, FLOATBITS);
-		//rectPoints1[i].y = round(rect1[i].y, FLOATBITS);
-		//rectPoints2[i].x = round(rect2[i].x, FLOATBITS);
-		//rectPoints2[i].y = round(rect2[i].y, FLOATBITS);
+		rectPoints1[i].x = round(rect1[i].x, FLOAT_BITS);
+		rectPoints1[i].y = round(rect1[i].y, FLOAT_BITS);
+		rectPoints2[i].x = round(rect2[i].x, FLOAT_BITS);
+		rectPoints2[i].y = round(rect2[i].y, FLOAT_BITS);
 
-		rectPoints1[i].x = rect1[i].x;
-		rectPoints1[i].y = rect1[i].y;
-		rectPoints2[i].x = rect2[i].x;
-		rectPoints2[i].y = rect2[i].y;
+		//rectPoints1[i].x = rect1[i].x;
+		//rectPoints1[i].y = rect1[i].y;
+		//rectPoints2[i].x = rect2[i].x;
+		//rectPoints2[i].y = rect2[i].y;
 	}
 	float lengthx = fabs((rectPoints1[1].x - rectPoints1[0].x) + (rectPoints2[1].x - rectPoints2[0].x));
 	float lengthy = fabs((rectPoints1[2].y - rectPoints1[0].y) + (rectPoints2[2].y - rectPoints2[0].y));
 	float lx = fabs((rectPoints1[0].x + rectPoints1[1].x) - (rectPoints2[0].x + rectPoints2[1].x));
 	float ly = fabs((rectPoints1[0].y + rectPoints1[2].y) - (rectPoints2[0].y + rectPoints2[2].y));
 
-	if (round(lx, FLOATBITS) < round(lengthx, FLOATBITS) && round(ly, FLOATBITS) < round(lengthy, FLOATBITS))
+	lx = round(lx, FLOAT_BITS);
+	ly = round(ly, FLOAT_BITS);
+	lengthx = round(lengthx, FLOAT_BITS);
+	lengthy = round(lengthy, FLOAT_BITS);
+	if (lx < lengthx && ly < lengthy)
 	{
 		return TouchType::cover;
 	}
-	else if (round(lx, FLOATBITS) < round(lengthx, FLOATBITS) && round(ly, FLOATBITS) == round(lengthy, FLOATBITS))
+	else if (lx < lengthx && ly == lengthy)
 	{
 		return TouchType::yTouch;
 	}
-	else if (round(lx, FLOATBITS) == round(lengthx, FLOATBITS) && round(ly, FLOATBITS) < round(lengthy, FLOATBITS))
+	else if (lx == lengthx && ly < lengthy)
 	{
 		return TouchType::xTouch;
 	}
-	else if (round(lx, FLOATBITS) == round(lengthx, FLOATBITS) && round(ly, FLOATBITS) == round(lengthy, FLOATBITS))
+	else if (lx == lengthx && ly == lengthy)
 	{
 		return TouchType::pointTouch;
 	}
@@ -127,10 +115,12 @@ TouchType Physics::rectTouchRect(D3DXVECTOR2 * rect1, D3DXVECTOR2 * rect2)
 
 bool Physics::pointInCycle(Cycle * cycle, D3DXVECTOR2 * point)
 {
-	float dis = (point->x - cycle->center_x) * (point->x - cycle->center_x) + (point->y - cycle->center_y) * (point->y - cycle->center_y);
+	//float dis = (point->x - cycle->center_x) * (point->x - cycle->center_x) + (point->y - cycle->center_y) * (point->y - cycle->center_y);
+	D3DXVECTOR2 vecDis = D3DXVECTOR2(cycle->center_x, cycle->center_y) - *point;
+	float dis = D3DXVec2LengthSq(&vecDis);
 	float ra2 = cycle->r * cycle->r;
-	
-	if (round(dis, FLOATBITS) <= round(ra2, FLOATBITS))
+
+	if (round(dis, FLOAT_BITS) <= round(ra2, FLOAT_BITS))
 	{
 		return true;
 	}
@@ -197,19 +187,8 @@ line_segment Physics::createLinesegment(D3DXVECTOR2 point1, D3DXVECTOR2 point2)
 {
 	line li = createLine(point1, point2);
 	line_segment lis = { li.a, li.b, point1.x, point2.x };
-	
-	return lis;
-}
 
-D3DXVECTOR2 * Physics::createRectPointsFromRECTF(RECTF const * rect)
-{
-	D3DXVECTOR2 *points = new D3DXVECTOR2[4]{
-		{ rect->left, rect->top},
-		{rect->right, rect->top},
-		{rect->left, rect->bottom},
-		{rect->right, rect->bottom}
-	};
-	return points;
+	return lis;
 }
 
 float Physics::round(float src, int bits)
@@ -219,6 +198,33 @@ float Physics::round(float src, int bits)
 	ss >> src;
 
 	return src;
+}
+
+D3DXVECTOR2 * Physics::createRectPointsFromRECTF(RECTF const * rect)
+{
+	D3DXVECTOR2 *points = new D3DXVECTOR2[4]{
+		{ rect->left, rect->top },
+		{ rect->right, rect->top },
+		{ rect->left, rect->bottom },
+		{ rect->right, rect->bottom }
+	};
+	return points;
+}
+
+D3DXVECTOR3 Physics::takeSmallerVaule(D3DXVECTOR3 a, D3DXVECTOR3 b)
+{
+	float x = a.x < b.x ? a.x : b.x;
+	float y = a.y < b.y ? a.y : b.y;
+	float z = a.z < b.z ? a.z : b.z;
+	return D3DXVECTOR3(x, y, z);
+}
+
+D3DXVECTOR3 Physics::takebiggerVaule(D3DXVECTOR3 a, D3DXVECTOR3 b)
+{
+	float x = a.x > b.x ? a.x : b.x;
+	float y = a.y > b.y ? a.y : b.y;
+	float z = a.z > b.z ? a.z : b.z;
+	return D3DXVECTOR3(x, y, z);
 }
 
 void Physics::sortLinesegmentPoint(line_segment & line)
