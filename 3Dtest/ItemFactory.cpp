@@ -18,7 +18,7 @@ Item * ItemFactory::create_item(float x, float y, ResourceM type)
 	switch (type)
 	{
 	case RESOURCEM_WOOD:
-		item->setModelPath("radio.x");
+		item->setModelPath("mokiuzai.blend.x");
 		item->loadModel(ItemFactory::g_pD3DDevice);
 		break;
 	case RESOURCEM_IRON:
@@ -78,7 +78,7 @@ void ItemFactory::setItemStatus(Item * item, ResourceM type)
 	switch (type)
 	{
 	case RESOURCEM_WOOD:
-		item->setModelPath("radio.x");
+		item->setModelPath("mokiuzai.blend.x");
 		item->loadModel(ItemFactory::g_pD3DDevice);
 		break;
 	case RESOURCEM_IRON:

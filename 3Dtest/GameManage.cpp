@@ -231,6 +231,14 @@ void GameManage::game_state_init(void)
 	factorys.push_back(fm);
 	map->addGameObject(fm);
 
+	factoryModel* fm1 = new factoryModel("radio.x");
+	fm1->loadModel(pD3DDevice);
+	fm1->setItemType(ResourceM::RESOURCEM_IRON);
+	fm1->setCanMove(false);
+	fm1->setVecNowPos(new D3DXVECTOR3(3, 0, 0));
+	factorys.push_back(fm1);
+	map->addGameObject(fm1);
+
 	Model* box = new Model("face.x");
 	box->loadModel(pD3DDevice);
 	box->setCanMove(false);
@@ -437,9 +445,9 @@ void GameManage::factoryUpdate(void)
 	{
 		vector<TouchStatus> list = map->collisionDetectionOvl(factorys[i]);
 		int listNum = list.size();
-		for (int i = 0; i < listNum; i++)
+		for (int j = 0; j < listNum; j++)
 		{
-			if (list[i].obj == player && player->getFindHoldings())
+			if (list[j].obj == player && player->getFindHoldings())
 			{
 				D3DXVECTOR2 pos = player->getBoundingCenter();
 				Item* item = factorys[i]->createItem(pos.x, pos.y);
