@@ -54,6 +54,7 @@ void GameManage::init(void)
 	TextureHandler2D::AddTexture("lose.png", 2736, 1824);
 	TextureHandler2D::AddTexture("title.png", 580, 326);
 	TextureHandler2D::AddTexture("fire ball.png", 2736, 1824);
+	TextureHandler2D::AddTexture("arrow1.png", 2736, 1824);
 	TextureHandler2D::LoadTextures(pD3DDevice);
 
 	Cube::initStaticMember(pD3DDevice);
@@ -212,9 +213,9 @@ void GameManage::titleStateClean(void)
 
 void GameManage::gameStateInit(void)
 {
-	SideEffect* se = new SideEffect();
+	/*SideEffect* se = new SideEffect();
 	se->setType(SideEffectType::SideEffectTypePull);
-	se->setTarget(EffectTarget::EffectTargetEnemy);
+	se->setTarget(EffectTarget::EffectTargetEnemy);*/
 	BattleSkill* fireBall = new BattleSkill();
 	fireBall->setTextureIndex(8);
 	fireBall->setCost(1);
@@ -225,8 +226,25 @@ void GameManage::gameStateInit(void)
 	fireBall->setHealTarget(EffectTarget::EffectTargetNoTarget);
 	fireBall->setMainTarget(EffectTarget::EffectTargetEnemy);
 	fireBall->setName("fire Ball");
-	fireBall->setSideEffect(se);
+	fireBall->setSideEffect(NULL);
 	fireBall->setSkillType(DamageType::magic);
+
+	SideEffect* se = new SideEffect();
+	se->setType(SideEffectType::SideEffectTypePull);
+	se->setTarget(EffectTarget::EffectTargetEnemy);
+	BattleSkill* chain = new BattleSkill();
+	chain->setTextureIndex(9);
+	chain->setCost(1);
+	chain->setDamage(0);
+	chain->setDamageTarget(EffectTarget::EffectTargetEnemy);
+	chain->setDistance(20);
+	chain->setHeal(0);
+	chain->setHealTarget(EffectTarget::EffectTargetNoTarget);
+	chain->setMainTarget(EffectTarget::EffectTargetEnemy);
+	chain->setName("chain");
+	chain->setSideEffect(se);
+	chain->setSkillType(DamageType::magic);
+
 	BattleChara* bc = new BattleChara();
 	bc->setAtk(10);
 	bc->setCamp(CampType::CampTypePlayer);
@@ -238,6 +256,7 @@ void GameManage::gameStateInit(void)
 	bc->setName("Player");
 	bc->setSpeed(10);
 	bc->addSkill(fireBall);
+	bc->addSkill(chain);
 	Player* mesh = new Player("player.blend.x");
 	mesh->setIsWithAnimation(true);
 	mesh->loadModel(pD3DDevice);
@@ -367,7 +386,7 @@ void GameManage::gameStateInit(void)
 	enemy1->setVecPatrolEnd(new D3DXVECTOR3(-75, 0, -70));
 	enemy1->setOverlapLevel(1);
 	enemy1->setBattleChara(bc4);
-	enemy1->setTrackingRadius(10);
+	enemy1->setTrackingRadius(20);
 	enemy1->setBattleRadius(5);
 	enemys.push_back(enemy1);
 	map->addGameObject(enemy1);
@@ -393,7 +412,7 @@ void GameManage::gameStateInit(void)
 	enemy2->setVecPatrolEnd(new D3DXVECTOR3(-50, 0, -70));
 	enemy2->setOverlapLevel(1);
 	enemy2->setBattleChara(bc6);
-	enemy2->setTrackingRadius(10);
+	enemy2->setTrackingRadius(20);
 	enemy2->setBattleRadius(5);
 	enemys.push_back(enemy2);
 	map->addGameObject(enemy2);
@@ -419,7 +438,7 @@ void GameManage::gameStateInit(void)
 	enemy3->setVecPatrolEnd(new D3DXVECTOR3(-30, 0, -72));
 	enemy3->setOverlapLevel(1);
 	enemy3->setBattleChara(bc5);
-	enemy3->setTrackingRadius(10);
+	enemy3->setTrackingRadius(20);
 	enemy3->setBattleRadius(5);
 	enemys.push_back(enemy3);
 	map->addGameObject(enemy3);
@@ -445,7 +464,7 @@ void GameManage::gameStateInit(void)
 	enemy4->setVecPatrolEnd(new D3DXVECTOR3(-30, 0, -83));
 	enemy4->setOverlapLevel(1);
 	enemy4->setBattleChara(bc3);
-	enemy4->setTrackingRadius(10);
+	enemy4->setTrackingRadius(20);
 	enemy4->setBattleRadius(5);
 	enemys.push_back(enemy4);
 	map->addGameObject(enemy4);
@@ -471,7 +490,7 @@ void GameManage::gameStateInit(void)
 	enemy5->setVecPatrolEnd(new D3DXVECTOR3(30, 0, -78));
 	enemy5->setOverlapLevel(1);
 	enemy5->setBattleChara(bc7);
-	enemy5->setTrackingRadius(10);
+	enemy5->setTrackingRadius(20);
 	enemy5->setBattleRadius(5);
 	enemys.push_back(enemy5);
 	map->addGameObject(enemy5);
@@ -497,7 +516,7 @@ void GameManage::gameStateInit(void)
 	enemy6->setVecPatrolEnd(new D3DXVECTOR3(30, 0, -50));
 	enemy6->setOverlapLevel(1);
 	enemy6->setBattleChara(bc8);
-	enemy6->setTrackingRadius(10);
+	enemy6->setTrackingRadius(20);
 	enemy6->setBattleRadius(5);
 	enemys.push_back(enemy6);
 	map->addGameObject(enemy6);
@@ -523,7 +542,7 @@ void GameManage::gameStateInit(void)
 	enemy7->setVecPatrolEnd(new D3DXVECTOR3(30, 0, -40));
 	enemy7->setOverlapLevel(1);
 	enemy7->setBattleChara(bc9);
-	enemy7->setTrackingRadius(10);
+	enemy7->setTrackingRadius(20);
 	enemy7->setBattleRadius(5);
 	enemys.push_back(enemy7);
 	map->addGameObject(enemy7);
@@ -549,7 +568,7 @@ void GameManage::gameStateInit(void)
 	enemy8->setVecPatrolEnd(new D3DXVECTOR3(30, 0, -30));
 	enemy8->setOverlapLevel(1);
 	enemy8->setBattleChara(bc10);
-	enemy8->setTrackingRadius(10);
+	enemy8->setTrackingRadius(20);
 	enemy8->setBattleRadius(5);
 	enemys.push_back(enemy8);
 	map->addGameObject(enemy8);
@@ -575,7 +594,7 @@ void GameManage::gameStateInit(void)
 	enemy9->setVecPatrolEnd(new D3DXVECTOR3(30, 0, -20));
 	enemy9->setOverlapLevel(1);
 	enemy9->setBattleChara(bc11);
-	enemy9->setTrackingRadius(10);
+	enemy9->setTrackingRadius(20);
 	enemy9->setBattleRadius(5);
 	enemys.push_back(enemy9);
 	map->addGameObject(enemy9);
@@ -602,7 +621,7 @@ void GameManage::gameStateInit(void)
 	enemy10->setVecPatrolEnd(new D3DXVECTOR3(30, 0, -10));
 	enemy10->setOverlapLevel(1);
 	enemy10->setBattleChara(bc12);
-	enemy10->setTrackingRadius(10);
+	enemy10->setTrackingRadius(20);
 	enemy10->setBattleRadius(5);
 	enemys.push_back(enemy10);
 	map->addGameObject(enemy10);
@@ -629,8 +648,8 @@ void GameManage::gameStateInit(void)
 	enemy11->setVecPatrolEnd(new D3DXVECTOR3(30, 0, 40));
 	enemy11->setOverlapLevel(1);
 	enemy11->setBattleChara(bc13);
-	enemy11->setTrackingRadius(20);
-	enemy11->setBattleRadius(10);
+	enemy11->setTrackingRadius(50);
+	enemy11->setBattleRadius(20);
 	enemys.push_back(enemy11);
 	boss = enemy11;
 	map->addGameObject(enemy11);
