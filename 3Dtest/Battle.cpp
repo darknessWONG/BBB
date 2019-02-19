@@ -387,7 +387,7 @@ void Battle::readTargetCommand(void)
 					targetPos.y = 3;
 					createSkillModel(action->skill->getTextureIndex(), pos);
 					addSkillPerform(skillBillboard, pos, targetPos);
-					if (action->skill->getSideEffect()->getType() == SideEffectType::SideEffectTypePull)
+					if (action->skill->getSideEffect() != NULL && action->skill->getSideEffect()->getType() == SideEffectType::SideEffectTypePull)
 					{
 						addMovePerform(action->passive[0], action->active, 1);
 					}

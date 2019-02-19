@@ -1,11 +1,11 @@
 #pragma once
-#include "Model.h"
+#include "GameObject.h"
+
 class Ground :
-	public Model
+	public GameObject
 {
 public:
 	Ground();
-	Ground(string modelPath);
 	~Ground();
 
 	/*===========================================

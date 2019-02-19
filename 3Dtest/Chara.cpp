@@ -7,12 +7,6 @@ Chara::Chara()
 {
 }
 
-Chara::Chara(string modelPath)
-	:Model(modelPath)
-{
-}
-
-
 Chara::~Chara()
 {
 }
@@ -21,21 +15,21 @@ void Chara::dataUpdate(void)
 {
 
 	float speedSum = D3DXVec3LengthSq(getVecMoveSpeed());
-	if (getIsWithAnimation())
+	if (getModel()->getIsWithAnimation())
 	{
 		if (Physics::round(speedSum, FLOAT_BITS) != 0)
 		{
-			setIsPlayAnimation(true);
+			getModel()->setIsPlayAnimation(true);
 		}
 		else
 		{
-			setIsPlayAnimation(false);
-			resetAnimation();
-			updateAnimation(0.001);
+			getModel()->setIsPlayAnimation(false);
+			getModel()->resetAnimation();
+			getModel()->updateAnimation(0.001);
 		}
 	}
 
-	Model::dataUpdate();
+	GameObject::dataUpdate();
 }
 
 BattleChara * Chara::getBattleChara(void)

@@ -5,7 +5,6 @@ class Player :
 {
 public:
 	Player();
-	Player(string modelPath);
 	virtual ~Player();
 
 	/*===========================================

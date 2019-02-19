@@ -12,15 +12,6 @@ Enemy::Enemy()
 	battleRadius = 0;
 }
 
-Enemy::Enemy(string modelPath)
-	:Chara(modelPath)
-{
-	vecPatrolTarget = vecPatrolEnd;
-	isPatrol = true;
-	trackingRadius = 0;
-	battleRadius = 0;
-}
-
 
 Enemy::~Enemy()
 {
@@ -50,28 +41,6 @@ void Enemy::dataUpdate(void)
 					vecPatrolTarget = vecPatrolEnd;
 				}
 			}
-		/*	D3DXVECTOR3 patrolLine = *vecPatrolEnd - *vecPatrolStart;
-			if (vecPatrolTarget == vecPatrolStart)
-			{
-				patrolLine = -patrolLine;
-			}
-			D3DXVECTOR2 boundingCenter = getBoundingCenter();
-			D3DXVECTOR3 nowLine = *vecPatrolTarget - D3DXVECTOR3(boundingCenter.x, 0, boundingCenter.y);
-
-			float dot = D3DXVec3Dot(&patrolLine, &nowLine);
-			float length = D3DXVec3Length(&patrolLine) * D3DXVec3Length(&nowLine);
-			if (Physics::round(dot, FLOAT_BITS) == -Physics::round(length, FLOAT_BITS))
-			{
-				if (vecPatrolTarget == vecPatrolEnd)
-				{
-					vecPatrolTarget = vecPatrolStart;
-				}
-				else
-				{
-					vecPatrolTarget = vecPatrolEnd;
-				}
-
-			}*/
 		}
 		D3DXVECTOR2 boundingCenter = getBoundingCenter();
 		D3DXVECTOR3 speedDir = *vecPatrolTarget - D3DXVECTOR3(boundingCenter.x, 0, boundingCenter.y);
@@ -88,20 +57,6 @@ void Enemy::dataUpdate(void)
 
 		isPatrol = false;
 	}
-
-	//float speedSum = D3DXVec3LengthSq(getVecMoveSpeed());
-	//if (getIsWithAnimation())
-	//{
-	//	if (Physics::round(speedSum, FLOAT_BITS) != 0)
-	//	{
-	//		setIsPlayAnimation(true);
-	//	}
-	//	else
-	//	{
-	//		setIsPlayAnimation(false);
-	//		resetAnimation();
-	//	}
-	//}
 
 	Chara::dataUpdate();
 }
@@ -135,7 +90,6 @@ D3DXVECTOR3 * Enemy::getVecPatrolTarget(void)
 
 void Enemy::setVecPatrolTarget(D3DXVECTOR3 * vecPatrolTarget)
 {
-	//safe_delete<D3DXVECTOR3>(this->vecPatrolTarget);
 	this->vecPatrolTarget = new D3DXVECTOR3(*vecPatrolTarget);
 }
 

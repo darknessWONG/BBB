@@ -213,6 +213,27 @@ void GameManage::titleStateClean(void)
 
 void GameManage::gameStateInit(void)
 {
+	Model *playerModel = new Model("player.blend.x");
+	playerModel->setIsWithAnimation(true);
+	playerModel->loadModel(pD3DDevice);
+	models.push_back(playerModel);
+	Model *monsterModel = new Model("moster.blend.x");
+	monsterModel->setIsWithAnimation(true);
+	monsterModel->loadModel(pD3DDevice);
+	models.push_back(monsterModel);
+	Model *wallModel = new Model("rock wall.blend.x");
+	wallModel->setIsWithAnimation(false);
+	wallModel->loadModel(pD3DDevice);
+	models.push_back(wallModel);
+	Model *wall2Model = new Model("rock wall2.blend.x");
+	wall2Model->setIsWithAnimation(false);
+	wall2Model->loadModel(pD3DDevice);
+	models.push_back(wall2Model);
+	Model *groundModel = new Model("aaa.blend.x");
+	groundModel->setIsWithAnimation(false);
+	groundModel->loadModel(pD3DDevice);
+	models.push_back(groundModel);
+
 	/*SideEffect* se = new SideEffect();
 	se->setType(SideEffectType::SideEffectTypePull);
 	se->setTarget(EffectTarget::EffectTargetEnemy);*/
@@ -257,9 +278,8 @@ void GameManage::gameStateInit(void)
 	bc->setSpeed(10);
 	bc->addSkill(fireBall);
 	bc->addSkill(chain);
-	Player* mesh = new Player("player.blend.x");
-	mesh->setIsWithAnimation(true);
-	mesh->loadModel(pD3DDevice);
+	Player* mesh = new Player();
+	mesh->setModel(playerModel);
 	mesh->setWalkSpeed(0.3f);
 	mesh->setMaxSpeed(0.3f);
 	mesh->setCanMove(true);
@@ -269,8 +289,8 @@ void GameManage::gameStateInit(void)
 	player = mesh;
 	map->addGameObject(mesh);
 
-	Model* tree = new Model("rock wall.blend.x");
-	tree->loadModel(pD3DDevice);
+	GameObject* tree = new GameObject();
+	tree->setModel(wallModel);
 	tree->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
 	tree->setCanMove(false);
 	tree->setIsDisplay(true);
@@ -279,8 +299,8 @@ void GameManage::gameStateInit(void)
 	others.push_back(tree);
 	map->addGameObject(tree);
 
-	Model* tree10 = new Model("rock wall.blend.x");
-	tree10->loadModel(pD3DDevice);
+	GameObject* tree10 = new GameObject();
+	tree10->setModel(wallModel);
 	tree10->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
 	tree10->setCanMove(false);
 	tree10->setIsDisplay(true);
@@ -300,8 +320,8 @@ void GameManage::gameStateInit(void)
 	//others.push_back(tree100);
 	//map->addGameObject(tree100);
 
-	Model* tree8 = new Model("rock wall2.blend.x");
-	tree8->loadModel(pD3DDevice);
+	GameObject* tree8 = new GameObject();
+	tree8->setModel(wall2Model);
 	tree8->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
 	tree8->setCanMove(false);
 	tree8->setIsDisplay(true);
@@ -310,8 +330,8 @@ void GameManage::gameStateInit(void)
 	others.push_back(tree8);
 	map->addGameObject(tree8);
 
-	Model* tree9 = new Model("rock wall2.blend.x");
-	tree9->loadModel(pD3DDevice);
+	GameObject* tree9 = new GameObject();
+	tree9->setModel(wall2Model);
 	tree9->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
 	tree9->setCanMove(false);
 	tree9->setIsDisplay(true);
@@ -320,9 +340,9 @@ void GameManage::gameStateInit(void)
 	others.push_back(tree9);
 	map->addGameObject(tree9);
 
-	Model* tree18 = new Model("rock wall2.blend.x");
+	GameObject* tree18 = new GameObject();
+	tree18->setModel(wall2Model);
 	tree18->setVecScale(new D3DXVECTOR3(0.8, 1, 0.5));
-	tree18->loadModel(pD3DDevice);
 	tree18->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
 	tree18->setCanMove(false);
 	tree18->setIsDisplay(true);
@@ -331,9 +351,9 @@ void GameManage::gameStateInit(void)
 	others.push_back(tree18);
 	map->addGameObject(tree18);
 
-	Model* tree19 = new Model("rock wall2.blend.x");
+	GameObject* tree19 = new GameObject();
+	tree19->setModel(wall2Model);
 	tree19->setVecScale(new D3DXVECTOR3(0.8, 1, 0.5));
-	tree19->loadModel(pD3DDevice);
 	tree19->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
 	tree19->setCanMove(false);
 	tree19->setIsDisplay(true);
@@ -353,9 +373,8 @@ void GameManage::gameStateInit(void)
 	//others.push_back(tree20);
 	//map->addGameObject(tree20);
 
-	Model* tree3 = new Ground("aaa.blend.x");
-	tree3->setIsWithAnimation(false);
-	tree3->loadModel(pD3DDevice);
+	GameObject* tree3 = new Ground();
+	tree3->setModel(groundModel);
 	tree3->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
 	//mesh1->setRotateSpeed(20);
 	tree3->setCanMove(false);
@@ -375,9 +394,8 @@ void GameManage::gameStateInit(void)
 	bc4->setMpNow(10);
 	bc4->setName("enemy1");
 	bc4->setSpeed(10);
-	Enemy* enemy1 = new Enemy("moster.blend.x");
-	enemy1->setIsWithAnimation(true);
-	enemy1->loadModel(pD3DDevice);
+	Enemy* enemy1 = new Enemy();
+	enemy1->setModel(monsterModel);
 	enemy1->setWalkSpeed(0.05f);
 	enemy1->setMaxSpeed(0.05f);
 	enemy1->setCanMove(true);
@@ -401,9 +419,8 @@ void GameManage::gameStateInit(void)
 	bc6->setMpNow(10);
 	bc6->setName("enemy2");
 	bc6->setSpeed(10);
-	Enemy* enemy2 = new Enemy("moster.blend.x");
-	enemy2->setIsWithAnimation(true);
-	enemy2->loadModel(pD3DDevice);
+	Enemy* enemy2 = new Enemy();
+	enemy2->setModel(monsterModel);
 	enemy2->setWalkSpeed(0.05f);
 	enemy2->setMaxSpeed(0.05f);
 	enemy2->setCanMove(true);
@@ -427,9 +444,8 @@ void GameManage::gameStateInit(void)
 	bc5->setMpNow(10);
 	bc5->setName("enemy3");
 	bc5->setSpeed(10);
-	Enemy* enemy3 = new Enemy("moster.blend.x");
-	enemy3->setIsWithAnimation(true);
-	enemy3->loadModel(pD3DDevice);
+	Enemy* enemy3 = new Enemy();
+	enemy3->setModel(monsterModel);
 	enemy3->setWalkSpeed(0.05f);
 	enemy3->setMaxSpeed(0.05f);
 	enemy3->setCanMove(true);
@@ -453,9 +469,8 @@ void GameManage::gameStateInit(void)
 	bc3->setMpNow(10);
 	bc3->setName("enemy4");
 	bc3->setSpeed(10);
-	Enemy* enemy4 = new Enemy("moster.blend.x");
-	enemy4->setIsWithAnimation(true);
-	enemy4->loadModel(pD3DDevice);
+	Enemy* enemy4 = new Enemy();
+	enemy4->setModel(monsterModel);
 	enemy4->setWalkSpeed(0.05f);
 	enemy4->setMaxSpeed(0.05f);
 	enemy4->setCanMove(true);
@@ -479,9 +494,8 @@ void GameManage::gameStateInit(void)
 	bc7->setMpNow(10);
 	bc7->setName("enemy5");
 	bc7->setSpeed(10);
-	Enemy* enemy5 = new Enemy("moster.blend.x");
-	enemy5->setIsWithAnimation(true);
-	enemy5->loadModel(pD3DDevice);
+	Enemy* enemy5 = new Enemy();
+	enemy5->setModel(monsterModel);
 	enemy5->setWalkSpeed(0.05f);
 	enemy5->setMaxSpeed(0.05f);
 	enemy5->setCanMove(true);
@@ -505,9 +519,8 @@ void GameManage::gameStateInit(void)
 	bc8->setMpNow(10);
 	bc8->setName("enemy6");
 	bc8->setSpeed(10);
-	Enemy* enemy6 = new Enemy("moster.blend.x");
-	enemy6->setIsWithAnimation(true);
-	enemy6->loadModel(pD3DDevice);
+	Enemy* enemy6 = new Enemy();
+	enemy6->setModel(monsterModel);
 	enemy6->setWalkSpeed(0.05f);
 	enemy6->setMaxSpeed(0.05f);
 	enemy6->setCanMove(true);
@@ -531,9 +544,8 @@ void GameManage::gameStateInit(void)
 	bc9->setMpNow(10);
 	bc9->setName("enemy7");
 	bc9->setSpeed(10);
-	Enemy* enemy7 = new Enemy("moster.blend.x");
-	enemy7->setIsWithAnimation(true);
-	enemy7->loadModel(pD3DDevice);
+	Enemy* enemy7 = new Enemy();
+	enemy7->setModel(monsterModel);
 	enemy7->setWalkSpeed(0.05f);
 	enemy7->setMaxSpeed(0.05f);
 	enemy7->setCanMove(true);
@@ -557,9 +569,8 @@ void GameManage::gameStateInit(void)
 	bc10->setMpNow(10);
 	bc10->setName("enemy8");
 	bc10->setSpeed(10);
-	Enemy* enemy8 = new Enemy("moster.blend.x");
-	enemy8->setIsWithAnimation(true);
-	enemy8->loadModel(pD3DDevice);
+	Enemy* enemy8 = new Enemy();
+	enemy8->setModel(monsterModel);
 	enemy8->setWalkSpeed(0.05f);
 	enemy8->setMaxSpeed(0.05f);
 	enemy8->setCanMove(true);
@@ -583,9 +594,8 @@ void GameManage::gameStateInit(void)
 	bc11->setMpNow(10);
 	bc11->setName("enemy9");
 	bc11->setSpeed(10);
-	Enemy* enemy9 = new Enemy("moster.blend.x");
-	enemy9->setIsWithAnimation(true);
-	enemy9->loadModel(pD3DDevice);
+	Enemy* enemy9 = new Enemy();
+	enemy9->setModel(monsterModel);
 	enemy9->setWalkSpeed(0.05f);
 	enemy9->setMaxSpeed(0.05f);
 	enemy9->setCanMove(true);
@@ -610,9 +620,8 @@ void GameManage::gameStateInit(void)
 	bc12->setMpNow(10);
 	bc12->setName("enemy10");
 	bc12->setSpeed(10);
-	Enemy* enemy10 = new Enemy("moster.blend.x");
-	enemy10->setIsWithAnimation(true);
-	enemy10->loadModel(pD3DDevice);
+	Enemy* enemy10 = new Enemy();
+	enemy10->setModel(monsterModel);
 	enemy10->setWalkSpeed(0.05f);
 	enemy10->setMaxSpeed(0.05f);
 	enemy10->setCanMove(true);
@@ -636,10 +645,9 @@ void GameManage::gameStateInit(void)
 	bc13->setMpNow(10);
 	bc13->setName("enemy11");
 	bc13->setSpeed(10);
-	Enemy* enemy11 = new Enemy("moster.blend.x");
+	Enemy* enemy11 = new Enemy();
 	enemy11->setVecScale(new D3DXVECTOR3( 5.0, 5.0, 5.0 ));
-	enemy11->setIsWithAnimation(true);
-	enemy11->loadModel(pD3DDevice);
+	enemy11->setModel(monsterModel);
 	enemy11->setWalkSpeed(0.05f);
 	enemy11->setMaxSpeed(0.05f);
 	enemy11->setCanMove(true);
@@ -761,6 +769,13 @@ void GameManage::gameStateClean(void)
 	vigliances.clear();
 	uis.clear();
 	//safe_delete<Battle>(battle);
+
+	gameObjectsNum = models.size();
+	for (int i = 0; i < gameObjectsNum; i++)
+	{
+		SAFE_DELETE(models[i]);
+	}
+	models.clear();
 
 	gs = GameState::GameStateEndInit;
 }
@@ -940,9 +955,13 @@ void GameManage::battleInit(void)
 {
 	if (!checkIsInBattle())
 	{
-		Player* pointMesh = new Player("face.x");
-		pointMesh->setIsWithAnimation(false);
-		pointMesh->loadModel(pD3DDevice);
+		Model *faceModel = new Model("face.x");
+		faceModel->setIsWithAnimation(false);
+		faceModel->loadModel(pD3DDevice);
+		models.push_back(faceModel);
+
+		Player* pointMesh = new Player();
+		pointMesh->setModel(faceModel);
 		pointMesh->setWalkSpeed(0.3f);
 		pointMesh->setMaxSpeed(0.3f);
 		pointMesh->setCanMove(true);
@@ -1087,7 +1106,7 @@ void GameManage::lockUnmoveObject(void)
 	if (actor != player)
 	{
 		player->lockThisTurn();
-		player->setIsPlayAnimation(false);
+		player->getModel()->setIsPlayAnimation(false);
 	}
 	int gameObjectsNum = enemys.size();
 	for (int i = 0; i < gameObjectsNum; i++)
@@ -1097,7 +1116,7 @@ void GameManage::lockUnmoveObject(void)
 			continue;
 		}
 		enemys[i]->lockThisTurn();
-		enemys[i]->setIsPlayAnimation(false);
+		enemys[i]->getModel()->setIsPlayAnimation(false);
 	}
 	gameObjectsNum = others.size();
 	for (int i = 0; i < gameObjectsNum; i++)

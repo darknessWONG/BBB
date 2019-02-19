@@ -1,6 +1,7 @@
 #pragma once
 #include <d3dx9.h>
 #include "Physics.h"
+#include "Model.h"
 
 class GameObject
 {
@@ -18,16 +19,19 @@ public:
 	virtual void positionUpdateY(void);
 	virtual void positionUpdateZ(void);
 	virtual void positionUpdate(void);
-	virtual void draw(LPDIRECT3DDEVICE9 pD3DDevice) = 0;
+	virtual void draw(LPDIRECT3DDEVICE9 pD3DDevice);
 	/*cal the new bounding box 
 	so that you should call it every time you set a new position or bounding center*/
 	virtual void calBounding(void);
-	virtual RECTF getBoundingRect(void) = 0;
+	virtual RECTF getBoundingRect(void);
+	virtual BOXF getBoundingBox(void);
 	/*the center of the bounding box
 	position may not be the center of the bounding box, so it have to be calculate*/
-	virtual D3DXVECTOR2 getBoundingCenter(void) = 0;
+	virtual D3DXVECTOR2 getBoundingCenter(void);
+	virtual D3DXVECTOR3 getBoundingCenter3D(void);
 	//calculate vecNowPos through center, set vecNowPos to let the bounding center get on the position where center at.
-	virtual void setBoundingCenter(D3DXVECTOR2 center) = 0;
+	virtual void setBoundingCenter(D3DXVECTOR2 center);
+	virtual void setBoundingCenter3D(D3DXVECTOR3 center);
 
 	/*===========================================
 	public function
@@ -44,6 +48,8 @@ public:
 	/*===========================================
 	public geter / seter
 	============================================*/
+	Model* getModel(void);
+	void setModel(Model* model);
 	D3DXMATRIX* getMtxWorld(void);
 	void setMtxWorld(D3DXMATRIX* mtxWorld);
 	D3DXVECTOR3* getVecFront(void);
@@ -82,6 +88,8 @@ public:
 	bool getIsDelete(void);
 	void setIsDelete(bool isDelete);
 private:
+	Model* model;
+
 	D3DXMATRIX *mtxWorld;
 
 	D3DXVECTOR3 *vecFront;   //the up direct of camera(normalize vector)
@@ -105,6 +113,9 @@ private:
 	D3DXVECTOR3 *vecRotateAxis;
 	float rotateSpeed;
 	float rotateDamping;
+
+	D3DXVECTOR3 boundingBoxMin;
+	D3DXVECTOR3 boundingBoxMax;
 
 	D3DXVECTOR3 *vecTargetFront;
 	//D3DXVECTOR3 *vecTargetPos;

@@ -73,6 +73,7 @@ private:
 	vector<Vigilance*> vigliances;
 	vector<GameObject*> others;
 	vector<MeumUI*> uis;
+	vector<Model*> models;
 	//vector<AnimationSet*> animates;
 
 	Battle* battle = NULL;

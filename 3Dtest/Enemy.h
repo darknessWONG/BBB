@@ -6,7 +6,6 @@ class Enemy :
 {
 public:
 	Enemy();
-	Enemy(string modelPath);
 	virtual ~Enemy();
 
 	/*===========================================

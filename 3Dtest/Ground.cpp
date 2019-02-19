@@ -5,12 +5,6 @@ Ground::Ground()
 {
 }
 
-Ground::Ground(string modelPath)
-	: Model(modelPath)
-{
-}
-
-
 Ground::~Ground()
 {
 }

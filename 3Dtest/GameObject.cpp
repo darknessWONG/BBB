@@ -9,6 +9,8 @@ GameObject::GameObject()
 	mtxWorld = new D3DXMATRIX();
 	D3DXMatrixIdentity(mtxWorld);
 
+	model = NULL;
+
 	vecFront = new D3DXVECTOR3(0, 0, 1);    //the up direct of camera(normalize vector)
 	vecRight = new D3DXVECTOR3(1, 0, 0);    //the front direct of camera(normalize vector)
 	vecUp = new D3DXVECTOR3(0, 1, 0);	     //the right direct of camera(normalize vector)
@@ -96,6 +98,11 @@ void GameObject::beforeUpdate(void)
 
 void GameObject::dataUpdate(void)
 {
+	if (model != NULL)
+	{
+		model->dataUpdate();
+	}
+	calBounding();
 	calSpeed();
 	calFront();
 
@@ -128,8 +135,145 @@ void GameObject::positionUpdate(void)
 	setVecNowPos(&newPos);
 }
 
+void GameObject::draw(LPDIRECT3DDEVICE9 pD3DDevice)
+{
+	if (isDisplay)
+	{
+		if (model != NULL)
+		{
+			model->draw(pD3DDevice, mtxWorld);
+		}
+	}
+}
+
 void GameObject::calBounding(void)
 {
+	if (model != NULL)
+	{
+		D3DXMATRIX matrix;
+		D3DXMatrixIdentity(&matrix);
+
+		D3DXMATRIX scale;
+		D3DXMatrixIdentity(&scale);
+		D3DXMatrixScaling(&scale, vecScale->x, vecScale->y, vecScale->z);
+		D3DXMatrixMultiply(&matrix, &matrix, &scale);
+
+		//D3DXMATRIX trans;
+		//D3DXMatrixIdentity(&trans);
+		//D3DXMatrixTranslation(&trans, vecNowPos->x, vecNowPos->y, vecNowPos->z);
+		//D3DXMatrixMultiply(&matrix, &matrix, &trans);
+
+		BOXF boundingBox = model->getBoundingBox();
+		boundingBoxMin = { boundingBox.left, boundingBox.bottom, boundingBox.front };
+		D3DXVec3TransformCoord(&boundingBoxMin, &boundingBoxMin, &matrix);
+		boundingBoxMax = { boundingBox.right, boundingBox.top, boundingBox.back };
+		D3DXVec3TransformCoord(&boundingBoxMax, &boundingBoxMax, &matrix);
+	}
+}
+
+RECTF GameObject::getBoundingRect(void)
+{
+	if (model != NULL)
+	{
+		RECTF rect;
+		float maxX = Physics::round(boundingBoxMax.x, FLOAT_BITS);
+		float minX = Physics::round(boundingBoxMin.x, FLOAT_BITS);
+		float maxZ = Physics::round(boundingBoxMax.z, FLOAT_BITS);
+		float minZ = Physics::round(boundingBoxMin.z, FLOAT_BITS);
+		float posX = Physics::round(vecNowPos->x, FLOAT_BITS);
+		float posZ = Physics::round(vecNowPos->z, FLOAT_BITS);
+
+		rect.left = minX + posX;
+		rect.right = maxX + posX;
+		rect.top = maxZ + posZ;
+		rect.bottom = minZ + posZ;
+	/*	rect.left = minX;
+		rect.right = maxX;
+		rect.top = maxZ;
+		rect.bottom = minZ;*/
+		return rect;
+	}
+	else
+	{
+		return RECTF{ 0.0f, 0.0f, 0.0f, 0.0f };
+	}
+}
+
+BOXF GameObject::getBoundingBox(void)
+{
+	if (model != NULL)
+	{
+		BOXF box;
+
+		float maxX = Physics::round(boundingBoxMax.x, FLOAT_BITS);
+		float minX = Physics::round(boundingBoxMin.x, FLOAT_BITS);
+		float maxY = Physics::round(boundingBoxMax.y, FLOAT_BITS);
+		float minY = Physics::round(boundingBoxMin.y, FLOAT_BITS);
+		float maxZ = Physics::round(boundingBoxMax.z, FLOAT_BITS);
+		float minZ = Physics::round(boundingBoxMin.z, FLOAT_BITS);
+		float posX = Physics::round(vecNowPos->x, FLOAT_BITS);
+		float posY = Physics::round(vecNowPos->y, FLOAT_BITS);
+		float posZ = Physics::round(vecNowPos->z, FLOAT_BITS);
+
+		return BOXF{ minX + posX, maxX + posX, minY + posY, maxY + posY, minZ + posZ, maxZ + posZ };
+		//return BOXF{ minX, maxX, minY, maxY, minZ, maxZ };
+	}
+	else
+	{
+		return BOXF{ 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
+	}
+}
+
+D3DXVECTOR2 GameObject::getBoundingCenter(void)
+{
+	if (model != NULL)
+	{
+		RECTF rect = getBoundingRect();
+		D3DXVECTOR2 center = { 0, 0 };
+		center.x = Physics::round((rect.left + rect.right) / 2, FLOAT_BITS);
+		center.y = Physics::round((rect.bottom + rect.top) / 2, FLOAT_BITS);
+		return center;
+	}
+	else
+	{
+		D3DXVECTOR2 pos = { vecNowPos->x, vecNowPos->z };
+		return pos;
+	}
+
+}
+
+D3DXVECTOR3 GameObject::getBoundingCenter3D(void)
+{
+	if (model != NULL)
+	{
+		BOXF rect = getBoundingBox();
+		D3DXVECTOR3 center = { 0, 0, 0 };
+		center.x = Physics::round((rect.left + rect.right) / 2, FLOAT_BITS);
+		center.y = Physics::round((rect.front + rect.back) / 2, FLOAT_BITS);
+		center.z = Physics::round((rect.bottom + rect.top) / 2, FLOAT_BITS);
+
+		return center;
+	}
+	else
+	{
+		return *vecNowPos;
+	}
+}
+
+void GameObject::setBoundingCenter(D3DXVECTOR2 center)
+{
+	D3DXVECTOR2 boundingCenter = getBoundingCenter();
+	D3DXVECTOR2 offset = { vecNowPos->x - boundingCenter.x, vecNowPos->z - boundingCenter.y };
+
+	*vecNowPos = { center.x + offset.x, vecNowPos->y, center.y + offset.y };
+}
+
+void GameObject::setBoundingCenter3D(D3DXVECTOR3 center)
+{
+	D3DXVECTOR3 boundingCenter3D = getBoundingCenter3D();
+	D3DXVECTOR3 offset = { vecNowPos->x - boundingCenter3D.x, vecNowPos->y - boundingCenter3D.y, vecNowPos->z - boundingCenter3D.z };
+
+	*vecNowPos = { center.x + offset.x, center.y + offset.y, center.y + offset.y };
 }
 
 void GameObject::addSpeed(D3DXVECTOR3 * speedDir, float speed)
@@ -188,6 +332,16 @@ void GameObject::setDisappear(bool isDisappear, int ovl)
 		setIsDisplay(!isDisappear);
 		setOverlapLevel(ovl);
 	}
+}
+
+Model * GameObject::getModel(void)
+{
+	return model;
+}
+
+void GameObject::setModel(Model * model)
+{
+	this->model = model;
 }
 
 D3DXMATRIX* GameObject::getMtxWorld(void)

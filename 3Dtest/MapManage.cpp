@@ -38,9 +38,14 @@ void MapManage::updateGameObejcts(void)
 	int gameObjectNum = gameObjects.size();
 	for (int i = 0; i < gameObjectNum; i++)
 	{
+		gameObjects[i]->calBounding();
 		if (!gameObjects[i]->getCanMove() || !gameObjects[i]->getMoveThisTurn())
 		{
 			gameObjects[i]->unlockThisTurn();
+			continue;
+		}
+		if (!gameObjects[i]->getIsDisplay())
+		{
 			continue;
 		}
 		gameObjects[i]->dataUpdate();
@@ -50,6 +55,10 @@ void MapManage::updateGameObejcts(void)
 		D3DXVECTOR3 xSpeed = *gameObjects[i]->getVecMoveSpeed();
 		while (list.size() != 0)
 		{
+			if (typeid(Player) == typeid(*gameObjects[i]))
+			{
+				int a = 0;
+			}
 			int j = 0;
 			int listNum = list.size();
 			while (j < listNum && list[j].touchType != TouchType::cover)
@@ -83,12 +92,17 @@ void MapManage::updateGameObejcts(void)
 			//list.clear();
 		}
 
+
 		//z position update
 		gameObjects[i]->positionUpdateZ();
 		list = collisionDetectionOvl(gameObjects[i]);
 		D3DXVECTOR3 zSpeed = *gameObjects[i]->getVecMoveSpeed();
 		while (list.size() != 0)
 		{
+			if (typeid(Player) == typeid(*gameObjects[i]))
+			{
+				int a = 0;
+			}
 			int j = 0;
 			int listNum = list.size();
 			while (j < listNum && list[j].touchType != TouchType::cover)
@@ -203,6 +217,10 @@ vector<TouchStatus> MapManage::collisionDetectionOvl(GameObject * gameObject)
 			continue;
 		}
 		if (0 > gameObject->getOverlapLevel() + gameObjects[i]->getOverlapLevel())
+		{
+			continue;
+		}
+		if (!gameObjects[i]->getIsDisplay())
 		{
 			continue;
 		}

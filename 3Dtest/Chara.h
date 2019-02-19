@@ -1,12 +1,12 @@
 #pragma once
-#include "Model.h"
 #include "BattleChara.h"
+#include "GameObject.h"
+
 class Chara :
-	public Model
+	public GameObject
 {
 public:
 	Chara();
-	Chara(string modelPath);
 	virtual ~Chara();
 
 	virtual void dataUpdate(void);

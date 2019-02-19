@@ -34,8 +34,8 @@ typedef struct
 {
 	float left;
 	float right;
-	float top;
 	float bottom;
+	float top;
 	float front;
 	float back;
 }BOXF;

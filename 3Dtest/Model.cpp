@@ -62,62 +62,53 @@ void Model::dataUpdate(void)
 {
 	if (isWithAnimation)
 	{
-		boundingBoxMin = { FLT_MAX, FLT_MAX ,FLT_MAX };
-		boundingBoxMax = { FLT_MIN, FLT_MIN, FLT_MIN };
-
 		if (isPlayAnimation)
 		{
 			updateAnimation(0.001);
 		}
 	}
-
-	calBounding();
-	GameObject::dataUpdate();
 }
 
-void Model::draw(LPDIRECT3DDEVICE9 pD3DDevice)
+void Model::draw(LPDIRECT3DDEVICE9 pD3DDevice, D3DXMATRIX * const matWorld)
 {
-	if (getIsDisplay())
+	if (!isWithAnimation)
 	{
-		if (!isWithAnimation)
+		pD3DDevice->SetTransform(D3DTS_WORLD, matWorld);
+		for (int i = 0; i < (int)numMaterials; i++)
 		{
-			pD3DDevice->SetTransform(D3DTS_WORLD, getMtxWorld());
-			for (int i = 0; i < (int)numMaterials; i++)
-			{
-				pD3DDevice->SetMaterial(&meshMat[i]);
-				pD3DDevice->SetTexture(0, meshTexture[i]);
-				mesh->DrawSubset(i);
-			}
+			pD3DDevice->SetMaterial(&meshMat[i]);
+			pD3DDevice->SetTexture(0, meshTexture[i]);
+			mesh->DrawSubset(i);
 		}
-		else
-		{		
-			updateFrameMatrices(m_pFrameRoot, getMtxWorld());
-			drawFrame(pD3DDevice, m_pFrameRoot);
-		}
+	}
+	else
+	{		
+		updateFrameMatrices(m_pFrameRoot, matWorld);
+		drawFrame(pD3DDevice, m_pFrameRoot);
+	}
 
 #ifdef _DEBUG
-		D3DMATERIAL9 blue;
-		blue.Diffuse = { 1.0f, 1.0f, 1.0f, 0.5f };
-		blue.Ambient = blue.Diffuse;
-		pD3DDevice->SetMaterial(&blue);
-		pD3DDevice->SetTexture(0, 0); // disable texture
+	//D3DMATERIAL9 blue;
+	//blue.Diffuse = { 1.0f, 1.0f, 1.0f, 0.5f };
+	//blue.Ambient = blue.Diffuse;
+	//pD3DDevice->SetMaterial(&blue);
+	//pD3DDevice->SetTexture(0, 0); // disable texture
 
-		LPD3DXMESH boxMesh;
+	//LPD3DXMESH boxMesh;
 
-		D3DXMATRIX mtxBoxWorld = *getMtxWorld();
-		mtxBoxWorld._42 += (boundingBoxMax.y - boundingBoxMin.y) / 2;
-		D3DXVECTOR3 scale = *getVecScale();
-		float x = (boundingBoxMax.x - boundingBoxMin.x) / scale.x;
-		float y = (boundingBoxMax.y - boundingBoxMin.y) / scale.y;
-		float z = (boundingBoxMax.z - boundingBoxMin.z) / scale.z;
-		D3DXCreateBox(pD3DDevice, x, y, z, &boxMesh, 0);
-		//D3DXCreateSphere(pD3DDevice, boundingSphereRadius, 20, 20, &sphereMesh, 0);
-		pD3DDevice->SetTransform(D3DTS_WORLD, &mtxBoxWorld);
-		boxMesh->DrawSubset(0);
+	//D3DXMATRIX mtxBoxWorld = *matWorld;
+	//mtxBoxWorld._42 += (boundingBoxMax.y - boundingBoxMin.y) / 2;
+	//D3DXVECTOR3 scale = *getVecScale();
+	//float x = (boundingBoxMax.x - boundingBoxMin.x) / scale.x;
+	//float y = (boundingBoxMax.y - boundingBoxMin.y) / scale.y;
+	//float z = (boundingBoxMax.z - boundingBoxMin.z) / scale.z;
+	//D3DXCreateBox(pD3DDevice, x, y, z, &boxMesh, 0);
+	////D3DXCreateSphere(pD3DDevice, boundingSphereRadius, 20, 20, &sphereMesh, 0);
+	//pD3DDevice->SetTransform(D3DTS_WORLD, &mtxBoxWorld);
+	//boxMesh->DrawSubset(0);
 
-		boxMesh->Release();
+	//boxMesh->Release();
 #endif
-	}
 }
 
 void Model::loadModel(LPDIRECT3DDEVICE9 pD3DDevice)
@@ -188,10 +179,6 @@ void Model::calBoundingBox(void)
 	D3DXComputeBoundingBox((D3DXVECTOR3*)v, num, D3DXGetFVFVertexSize(mesh->GetFVF()), &boundingBoxMin, &boundingBoxMax);
 	//D3DXComputeBoundingSphere((D3DXVECTOR3*)v, num, D3DXGetFVFVertexSize(mesh->GetFVF()), &boundingSphereCenter, &boundingSphereRadius);
 	mesh->UnlockVertexBuffer();
-
-	D3DXVECTOR3 scale = *getVecScale();
-	boundingBoxMax = { scale.x * boundingBoxMax.x, scale.y * boundingBoxMax.y, scale.z * boundingBoxMax.z };
-	boundingBoxMin = { scale.x * boundingBoxMin.x, scale.y * boundingBoxMin.y, scale.z * boundingBoxMin.z };
 }
 
 void Model::calBoundingBox(LPD3DXFRAME pFrameBase, D3DXVECTOR3 &boundingBoxMin, D3DXVECTOR3 &boundingBoxMax)
@@ -210,9 +197,8 @@ void Model::calBoundingBox(LPD3DXFRAME pFrameBase, D3DXVECTOR3 &boundingBoxMin, 
 		D3DXComputeBoundingBox((D3DXVECTOR3*)v, num, D3DXGetFVFVertexSize(pMesh->GetFVF()), &boxMin, &boxMax);
 		pMesh->UnlockVertexBuffer();
 
-		D3DXVECTOR3 scale = *getVecScale();
-		boxMax = { scale.x * boxMax.x, scale.y * boxMax.y, scale.z * boxMax.z };
-		boxMin = { scale.x * boxMin.x, scale.y * boxMin.y, scale.z * boxMin.z };
+		D3DXVec3TransformCoord(&boxMax, &boxMax, &pFrameBase->TransformationMatrix);
+		D3DXVec3TransformCoord(&boxMin, &boxMin, &pFrameBase->TransformationMatrix);
 		boundingBoxMin = Physics::takeSmallerVaule(boxMin, boundingBoxMin);
 		boundingBoxMax = Physics::takebiggerVaule(boxMax, boundingBoxMax);
 	}
@@ -271,84 +257,24 @@ void Model::calBounding(void)
 
 RECTF Model::getBoundingRect(void)
 {
-	RECTF rect;
 	float maxX = Physics::round(boundingBoxMax.x, FLOAT_BITS);
 	float minX = Physics::round(boundingBoxMin.x, FLOAT_BITS);
 	float maxZ = Physics::round(boundingBoxMax.z, FLOAT_BITS);
 	float minZ = Physics::round(boundingBoxMin.z, FLOAT_BITS);
-	float posX = Physics::round(getVecNowPos()->x, FLOAT_BITS);
-	float posZ = Physics::round(getVecNowPos()->z, FLOAT_BITS); 
 
-	//rect.left = (float)((double)boundingBoxMin.x + (double)getVecNowPos()->x);
-	//rect.right = (float)((double)boundingBoxMax.x + (double)getVecNowPos()->x);
-	//rect.top = (float)((double)boundingBoxMax.z + (double)getVecNowPos()->z);
-	//rect.bottom = (float)((double)boundingBoxMin.z + (double)getVecNowPos()->z);
-	rect.left = minX + posX;
-	rect.right = maxX + posX;
-	rect.top = maxZ + posZ;
-	rect.bottom = minZ + posZ;
-	return rect;
+	return RECTF{ minX, maxX, maxZ, minZ };
 }
 
 BOXF Model::getBoundingBox(void)
 {
-	BOXF box;
 	float maxX = Physics::round(boundingBoxMax.x, FLOAT_BITS);
 	float minX = Physics::round(boundingBoxMin.x, FLOAT_BITS);
 	float maxY = Physics::round(boundingBoxMax.y, FLOAT_BITS);
 	float minY = Physics::round(boundingBoxMin.y, FLOAT_BITS);
 	float maxZ = Physics::round(boundingBoxMax.z, FLOAT_BITS);
 	float minZ = Physics::round(boundingBoxMin.z, FLOAT_BITS);
-	float posX = Physics::round(getVecNowPos()->x, FLOAT_BITS);
-	float posY = Physics::round(getVecNowPos()->y, FLOAT_BITS);
-	float posZ = Physics::round(getVecNowPos()->z, FLOAT_BITS); 
 
-	box.left = minX + posX;
-	box.right = maxX + posX;
-	box.bottom = minY + posY;
-	box.top = maxY + posY;
-	box.front = minZ + posZ;
-	box.back = maxZ + posZ;
-	return box;
-}
-
-D3DXVECTOR2 Model::getBoundingCenter(void)
-{
-	RECTF rect = getBoundingRect();
-	D3DXVECTOR2 center = { 0, 0 };
-	center.x = Physics::round((rect.left + rect.right) / 2, FLOAT_BITS);
-	center.y = Physics::round((rect.bottom + rect.top) / 2, FLOAT_BITS);
-	return center;
-}
-
-D3DXVECTOR3 Model::getBoundingCenter3D(void)
-{
-	BOXF box = getBoundingBox();
-	D3DXVECTOR3 center = { 0, 0, 0 };
-	center.x = Physics::round((box.left + box.right) / 2, FLOAT_BITS);
-	center.y = Physics::round((box.bottom + box.top) / 2, FLOAT_BITS);
-	center.z = Physics::round((box.front + box.back) / 2, FLOAT_BITS);
-	return center;
-}
-
-void Model::setBoundingCenter(D3DXVECTOR2 center)
-{
-	D3DXVECTOR2 boundingCenter = getBoundingCenter();
-	D3DXVECTOR3 nowPos = *getVecNowPos();
-	D3DXVECTOR2 offset = { nowPos.x - boundingCenter.x, nowPos.z - boundingCenter.y };
-
-	nowPos = { center.x + offset.x, nowPos.y, center.y + offset.y };
-	setVecNowPos(&nowPos);
-}
-
-void Model::setBoundingCenter3D(D3DXVECTOR3 center)
-{
-	D3DXVECTOR3 boundingCenter3D = getBoundingCenter3D();
-	D3DXVECTOR3 nowPos = *getVecNowPos();
-	D3DXVECTOR3 offset = { nowPos.x - boundingCenter3D.x, nowPos.y - boundingCenter3D.y, nowPos.z - boundingCenter3D.z };
-
-	nowPos = { center.x + offset.x, center.y + offset.y, center.y + offset.y };
-	setVecNowPos(&nowPos);
+	return BOXF{ minX, maxX, minY, maxY, minZ, maxZ};
 }
 
 //--------------------------------------------------------------------------------------
