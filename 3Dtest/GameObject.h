@@ -116,6 +116,8 @@ private:
 
 	D3DXVECTOR3 boundingBoxMin;
 	D3DXVECTOR3 boundingBoxMax;
+	
+	float animaCounter;
 
 	D3DXVECTOR3 *vecTargetFront;
 	//D3DXVECTOR3 *vecTargetPos;

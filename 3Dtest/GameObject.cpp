@@ -32,6 +32,8 @@ GameObject::GameObject()
 	overlapLevel = 0;
 	isDisplay = true;
 	isDelete = false;
+
+	animaCounter = 0;
 }
 
 
@@ -249,8 +251,8 @@ D3DXVECTOR3 GameObject::getBoundingCenter3D(void)
 		BOXF rect = getBoundingBox();
 		D3DXVECTOR3 center = { 0, 0, 0 };
 		center.x = Physics::round((rect.left + rect.right) / 2, FLOAT_BITS);
-		center.y = Physics::round((rect.front + rect.back) / 2, FLOAT_BITS);
-		center.z = Physics::round((rect.bottom + rect.top) / 2, FLOAT_BITS);
+		center.y = Physics::round((rect.bottom + rect.top) / 2, FLOAT_BITS);
+		center.z = Physics::round((rect.front + rect.back) / 2, FLOAT_BITS);
 
 		return center;
 	}

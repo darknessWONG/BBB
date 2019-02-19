@@ -234,9 +234,6 @@ void GameManage::gameStateInit(void)
 	groundModel->loadModel(pD3DDevice);
 	models.push_back(groundModel);
 
-	/*SideEffect* se = new SideEffect();
-	se->setType(SideEffectType::SideEffectTypePull);
-	se->setTarget(EffectTarget::EffectTargetEnemy);*/
 	BattleSkill* fireBall = new BattleSkill();
 	fireBall->setTextureIndex(8);
 	fireBall->setCost(1);
@@ -309,17 +306,6 @@ void GameManage::gameStateInit(void)
 	others.push_back(tree10);
 	map->addGameObject(tree10);
 
-	//Model* tree100 = new Model("rock wall.blend.x");
-	//tree100->setVecScale(new D3DXVECTOR3(0.5, 1, 0.3));
-	//tree100->loadModel(pD3DDevice);
-	//tree100->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
-	//tree100->setCanMove(false);
-	//tree100->setIsDisplay(true);
-	//tree100->setVecNowPos(new D3DXVECTOR3(-50, 0, 80));
-	//tree100->setOverlapLevel(500);
-	//others.push_back(tree100);
-	//map->addGameObject(tree100);
-
 	GameObject* tree8 = new GameObject();
 	tree8->setModel(wall2Model);
 	tree8->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
@@ -361,17 +347,6 @@ void GameManage::gameStateInit(void)
 	tree19->setOverlapLevel(500);
 	others.push_back(tree19);
 	map->addGameObject(tree19);
-
-	//Model* tree20 = new Model("rock wall2.blend.x");
-	//tree20->setVecScale(new D3DXVECTOR3(0.25, 1, 0.5));
-	//tree20->loadModel(pD3DDevice);
-	//tree20->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
-	//tree20->setCanMove(false);
-	//tree20->setIsDisplay(true);
-	//tree20->setVecNowPos(new D3DXVECTOR3(0, 0, 50));
-	//tree20->setOverlapLevel(500);
-	//others.push_back(tree20);
-	//map->addGameObject(tree20);
 
 	GameObject* tree3 = new Ground();
 	tree3->setModel(groundModel);
@@ -987,7 +962,7 @@ void GameManage::battleInit(void)
 		billboard->setVecNowPos(new D3DXVECTOR3(0, 3, 0));
 		billboard->setOverlapLevel(-1000);
 		billboard->setIsDelete(false);
-		//billboard->setVecScale(new D3DXVECTOR3(5, 5, 5));
+		billboard->setVecScale(new D3DXVECTOR3(5, 5, 5));
 		others.push_back(billboard);
 		map->addGameObject(billboard);
 
