@@ -17,7 +17,7 @@ MeumUI::~MeumUI()
 	safe_delete<UI>(background);
 	safe_delete<UI>(pointer);
 	
-	int optionsNum = options.size();
+	int optionsNum = (int)options.size();
 	for (int i = 0; i < optionsNum; i++)
 	{
 		safe_delete<UI>(options[i]);
@@ -32,7 +32,7 @@ void MeumUI::assembleUIs(void)
 		background->setStr(displayStr);
 		background->releaseChain();
 		background->addChild(pointer);
-		int optionsNum = options.size();
+		int optionsNum = (int)options.size();
 		for (int i = 0; i < optionsNum; i++)
 		{
 			background->addChild(options[i]);
@@ -96,7 +96,7 @@ void MeumUI::cleanOption(void)
 	if (background != NULL)
 	{
 		background->releaseChain();
-		int optionNum = options.size();
+		int optionNum = (int)options.size();
 		for (int i = 0; i < optionNum; i++)
 		{
 			delete options[optionNum - i - 1];
@@ -126,7 +126,7 @@ void MeumUI::setNowPointing(int nowPointing)
 	nowPointing %= options.size();
 	if (nowPointing < 0)
 	{
-		nowPointing = options.size() - nowPointing;
+		nowPointing = (int)options.size() - nowPointing;
 	}
 	this->nowPointing = nowPointing;
 }

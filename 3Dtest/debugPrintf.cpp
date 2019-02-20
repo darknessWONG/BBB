@@ -27,10 +27,3 @@ void DebugPrintf(const char* pFormat, ...)
 	OutputDebugStringA(buf);
 #endif // _DEBUG || 
 }
-
-//void FaultLog(char* message)
-//{
-//	char timeString[TIME_STRING_LENGTH];
-//	GetTimeString(timeString, TIME_STRING_LENGTH);
-//	DebugPrintf("%s: %s %s\n", "FAULT", timeString, message);
-//}

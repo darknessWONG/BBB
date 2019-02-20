@@ -114,30 +114,6 @@
     <ClInclude Include="font.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Shape.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Cube.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Parts.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MyMesh.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="AnimationTemplate.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Animation.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="AnimationSet.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="AnimationManage.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="AllocateHierarchy.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -147,18 +123,12 @@
     <ClInclude Include="NameTap.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Bird.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="ForceMovePerform.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="3Dtest.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Common.cpp">
@@ -248,30 +218,6 @@
     <ClCompile Include="font.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Shape.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Cube.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Parts.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="MyMesh.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="AnimationTemplate.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Animation.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="AnimationSet.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="AnimationManage.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="AllocateHierarchy.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -279,9 +225,6 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="NameTap.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Bird.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="ForceMovePerform.cpp">

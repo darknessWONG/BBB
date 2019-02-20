@@ -23,7 +23,7 @@ void BattleChara::addEffect(SideEffect * effect)
 
 bool BattleChara::checkEffect(SideEffectType type)
 {
-	int effectNum = effect.size();
+	int effectNum = (int)effect.size();
 	for (int i = 0; i < effectNum; i++)
 	{
 		if (effect[i]->getType() == type)
@@ -36,7 +36,7 @@ bool BattleChara::checkEffect(SideEffectType type)
 
 void BattleChara::removeEffect(int index)
 {
-	int effectNum = effect.size();
+	int effectNum = (int)effect.size();
 	if (index >= 0 && index < effectNum)
 	{
 		vector<SideEffect*>::iterator it = effect.begin() + index;
@@ -64,7 +64,7 @@ void BattleChara::removeEffect(SideEffect* effect)
 
 void BattleChara::removeEffect(SideEffectType type)
 {
-	int max = effect.size();
+	int max = (int)effect.size();
 	for (int i = 0; i < max; i++)
 	{
 		if (effect[i]->getType() == type)
@@ -72,7 +72,7 @@ void BattleChara::removeEffect(SideEffectType type)
 			vector<SideEffect*>::iterator it = this->effect.begin() + i;
 			this->effect.erase(it);
 			
-			max = effect.size();
+			max = (int)effect.size();
 			i = 0;
 			if (max <= 0)
 			{
@@ -85,7 +85,7 @@ void BattleChara::removeEffect(SideEffectType type)
 void BattleChara::removeOverdueStauts(void)
 {
 	vector<int> list;
-	int effectNum = effect.size();
+	int effectNum = (int)effect.size();
 	for (int i = 0; i < effectNum; i++)
 	{
 		if (effect[i]->getDuration() <= 0)
@@ -94,7 +94,7 @@ void BattleChara::removeOverdueStauts(void)
 		}
 	}
 	
-	int listNum = list.size();
+	int listNum = (int)list.size();
 	for (int i = listNum - 1; i >= 0; i--)
 	{
 		removeEffect(list[i]);
@@ -103,7 +103,7 @@ void BattleChara::removeOverdueStauts(void)
 
 void BattleChara::calStatus(void)
 {
-	int effectNum = effect.size();
+	int effectNum = (int)effect.size();
 	for (int i = 0; i < effectNum; i++)
 	{
 		effect[i]->turn_pass();

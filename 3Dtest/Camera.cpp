@@ -47,7 +47,6 @@ void Camera::draw(LPDIRECT3DDEVICE9 pD3DDevice)
 	invMatrix._41 = 0;
 	invMatrix._42 = 0;
 	invMatrix._43 = 0;
-	//invMatrix = mtxView;
 
 	//projection matirx
 	D3DXMATRIX mtxProjection;

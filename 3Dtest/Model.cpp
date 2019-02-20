@@ -9,7 +9,6 @@ Model::Model()
 	boundingBoxMax = { 0.0f, 0.0f, 0.0f };
 
 	isWithAnimation = false;
-	isPlayAnimation = true;
 }
 
 Model::Model(string modelPath)
@@ -21,7 +20,6 @@ Model::Model(string modelPath)
 	boundingBoxMax = { 0.0f, 0.0f, 0.0f };
 
 	isWithAnimation = false;
-	isPlayAnimation = true;
 }
 
 
@@ -58,18 +56,11 @@ Model::~Model()
 	}
 }
 
-void Model::dataUpdate(void)
+void Model::dataUpdate(float animaCount)
 {
-	if (isWithAnimation)
-	{
-		if (isPlayAnimation)
-		{
-			updateAnimation(0.001);
-		}
-	}
 }
 
-void Model::draw(LPDIRECT3DDEVICE9 pD3DDevice, D3DXMATRIX * const matWorld)
+void Model::draw(LPDIRECT3DDEVICE9 pD3DDevice, D3DXMATRIX * const matWorld, float animaCount)
 {
 	if (!isWithAnimation)
 	{
@@ -82,33 +73,12 @@ void Model::draw(LPDIRECT3DDEVICE9 pD3DDevice, D3DXMATRIX * const matWorld)
 		}
 	}
 	else
-	{		
+	{
+		resetAnimation();
+		updateAnimation(animaCount);
 		updateFrameMatrices(m_pFrameRoot, matWorld);
 		drawFrame(pD3DDevice, m_pFrameRoot);
 	}
-
-#ifdef _DEBUG
-	//D3DMATERIAL9 blue;
-	//blue.Diffuse = { 1.0f, 1.0f, 1.0f, 0.5f };
-	//blue.Ambient = blue.Diffuse;
-	//pD3DDevice->SetMaterial(&blue);
-	//pD3DDevice->SetTexture(0, 0); // disable texture
-
-	//LPD3DXMESH boxMesh;
-
-	//D3DXMATRIX mtxBoxWorld = *matWorld;
-	//mtxBoxWorld._42 += (boundingBoxMax.y - boundingBoxMin.y) / 2;
-	//D3DXVECTOR3 scale = *getVecScale();
-	//float x = (boundingBoxMax.x - boundingBoxMin.x) / scale.x;
-	//float y = (boundingBoxMax.y - boundingBoxMin.y) / scale.y;
-	//float z = (boundingBoxMax.z - boundingBoxMin.z) / scale.z;
-	//D3DXCreateBox(pD3DDevice, x, y, z, &boxMesh, 0);
-	////D3DXCreateSphere(pD3DDevice, boundingSphereRadius, 20, 20, &sphereMesh, 0);
-	//pD3DDevice->SetTransform(D3DTS_WORLD, &mtxBoxWorld);
-	//boxMesh->DrawSubset(0);
-
-	//boxMesh->Release();
-#endif
 }
 
 void Model::loadModel(LPDIRECT3DDEVICE9 pD3DDevice)
@@ -177,7 +147,6 @@ void Model::calBoundingBox(void)
 	mesh->LockVertexBuffer(0, (void**)&v);
 	int num = mesh->GetNumVertices();
 	D3DXComputeBoundingBox((D3DXVECTOR3*)v, num, D3DXGetFVFVertexSize(mesh->GetFVF()), &boundingBoxMin, &boundingBoxMax);
-	//D3DXComputeBoundingSphere((D3DXVECTOR3*)v, num, D3DXGetFVFVertexSize(mesh->GetFVF()), &boundingSphereCenter, &boundingSphereRadius);
 	mesh->UnlockVertexBuffer();
 }
 
@@ -231,16 +200,6 @@ bool Model::getIsWithAnimation(void)
 void Model::setIsWithAnimation(bool isWithAnimation)
 {
 	this->isWithAnimation = isWithAnimation;
-}
-
-bool Model::getIsPlayAnimation(void)
-{
-	return isPlayAnimation;
-}
-
-void Model::setIsPlayAnimation(bool isPlayAnimation)
-{
-	this->isPlayAnimation = isPlayAnimation;
 }
 
 void Model::calBounding(void)
@@ -439,7 +398,6 @@ void Model::updateFrameMatrices(LPD3DXFRAME pFrameBase, LPD3DXMATRIX pParentMatr
 
 void Model::setAnimationByName(LPCTSTR name)
 {
-	//m_pAnimController->SetTrackPosition(0, 0.5);
 	LPD3DXANIMATIONSET pAnimationSet = NULL;
 	m_pAnimController->GetAnimationSetByName(name, &pAnimationSet);
 	m_pAnimController->SetTrackAnimationSet((UINT)0.0, pAnimationSet);
@@ -448,10 +406,8 @@ void Model::setAnimationByName(LPCTSTR name)
 
 void Model::setAnimationByName(LPCTSTR name, int track, float wigth)
 {
-	//m_pAnimController->SetTrackPosition(0, 0.5);
 	LPD3DXANIMATIONSET pAnimationSet = NULL;
 	m_pAnimController->GetAnimationSetByName(name, &pAnimationSet);
-	//m_pAnimController->SetTrackAnimationSet((UINT)1.0, pAnimationSet);
 	m_pAnimController->SetTrackAnimationSet(track, pAnimationSet);
 	m_pAnimController->SetTrackEnable(track, true);
 	m_pAnimController->SetTrackWeight(track, wigth);

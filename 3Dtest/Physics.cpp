@@ -55,12 +55,6 @@ bool Physics::pointTouchRect(D3DXVECTOR2 point, D3DXVECTOR2 * rectPoints)
 	return false;
 }
 
-//bool Physics::rectInRect(D3DXVECTOR2 * rectPoints1, D3DXVECTOR2 * rectPoints2)
-//{
-//
-//	return false;
-//}
-
 TouchType Physics::rectTouchRect(D3DXVECTOR2 * rect1, D3DXVECTOR2 * rect2)
 {
 	D3DXVECTOR2 rectPoints1[4];
@@ -71,11 +65,6 @@ TouchType Physics::rectTouchRect(D3DXVECTOR2 * rect1, D3DXVECTOR2 * rect2)
 		rectPoints1[i].y = round(rect1[i].y, FLOAT_BITS);
 		rectPoints2[i].x = round(rect2[i].x, FLOAT_BITS);
 		rectPoints2[i].y = round(rect2[i].y, FLOAT_BITS);
-
-		//rectPoints1[i].x = rect1[i].x;
-		//rectPoints1[i].y = rect1[i].y;
-		//rectPoints2[i].x = rect2[i].x;
-		//rectPoints2[i].y = rect2[i].y;
 	}
 	float lengthx = fabs((rectPoints1[1].x - rectPoints1[0].x) + (rectPoints2[1].x - rectPoints2[0].x));
 	float lengthy = fabs((rectPoints1[2].y - rectPoints1[0].y) + (rectPoints2[2].y - rectPoints2[0].y));
@@ -107,7 +96,6 @@ TouchType Physics::rectTouchRect(D3DXVECTOR2 * rect1, D3DXVECTOR2 * rect2)
 
 bool Physics::pointInCycle(Cycle * cycle, D3DXVECTOR2 * point)
 {
-	//float dis = (point->x - cycle->center_x) * (point->x - cycle->center_x) + (point->y - cycle->center_y) * (point->y - cycle->center_y);
 	D3DXVECTOR2 vecDis = D3DXVECTOR2(cycle->center_x, cycle->center_y) - *point;
 	float dis = D3DXVec2LengthSq(&vecDis);
 	float ra2 = cycle->r * cycle->r;

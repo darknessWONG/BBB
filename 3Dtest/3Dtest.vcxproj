@@ -42,14 +42,14 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -76,6 +76,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -84,6 +86,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -110,6 +114,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>d3d9.lib;d3dx9d.lib;dinput8.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -145,6 +150,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>d3d9.lib;d3dx9.lib;dinput8.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -153,19 +159,13 @@
   <ItemGroup>
     <ClInclude Include="3Dtest.h" />
     <ClInclude Include="AllocateHierarchy.h" />
-    <ClInclude Include="Animation.h" />
-    <ClInclude Include="AnimationManage.h" />
-    <ClInclude Include="AnimationSet.h" />
-    <ClInclude Include="AnimationTemplate.h" />
     <ClInclude Include="Battle.h" />
     <ClInclude Include="BattleChara.h" />
     <ClInclude Include="BattleSkill.h" />
     <ClInclude Include="Billboard.h" />
-    <ClInclude Include="Bird.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Chara.h" />
     <ClInclude Include="Common.h" />
-    <ClInclude Include="Cube.h" />
     <ClInclude Include="debugPrintf.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="font.h" />
@@ -173,7 +173,6 @@
     <ClInclude Include="GameManage.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Ground.h" />
-    <ClInclude Include="MyMesh.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="MapManage.h" />
@@ -181,13 +180,11 @@
     <ClInclude Include="Model.h" />
     <ClInclude Include="MovePerform.h" />
     <ClInclude Include="NameTap.h" />
-    <ClInclude Include="Parts.h" />
     <ClInclude Include="Perform.h" />
     <ClInclude Include="PerformManage.h" />
     <ClInclude Include="Physics.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Resource.h" />
-    <ClInclude Include="Shape.h" />
     <ClInclude Include="SideEffect.h" />
     <ClInclude Include="SpecialArea.h" />
     <ClInclude Include="stdafx.h" />
@@ -198,21 +195,14 @@
     <ClInclude Include="Vigilance.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="3Dtest.cpp" />
     <ClCompile Include="AllocateHierarchy.cpp" />
-    <ClCompile Include="Animation.cpp" />
-    <ClCompile Include="AnimationManage.cpp" />
-    <ClCompile Include="AnimationSet.cpp" />
-    <ClCompile Include="AnimationTemplate.cpp" />
     <ClCompile Include="Battle.cpp" />
     <ClCompile Include="BattleChara.cpp" />
     <ClCompile Include="BattleSkill.cpp" />
     <ClCompile Include="Billboard.cpp" />
-    <ClCompile Include="Bird.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Chara.cpp" />
     <ClCompile Include="Common.cpp" />
-    <ClCompile Include="Cube.cpp" />
     <ClCompile Include="debugPrintf.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="font.cpp" />
@@ -220,7 +210,6 @@
     <ClCompile Include="GameManage.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Ground.cpp" />
-    <ClCompile Include="MyMesh.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="main.cpp" />
@@ -229,12 +218,10 @@
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="MovePerform.cpp" />
     <ClCompile Include="NameTap.cpp" />
-    <ClCompile Include="Parts.cpp" />
     <ClCompile Include="Perform.cpp" />
     <ClCompile Include="PerformManage.cpp" />
     <ClCompile Include="Physics.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Shape.cpp" />
     <ClCompile Include="SideEffect.cpp" />
     <ClCompile Include="SpecialArea.cpp" />
     <ClCompile Include="stdafx.cpp">

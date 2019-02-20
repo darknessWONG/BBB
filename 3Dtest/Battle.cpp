@@ -61,7 +61,7 @@ Battle::~Battle()
 
 void Battle::start(void)
 {
-	int charasNum = charas.size();
+	int charasNum = (int)charas.size();
 	for (int i = 0; i < charasNum; i++)
 	{
 		if (typeid(*charas[i]) == typeid(Enemy))
@@ -102,7 +102,7 @@ void Battle::start(void)
 BOOL Battle::checkEnd(void)
 {
 	int playerNum = 0, enemyNum = 0;
-	int charaNum = charas.size();
+	int charaNum = (int)charas.size();
 	for (int i = 0; i < charaNum; i++)
 	{
 		if (charas[i]->getBattleChara()->getHpNow() > 0)
@@ -259,7 +259,7 @@ void Battle::endPhase(void)
 
 void Battle::calActionList(void)
 {
-	int charaNum = charas.size();
+	int charaNum = (int)charas.size();
 	actionList.clear();
 	for (int i = 0; i < charaNum; i++)
 	{
@@ -269,7 +269,7 @@ void Battle::calActionList(void)
 		}
 	}
 
-	int actionNum = actionList.size();
+	int actionNum = (int)actionList.size();
 	for (int i = 0; i < actionNum; i++)
 	{
 		for (int j = i + 1; j < actionNum; j++)
@@ -461,7 +461,6 @@ void Battle::readMovePlace(void)
 {
 	if (Keyboard_IsTrigger(DIK_RETURN))
 	{
-	//	float dis = D3DXVec2Length(&(actionList[nowActionChara]->getBoundingCenter() - movePointer->getBoundingCenter()));
 		float dis = D3DXVec2Length(&(primitivePosition - movePointer->getBoundingCenter()));
 
 		if (dis <= actionList[nowActionChara]->getBattleChara()->getMovePoint())
@@ -511,7 +510,7 @@ void Battle::addCharas(Chara * chara)
 
 bool Battle::checkCharaIsInBattle(Chara * chara)
 {
-	int charaNum = charas.size();
+	int charaNum = (int)charas.size();
 	for (int i = 0; i < charaNum; i++)
 	{
 		if (charas[i] == chara)
@@ -559,9 +558,8 @@ void Battle::createSkillMeum(vector<BattleSkill*> list)
 	commandMeum->setBackground(ui);
 	UI* ui1 = new UI({ 0, 0 }, ui->getWidth() / 4, ui->getHeight() / 5, 1);
 	commandMeum->setPointer(ui1);
-	//commandMeum->setPosition({ 0, 0 });
 
-	int listNum = list.size();
+	int listNum = (int)list.size();
 	for (int i = 0; i < listNum; i++)
 	{
 		ui1 = new UI({ (ui->getWidth() / 4 * 2), (ui->getHeight() / (listNum + 2)) * (i + 1) }, ui->getWidth() / 4, ui->getHeight() / (listNum + 2), 1);
@@ -579,9 +577,8 @@ void Battle::createTagatMeum(vector<Chara*> list)
 	commandMeum->setBackground(ui);
 	UI* ui1 = new UI({ 0, 0 }, ui->getWidth() / 4, ui->getHeight() / 5, 1);
 	commandMeum->setPointer(ui1);
-//	commandMeum->setPosition({ 0, 0 });
 
-	int listNum = list.size();
+	int listNum = (int)list.size();
 	for (int i = 0; i < listNum; i++)
 	{
 		ui1 = new UI({ (ui->getWidth() / 4 * 2), (ui->getHeight() / (listNum + 2)) * (i + 1) }, ui->getWidth() / 4, ui->getHeight() / (listNum + 2), 1);
@@ -629,7 +626,7 @@ vector<Chara*> Battle::calTargetList(Chara * acvite, BattleSkill * skill)
 		}
 	}
 
-	int num = actionList.size();
+	int num = (int)actionList.size();
 	for (int i = 0; i < num; i++)
 	{
 		if (actionList[i]->getBattleChara()->getCamp() == targetCamp)
@@ -643,7 +640,7 @@ vector<Chara*> Battle::calTargetList(Chara * acvite, BattleSkill * skill)
 
 vector<int> Battle::calDamageList(Chara* active, vector<Chara*>passive, bool isUseSkill, BattleSkill* skill)
 {
-	int targetNum = passive.size();
+	int targetNum = (int)passive.size();
 	vector<int> damage;
 	int atk = 0, def = 0;
 	for (int i = 0; i < targetNum; i++)
@@ -669,19 +666,9 @@ int Battle::calDamageSingle(BattleChara * active, BattleChara * passive, bool is
 			int def = 0;
 			damage = calDamageVal(atk, def, 0);
 
-			/*int atk = active->getAtk();
-			int def = action->passive->getDefense();
-			damage = atk - def * DEFENSE_EFFICIENCY + 1 > 1 ?
-			atk - def * DEFENSE_EFFICIENCY + 1 : 1;*/
 		}
 		else
 		{
-			/*	int atk = skill->getSkillType() == magic ? active->getMAtk() : active->getAtk();
-
-			int def = skill->getSkillType() == magic ? passive->getMDefense() : passive->getDefense();
-
-			damage = atk + skill->getDamage() * SKILL_EFFICIENCY - def * DEFENSE_EFFICIENCY + 1 > 1 ?
-			atk + skill->getDamage() * SKILL_EFFICIENCY - def * DEFENSE_EFFICIENCY + 1 : 1);*/
 			int atk = active->getAtk();
 			int def = 0;
 			damage = calDamageVal(atk, def, (int)skill->getDamage());
@@ -700,7 +687,7 @@ int Battle::calDamageVal(int atk, int def, int skillDamage)
 
 void Battle::takeDamage(void)
 {
-	int targetNum = action->passive.size();
+	int targetNum = (int)action->passive.size();
 	for (int i = 0; i < targetNum; i++)
 	{
 		if (action->damage[i] > 0)
@@ -765,7 +752,7 @@ void Battle::displayMessage(string str)
 
 void Battle::tabDeadEnemy(void)
 {
-	int charaNum = charas.size();
+	int charaNum = (int)charas.size();
 	for (int i = 0; i < charaNum; i++)
 	{
 		if (charas[i]->getBattleChara()->getHpNow() <= 0)
@@ -777,7 +764,7 @@ void Battle::tabDeadEnemy(void)
 
 void Battle::calStatusMessage(void)
 {
-	int charasNum = charas.size();
+	int charasNum = (int)charas.size();
 	string displayStr;
 	stringstream ss;
 	string tmpStr;

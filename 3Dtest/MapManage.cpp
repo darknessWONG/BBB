@@ -35,7 +35,7 @@ void MapManage::cleanGameObject(void)
 
 void MapManage::updateGameObejcts(void)
 {
-	int gameObjectNum = gameObjects.size();
+	int gameObjectNum = (int)gameObjects.size();
 	for (int i = 0; i < gameObjectNum; i++)
 	{
 		gameObjects[i]->calBounding();
@@ -60,7 +60,7 @@ void MapManage::updateGameObejcts(void)
 				int a = 0;
 			}
 			int j = 0;
-			int listNum = list.size();
+			int listNum = (int)list.size();
 			while (j < listNum && list[j].touchType != TouchType::cover)
 			{
 				j++;
@@ -77,11 +77,11 @@ void MapManage::updateGameObejcts(void)
 			float gameObjCenterPos = gameObjects[i]->getBoundingCenter().x - new_point.x;
 			if (xSpeed.x > 0)
 			{
-				new_point.x = (list[0].obj->getBoundingCenter().x - ((gameObjLength + listObjLength) / 2.0f) - pow(0.1, FLOAT_BITS) - gameObjCenterPos);
+				new_point.x = (list[0].obj->getBoundingCenter().x - ((gameObjLength + listObjLength) / 2.0f) - (float)pow(0.1, FLOAT_BITS) - gameObjCenterPos);
 			}
 			else
 			{
-				new_point.x = (list[0].obj->getBoundingCenter().x + ((gameObjLength + listObjLength) / 2.0f) + pow(0.1, FLOAT_BITS) - gameObjCenterPos);
+				new_point.x = (list[0].obj->getBoundingCenter().x + ((gameObjLength + listObjLength) / 2.0f) + (float)pow(0.1, FLOAT_BITS) - gameObjCenterPos);
 			}
 			D3DXVECTOR3 newSpeed = *gameObjects[i]->getVecMoveSpeed();
 			newSpeed.x = 0.0f;
@@ -89,7 +89,6 @@ void MapManage::updateGameObejcts(void)
 			gameObjects[i]->setVecNowPos(&new_point);
 			gameObjects[i]->calBounding();
 			list = collisionDetectionOvl(gameObjects[i]);
-			//list.clear();
 		}
 
 
@@ -104,7 +103,7 @@ void MapManage::updateGameObejcts(void)
 				int a = 0;
 			}
 			int j = 0;
-			int listNum = list.size();
+			int listNum = (int)list.size();
 			while (j < listNum && list[j].touchType != TouchType::cover)
 			{
 				j++;
@@ -121,11 +120,11 @@ void MapManage::updateGameObejcts(void)
 			float gameObjCenterPos = gameObjects[i]->getBoundingCenter().y - new_point.z;
 			if (zSpeed.z > 0)
 			{
-				new_point.z = list[0].obj->getBoundingCenter().y - ((gameObjWidth + listObjWidth) / 2.0f) - pow(0.1, FLOAT_BITS) - gameObjCenterPos;
+				new_point.z = list[0].obj->getBoundingCenter().y - ((gameObjWidth + listObjWidth) / 2.0f) - (float)pow(0.1, FLOAT_BITS) - gameObjCenterPos;
 			}
 			else
 			{
-				new_point.z = list[0].obj->getBoundingCenter().y + ((gameObjWidth + listObjWidth) / 2.0f) + pow(0.1, FLOAT_BITS) - gameObjCenterPos;
+				new_point.z = list[0].obj->getBoundingCenter().y + ((gameObjWidth + listObjWidth) / 2.0f) + (float)pow(0.1, FLOAT_BITS) - gameObjCenterPos;
 			}
 			D3DXVECTOR3 newSpeed = *gameObjects[i]->getVecMoveSpeed();
 			newSpeed.z = 0.0f;
@@ -133,14 +132,13 @@ void MapManage::updateGameObejcts(void)
 			gameObjects[i]->setVecNowPos(&new_point);
 			gameObjects[i]->calBounding();
 			list = collisionDetectionOvl(gameObjects[i]);
-			//list.clear();
 		}
 
 		//y position update
 		gameObjects[i]->positionUpdateY();
 	}
 
-	gameObjectNum = gameObjects2D.size();
+	gameObjectNum = (int)gameObjects2D.size();
 	for (int i = 0; i < gameObjectNum; i++)
 	{
 		gameObjects2D[i]->dataUpdate();
@@ -149,14 +147,14 @@ void MapManage::updateGameObejcts(void)
 
 void MapManage::drawGameObjects(LPDIRECT3DDEVICE9 pD3DDevice)
 {
-	int gameObjectNum = gameObjects.size();
+	int gameObjectNum = (int)gameObjects.size();
 	for (int i = 0; i < gameObjectNum; i++)
 	{
 		gameObjects[i]->calWorldMatrix();
 		gameObjects[i]->draw(pD3DDevice);
 	}
 
-	gameObjectNum = gameObjects2D.size();
+	gameObjectNum = (int)gameObjects2D.size();
 	for (int i = 0; i < gameObjectNum; i++)
 	{
 		gameObjects2D[i]->draw(pD3DDevice);
@@ -166,7 +164,7 @@ void MapManage::drawGameObjects(LPDIRECT3DDEVICE9 pD3DDevice)
 
 void MapManage::gameObjectsBeforeUpdate(void)
 {
-	int gameObectsNum = gameObjects.size();
+	int gameObectsNum = (int)gameObjects.size();
 	for (int i = 0; i < gameObectsNum; i++)
 	{
 		gameObjects[i]->beforeUpdate();
@@ -209,7 +207,7 @@ vector<TouchStatus> MapManage::collisionDetectionOvl(GameObject * gameObject)
 	position[2] = D3DXVECTOR2(rect.left, rect.bottom);
 	position[3] = D3DXVECTOR2(rect.right, rect.bottom);
 
-	int ganmeObjectNum = gameObjects.size();
+	int ganmeObjectNum = (int)gameObjects.size();
 	for (int i = 0; i < ganmeObjectNum; i++)
 	{
 		if (gameObjects[i] == gameObject)
@@ -250,7 +248,7 @@ vector<GameObject*> MapManage::calObjectInCycle(Vigilance * cycle)
 	c.center_y = center.y;
 	c.r = cycle->getRadius();
 
-	int gameObjectNum = gameObjects.size();
+	int gameObjectNum = (int)gameObjects.size();
 	vector<GameObject*> list;
 	for (int i = 0; i < gameObjectNum; i++)
 	{
@@ -274,7 +272,7 @@ vector<GameObject*> MapManage::calObjectInCycle(D3DXVECTOR2 center, float radius
 	c.center_y = center.y;
 	c.r = radius;
 
-	int gameObjectNum = gameObjects.size();
+	int gameObjectNum = (int)gameObjects.size();
 	vector<GameObject*> list;
 	for (int i = 0; i < gameObjectNum; i++)
 	{
@@ -293,7 +291,7 @@ vector<GameObject*> MapManage::calObjectOnSight(GameObject * enemy, GameObject *
 
 	vector<GameObject*> list;
 
-	int gameObjNum = gameObjects.size();
+	int gameObjNum = (int)gameObjects.size();
 	for (int i = 0; i < gameObjNum; i++)
 	{
 		if (gameObjects[i] == enemy || gameObjects[i] == player || typeid(Vigilance) == typeid(*gameObjects[i]))
@@ -318,7 +316,7 @@ vector<GameObject*> MapManage::calObjectOnSightOvl(GameObject * active, GameObje
 
 	vector<GameObject*> list;
 
-	int gameObjNum = gameObjects.size();
+	int gameObjNum = (int)gameObjects.size();
 	for (int i = 0; i < gameObjNum; i++)
 	{
 		if (gameObjects[i] == active || gameObjects[i] == target || typeid(Vigilance) == typeid(*gameObjects[i]) 
@@ -348,7 +346,7 @@ vector<TouchStatus> MapManage::collisionDetection(GameObject * gameObject)
 	position[2] = D3DXVECTOR2(rect.left, rect.bottom);
 	position[3] = D3DXVECTOR2(rect.right, rect.bottom);
 
-	int ganmeObjectNum = gameObjects.size();
+	int ganmeObjectNum = (int)gameObjects.size();
 	for (int i = 0; i < ganmeObjectNum; i++)
 	{
 		if (gameObjects[i] == gameObject)

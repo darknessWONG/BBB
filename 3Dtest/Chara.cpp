@@ -19,11 +19,12 @@ void Chara::dataUpdate(void)
 	{
 		if (Physics::round(speedSum, FLOAT_BITS) != 0)
 		{
-			getModel()->setIsPlayAnimation(true);
+			setIsPlayAnima(true);
 		}
 		else
 		{
-			getModel()->setIsPlayAnimation(false);
+			setIsPlayAnima(false);
+			resetAnimaCount();
 			getModel()->resetAnimation();
 			getModel()->updateAnimation(0.001);
 		}

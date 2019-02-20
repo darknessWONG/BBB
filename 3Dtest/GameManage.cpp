@@ -3,7 +3,6 @@
 #include "Model.h"
 #include "Player.h"
 #include "Ground.h"
-#include "Vigilance.h"
 #include "input.h"
 #include "Enemy.h"
 #include "MovePerform.h"
@@ -11,9 +10,7 @@
 #include "MeumUI.h"
 #include "UI.h"
 #include "MyMesh.h"
-#include "AnimationSet.h"
 #include "NameTap.h"
-#include "Bird.h"
 
 GameManage::GameManage()
 {
@@ -23,13 +20,18 @@ GameManage::GameManage()
 GameManage::GameManage(LPDIRECT3DDEVICE9 pD3DDevice)
 {
 	setPD3DDevice(pD3DDevice);
-	//gs = GameState::GameStateTitleInit;
-	gs = GameState::GameStateGameInit;
+	gs = GameState::GameStateTitleInit;
 }
 
 
 GameManage::~GameManage()
 {
+	int gameObjectsNum = (int)models.size();
+	for (int i = 0; i < gameObjectsNum; i++)
+	{
+		SAFE_DELETE(models[i]);
+	}
+	models.clear();
 }
 
 void GameManage::init(void)
@@ -57,10 +59,30 @@ void GameManage::init(void)
 	TextureHandler2D::AddTexture("arrow1.png", 2736, 1824);
 	TextureHandler2D::LoadTextures(pD3DDevice);
 
-	Cube::initStaticMember(pD3DDevice);
 	Billboard::initStaticMember(pD3DDevice);
 
 	fadeFrame = new MeumUI();
+
+	Model *playerModel = new Model("player.blend.x");
+	playerModel->setIsWithAnimation(true);
+	playerModel->loadModel(pD3DDevice);
+	models.push_back(playerModel);
+	Model *monsterModel = new Model("moster.blend.x");
+	monsterModel->setIsWithAnimation(true);
+	monsterModel->loadModel(pD3DDevice);
+	models.push_back(monsterModel);
+	Model *wallModel = new Model("rock wall.blend.x");
+	wallModel->setIsWithAnimation(false);
+	wallModel->loadModel(pD3DDevice);
+	models.push_back(wallModel);
+	Model *wall2Model = new Model("rock wall2.blend.x");
+	wall2Model->setIsWithAnimation(false);
+	wall2Model->loadModel(pD3DDevice);
+	models.push_back(wall2Model);
+	Model *groundModel = new Model("aaa.blend.x");
+	groundModel->setIsWithAnimation(false);
+	groundModel->loadModel(pD3DDevice);
+	models.push_back(groundModel);
 }
 
 void GameManage::beforeUpdate(void)
@@ -68,17 +90,17 @@ void GameManage::beforeUpdate(void)
 	map->cleanGameObject();
 	cleanDeletedObject();
 
-	int gameObjectsNum = enemys.size();
+	int gameObjectsNum = (int)enemys.size();
 	for (int i = 0; i < gameObjectsNum; i++)
 	{
 		map->addGameObject(enemys[i]);
 	}
-	gameObjectsNum = others.size();
+	gameObjectsNum = (int)others.size();
 	for (int i = 0; i < gameObjectsNum; i++)
 	{
 		map->addGameObject(others[i]);
 	}
-	gameObjectsNum = vigliances.size();
+	gameObjectsNum = (int)vigliances.size();
 	for (int i = 0; i < gameObjectsNum; i++)
 	{
 		map->addGameObject(vigliances[i]);
@@ -86,7 +108,7 @@ void GameManage::beforeUpdate(void)
 
 	map->addGameObject(player);
 
-	gameObjectsNum = uis.size();
+	gameObjectsNum = (int)uis.size();
 	for (int i = 0; i < gameObjectsNum; i++)
 	{
 		map->addGameObject2D(uis[i]);
@@ -137,7 +159,6 @@ void GameManage::update(void)
 		break;
 	}
 
-	//map->updateGameObejcts();
 
 }
 
@@ -198,7 +219,6 @@ void GameManage::titleStateUpdate(void)
 	}
 	if (fadeAlpha >= 255 && isFade == 1)
 	{
-		//setIsFade(0);
 		gs = GameState::GameStateTitleClean;
 	}
 }
@@ -213,27 +233,6 @@ void GameManage::titleStateClean(void)
 
 void GameManage::gameStateInit(void)
 {
-	Model *playerModel = new Model("player.blend.x");
-	playerModel->setIsWithAnimation(true);
-	playerModel->loadModel(pD3DDevice);
-	models.push_back(playerModel);
-	Model *monsterModel = new Model("moster.blend.x");
-	monsterModel->setIsWithAnimation(true);
-	monsterModel->loadModel(pD3DDevice);
-	models.push_back(monsterModel);
-	Model *wallModel = new Model("rock wall.blend.x");
-	wallModel->setIsWithAnimation(false);
-	wallModel->loadModel(pD3DDevice);
-	models.push_back(wallModel);
-	Model *wall2Model = new Model("rock wall2.blend.x");
-	wall2Model->setIsWithAnimation(false);
-	wall2Model->loadModel(pD3DDevice);
-	models.push_back(wall2Model);
-	Model *groundModel = new Model("aaa.blend.x");
-	groundModel->setIsWithAnimation(false);
-	groundModel->loadModel(pD3DDevice);
-	models.push_back(groundModel);
-
 	BattleSkill* fireBall = new BattleSkill();
 	fireBall->setTextureIndex(8);
 	fireBall->setCost(1);
@@ -276,7 +275,7 @@ void GameManage::gameStateInit(void)
 	bc->addSkill(fireBall);
 	bc->addSkill(chain);
 	Player* mesh = new Player();
-	mesh->setModel(playerModel);
+	mesh->setModel(models[ModelType::ModelTypePlayer]);
 	mesh->setWalkSpeed(0.3f);
 	mesh->setMaxSpeed(0.3f);
 	mesh->setCanMove(true);
@@ -287,7 +286,7 @@ void GameManage::gameStateInit(void)
 	map->addGameObject(mesh);
 
 	GameObject* tree = new GameObject();
-	tree->setModel(wallModel);
+	tree->setModel(models[ModelType::ModelTypeRockWall]);
 	tree->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
 	tree->setCanMove(false);
 	tree->setIsDisplay(true);
@@ -297,7 +296,7 @@ void GameManage::gameStateInit(void)
 	map->addGameObject(tree);
 
 	GameObject* tree10 = new GameObject();
-	tree10->setModel(wallModel);
+	tree10->setModel(models[ModelType::ModelTypeRockWall]);
 	tree10->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
 	tree10->setCanMove(false);
 	tree10->setIsDisplay(true);
@@ -307,7 +306,7 @@ void GameManage::gameStateInit(void)
 	map->addGameObject(tree10);
 
 	GameObject* tree8 = new GameObject();
-	tree8->setModel(wall2Model);
+	tree8->setModel(models[ModelType::ModelTypeRockWall2]);
 	tree8->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
 	tree8->setCanMove(false);
 	tree8->setIsDisplay(true);
@@ -317,7 +316,7 @@ void GameManage::gameStateInit(void)
 	map->addGameObject(tree8);
 
 	GameObject* tree9 = new GameObject();
-	tree9->setModel(wall2Model);
+	tree9->setModel(models[ModelType::ModelTypeRockWall2]);
 	tree9->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
 	tree9->setCanMove(false);
 	tree9->setIsDisplay(true);
@@ -327,8 +326,8 @@ void GameManage::gameStateInit(void)
 	map->addGameObject(tree9);
 
 	GameObject* tree18 = new GameObject();
-	tree18->setModel(wall2Model);
-	tree18->setVecScale(new D3DXVECTOR3(0.8, 1, 0.5));
+	tree18->setModel(models[ModelType::ModelTypeRockWall2]);
+	tree18->setVecScale(new D3DXVECTOR3(0.8f, 1, 0.5f));
 	tree18->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
 	tree18->setCanMove(false);
 	tree18->setIsDisplay(true);
@@ -338,8 +337,8 @@ void GameManage::gameStateInit(void)
 	map->addGameObject(tree18);
 
 	GameObject* tree19 = new GameObject();
-	tree19->setModel(wall2Model);
-	tree19->setVecScale(new D3DXVECTOR3(0.8, 1, 0.5));
+	tree19->setModel(models[ModelType::ModelTypeRockWall2]);
+	tree19->setVecScale(new D3DXVECTOR3(0.8f, 1, 0.5f));
 	tree19->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
 	tree19->setCanMove(false);
 	tree19->setIsDisplay(true);
@@ -349,9 +348,8 @@ void GameManage::gameStateInit(void)
 	map->addGameObject(tree19);
 
 	GameObject* tree3 = new Ground();
-	tree3->setModel(groundModel);
+	tree3->setModel(models[ModelType::ModelTypeAAA]);
 	tree3->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
-	//mesh1->setRotateSpeed(20);
 	tree3->setCanMove(false);
 	tree3->setIsDisplay(true);
 	tree3->setVecNowPos(new D3DXVECTOR3(0, 0, 0));
@@ -370,7 +368,7 @@ void GameManage::gameStateInit(void)
 	bc4->setName("enemy1");
 	bc4->setSpeed(10);
 	Enemy* enemy1 = new Enemy();
-	enemy1->setModel(monsterModel);
+	enemy1->setModel(models[ModelType::ModelTypeMonster]);
 	enemy1->setWalkSpeed(0.05f);
 	enemy1->setMaxSpeed(0.05f);
 	enemy1->setCanMove(true);
@@ -395,7 +393,7 @@ void GameManage::gameStateInit(void)
 	bc6->setName("enemy2");
 	bc6->setSpeed(10);
 	Enemy* enemy2 = new Enemy();
-	enemy2->setModel(monsterModel);
+	enemy2->setModel(models[ModelType::ModelTypeMonster]);
 	enemy2->setWalkSpeed(0.05f);
 	enemy2->setMaxSpeed(0.05f);
 	enemy2->setCanMove(true);
@@ -420,7 +418,7 @@ void GameManage::gameStateInit(void)
 	bc5->setName("enemy3");
 	bc5->setSpeed(10);
 	Enemy* enemy3 = new Enemy();
-	enemy3->setModel(monsterModel);
+	enemy3->setModel(models[ModelType::ModelTypeMonster]);
 	enemy3->setWalkSpeed(0.05f);
 	enemy3->setMaxSpeed(0.05f);
 	enemy3->setCanMove(true);
@@ -445,7 +443,7 @@ void GameManage::gameStateInit(void)
 	bc3->setName("enemy4");
 	bc3->setSpeed(10);
 	Enemy* enemy4 = new Enemy();
-	enemy4->setModel(monsterModel);
+	enemy4->setModel(models[ModelType::ModelTypeMonster]);
 	enemy4->setWalkSpeed(0.05f);
 	enemy4->setMaxSpeed(0.05f);
 	enemy4->setCanMove(true);
@@ -470,7 +468,7 @@ void GameManage::gameStateInit(void)
 	bc7->setName("enemy5");
 	bc7->setSpeed(10);
 	Enemy* enemy5 = new Enemy();
-	enemy5->setModel(monsterModel);
+	enemy5->setModel(models[ModelType::ModelTypeMonster]);
 	enemy5->setWalkSpeed(0.05f);
 	enemy5->setMaxSpeed(0.05f);
 	enemy5->setCanMove(true);
@@ -495,7 +493,7 @@ void GameManage::gameStateInit(void)
 	bc8->setName("enemy6");
 	bc8->setSpeed(10);
 	Enemy* enemy6 = new Enemy();
-	enemy6->setModel(monsterModel);
+	enemy6->setModel(models[ModelType::ModelTypeMonster]);
 	enemy6->setWalkSpeed(0.05f);
 	enemy6->setMaxSpeed(0.05f);
 	enemy6->setCanMove(true);
@@ -520,7 +518,7 @@ void GameManage::gameStateInit(void)
 	bc9->setName("enemy7");
 	bc9->setSpeed(10);
 	Enemy* enemy7 = new Enemy();
-	enemy7->setModel(monsterModel);
+	enemy7->setModel(models[ModelType::ModelTypeMonster]);
 	enemy7->setWalkSpeed(0.05f);
 	enemy7->setMaxSpeed(0.05f);
 	enemy7->setCanMove(true);
@@ -545,7 +543,7 @@ void GameManage::gameStateInit(void)
 	bc10->setName("enemy8");
 	bc10->setSpeed(10);
 	Enemy* enemy8 = new Enemy();
-	enemy8->setModel(monsterModel);
+	enemy8->setModel(models[ModelType::ModelTypeMonster]);
 	enemy8->setWalkSpeed(0.05f);
 	enemy8->setMaxSpeed(0.05f);
 	enemy8->setCanMove(true);
@@ -570,7 +568,7 @@ void GameManage::gameStateInit(void)
 	bc11->setName("enemy9");
 	bc11->setSpeed(10);
 	Enemy* enemy9 = new Enemy();
-	enemy9->setModel(monsterModel);
+	enemy9->setModel(models[ModelType::ModelTypeMonster]);
 	enemy9->setWalkSpeed(0.05f);
 	enemy9->setMaxSpeed(0.05f);
 	enemy9->setCanMove(true);
@@ -596,7 +594,7 @@ void GameManage::gameStateInit(void)
 	bc12->setName("enemy10");
 	bc12->setSpeed(10);
 	Enemy* enemy10 = new Enemy();
-	enemy10->setModel(monsterModel);
+	enemy10->setModel(models[ModelType::ModelTypeMonster]);
 	enemy10->setWalkSpeed(0.05f);
 	enemy10->setMaxSpeed(0.05f);
 	enemy10->setCanMove(true);
@@ -622,7 +620,7 @@ void GameManage::gameStateInit(void)
 	bc13->setSpeed(10);
 	Enemy* enemy11 = new Enemy();
 	enemy11->setVecScale(new D3DXVECTOR3( 5.0, 5.0, 5.0 ));
-	enemy11->setModel(monsterModel);
+	enemy11->setModel(models[ModelType::ModelTypeMonster]);
 	enemy11->setWalkSpeed(0.05f);
 	enemy11->setMaxSpeed(0.05f);
 	enemy11->setCanMove(true);
@@ -653,9 +651,8 @@ void GameManage::gameStateUpdate(void)
 	}
 	if (isFade == 0)
 	{
-		//battle = NULL;
 		player->setIsReadInput(true);
-		int enemyNum = enemys.size();
+		int enemyNum = (int)enemys.size();
 		for (int i = 0; i < enemyNum; i++)
 		{
 			enemys[i]->setIsPatrol(true);
@@ -664,7 +661,7 @@ void GameManage::gameStateUpdate(void)
 
 		if (pm.playPerforms())
 		{
-			int enemyNum = enemys.size();
+			int enemyNum = (int)enemys.size();
 			for (int i = 0; i < enemyNum; i++)
 			{
 				enemys[i]->setIsPatrol(false);
@@ -679,10 +676,10 @@ void GameManage::gameStateUpdate(void)
 			{
 				if (battle->getBattleState() != BattleState::BattleStateMapMove)
 				{
-					int enemyNum = enemys.size();
+					int enemyNum = (int)enemys.size();
 					for (int i = 0; i < enemyNum; i++)
 					{
-						enemys[i]->setIsPatrol(false);
+							enemys[i]->setIsPatrol(false);
 					}
 				}
 				player->setIsReadInput(false);
@@ -690,13 +687,9 @@ void GameManage::gameStateUpdate(void)
 			}
 		}
 		cameraUpdate();
-		animationUpdate();
 		enemyUpdate();
 		othersUpdate();
-		if (boss != NULL)
-		{
-			//boss->setIsPatrol(false);
-		}
+
 		winStatus = checkEnd();
 		if (winStatus)
 		{
@@ -710,29 +703,28 @@ void GameManage::gameStateUpdate(void)
 
 	if (fadeAlpha >= 255 && isFade == 1)
 	{
-		//setIsFade(0);
 		gs = GameState::GameStateGameClean;
 	}
 }
 
 void GameManage::gameStateClean(void)
 {
-	int gameObjectsNum = others.size();
+	int gameObjectsNum = (int)others.size();
 	for (int i = 0; i < gameObjectsNum; i++)
 	{
 		SAFE_DELETE(others[i]);
 	}
-	gameObjectsNum = vigliances.size();
+	gameObjectsNum = (int)vigliances.size();
 	for (int i = 0; i < gameObjectsNum; i++)
 	{
 		SAFE_DELETE(vigliances[i]);
 	}
-	gameObjectsNum = enemys.size();
+	gameObjectsNum = (int)enemys.size();
 	for (int i = 0; i < gameObjectsNum; i++)
 	{
 		SAFE_DELETE(enemys[i]);
 	}
-	gameObjectsNum = uis.size();
+	gameObjectsNum = (int)uis.size();
 	for (int i = 0; i < gameObjectsNum; i++)
 	{
 		SAFE_DELETE(uis[i]);
@@ -743,14 +735,6 @@ void GameManage::gameStateClean(void)
 	others.clear();
 	vigliances.clear();
 	uis.clear();
-	//safe_delete<Battle>(battle);
-
-	gameObjectsNum = models.size();
-	for (int i = 0; i < gameObjectsNum; i++)
-	{
-		SAFE_DELETE(models[i]);
-	}
-	models.clear();
 
 	gs = GameState::GameStateEndInit;
 }
@@ -803,7 +787,6 @@ void GameManage::endStateUpdate(void)
 	}
 	if (fadeAlpha >= 255 && isFade == 1)
 	{
-		//setIsFade(0);
 		gs = GameState::GameStateEndClean;
 	}
 }
@@ -845,7 +828,7 @@ void GameManage::cameraUpdate(void)
 
 void GameManage::enemyUpdate(void)
 {
-	int enemyNum = enemys.size();
+	int enemyNum = (int)enemys.size();
 	for (int i = 0; i < enemyNum; i++)
 	{
 		if (!enemys[i]->getIsDelete())
@@ -869,7 +852,7 @@ void GameManage::enemyUpdate(Enemy* enemy)
 	}
 
 	vector<GameObject*> battleList = map->calObjectInCycle(enemy->getBoundingCenter(), enemy->getBattleRadius());
-	int battleListNum = battleList.size();
+	int battleListNum = (int)battleList.size();
 	for (int i = 0; i < battleListNum; i++)
 	{
 		if (player != battleList[i] || player->getIsDelete())
@@ -882,7 +865,7 @@ void GameManage::enemyUpdate(Enemy* enemy)
 	}
 
 	vector<GameObject*> trackingList = map->calObjectInCycle(enemy->getBoundingCenter(), enemy->getTrackingRadius());
-	int trackingListNum = trackingList.size();
+	int trackingListNum = (int)trackingList.size();
 	for (int i = 0; i < trackingListNum; i++)
 	{
 		if (player != trackingList[i])
@@ -901,21 +884,14 @@ void GameManage::enemyUpdate(Enemy* enemy)
 		enemy->setIsTracking(true);
 		return;
 	}
-	//enemy->setVecPatrolTarget(NULL);
 	enemy->setIsTracking(false);
-}
-
-void GameManage::animationUpdate(void)
-{
-	am.play();
-	am.cleanEndAnimation();
 }
 
 void GameManage::othersUpdate(void)
 {
 	if (!checkIsInBattle())
 	{
-		int othersNum = others.size();
+		int othersNum = (int)others.size();
 		for (int i = 0; i < othersNum; i++)
 		{
 			if (typeid(*others[i]) == typeid(NameTap))
@@ -969,7 +945,6 @@ void GameManage::battleInit(void)
 		battle = new Battle(map, &pm, cmdMeum, textBox, statusBox, pointMesh);
 		addCharaToBattle(battle, player);
 		battle->setSkillBillboard(billboard);
-		//battle->addCharas(player);
 		battleResult = BattleResultType::BattleResultTypeUnknow;
 	}
 }
@@ -1007,7 +982,6 @@ void GameManage::addCharaToBattle(Battle * battle, Chara* chara)
 		billboard->setIsDelete(false);
 		billboard->setBelong(chara);
 		billboard->initName(pD3DDevice);
-		//billboard->setVecScale(new D3DXVECTOR3(5, 5, 5));
 		others.push_back(billboard);
 		map->addGameObject(billboard);
 
@@ -1081,9 +1055,9 @@ void GameManage::lockUnmoveObject(void)
 	if (actor != player)
 	{
 		player->lockThisTurn();
-		player->getModel()->setIsPlayAnimation(false);
+		player->setIsPlayAnima(false);
 	}
-	int gameObjectsNum = enemys.size();
+	int gameObjectsNum = (int)enemys.size();
 	for (int i = 0; i < gameObjectsNum; i++)
 	{
 		if (actor == enemys[i])
@@ -1091,9 +1065,9 @@ void GameManage::lockUnmoveObject(void)
 			continue;
 		}
 		enemys[i]->lockThisTurn();
-		enemys[i]->getModel()->setIsPlayAnimation(false);
+		enemys[i]->setIsPlayAnima(false);
 	}
-	gameObjectsNum = others.size();
+	gameObjectsNum = (int)others.size();
 	for (int i = 0; i < gameObjectsNum; i++)
 	{
 		if (actor == others[i])
@@ -1102,7 +1076,7 @@ void GameManage::lockUnmoveObject(void)
 		}
 		others[i]->lockThisTurn();
 	}
-	gameObjectsNum = vigliances.size();
+	gameObjectsNum = (int)vigliances.size();
 	for (int i = 0; i < gameObjectsNum; i++)
 	{
 		if (actor == vigliances[i])

@@ -49,7 +49,6 @@ void Enemy::dataUpdate(void)
 		addSpeed(&speedDir, getWalkSpeed());
 
 		D3DXVECTOR2 newCenter = { vecPatrolTarget->x, vecPatrolTarget->z };
-		//D3DXVECTOR2 newFront = boundingCenter - newCenter;
 		D3DXVECTOR2 newFront = newCenter - boundingCenter;
 		D3DXVECTOR3 newFront3 = { newFront.x, 0, newFront.y };
 		D3DXVec3Normalize(&newFront3, &newFront3);

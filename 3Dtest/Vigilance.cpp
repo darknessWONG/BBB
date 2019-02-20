@@ -44,16 +44,12 @@ void Vigilance::draw(LPDIRECT3DDEVICE9 pD3DDevice)
 		D3DMATERIAL9 blue;
 		blue.Diffuse = { 1.0f, 1.0f, 1.0f, 0.5f };
 		blue.Ambient = blue.Diffuse;
-		//blue.Emissive = blue.Diffuse;
-		//blue.Specular = blue.Diffuse;
 
 		pD3DDevice->SetMaterial(&blue);
 		pD3DDevice->SetTexture(0, 0); // disable texture
 
 		LPD3DXMESH SphereMesh;
 		D3DXCreateSphere(pD3DDevice, getRadius(), 16, 16, &SphereMesh, NULL);
-		//D3DXCreateBox(pD3DDevice, boundingBoxMax.x - boundingBoxMin.x, boundingBoxMax.y - boundingBoxMin.y, boundingBoxMax.z - boundingBoxMin.z, &boxMesh, 0);
-		//D3DXCreateSphere(pD3DDevice, boundingSphereRadius, 20, 20, &sphereMesh, 0);
 		pD3DDevice->SetTransform(D3DTS_WORLD, getMtxWorld());
 		SphereMesh->DrawSubset(0);
 

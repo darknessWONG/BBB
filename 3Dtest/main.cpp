@@ -12,22 +12,15 @@ Date   : 2018/09/05
 #include "GameManage.h"
 #include "system_timer.h"
 #include "GameManage.h"
-//#include "mydirect3d.h"
-//#include "debug_font.h"
 #include "input.h"
 #include "font.h"
-//#include "texture.h"
-//#include "sprite.h"
-//#include "game.h"
 
 
 /*------------------------------------------------------------------------------
 定数定義
 ------------------------------------------------------------------------------*/
 #define CLASS_NAME     "GameWindow"       // ウインドウクラスの名前
-#define WINDOW_CAPTION "ゲームウィンドウ" // ウィンドウの名前
-
-#define DEBUG 0
+#define WINDOW_CAPTION "Goblin War" // ウィンドウの名前
 
 #if defined(_DEBUG) || defined(DEBUG)
 #define FPS_MEASUREMENT_TIME (1.0f)       // FPS計測時間
@@ -217,11 +210,6 @@ bool Initialize(HINSTANCE hInstance, HWND hWnd)
 
 	Font_Initialize();
 
-	// テクスチャの読み込み
-	/*if (Texture_Load() > 0) {
-		MessageBox(hWnd, "いくつか読み込めなかったテクスチャファイルがあります", "エラー", MB_OK);
-	}*/
-
 	// システムタイマーの初期化
 	SystemTimer_Initialize();
 
@@ -229,8 +217,6 @@ bool Initialize(HINSTANCE hInstance, HWND hWnd)
 	SystemTimer_Start();
 
 #if defined(_DEBUG) || defined(DEBUG)
-	// デバックフォントモジュールの初期化
-	//DebugFont_Initialize();
 
 	// FPS計測用変数群の初期化
 	g_FrameCount = g_FPSBaseFrameCount = 0;
@@ -241,11 +227,7 @@ bool Initialize(HINSTANCE hInstance, HWND hWnd)
 	// フレーム固定用計測時間
 	g_StaticFrameTime = SystemTimer_GetTime();;
 
-	// スプライト描画モジュールの初期化
-	//Sprite_Initialize();
-
 	// ゲームの初期化
-	//Game_Initialize();
 	game = new GameManage();
 	game->setPD3DDevice(Common::g_pD3DDevice);
 	game->init();
@@ -260,7 +242,6 @@ void Update(void)
 	Keyboard_Update();
 
 	// ゲームの更新
-	//Game_Update();
 	game->update();
 
 #if defined(_DEBUG) || defined(DEBUG)
@@ -300,7 +281,6 @@ void draw(void)
 
 #if defined(_DEBUG) || defined(DEBUG)
 	// FPSのデバック表示
-	//Font_Draw(8, 8, "FPS : %.2f", g_FPS);
 	stringstream ss;
 	ss << g_FPS;
 	string text;
@@ -332,10 +312,8 @@ void Finalize(void)
 
 #if defined(_DEBUG) || defined(DEBUG)
 	// デバックフォントモジュールの終了処理
-	//DebugFont_Finalize();
 #endif // _DEBUG || DEBUG
 
 	// Direct3Dラッパーモジュールの終了処理
-	//MyDirect3D_Finalize();
 	Common::MyDirect3D_Finalize();
 }

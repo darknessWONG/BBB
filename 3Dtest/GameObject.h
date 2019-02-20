@@ -45,6 +45,8 @@ public:
 	//if isDisappear is true, will setIsDisplay to false and setOverlapLevel to -100(is unrelated to ovl)
 	//if isDisappear is false, will setIsDisplay to true and setOverlapLevel to ovl
 	void setDisappear(bool isDisappear, int ovl = 10);
+	void resetAnimaCount(void);
+
 	/*===========================================
 	public geter / seter
 	============================================*/
@@ -80,11 +82,11 @@ public:
 	void setRotateSpeed(float rotateSpeed);
 	float getRotateDamping(void);
 	void setRotateDamping(float rotateDamping);
+	bool getIsPlayAnima(void);
+	void setIsPlayAnima(bool isPlayAnima);
 	D3DXVECTOR3* getVecTargetFront(void);
 	void setVecTargetFront(D3DXVECTOR3* vecTargetFront);
 	bool getMoveThisTurn(void);
-	//D3DXVECTOR3 *getVecTargetPos(void);
-	//void setVecTargetPos(D3DXVECTOR3 * vecTargetPos);
 	bool getIsDelete(void);
 	void setIsDelete(bool isDelete);
 private:
@@ -118,9 +120,9 @@ private:
 	D3DXVECTOR3 boundingBoxMax;
 	
 	float animaCounter;
+	bool isPlayAnima;
 
 	D3DXVECTOR3 *vecTargetFront;
-	//D3DXVECTOR3 *vecTargetPos;
 	static D3DXVECTOR3* zeroDirect;
 
 	bool isDelete;

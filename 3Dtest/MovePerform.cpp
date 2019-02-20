@@ -18,7 +18,6 @@ void MovePerform::play(void)
 	vecStart = { actor->getBoundingCenter().x, actor->getVecNowPos()->y, actor->getBoundingCenter().y };
 	D3DXVECTOR3 speedDir = vecTarget - vecStart;
 	D3DXVec3Normalize(&speedDir, &speedDir);
-	//actor->setVecMoveSpeed(&D3DXVECTOR3(0, 0, 0));
 	actor->addSpeed(&speedDir, moveSpeed);
 
 	D3DXVECTOR2 boundingCenter = actor->getBoundingCenter();

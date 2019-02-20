@@ -11,8 +11,8 @@ public:
 	/*===========================================
 	virtual member
 	============================================*/
-	virtual void dataUpdate(void);
-	virtual void draw(LPDIRECT3DDEVICE9 pD3DDevice, D3DXMATRIX * const matWorld);
+	virtual void dataUpdate(float animaCount);
+	virtual void draw(LPDIRECT3DDEVICE9 pD3DDevice, D3DXMATRIX * const matWorld, float animaCount);
 	/*cal the new bounding box
 	so that you should call it every time you set a new position or bounding center*/
 	virtual void calBounding(void);
@@ -32,8 +32,6 @@ public:
 	void setModelPath(string modelPath);
 	bool getIsWithAnimation(void);
 	void setIsWithAnimation(bool isWithAnimation);
-	bool getIsPlayAnimation(void);
-	void setIsPlayAnimation(bool isPlayAnimation);
 
 	//提供给外界的接口
 
@@ -59,8 +57,6 @@ private:
 
 	string modelPath;
 	bool isWithAnimation;
-
-	bool isPlayAnimation;
 
 	//mesh
 	LPD3DXMESH mesh = NULL;

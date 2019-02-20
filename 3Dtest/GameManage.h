@@ -10,9 +10,6 @@
 #include "MeumUI.h"
 #include "PerformManage.h"
 #include "UI.h"
-#include "Animation.h"
-#include "AnimationSet.h"
-#include "AnimationManage.h"
 #include "Battle.h"
 
 class GameManage
@@ -42,7 +39,6 @@ public:
 	void cameraUpdate(void);
 	void enemyUpdate(void);
 	void enemyUpdate(Enemy* enemy);
-	void animationUpdate(void);
 	void othersUpdate(void);
 
 	void battleInit(void);
@@ -74,7 +70,6 @@ private:
 	vector<GameObject*> others;
 	vector<MeumUI*> uis;
 	vector<Model*> models;
-	//vector<AnimationSet*> animates;
 
 	Battle* battle = NULL;
 	BattleResultType battleResult;
@@ -82,7 +77,6 @@ private:
 	MapManage* map = NULL;
 
 	PerformManage pm;
-	AnimationManage am;
 
 	GameState gs;
 
