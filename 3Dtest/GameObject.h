@@ -1,4 +1,13 @@
 #pragma once
+/*==============================================================================
+
+[GameObject.h]
+Author : darknessWONG
+Date   : 2018/11/23
+--------------------------------------------------------------------------------
+The base unit in this game,
+everything you want to draw of do the collision should be a gameObject
+==============================================================================*/
 #include <d3dx9.h>
 #include "Physics.h"
 #include "Model.h"

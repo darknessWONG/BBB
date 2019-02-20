@@ -1,4 +1,12 @@
 #pragma once
+/*==============================================================================
+
+[MapManage.h]
+Author : darknessWONG
+Date   : 2018/11/23
+--------------------------------------------------------------------------------
+The class which is used for manage the position relation and draw the gameObjects
+==============================================================================*/
 #include <vector>
 #include "GameObject.h"
 #include "Model.h"
@@ -21,10 +29,6 @@ public:
 	~MapManage();
 
 	/*===========================================
-	virtual member
-	============================================*/
-
-	/*===========================================
 	public function
 	============================================*/
 	void addGameObject(GameObject* gameObject);
@@ -45,9 +49,6 @@ public:
 	vector<GameObject*> calObjectOnSight(GameObject* enemy, GameObject* player) const;
 	//check object on sight or not whth overlap level, it will do overlap test with actve and the object on sight
 	vector<GameObject*> calObjectOnSightOvl(GameObject* active, GameObject* target) const;
-	/*===========================================
-	public geter / seter
-	============================================*/
 
 private:
 	vector<GameObject*> gameObjects;

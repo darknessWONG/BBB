@@ -1,8 +1,8 @@
 /*==============================================================================
 
-キーボード入力とプレイヤーの作成 [main.cpp]
-Author : Youhei Sato
-Date   : 2018/09/05
+ゲームのメイン作成 [main.cpp]
+Author : darknessWONG
+Date   : 2018/10/15
 --------------------------------------------------------------------------------
 
 ==============================================================================*/
@@ -180,7 +180,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		break;
 
 	case WM_CLOSE:
-		if (MessageBox(hWnd, "本当に終了してよろしいですか？", "確認", MB_OKCANCEL | MB_DEFBUTTON2) == IDOK) {
+		if (MessageBox(hWnd, "Do you really want to exit this game?", "Exit check", MB_OKCANCEL | MB_DEFBUTTON2) == IDOK) {
 			DestroyWindow(hWnd); // 指定のウィンドウにWM_DESTROYメッセージを送る
 		}
 		return 0; // DefWindowProc関数にメッセージを流さず終了することによって何もなかったことにする
@@ -301,12 +301,6 @@ void draw(void)
 // ゲームの終了処理
 void Finalize(void)
 {
-	// スプライト描画モジュールの終了処理
-	//Sprite_Finalize();
-
-	// テクスチャの解放
-	//Texture_Release();
-
 	// DirectInput版キーボードモジュールの終了処理
 	Keyboard_Finalize();
 

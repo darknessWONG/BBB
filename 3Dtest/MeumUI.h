@@ -1,4 +1,13 @@
 #pragma once
+/*==============================================================================
+
+[MeumUI.h]
+Author : darknessWONG
+Date   : 2019/01/28
+--------------------------------------------------------------------------------
+Level struct of uis.
+This is a 2D object, so it isn't a gameObject
+==============================================================================*/
 #include "stdafx.h"
 #include "UI.h"
 class MeumUI
@@ -30,6 +39,7 @@ public:
 	void setPosition(D3DXVECTOR2 pos);
 	int getNowPointing(void);
 	void setNowPointing(int nowPointing);
+	//If you just want to use this meum to display a dialog, then only set the background and displayStr
 	void setBackground(UI* ui);
 	void setPointer(UI* ui);
 	void setIsDisplay(bool isDisplay);

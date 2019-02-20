@@ -1,4 +1,14 @@
 #pragma once
+
+/*==============================================================================
+
+Battle manager [Battle.h]
+Author : darknessWONG
+Date   : 2019/01/15
+--------------------------------------------------------------------------------
+
+==============================================================================*/
+
 #include "stdafx.h"
 #include "Chara.h"
 #include "meumUI.h"
@@ -8,6 +18,7 @@
 #include "NameTap.h"
 #include "Billboard.h"
 
+//struct to save what the chara wants to do in this turn
 typedef struct action_st
 {
 	Chara* active = NULL;
@@ -134,6 +145,9 @@ private:
 	void calStatusMessage(void);
 	void createSkillModel(int textureIndex, D3DXVECTOR3 position);
 
+	/*===========================================
+	private values
+	============================================*/
 	BattleState bs;
 	BattleState lastBs;
 	ActionPhaseStatus as;

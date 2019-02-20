@@ -1,4 +1,12 @@
 #pragma once
+/*==============================================================================
+
+[Enemy.h]
+Author : darknessWONG
+Date   : 2019/01/20
+--------------------------------------------------------------------------------
+
+==============================================================================*/
 #include "Chara.h"
 #include "stdafx.h"
 class Enemy :
@@ -30,10 +38,13 @@ public:
 	void setIsTracking(bool isTracking);
 	void setIsPatrol(bool isPatrol);
 private:
+	//if isPlatorl is false, this object will not tracking player too
 	bool isPatrol;
 
+	//Two ends of the partrol route
 	D3DXVECTOR3* vecPatrolStart = NULL;
 	D3DXVECTOR3* vecPatrolEnd = NULL;
+	//the target point wants to go now
 	D3DXVECTOR3* vecPatrolTarget = NULL;
 
 	float trackingRadius;

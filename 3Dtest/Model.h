@@ -1,4 +1,14 @@
 ﻿#pragma once
+/*==============================================================================
+
+[Model.h]
+Author : darknessWONG
+Date   : 2018/11/23
+--------------------------------------------------------------------------------
+The model with is from xfile,
+you can only load the model once even if there are many gameObject is useing a
+same model.
+==============================================================================*/
 #include "stdafx.h"
 #include "AllocateHierarchy.h"
 #include "Physics.h"
@@ -11,6 +21,8 @@ public:
 	/*===========================================
 	virtual member
 	============================================*/
+	//it will cal the animation status in this function,
+	//so every gameObejct should save there onw animaCount
 	virtual void dataUpdate(float animaCount);
 	virtual void draw(LPDIRECT3DDEVICE9 pD3DDevice, D3DXMATRIX * const matWorld, float animaCount);
 	/*cal the new bounding box

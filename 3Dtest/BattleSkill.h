@@ -1,4 +1,13 @@
 #pragma once
+
+/*==============================================================================
+
+Skill infomation which used in the battle[BattleSkill.h]
+Author : darknessWONG
+Date   : 2019/01/15
+--------------------------------------------------------------------------------
+
+==============================================================================*/
 #include "stdafx.h"
 #include "SideEffect.h"
 #include "Common.h"
@@ -9,6 +18,9 @@ public:
 	BattleSkill();
 	~BattleSkill();
 
+	/*===========================================
+	public geter / seter
+	============================================*/
 	string getName(void);
 	void setName(string name);
 	int getCost(void);
