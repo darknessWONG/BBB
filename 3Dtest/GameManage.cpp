@@ -38,7 +38,7 @@ void GameManage::init(void)
 {
 	map = new MapManage();
 
-	D3DXVECTOR3* cameraPos = new D3DXVECTOR3(0, 6, -15);
+	D3DXVECTOR3* cameraPos = new D3DXVECTOR3(-15, 6, 0);
 	D3DXVECTOR3* cameraWatchAt = new D3DXVECTOR3(0, 0, 0);
 	D3DXVECTOR3* cameraUp = new D3DXVECTOR3(0, 1, 0);
 	camera = new Camera(cameraPos, cameraWatchAt, cameraUp);
@@ -691,6 +691,10 @@ void GameManage::gameStateUpdate(void)
 		othersUpdate();
 
 		winStatus = checkEnd();
+		if (Keyboard_IsTrigger(DIK_K))
+		{
+			winStatus = 1;
+		}
 		if (winStatus)
 		{
 			setIsFade(1);
