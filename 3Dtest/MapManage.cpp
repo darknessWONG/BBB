@@ -55,10 +55,6 @@ void MapManage::updateGameObejcts(void)
 		D3DXVECTOR3 xSpeed = *gameObjects[i]->getVecMoveSpeed();
 		while (list.size() != 0)
 		{
-			if (typeid(Player) == typeid(*gameObjects[i]))
-			{
-				int a = 0;
-			}
 			int j = 0;
 			int listNum = (int)list.size();
 			while (j < listNum && list[j].touchType != TouchType::cover)
@@ -98,10 +94,6 @@ void MapManage::updateGameObejcts(void)
 		D3DXVECTOR3 zSpeed = *gameObjects[i]->getVecMoveSpeed();
 		while (list.size() != 0)
 		{
-			if (typeid(Player) == typeid(*gameObjects[i]))
-			{
-				int a = 0;
-			}
 			int j = 0;
 			int listNum = (int)list.size();
 			while (j < listNum && list[j].touchType != TouchType::cover)
