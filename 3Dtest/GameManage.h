@@ -10,6 +10,9 @@
 #include "Emitter.h"
 #include "factoryModel.h"
 #include "AnimationManage.h"
+#include "GameTitle.h"
+#include "GameTutorial.h"
+#include "GameResult.h"
 
 class GameManage
 {
@@ -73,6 +76,10 @@ private:
 	vector<GameObject*> others;
 
 	Emitter *pEmitter;
+	
+	GameTitle *pTitle;
+	GameTutorial *pTutorial;
+	GameResult *pResult;
 
 	MapManage* map = NULL;
 

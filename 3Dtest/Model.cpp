@@ -96,28 +96,29 @@ void Model::draw(LPDIRECT3DDEVICE9 pD3DDevice)
 		}
 
 #ifdef _DEBUG
-		D3DMATERIAL9 blue;
-		blue.Diffuse = { 1.0f, 1.0f, 1.0f, 0.5f };
-		blue.Ambient = blue.Diffuse;
-		pD3DDevice->SetMaterial(&blue);
-		pD3DDevice->SetTexture(0, 0); // disable texture
+		//D3DMATERIAL9 blue;
+		//blue.Diffuse = { 1.0f, 1.0f, 1.0f, 0.5f };
+		//blue.Ambient = blue.Diffuse;
+		//pD3DDevice->SetMaterial(&blue);
+		//pD3DDevice->SetTexture(0, 0); // disable texture
 
-		LPD3DXMESH boxMesh;
+		//LPD3DXMESH boxMesh;
 
-		D3DXMATRIX mtxBoxWorld = *getMtxWorld();
-		mtxBoxWorld._42 += (boundingBoxMax.y - boundingBoxMin.y) / 2;
-		D3DXVECTOR3 scale = *getVecScale();
-		float x = (boundingBoxMax.x - boundingBoxMin.x) / scale.x;
-		float y = (boundingBoxMax.y - boundingBoxMin.y) / scale.y;
-		float z = (boundingBoxMax.z - boundingBoxMin.z) / scale.z;
-		D3DXCreateBox(pD3DDevice, x, y, z, &boxMesh, 0);
-		//D3DXCreateSphere(pD3DDevice, boundingSphereRadius, 20, 20, &sphereMesh, 0);
-		pD3DDevice->SetTransform(D3DTS_WORLD, &mtxBoxWorld);
-		boxMesh->DrawSubset(0);
+		//D3DXMATRIX mtxBoxWorld = *getMtxWorld();
+		//mtxBoxWorld._42 += (boundingBoxMax.y - boundingBoxMin.y) / 2;
+		//D3DXVECTOR3 scale = *getVecScale();
+		//float x = (boundingBoxMax.x - boundingBoxMin.x) / scale.x;
+		//float y = (boundingBoxMax.y - boundingBoxMin.y) / scale.y;
+		//float z = (boundingBoxMax.z - boundingBoxMin.z) / scale.z;
+		//D3DXCreateBox(pD3DDevice, x, y, z, &boxMesh, 0);
+		////D3DXCreateSphere(pD3DDevice, boundingSphereRadius, 20, 20, &sphereMesh, 0);
+		//pD3DDevice->SetTransform(D3DTS_WORLD, &mtxBoxWorld);
+		//boxMesh->DrawSubset(0);
 
-		boxMesh->Release();
+		//boxMesh->Release();
 #endif
 	}
+	pD3DDevice->SetTexture(0, NULL);
 }
 
 void Model::loadModel(LPDIRECT3DDEVICE9 pD3DDevice)

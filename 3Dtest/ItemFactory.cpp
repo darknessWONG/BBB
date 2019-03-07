@@ -18,19 +18,20 @@ Item * ItemFactory::create_item(float x, float y, ResourceM type)
 	switch (type)
 	{
 	case RESOURCEM_WOOD:
-		item->setModelPath("mokiuzai.blend.x");
+		//item->setModelPath("asset\\hew_models\\hew_tree_material.x");
+		item->setModelPath("asset\\hew_models\\ferrisTest.x");
 		item->loadModel(ItemFactory::g_pD3DDevice);
 		break;
 	case RESOURCEM_IRON:
-		item->setModelPath("radio.x");
+		item->setModelPath("asset\\hew_models\\hew_iron_material.x");
 		item->loadModel(ItemFactory::g_pD3DDevice);
 		break;
 	case RESOURCEM_BRICK:
-		item->setModelPath("radio.x");
+		item->setModelPath("asset\\hew_models\\hew_rock_material.x");
 		item->loadModel(ItemFactory::g_pD3DDevice);
 		break;
 	case RESOURCEM_MARRY:
-		item->setModelPath("radio.x");
+		item->setModelPath("asset\\sprite\\hew_ferris_block.blend.x");
 		item->loadModel(ItemFactory::g_pD3DDevice);
 		break;
 	case RESOURCEM_ROLLER:

@@ -18,6 +18,7 @@ GameObject::GameObject()
 	moveDamping = MOVE_DAMPING;
 
 	vecScale = new D3DXVECTOR3(1, 1, 1);
+	vecRotation = new D3DXVECTOR3(0, 0, 0);
 
 	vecRotateAxis = new D3DXVECTOR3(0, 0, 0);
 	rotateSpeed = 0;
@@ -83,8 +84,13 @@ void GameObject::calWorldMatrix(void)
 	mtxRotate._31 = -sinFront;
 	mtxRotate._33 = cosFront;
 
+	D3DXMATRIX mtxRotation;
+	D3DXMatrixIdentity(&mtxRotation);
+	D3DXMatrixRotationYawPitchRoll(&mtxRotation, D3DXToRadian(vecRotation->y), D3DXToRadian(vecRotation->x), D3DXToRadian(vecRotation->z));
+
 	D3DXMatrixMultiply(mtxWorld, mtxWorld, &mtxScale);
 	D3DXMatrixMultiply(mtxWorld, mtxWorld, &mtxRotate);
+	D3DXMatrixMultiply(mtxWorld, mtxWorld, &mtxRotation);
 	D3DXMatrixMultiply(mtxWorld, mtxWorld, &mtxTrans);
 
 }
@@ -315,6 +321,17 @@ void GameObject::setVecScale(D3DXVECTOR3 * vecScale)
 {
 	safe_delete<D3DXVECTOR3>(this->vecScale);
 	this->vecScale = new D3DXVECTOR3(*vecScale);
+}
+
+D3DXVECTOR3 * GameObject::getVecRotation(void)
+{
+	return vecRotation;
+}
+
+void GameObject::setVecRotation(D3DXVECTOR3 * vecRotation)
+{
+	safe_delete<D3DXVECTOR3>(this->vecRotation);
+	this->vecRotation = new D3DXVECTOR3(*vecRotation);
 }
 
 D3DXVECTOR3* GameObject::getVecRotateAxis(void)

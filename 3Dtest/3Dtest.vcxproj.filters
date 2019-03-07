@@ -106,6 +106,19 @@
     <ClCompile Include="AllocateHierarchy.cpp">
       <Filter>Source File</Filter>
     </ClCompile>
+    <ClCompile Include="GameTitle.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="GameResult.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="GameTutorial.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="Particle2D.cpp">
+      <Filter>Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="Number.cpp">
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3Dtest.h">
@@ -216,6 +229,19 @@
     <ClInclude Include="AllocateHierarchy.h">
       <Filter>Header</Filter>
     </ClInclude>
+    <ClInclude Include="GameTitle.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GameResult.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GameTutorial.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Particle2D.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Number.h">
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="3Dtest.rc" />

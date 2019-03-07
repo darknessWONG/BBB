@@ -68,6 +68,8 @@ public:
 	void setIsDisplay(bool isDisplay);
 	D3DXVECTOR3 *getVecScale(void);
 	void setVecScale(D3DXVECTOR3* vecScale);
+	D3DXVECTOR3 *getVecRotation(void);
+	void setVecRotation(D3DXVECTOR3 *vecRotation);
 	D3DXVECTOR3* getVecRotateAxis(void);
 	void setVecRotateAxis(D3DXVECTOR3* vecRotateAxis);
 	float getRotateSpeed(void);
@@ -101,6 +103,7 @@ private:
 	bool isDisplay;
 
 	D3DXVECTOR3 *vecScale;
+	D3DXVECTOR3 *vecRotation;
 
 	D3DXVECTOR3 *vecRotateAxis;
 	float rotateSpeed;

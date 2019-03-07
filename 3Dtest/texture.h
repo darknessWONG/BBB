@@ -4,6 +4,11 @@
 #include "stdafx.h"
 
 enum {
+	TEX_LOGO,
+	TEX_RESULT,
+	TEX_START,
+	TEX_NUMBER,
+	TEX_BALLOON,
 	TEX_MARRY,
 	TEX_ROLLER,
 	TEX_FERRIS,
