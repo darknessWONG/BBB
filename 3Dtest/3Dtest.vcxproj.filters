@@ -1,247 +1,89 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="3Dtest.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="Chara.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="Common.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="debugPrintf.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="Emitter.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="font.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="GameManage.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="input.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="Item.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="ItemFactory.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="Light.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="Model.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="MapManage.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="Physics.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="Recipe.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="SpecialArea.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="sprite.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="system_timer.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="texture.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="Workbench.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="Vigilance.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="Parts.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="Animation.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="AnimationManage.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="AnimationSet.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="AnimationTemplate.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="MyMesh.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="factoryModel.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="AllocateHierarchy.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="GameTitle.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="GameResult.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="GameTutorial.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="Particle2D.cpp">
-      <Filter>Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="Number.cpp">
+    <ClCompile Include="3Dtest.cpp" />
+    <ClCompile Include="AllocateHierarchy.cpp" />
+    <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="AnimationManage.cpp" />
+    <ClCompile Include="AnimationSet.cpp" />
+    <ClCompile Include="AnimationTemplate.cpp" />
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Chara.cpp" />
+    <ClCompile Include="Common.cpp" />
+    <ClCompile Include="debugPrintf.cpp" />
+    <ClCompile Include="Emitter.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="factoryModel.cpp" />
+    <ClCompile Include="font.cpp" />
+    <ClCompile Include="GameManage.cpp" />
+    <ClCompile Include="GameTutorial.cpp" />
+    <ClCompile Include="Item.cpp" />
+    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="input.cpp" />
+    <ClCompile Include="ItemFactory.cpp" />
+    <ClCompile Include="Light.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="MapManage.cpp" />
+    <ClCompile Include="Model.cpp" />
+    <ClCompile Include="MyMesh.cpp" />
+    <ClCompile Include="Parts.cpp" />
+    <ClCompile Include="Number.cpp" />
+    <ClCompile Include="Particle2D.cpp" />
+    <ClCompile Include="Physics.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Recipe.cpp" />
+    <ClCompile Include="GameResult.cpp" />
+    <ClCompile Include="SpecialArea.cpp" />
+    <ClCompile Include="sprite.cpp" />
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="system_timer.cpp" />
+    <ClCompile Include="texture.cpp" />
+    <ClCompile Include="GameTitle.cpp" />
+    <ClCompile Include="Vigilance.cpp" />
+    <ClCompile Include="Workbench.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="3Dtest.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Chara.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Common.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="debugPrintf.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Emitter.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="font.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="GameManage.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="input.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Item.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="ItemFactory.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Light.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="MapManage.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Model.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Physics.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Recipe.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="sprite.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="SpecialArea.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="stdafx.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="system_timer.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="texture.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Vigilance.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Workbench.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Parts.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Animation.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="AnimationManage.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="AnimationSet.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="AnimationTemplate.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="MyMesh.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="factoryModel.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="AllocateHierarchy.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="GameTitle.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="GameResult.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="GameTutorial.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Particle2D.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Number.h">
+    <ClInclude Include="3Dtest.h" />
+    <ClInclude Include="AllocateHierarchy.h" />
+    <ClInclude Include="Animation.h" />
+    <ClInclude Include="AnimationManage.h" />
+    <ClInclude Include="AnimationSet.h" />
+    <ClInclude Include="AnimationTemplate.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Chara.h" />
+    <ClInclude Include="Common.h" />
+    <ClInclude Include="debugPrintf.h" />
+    <ClInclude Include="Emitter.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="factoryModel.h" />
+    <ClInclude Include="font.h" />
+    <ClInclude Include="GameManage.h" />
+    <ClInclude Include="GameTutorial.h" />
+    <ClInclude Include="Item.h" />
+    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="input.h" />
+    <ClInclude Include="ItemFactory.h" />
+    <ClInclude Include="Light.h" />
+    <ClInclude Include="MapManage.h" />
+    <ClInclude Include="Model.h" />
+    <ClInclude Include="MyMesh.h" />
+    <ClInclude Include="Parts.h" />
+    <ClInclude Include="Number.h" />
+    <ClInclude Include="Particle2D.h" />
+    <ClInclude Include="Physics.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="Recipe.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="GameResult.h" />
+    <ClInclude Include="SpecialArea.h" />
+    <ClInclude Include="sprite.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="system_timer.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="texture.h" />
+    <ClInclude Include="GameTitle.h" />
+    <ClInclude Include="Vigilance.h" />
+    <ClInclude Include="Workbench.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="3Dtest.rc" />
@@ -252,13 +94,5 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="Header">
-      <UniqueIdentifier>{3682a822-29f0-4785-a05b-5b5811e3b1a3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source File">
-      <UniqueIdentifier>{3f7a6833-b237-4fd7-a59d-c6751a8c6c3d}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
 </Project>

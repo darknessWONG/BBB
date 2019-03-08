@@ -17,6 +17,8 @@ GameTitle::GameTitle()
 
 GameTitle::~GameTitle()
 {
+	delete pParticle;
+	pParticle = NULL;
 }
 
 void GameTitle::Update()

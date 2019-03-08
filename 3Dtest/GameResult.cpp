@@ -18,6 +18,8 @@ GameResult::GameResult()
 
 GameResult::~GameResult()
 {
+	delete pParticle;
+	pParticle = NULL;
 }
 
 void GameResult::Update()

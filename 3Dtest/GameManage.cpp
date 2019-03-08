@@ -248,6 +248,7 @@ void GameManage::game_state_init(void)
 	Workbench::initRecipe();
 
 	Player* mesh = new Player("hew_char.blend.x");
+	//Player* mesh = new Player("player.blend.x");
 	mesh->setIsWithAnimation(true);
 	mesh->loadModel(pD3DDevice);
 	mesh->setWalkSpeed(0.01);
@@ -273,7 +274,7 @@ void GameManage::game_state_init(void)
 	factorys.push_back(fm1);
 	map->addGameObject(fm1);
 
-	Model* box = new Model("face.x");
+	Model* box = new Model("radio.x");
 	box->loadModel(pD3DDevice);
 	box->setCanMove(false);
 	box->setOverlapLevel(-10);
@@ -508,6 +509,7 @@ void GameManage::result_state_update(void)
 void GameManage::result_state_clean(void)
 {
 	delete pResult;
+	delete pEmitter;
 
 	gs = GameState_naming_state_init;
 }

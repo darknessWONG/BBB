@@ -23,7 +23,7 @@ public:
 template <typename T>
 inline void safe_delete(T *&target) {
 	if (nullptr != target) {
-		delete[] target;
+		delete target;
 		target = nullptr;
 	}
 }
