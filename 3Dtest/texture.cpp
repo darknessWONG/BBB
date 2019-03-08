@@ -15,8 +15,13 @@ typedef struct TextureFileData_tag {
 }TextureFileData;
 
 static const TextureFileData TEXTURE_FILES[] = {
-	{ "asset/sprite/logo.png", 1280, 670 },
-	{ "asset/sprite/result.jpg", 2000, 1686 },		// size 1000x562 each ëΩï™Åc
+	{ "asset/sprite/logo.png", 800, 571 },
+	{ "asset/sprite/result1.png", 1240, 729 },
+	{ "asset/sprite/result2.png", 1240, 729 },
+	{ "asset/sprite/result3.png", 1240, 729 },
+	{ "asset/sprite/result4.png", 1240, 729 },
+	{ "asset/sprite/result5.png", 1240, 729 },
+	{ "asset/sprite/result6.png", 1240, 729 },
 	{ "asset/sprite/start.png", 600, 100 },
 	{ "asset/sprite/number.png", 728, 95 },
 	{ "asset/sprite/balloon.png", 1218, 3059 },

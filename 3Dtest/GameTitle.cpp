@@ -11,7 +11,7 @@ GameTitle::GameTitle()
 	pParticle = new Particle2D();
 
 	texture_logo = TEX_LOGO;
-	texture_background = TEX_RESULT;
+	texture_background = TEX_RESULT6;
 	texture_startgame = TEX_START;
 }
 
@@ -36,9 +36,9 @@ void GameTitle::Update()
 
 void GameTitle::Draw()
 {
-	Sprite_Draw_Background(texture_background, 0, 562 * 2 + 40, 980, 562 - 40 );			// ‚¿‚å‚Á‚Æ‰æ‘œ‚Ì–â‘è‚Ì‰ðŒˆ‚½‚ßŒvŽZ‚µ‚Ä‚¢‚é
+	Sprite_Draw_Background(texture_background);
 	pParticle->Draw();
-	Sprite_Draw_Size(texture_logo, Common::screen_width * 0.5f, Common::screen_height * 0.3f, 600, 250);
+	Sprite_Draw_Size(texture_logo, Common::screen_width * 0.5f, Common::screen_height * 0.25f, 600, 428);
 	Sprite_Draw_Size(texture_startgame, Common::screen_width * 0.5f, Common::screen_height * 0.7f, 200, 50, gColor);
 	//Number::Draw(192387129, 10, D3DXVECTOR2(100.0f, 100.0f), 1.0f);
 }
