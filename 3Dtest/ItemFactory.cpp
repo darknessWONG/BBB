@@ -18,32 +18,31 @@ Item * ItemFactory::create_item(float x, float y, ResourceM type)
 	switch (type)
 	{
 	case RESOURCEM_WOOD:
-		//item->setModelPath("asset\\hew_models\\hew_tree_material.x");
-		item->setModelPath("asset\\hew_models\\ferrisTest.x");
+		item->setModelPath("asset\\hew_models\\hew_tree_block.x");
 		item->loadModel(ItemFactory::g_pD3DDevice);
 		break;
 	case RESOURCEM_IRON:
-		item->setModelPath("asset\\hew_models\\hew_iron_material.x");
+		item->setModelPath("asset\\hew_models\\hew_iron_block.x");
 		item->loadModel(ItemFactory::g_pD3DDevice);
 		break;
 	case RESOURCEM_BRICK:
-		item->setModelPath("asset\\hew_models\\hew_rock_material.x");
+		item->setModelPath("asset\\hew_models\\hew_rock_block.x");
 		item->loadModel(ItemFactory::g_pD3DDevice);
 		break;
 	case RESOURCEM_MARRY:
-		item->setModelPath("asset\\sprite\\hew_ferris_block.blend.x");
+		item->setModelPath("asset\\hew_models\\hew_marry_block.x");
 		item->loadModel(ItemFactory::g_pD3DDevice);
 		break;
 	case RESOURCEM_ROLLER:
-		item->setModelPath("radio.x");
+		item->setModelPath("asset\\hew_models\\hew_roller_block.x");
 		item->loadModel(ItemFactory::g_pD3DDevice);
 		break;
 	case RESOURCEM_FERRIS:
-		item->setModelPath("radio.x");
+		item->setModelPath("asset\\hew_models\\hew_ferris_block.x");
 		item->loadModel(ItemFactory::g_pD3DDevice);
 		break;
 	case RESOURCEM_VIKING:
-		item->setModelPath("radio.x");
+		item->setModelPath("asset\\hew_models\\hew_viking_block.x");
 		item->loadModel(ItemFactory::g_pD3DDevice);
 		break;
 	}
@@ -79,31 +78,31 @@ void ItemFactory::setItemStatus(Item * item, ResourceM type)
 	switch (type)
 	{
 	case RESOURCEM_WOOD:
-		item->setModelPath("mokiuzai.blend.x");
+		item->setModelPath("asset\\hew_models\\hew_tree_block.x");
 		item->loadModel(ItemFactory::g_pD3DDevice);
 		break;
 	case RESOURCEM_IRON:
-		item->setModelPath("radio.x");
+		item->setModelPath("asset\\hew_models\\hew_iron_block.x");
 		item->loadModel(ItemFactory::g_pD3DDevice);
 		break;
 	case RESOURCEM_BRICK:
-		item->setModelPath("radio.x");
+		item->setModelPath("asset\\hew_models\\hew_rock_block.x");
 		item->loadModel(ItemFactory::g_pD3DDevice);
 		break;
 	case RESOURCEM_MARRY:
-		item->setModelPath("radio.x");
+		item->setModelPath("asset\\hew_models\\hew_marry_block.x");
 		item->loadModel(ItemFactory::g_pD3DDevice);
 		break;
 	case RESOURCEM_ROLLER:
-		item->setModelPath("radio.x");
+		item->setModelPath("asset\\hew_models\\hew_roller_block.x");
 		item->loadModel(ItemFactory::g_pD3DDevice);
 		break;
 	case RESOURCEM_FERRIS:
-		item->setModelPath("radio.x");
+		item->setModelPath("asset\\hew_models\\hew_ferris_block.x");
 		item->loadModel(ItemFactory::g_pD3DDevice);
 		break;
 	case RESOURCEM_VIKING:
-		item->setModelPath("radio.x");
+		item->setModelPath("asset\\hew_models\\hew_viking_block.x");
 		item->loadModel(ItemFactory::g_pD3DDevice);
 		break;
 	}

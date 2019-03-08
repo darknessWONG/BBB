@@ -63,11 +63,11 @@ HRESULT CAllocateHierarchy::GenerateSkinnedMesh(IDirect3DDevice9* pd3dDevice, D3
 HRESULT CAllocateHierarchy::CreateFrame(LPCSTR Name, LPD3DXFRAME* ppNewFrame)
 {
 	HRESULT hr = S_OK;
-	D3DXFRAME_DERIVED* pFrame;
+	D3DXFRAME_DERIVED* pFrame = NULL;
 
 	*ppNewFrame = NULL;
 
-	pFrame = new D3DXFRAME_DERIVED;
+	pFrame = new D3DXFRAME_DERIVED();
 	if (pFrame == NULL)
 	{
 		hr = E_OUTOFMEMORY;

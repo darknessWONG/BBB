@@ -181,7 +181,7 @@ void GameManage::draw(void)
 			map->addGameObject(others[i]);
 		}
 		map->drawGameObjects(pD3DDevice);
-		pEmitter->Draw();
+		//pEmitter->Draw();
 	}
 
 	if (gs == GameState::GameState_result_state_running)
@@ -247,9 +247,9 @@ void GameManage::game_state_init(void)
 	ItemFactory::setDevice(pD3DDevice);
 	Workbench::initRecipe();
 
+
 	Player* mesh = new Player("hew_char.blend.x");
 	//Player* mesh = new Player("player.blend.x");
-	mesh->setIsWithAnimation(true);
 	mesh->loadModel(pD3DDevice);
 	mesh->setWalkSpeed(0.01);
 	mesh->setMaxSpeed(0.3);
@@ -274,7 +274,16 @@ void GameManage::game_state_init(void)
 	factorys.push_back(fm1);
 	map->addGameObject(fm1);
 
-	Model* box = new Model("radio.x");
+
+	factoryModel* fm2 = new factoryModel("radio.x");
+	fm2->loadModel(pD3DDevice);
+	fm2->setItemType(ResourceM::RESOURCEM_BRICK);
+	fm2->setCanMove(false);
+	fm2->setVecNowPos(new D3DXVECTOR3(3, 0, 0));
+	factorys.push_back(fm2);
+	map->addGameObject(fm2);
+
+	Model* box = new Model("face.x");
 	box->loadModel(pD3DDevice);
 	box->setCanMove(false);
 	box->setOverlapLevel(-10);
@@ -291,14 +300,6 @@ void GameManage::game_state_init(void)
 	others.push_back(wall);
 	map->addGameObject(wall);
 
-	Model* iron = new Model("asset\\hew_models\\hew_tree_material.x");
-	iron->loadModel(pD3DDevice);
-	iron->setCanMove(false);
-	iron->setOverlapLevel(-10);
-	iron->setVecNowPos(new D3DXVECTOR3(-10, 0, 10));
-	iron->setVecScale(new D3DXVECTOR3(1, 0.5, 0.5));
-	others.push_back(iron);
-	map->addGameObject(iron);
 
 	Model* wall1 = new Model("asset\\hew_models\\hew_wall.x");
 	wall1->loadModel(pD3DDevice);
@@ -421,14 +422,14 @@ void GameManage::game_state_init(void)
 
 
 
-	pEmitter = new Emitter();
+	//pEmitter = new Emitter();
 
 	gs = GameState::GameState_game_state_running;
 }
 
 void GameManage::game_state_update(void)
 {
-	pEmitter->Update();
+	//pEmitter->Update();
 
 	ItemUpdate();
 	workbenchUpdate();
@@ -477,8 +478,10 @@ void GameManage::game_state_clean(void)
 	{
 		delete handOutbox[i];
 	}
-	safe_delete<Player>(player);
-	
+	//safe_delete<Player>(player);
+	delete player;
+	player = NULL;
+
 	enemys.clear();
 	others.clear();
 	items.clear();
@@ -615,7 +618,8 @@ void GameManage::factoryUpdate(void)
 	int factorysNum = factorys.size();
 	for (int i = 0; i < factorysNum; i++)
 	{
-		vector<TouchStatus> list = map->collisionDetectionOvl(factorys[i]);
+		vector<NearInfo> list = map->calNearObject(factorys[i], 2);
+
 		int listNum = list.size();
 		for (int j = 0; j < listNum; j++)
 		{
@@ -643,7 +647,7 @@ void GameManage::handOutBoxUpdate(void)
 			{
 				list[i].obj->setIsDisplay(false);
 				list[i].obj->setIsDelete(true);
-				pEmitter->Submit(((Item*)list[i].obj)->getStatusNow());
+				//pEmitter->Submit(((Item*)list[i].obj)->getStatusNow());
 			}
 		}
 	}
@@ -675,7 +679,7 @@ void GameManage::setPD3DDevice(LPDIRECT3DDEVICE9 pD3DDevice)
 
 void GameManage::state_read_input(GameState name)
 {
-	if (Keyboard_IsPress(DIK_RETURN))
+	if (Keyboard_IsTrigger(DIK_RETURN))
 	{
 		gs = name;
 	}
