@@ -261,12 +261,12 @@ void Model::setIsPlayAnimation(bool isPlayAnimation)
 
 D3DXVECTOR2 Model::getBoundingBoxMax(void)
 {
-	return boundingBoxMax;
+	return{ boundingBoxMax.x, boundingBoxMin.z };
 }
 
 D3DXVECTOR2 Model::getBoundingBoxMin(void)
 {
-	return boundingBoxMin;
+	return{ boundingBoxMin.x, boundingBoxMin.z };
 }
 
 void Model::calBounding(void)
