@@ -270,7 +270,7 @@ void GameManage::game_state_init(void)
 	mesh->setWalkSpeed(0.01);
 	mesh->setMaxSpeed(0.3);
 	mesh->setCanMove(true);
-	mesh->setVecNowPos(new D3DXVECTOR3(0, 0, 0));
+	mesh->setVecNowPos(&D3DXVECTOR3(0, 0, 0));
 	player = mesh;
 	map->addGameObject(mesh);
 
@@ -278,7 +278,7 @@ void GameManage::game_state_init(void)
 	fm->setModel(models[1]);
 	fm->setItemType(ResourceM::RESOURCEM_WOOD);
 	fm->setCanMove(false);
-	fm->setVecNowPos(new D3DXVECTOR3(3, 0, 3));
+	fm->setVecNowPos(&D3DXVECTOR3(3, 0, 3));
 	factorys.push_back(fm);
 	map->addGameObject(fm);
 
@@ -286,7 +286,7 @@ void GameManage::game_state_init(void)
 	fm1->setModel(models[1]);
 	fm1->setItemType(ResourceM::RESOURCEM_IRON);
 	fm1->setCanMove(false);
-	fm1->setVecNowPos(new D3DXVECTOR3(3, 0, 0));
+	fm1->setVecNowPos(&D3DXVECTOR3(3, 0, 0));
 	factorys.push_back(fm1);
 	map->addGameObject(fm1);
 
@@ -294,7 +294,7 @@ void GameManage::game_state_init(void)
 	fm2->setModel(models[1]);
 	fm2->setItemType(ResourceM::RESOURCEM_BRICK);
 	fm2->setCanMove(false);
-	fm2->setVecNowPos(new D3DXVECTOR3(3, 0, 0));
+	fm2->setVecNowPos(&D3DXVECTOR3(0, 0, 3));
 	factorys.push_back(fm2);
 	map->addGameObject(fm2);
 
@@ -302,7 +302,7 @@ void GameManage::game_state_init(void)
 	box->setModel(models[2]);
 	box->setCanMove(false);
 	box->setOverlapLevel(-10);
-	box->setVecNowPos(new D3DXVECTOR3(5, 0, 5));
+	box->setVecNowPos(&D3DXVECTOR3(5, 0, 5));
 	handOutbox.push_back(box);
 	map->addGameObject(box);
 
@@ -310,8 +310,8 @@ void GameManage::game_state_init(void)
 	wall->setModel(models[3]);
 	wall->setCanMove(false);
 	wall->setOverlapLevel(-10);
-	wall->setVecNowPos(new D3DXVECTOR3(-10, 0, 10));
-	wall->setVecScale(new D3DXVECTOR3(1, 0.5, 0.5));
+	wall->setVecNowPos(&D3DXVECTOR3(-10, 0, 10));
+	wall->setVecScale(&D3DXVECTOR3(1, 0.5, 0.5));
 	others.push_back(wall);
 	map->addGameObject(wall);
 
@@ -320,8 +320,8 @@ void GameManage::game_state_init(void)
 	wall1->setModel(models[3]);
 	wall1->setCanMove(false);
 	wall1->setOverlapLevel(-10);
-	wall1->setVecNowPos(new D3DXVECTOR3(-3, 0, 10));
-	wall1->setVecScale(new D3DXVECTOR3(1, 0.5, 0.5));
+	wall1->setVecNowPos(&D3DXVECTOR3(-3, 0, 10));
+	wall1->setVecScale(&D3DXVECTOR3(1, 0.5, 0.5));
 	others.push_back(wall1);
 	map->addGameObject(wall1);
 
@@ -329,8 +329,8 @@ void GameManage::game_state_init(void)
 	wall2->setModel(models[3]);
 	wall2->setCanMove(false);
 	wall2->setOverlapLevel(-10);
-	wall2->setVecNowPos(new D3DXVECTOR3(4, 0, 10));
-	wall2->setVecScale(new D3DXVECTOR3(1, 0.5, 0.5));
+	wall2->setVecNowPos(&D3DXVECTOR3(4, 0, 10));
+	wall2->setVecScale(&D3DXVECTOR3(1, 0.5, 0.5));
 	others.push_back(wall2);
 	map->addGameObject(wall2);
 
@@ -338,8 +338,8 @@ void GameManage::game_state_init(void)
 	wall3->setModel(models[3]);
 	wall3->setCanMove(false);
 	wall3->setOverlapLevel(-10);
-	wall3->setVecNowPos(new D3DXVECTOR3(11, 0, 10));
-	wall3->setVecScale(new D3DXVECTOR3(1, 0.5, 0.5));
+	wall3->setVecNowPos(&D3DXVECTOR3(11, 0, 10));
+	wall3->setVecScale(&D3DXVECTOR3(1, 0.5, 0.5));
 	others.push_back(wall3);
 	map->addGameObject(wall3);
 
@@ -347,8 +347,8 @@ void GameManage::game_state_init(void)
 	wall4->setModel(models[3]);
 	wall4->setCanMove(false);
 	wall4->setOverlapLevel(-10);
-	wall4->setVecNowPos(new D3DXVECTOR3(-17, 0, 10));
-	wall4->setVecScale(new D3DXVECTOR3(1, 0.5, 0.5));
+	wall4->setVecNowPos(&D3DXVECTOR3(-17, 0, 10));
+	wall4->setVecScale(&D3DXVECTOR3(1, 0.5, 0.5));
 	others.push_back(wall4);
 	map->addGameObject(wall4);
 
@@ -356,9 +356,8 @@ void GameManage::game_state_init(void)
 	wall5->setModel(models[3]);
 	wall5->setCanMove(false);
 	wall5->setOverlapLevel(-10);
-	wall5->setVecNowPos(new D3DXVECTOR3(-17, 0, 7));
-	wall5->setVecScale(new D3DXVECTOR3(1, 0.5, 0.5));
-	//wall5->setVecRotation(new D3DXVECTOR3(0, 90, 0));
+	wall5->setVecNowPos(&D3DXVECTOR3(-17, 0, 7));
+	wall5->setVecScale(&D3DXVECTOR3(1, 0.5, 0.5));
 	wall5->setVecFront(new D3DXVECTOR3(1, 0, 0));
 	others.push_back(wall5);
 	map->addGameObject(wall5);
@@ -367,9 +366,8 @@ void GameManage::game_state_init(void)
 	wall6->setModel(models[3]);
 	wall6->setCanMove(false);
 	wall6->setOverlapLevel(-10);
-	wall6->setVecNowPos(new D3DXVECTOR3(-17, 0, 0));
-	wall6->setVecScale(new D3DXVECTOR3(1, 0.5, 0.5));
-	//wall6->setVecRotation(new D3DXVECTOR3(0, 90, 0));
+	wall6->setVecNowPos(&D3DXVECTOR3(-17, 0, 0));
+	wall6->setVecScale(&D3DXVECTOR3(1, 0.5, 0.5));
 	wall6->setVecFront(new D3DXVECTOR3(1, 0, 0));
 	others.push_back(wall6);
 	map->addGameObject(wall6);
@@ -378,9 +376,8 @@ void GameManage::game_state_init(void)
 	wall7->setModel(models[3]);
 	wall7->setCanMove(false);
 	wall7->setOverlapLevel(-10);
-	wall7->setVecNowPos(new D3DXVECTOR3(-17, 0, -7));
-	wall7->setVecScale(new D3DXVECTOR3(1, 0.5, 0.5));
-	//wall7->setVecRotation(new D3DXVECTOR3(0, 90, 0));
+	wall7->setVecNowPos(&D3DXVECTOR3(-17, 0, -7));
+	wall7->setVecScale(&D3DXVECTOR3(1, 0.5, 0.5));
 	wall7->setVecFront(new D3DXVECTOR3(1, 0, 0));
 	others.push_back(wall7);
 	map->addGameObject(wall7);
@@ -389,8 +386,8 @@ void GameManage::game_state_init(void)
 	wall10->setModel(models[3]);;
 	wall10->setCanMove(false);
 	wall10->setOverlapLevel(-10);
-	wall10->setVecNowPos(new D3DXVECTOR3(-10, 0, -10));
-	wall10->setVecScale(new D3DXVECTOR3(1, 0.5, 0.5));
+	wall10->setVecNowPos(&D3DXVECTOR3(-10, 0, -10));
+	wall10->setVecScale(&D3DXVECTOR3(1, 0.5, 0.5));
 	others.push_back(wall10);
 	map->addGameObject(wall10);
 
@@ -398,8 +395,8 @@ void GameManage::game_state_init(void)
 	wall11->setModel(models[3]);;
 	wall11->setCanMove(false);
 	wall11->setOverlapLevel(-10);
-	wall11->setVecNowPos(new D3DXVECTOR3(-3, 0, -10));
-	wall11->setVecScale(new D3DXVECTOR3(1, 0.5, 0.5));
+	wall11->setVecNowPos(&D3DXVECTOR3(-3, 0, -10));
+	wall11->setVecScale(&D3DXVECTOR3(1, 0.5, 0.5));
 	others.push_back(wall11);
 	map->addGameObject(wall11);
 
@@ -407,8 +404,8 @@ void GameManage::game_state_init(void)
 	wall12->setModel(models[3]);
 	wall12->setCanMove(false);
 	wall12->setOverlapLevel(-10);
-	wall12->setVecNowPos(new D3DXVECTOR3(4, 0, -10));
-	wall12->setVecScale(new D3DXVECTOR3(1, 0.5, 0.5));
+	wall12->setVecNowPos(&D3DXVECTOR3(4, 0, -10));
+	wall12->setVecScale(&D3DXVECTOR3(1, 0.5, 0.5));
 	others.push_back(wall12);
 	map->addGameObject(wall12);
 
@@ -416,8 +413,8 @@ void GameManage::game_state_init(void)
 	wall13->setModel(models[3]);
 	wall13->setCanMove(false);
 	wall13->setOverlapLevel(-10);
-	wall13->setVecNowPos(new D3DXVECTOR3(11, 0, -10));
-	wall13->setVecScale(new D3DXVECTOR3(1, 0.5, 0.5));
+	wall13->setVecNowPos(&D3DXVECTOR3(11, 0, -10));
+	wall13->setVecScale(&D3DXVECTOR3(1, 0.5, 0.5));
 	others.push_back(wall13);
 	map->addGameObject(wall13);
 
@@ -425,15 +422,15 @@ void GameManage::game_state_init(void)
 	wall14->setModel(models[3]);
 	wall14->setCanMove(false);
 	wall14->setOverlapLevel(-10);
-	wall14->setVecNowPos(new D3DXVECTOR3(-17, 0, -10));
-	wall14->setVecScale(new D3DXVECTOR3(1, 0.5, 0.5));
+	wall14->setVecNowPos(&D3DXVECTOR3(-17, 0, -10));
+	wall14->setVecScale(&D3DXVECTOR3(1, 0.5, 0.5));
 	others.push_back(wall14);
 	map->addGameObject(wall14);
 
 	Workbench *wb = new Workbench(3, 3, 6, 6);
-	wb->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
+	wb->setVecRotateAxis(&D3DXVECTOR3(0, 1, 0));
 	wb->setCanMove(false);
-	wb->setVecNowPos(new D3DXVECTOR3(-7.5, 0, 0));
+	wb->setVecNowPos(&D3DXVECTOR3(-7.5, 0, 0));
 	wb->setOverlapLevel(-10);
 	wbs.push_back(wb);
 	map->addGameObject(wb);

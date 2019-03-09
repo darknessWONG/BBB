@@ -184,10 +184,6 @@ RECTF GameObject::getBoundingRect(void)
 		rect.right = maxX + posX;
 		rect.top = maxZ + posZ;
 		rect.bottom = minZ + posZ;
-		/*	rect.left = minX;
-		rect.right = maxX;
-		rect.top = maxZ;
-		rect.bottom = minZ;*/
 		return rect;
 	}
 	else
@@ -279,6 +275,7 @@ void GameObject::addSpeed(D3DXVECTOR3 * speedDir, float speed)
 
 void GameObject::calSpeed(void)
 {
+	*vecMoveSpeed *= 0.98;
 }
 
 void GameObject::calFront(void)
