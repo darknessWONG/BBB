@@ -2,6 +2,7 @@
 #include "ItemFactory.h"
 
 LPDIRECT3DDEVICE9 ItemFactory::g_pD3DDevice = NULL;
+vector<Model*> ItemFactory::models;
 
 ItemFactory::ItemFactory()
 {
@@ -12,47 +13,63 @@ ItemFactory::~ItemFactory()
 {
 }
 
+void ItemFactory::Init(void)
+{
+	Model* itemModel = new Model("asset\\hew_models\\hew_tree_block.x");
+	itemModel->setIsWithAnimation(false);
+	itemModel->loadModel(ItemFactory::g_pD3DDevice);
+	models.push_back(itemModel);
+
+	itemModel = new Model("asset\\hew_models\\hew_iron_block.x");
+	itemModel->setIsWithAnimation(false);
+	itemModel->loadModel(ItemFactory::g_pD3DDevice);
+	models.push_back(itemModel);
+
+	itemModel = new Model("asset\\hew_models\\hew_rock_block.x");
+	itemModel->setIsWithAnimation(false);
+	itemModel->loadModel(ItemFactory::g_pD3DDevice);
+	models.push_back(itemModel);
+
+	itemModel = new Model("asset\\hew_models\\hew_marry_block.x");
+	itemModel->setIsWithAnimation(false);
+	itemModel->loadModel(ItemFactory::g_pD3DDevice);
+	models.push_back(itemModel);
+
+	itemModel = new Model("asset\\hew_models\\hew_roller_block.x");
+	itemModel->setIsWithAnimation(false);
+	itemModel->loadModel(ItemFactory::g_pD3DDevice);
+	models.push_back(itemModel);
+
+	itemModel = new Model("asset\\hew_models\\hew_ferris_block.x");
+	itemModel->setIsWithAnimation(false);
+	itemModel->loadModel(ItemFactory::g_pD3DDevice);
+	models.push_back(itemModel);
+
+	itemModel = new Model("asset\\hew_models\\hew_viking_block.x");
+	itemModel->setIsWithAnimation(false);
+	itemModel->loadModel(ItemFactory::g_pD3DDevice);
+	models.push_back(itemModel);
+}
+
+void ItemFactory::Uninit(void)
+{
+	int modelNum = models.size();
+	for (int i = 0; i < modelNum; i++)
+	{
+		safe_delete<Model>(models[i]);
+	}
+	models.clear();
+}
+
 Item * ItemFactory::create_item(float x, float y, ResourceM type)
 {
-	Item* item = new Item("radio.x");
-	switch (type)
-	{
-	case RESOURCEM_WOOD:
-		//item->setModelPath("asset\\hew_models\\hew_tree_material.x");
-		item->setModelPath("asset\\hew_models\\ferrisTest.x");
-		item->loadModel(ItemFactory::g_pD3DDevice);
-		break;
-	case RESOURCEM_IRON:
-		item->setModelPath("asset\\hew_models\\hew_iron_material.x");
-		item->loadModel(ItemFactory::g_pD3DDevice);
-		break;
-	case RESOURCEM_BRICK:
-		item->setModelPath("asset\\hew_models\\hew_rock_material.x");
-		item->loadModel(ItemFactory::g_pD3DDevice);
-		break;
-	case RESOURCEM_MARRY:
-		item->setModelPath("asset\\sprite\\hew_ferris_block.blend.x");
-		item->loadModel(ItemFactory::g_pD3DDevice);
-		break;
-	case RESOURCEM_ROLLER:
-		item->setModelPath("radio.x");
-		item->loadModel(ItemFactory::g_pD3DDevice);
-		break;
-	case RESOURCEM_FERRIS:
-		item->setModelPath("radio.x");
-		item->loadModel(ItemFactory::g_pD3DDevice);
-		break;
-	case RESOURCEM_VIKING:
-		item->setModelPath("radio.x");
-		item->loadModel(ItemFactory::g_pD3DDevice);
-		break;
-	}
-	item->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
+	Item* item = new Item();
+	item->setModel(models[type]);
 	item->setCanMove(true);
 	item->setOverlapLevel(-10);
 	item->setVecNowPos(new D3DXVECTOR3(x, 0, y));
 	item->setStatusNow(type);
-	
+
 
 	return item;
 }
@@ -74,39 +91,10 @@ BOOL ItemFactory::item_unite(Item * ia, Item * ib)
 
 void ItemFactory::setItemStatus(Item * item, ResourceM type)
 {
-
 	item->setStatusNow(type);
-	switch (type)
-	{
-	case RESOURCEM_WOOD:
-		item->setModelPath("mokiuzai.blend.x");
-		item->loadModel(ItemFactory::g_pD3DDevice);
-		break;
-	case RESOURCEM_IRON:
-		item->setModelPath("radio.x");
-		item->loadModel(ItemFactory::g_pD3DDevice);
-		break;
-	case RESOURCEM_BRICK:
-		item->setModelPath("radio.x");
-		item->loadModel(ItemFactory::g_pD3DDevice);
-		break;
-	case RESOURCEM_MARRY:
-		item->setModelPath("radio.x");
-		item->loadModel(ItemFactory::g_pD3DDevice);
-		break;
-	case RESOURCEM_ROLLER:
-		item->setModelPath("radio.x");
-		item->loadModel(ItemFactory::g_pD3DDevice);
-		break;
-	case RESOURCEM_FERRIS:
-		item->setModelPath("radio.x");
-		item->loadModel(ItemFactory::g_pD3DDevice);
-		break;
-	case RESOURCEM_VIKING:
-		item->setModelPath("radio.x");
-		item->loadModel(ItemFactory::g_pD3DDevice);
-		break;
-	}
+
+	item->setModel(models[type]);
+
 }
 
 void ItemFactory::setDevice(LPDIRECT3DDEVICE9 device)

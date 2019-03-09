@@ -6,12 +6,6 @@ Item::Item()
 {
 }
 
-Item::Item(string modelPath)
-	:Model(modelPath)
-{
-}
-
-
 Item::~Item()
 {
 	belong = NULL;
@@ -32,7 +26,7 @@ void Item::positionUpdateY(void)
 	if (belong != NULL)
 	{
 		D3DXVECTOR3 pos = *getVecNowPos();
-		pos.y = belong->getBoundingBoxMax().y;
+		pos.y = belong->getModel()->getBoundingBox().top;
 		setVecNowPos(&pos);
 	}
 	else
@@ -63,7 +57,7 @@ void Item::positionUpdate(void)
 		setBoundingCenter(center);
 
 		D3DXVECTOR3 pos = *getVecNowPos();
-		pos.y = belong->getBoundingBoxMax().y;
+		pos.y = belong->getModel()->getBoundingBox().top;
 		setVecNowPos(&pos);
 	}
 	else

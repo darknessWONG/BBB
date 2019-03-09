@@ -47,6 +47,7 @@ Workbench::~Workbench()
 {
 	safe_delete<Item*>(items);
 	safe_delete<Vertex>(grid);
+	delete[] recipe;
 
 }
 
@@ -251,7 +252,7 @@ void Workbench::setLength(float length)
 void Workbench::initRecipe(void)
 {
 	recipeNum = 4;
-	recipe = new int*[1];
+	recipe = new int*[recipeNum];
 	recipe[0] = new int[10]{
 		ResourceM::RESOURCEM_NONE,		ResourceM::RESOURCEM_IRON,		ResourceM::RESOURCEM_NONE,
 		ResourceM::RESOURCEM_NONE,		ResourceM::RESOURCEM_WOOD,		ResourceM::RESOURCEM_NONE,

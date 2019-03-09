@@ -7,12 +7,6 @@ factoryModel::factoryModel()
 {
 }
 
-factoryModel::factoryModel(string modelName)
-	:Model(modelName)
-{
-}
-
-
 factoryModel::~factoryModel()
 {
 }

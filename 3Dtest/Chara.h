@@ -1,31 +1,30 @@
 #pragma once
-#include "Model.h"
+/*==============================================================================
+The base of other chara class like player and enemy[Chara.h]
+Author : darknessWONG
+Date   : 2019/01/15
+--------------------------------------------------------------------------------
+==============================================================================*/
+#include "GameObject.h"
 
 class Chara :
-	public Model
+	public GameObject
 {
 public:
 	Chara();
-	Chara(string modelPath);
 	virtual ~Chara();
 
 	/*===========================================
 	virtual member
 	============================================*/
+	virtual void dataUpdate(void);
 
 	/*===========================================
-	public function
-	============================================*/
-
-
-	/*===========================================
-	public geter / seter
+	public geter/seter
 	============================================*/
 	float getWalkSpeed(void);
 	void setWalkSpeed(float walkSpeed);
 
 private:
 	float walkSpeed;
-
 };
-

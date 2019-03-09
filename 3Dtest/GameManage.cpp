@@ -11,11 +11,7 @@
 #include "Emitter.h"
 #include "font.h"
 #include "texture.h"
-#include "Parts.h"
-#include "MyMesh.h"
 #include "factoryModel.h"
-#include "Animation.h"
-#include "AnimationSet.h"
 
 
 GameManage::GameManage()
@@ -32,11 +28,22 @@ GameManage::GameManage(LPDIRECT3DDEVICE9 pD3DDevice)
 GameManage::~GameManage()
 {
 	Font_Finalize();
+	ItemFactory::Uninit();
+
+	int modelNum = models.size();
+	for (int i = 0; i < modelNum; i++)
+	{
+		safe_delete<Model>(models[i]);
+	}
+	models.clear();
 }
 
 void GameManage::init(void)
 {
 	map = new MapManage();
+
+	ItemFactory::setDevice(pD3DDevice);
+	ItemFactory::Init();
 
 	D3DXVECTOR3* cameraPos = new D3DXVECTOR3(0, 20, -20);
 	D3DXVECTOR3* cameraWatchAt = new D3DXVECTOR3(0, 0, 0);
@@ -45,6 +52,24 @@ void GameManage::init(void)
 
 	light = new Light();
 	light->init(pD3DDevice);
+
+	Model* playerMesh = new Model("hew_char.blend.x");
+	playerMesh->setIsWithAnimation(true);
+	playerMesh->loadModel(pD3DDevice);
+	models.push_back(playerMesh);
+	Model* radioMesh = new Model("radio.x");
+	radioMesh->setIsWithAnimation(false);
+	radioMesh->loadModel(pD3DDevice);
+	models.push_back(radioMesh);
+	Model* faceMesh = new Model("face.x");
+	faceMesh->setIsWithAnimation(false);
+	faceMesh->loadModel(pD3DDevice);
+	models.push_back(faceMesh);
+	Model* wallMesh = new Model("asset\\hew_models\\hew_wall.x");
+	wallMesh->setIsWithAnimation(false);
+	wallMesh->loadModel(pD3DDevice);
+	models.push_back(wallMesh);
+
 
 	Font_Initialize();
 }
@@ -68,16 +93,7 @@ void GameManage::beforeUpdate(void)
 	{
 		map->addGameObject(wbs[i]);
 	}
-	gameObjectsNum = enemys.size();
-	for (int i = 0; i < gameObjectsNum; i++)
-	{
-		map->addGameObject(enemys[i]);
-	}
-	gameObjectsNum = vigliances.size();
-	for (int i = 0; i < gameObjectsNum; i++)
-	{
-		map->addGameObject(vigliances[i]);
-	}
+
 	gameObjectsNum = factorys.size();
 	for (int i = 0; i < gameObjectsNum; i++)
 	{
@@ -244,177 +260,176 @@ void GameManage::tutorial_state_clean(void)
 
 void GameManage::game_state_init(void)
 {
-	ItemFactory::setDevice(pD3DDevice);
+
 	Workbench::initRecipe();
 
-	Player* mesh = new Player("hew_char.blend.x");
-	//Player* mesh = new Player("player.blend.x");
-	mesh->setIsWithAnimation(true);
-	mesh->loadModel(pD3DDevice);
+	Player* mesh = new Player();
+	mesh->setModel(models[0]);
 	mesh->setWalkSpeed(0.01);
 	mesh->setMaxSpeed(0.3);
 	mesh->setCanMove(true);
-	mesh->setVecNowPos(new D3DXVECTOR3(0, 0, 0));
+	mesh->setVecNowPos(&D3DXVECTOR3(0, 0, 0));
 	player = mesh;
 	map->addGameObject(mesh);
 
-	factoryModel* fm = new factoryModel("radio.x");
-	fm->loadModel(pD3DDevice);
+	factoryModel* fm = new factoryModel();
+	fm->setModel(models[1]);
 	fm->setItemType(ResourceM::RESOURCEM_WOOD);
 	fm->setCanMove(false);
-	fm->setVecNowPos(new D3DXVECTOR3(3, 0, 3));
+	fm->setVecNowPos(&D3DXVECTOR3(3, 0, 3));
 	factorys.push_back(fm);
 	map->addGameObject(fm);
 
-	factoryModel* fm1 = new factoryModel("radio.x");
-	fm1->loadModel(pD3DDevice);
+	factoryModel* fm1 = new factoryModel();
+	fm1->setModel(models[1]);
 	fm1->setItemType(ResourceM::RESOURCEM_IRON);
 	fm1->setCanMove(false);
-	fm1->setVecNowPos(new D3DXVECTOR3(3, 0, 0));
+	fm1->setVecNowPos(&D3DXVECTOR3(3, 0, 0));
 	factorys.push_back(fm1);
 	map->addGameObject(fm1);
 
-	Model* box = new Model("radio.x");
-	box->loadModel(pD3DDevice);
+
+	factoryModel* fm2 = new factoryModel();
+	fm2->setModel(models[1]);
+	fm2->setItemType(ResourceM::RESOURCEM_BRICK);
+	fm2->setCanMove(false);
+	fm2->setVecNowPos(&D3DXVECTOR3(0, 0, 3));
+	factorys.push_back(fm2);
+	map->addGameObject(fm2);
+
+	GameObject* box = new GameObject();
+	box->setModel(models[2]);
 	box->setCanMove(false);
 	box->setOverlapLevel(-10);
-	box->setVecNowPos(new D3DXVECTOR3(5, 0, 5));
+	box->setVecNowPos(&D3DXVECTOR3(5, 0, 5));
 	handOutbox.push_back(box);
 	map->addGameObject(box);
 
-	Model* wall = new Model("asset\\hew_models\\hew_wall.x");
-	wall->loadModel(pD3DDevice);
+	GameObject* wall = new GameObject();
+	wall->setModel(models[3]);
 	wall->setCanMove(false);
 	wall->setOverlapLevel(-10);
-	wall->setVecNowPos(new D3DXVECTOR3(-10, 0, 10));
-	wall->setVecScale(new D3DXVECTOR3(1, 0.5, 0.5));
+	wall->setVecNowPos(&D3DXVECTOR3(-10, 0, 10));
+	wall->setVecScale(&D3DXVECTOR3(1, 0.5, 0.5));
 	others.push_back(wall);
 	map->addGameObject(wall);
 
-	Model* iron = new Model("asset\\hew_models\\hew_tree_material.x");
-	iron->loadModel(pD3DDevice);
-	iron->setCanMove(false);
-	iron->setOverlapLevel(-10);
-	iron->setVecNowPos(new D3DXVECTOR3(-10, 0, 10));
-	iron->setVecScale(new D3DXVECTOR3(1, 0.5, 0.5));
-	others.push_back(iron);
-	map->addGameObject(iron);
 
-	Model* wall1 = new Model("asset\\hew_models\\hew_wall.x");
-	wall1->loadModel(pD3DDevice);
+	GameObject* wall1 = new GameObject();
+	wall1->setModel(models[3]);
 	wall1->setCanMove(false);
 	wall1->setOverlapLevel(-10);
-	wall1->setVecNowPos(new D3DXVECTOR3(-3, 0, 10));
-	wall1->setVecScale(new D3DXVECTOR3(1, 0.5, 0.5));
+	wall1->setVecNowPos(&D3DXVECTOR3(-3, 0, 10));
+	wall1->setVecScale(&D3DXVECTOR3(1, 0.5, 0.5));
 	others.push_back(wall1);
 	map->addGameObject(wall1);
 
-	Model* wall2 = new Model("asset\\hew_models\\hew_wall.x");
-	wall2->loadModel(pD3DDevice);
+	GameObject* wall2 = new GameObject();
+	wall2->setModel(models[3]);
 	wall2->setCanMove(false);
 	wall2->setOverlapLevel(-10);
-	wall2->setVecNowPos(new D3DXVECTOR3(4, 0, 10));
-	wall2->setVecScale(new D3DXVECTOR3(1, 0.5, 0.5));
+	wall2->setVecNowPos(&D3DXVECTOR3(4, 0, 10));
+	wall2->setVecScale(&D3DXVECTOR3(1, 0.5, 0.5));
 	others.push_back(wall2);
 	map->addGameObject(wall2);
 
-	Model* wall3 = new Model("asset\\hew_models\\hew_wall.x");
-	wall3->loadModel(pD3DDevice);
+	GameObject* wall3 = new GameObject();
+	wall3->setModel(models[3]);
 	wall3->setCanMove(false);
 	wall3->setOverlapLevel(-10);
-	wall3->setVecNowPos(new D3DXVECTOR3(11, 0, 10));
-	wall3->setVecScale(new D3DXVECTOR3(1, 0.5, 0.5));
+	wall3->setVecNowPos(&D3DXVECTOR3(11, 0, 10));
+	wall3->setVecScale(&D3DXVECTOR3(1, 0.5, 0.5));
 	others.push_back(wall3);
 	map->addGameObject(wall3);
 
-	Model* wall4 = new Model("asset\\hew_models\\hew_wall.x");
-	wall4->loadModel(pD3DDevice);
+	GameObject* wall4 = new GameObject();
+	wall4->setModel(models[3]);
 	wall4->setCanMove(false);
 	wall4->setOverlapLevel(-10);
-	wall4->setVecNowPos(new D3DXVECTOR3(-17, 0, 10));
-	wall4->setVecScale(new D3DXVECTOR3(1, 0.5, 0.5));
+	wall4->setVecNowPos(&D3DXVECTOR3(-17, 0, 10));
+	wall4->setVecScale(&D3DXVECTOR3(1, 0.5, 0.5));
 	others.push_back(wall4);
 	map->addGameObject(wall4);
 
-	Model* wall5 = new Model("asset\\hew_models\\hew_wall.x");
-	wall5->loadModel(pD3DDevice);
+	GameObject* wall5 = new GameObject();
+	wall5->setModel(models[3]);
 	wall5->setCanMove(false);
 	wall5->setOverlapLevel(-10);
-	wall5->setVecNowPos(new D3DXVECTOR3(-17, 0, 7));
-	wall5->setVecScale(new D3DXVECTOR3(1, 0.5, 0.5));
-	wall5->setVecRotation(new D3DXVECTOR3(0, 90, 0));
+	wall5->setVecNowPos(&D3DXVECTOR3(-17, 0, 7));
+	wall5->setVecScale(&D3DXVECTOR3(1, 0.5, 0.5));
+	wall5->setVecFront(new D3DXVECTOR3(1, 0, 0));
 	others.push_back(wall5);
 	map->addGameObject(wall5);
 
-	Model* wall6 = new Model("asset\\hew_models\\hew_wall.x");
-	wall6->loadModel(pD3DDevice);
+	GameObject* wall6 = new GameObject();
+	wall6->setModel(models[3]);
 	wall6->setCanMove(false);
 	wall6->setOverlapLevel(-10);
-	wall6->setVecNowPos(new D3DXVECTOR3(-17, 0, 0));
-	wall6->setVecScale(new D3DXVECTOR3(1, 0.5, 0.5));
-	wall6->setVecRotation(new D3DXVECTOR3(0, 90, 0));
+	wall6->setVecNowPos(&D3DXVECTOR3(-17, 0, 0));
+	wall6->setVecScale(&D3DXVECTOR3(1, 0.5, 0.5));
+	wall6->setVecFront(new D3DXVECTOR3(1, 0, 0));
 	others.push_back(wall6);
 	map->addGameObject(wall6);
 
-	Model* wall7 = new Model("asset\\hew_models\\hew_wall.x");
-	wall7->loadModel(pD3DDevice);
+	GameObject* wall7 = new GameObject();
+	wall7->setModel(models[3]);
 	wall7->setCanMove(false);
 	wall7->setOverlapLevel(-10);
-	wall7->setVecNowPos(new D3DXVECTOR3(-17, 0, -7));
-	wall7->setVecScale(new D3DXVECTOR3(1, 0.5, 0.5));
-	wall7->setVecRotation(new D3DXVECTOR3(0, 90, 0));
+	wall7->setVecNowPos(&D3DXVECTOR3(-17, 0, -7));
+	wall7->setVecScale(&D3DXVECTOR3(1, 0.5, 0.5));
+	wall7->setVecFront(new D3DXVECTOR3(1, 0, 0));
 	others.push_back(wall7);
 	map->addGameObject(wall7);
 
-	Model* wall10 = new Model("asset\\hew_models\\hew_wall.x");
-	wall10->loadModel(pD3DDevice);
+	GameObject* wall10 = new GameObject();
+	wall10->setModel(models[3]);;
 	wall10->setCanMove(false);
 	wall10->setOverlapLevel(-10);
-	wall10->setVecNowPos(new D3DXVECTOR3(-10, 0, -10));
-	wall10->setVecScale(new D3DXVECTOR3(1, 0.5, 0.5));
+	wall10->setVecNowPos(&D3DXVECTOR3(-10, 0, -10));
+	wall10->setVecScale(&D3DXVECTOR3(1, 0.5, 0.5));
 	others.push_back(wall10);
 	map->addGameObject(wall10);
 
-	Model* wall11 = new Model("asset\\hew_models\\hew_wall.x");
-	wall11->loadModel(pD3DDevice);
+	GameObject* wall11 = new GameObject();
+	wall11->setModel(models[3]);;
 	wall11->setCanMove(false);
 	wall11->setOverlapLevel(-10);
-	wall11->setVecNowPos(new D3DXVECTOR3(-3, 0, -10));
-	wall11->setVecScale(new D3DXVECTOR3(1, 0.5, 0.5));
+	wall11->setVecNowPos(&D3DXVECTOR3(-3, 0, -10));
+	wall11->setVecScale(&D3DXVECTOR3(1, 0.5, 0.5));
 	others.push_back(wall11);
 	map->addGameObject(wall11);
 
-	Model* wall12 = new Model("asset\\hew_models\\hew_wall.x");
-	wall12->loadModel(pD3DDevice);
+	GameObject* wall12 = new GameObject();
+	wall12->setModel(models[3]);
 	wall12->setCanMove(false);
 	wall12->setOverlapLevel(-10);
-	wall12->setVecNowPos(new D3DXVECTOR3(4, 0, -10));
-	wall12->setVecScale(new D3DXVECTOR3(1, 0.5, 0.5));
+	wall12->setVecNowPos(&D3DXVECTOR3(4, 0, -10));
+	wall12->setVecScale(&D3DXVECTOR3(1, 0.5, 0.5));
 	others.push_back(wall12);
 	map->addGameObject(wall12);
 
-	Model* wall13 = new Model("asset\\hew_models\\hew_wall.x");
-	wall13->loadModel(pD3DDevice);
+	GameObject* wall13 = new GameObject();
+	wall13->setModel(models[3]);
 	wall13->setCanMove(false);
 	wall13->setOverlapLevel(-10);
-	wall13->setVecNowPos(new D3DXVECTOR3(11, 0, -10));
-	wall13->setVecScale(new D3DXVECTOR3(1, 0.5, 0.5));
+	wall13->setVecNowPos(&D3DXVECTOR3(11, 0, -10));
+	wall13->setVecScale(&D3DXVECTOR3(1, 0.5, 0.5));
 	others.push_back(wall13);
 	map->addGameObject(wall13);
 
-	Model* wall14 = new Model("asset\\hew_models\\hew_wall.x");
-	wall14->loadModel(pD3DDevice);
+	GameObject* wall14 = new GameObject();
+	wall14->setModel(models[3]);
 	wall14->setCanMove(false);
 	wall14->setOverlapLevel(-10);
-	wall14->setVecNowPos(new D3DXVECTOR3(-17, 0, -10));
-	wall14->setVecScale(new D3DXVECTOR3(1, 0.5, 0.5));
+	wall14->setVecNowPos(&D3DXVECTOR3(-17, 0, -10));
+	wall14->setVecScale(&D3DXVECTOR3(1, 0.5, 0.5));
 	others.push_back(wall14);
 	map->addGameObject(wall14);
 
 	Workbench *wb = new Workbench(3, 3, 6, 6);
-	wb->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
+	wb->setVecRotateAxis(&D3DXVECTOR3(0, 1, 0));
 	wb->setCanMove(false);
-	wb->setVecNowPos(new D3DXVECTOR3(-7.5, 0, 0));
+	wb->setVecNowPos(&D3DXVECTOR3(-7.5, 0, 0));
 	wb->setOverlapLevel(-10);
 	wbs.push_back(wb);
 	map->addGameObject(wb);
@@ -432,7 +447,6 @@ void GameManage::game_state_update(void)
 
 	ItemUpdate();
 	workbenchUpdate();
-	animationUpdate();
 	handOutBoxUpdate();
 	factoryUpdate();
 
@@ -478,7 +492,9 @@ void GameManage::game_state_clean(void)
 		delete handOutbox[i];
 	}
 	safe_delete<Player>(player);
-	
+	delete player;
+	player = NULL;
+
 	enemys.clear();
 	others.clear();
 	items.clear();
@@ -604,18 +620,13 @@ void GameManage::workbenchUpdate(void)
 	}
 }
 
-void GameManage::animationUpdate(void)
-{
-	am.play();
-	am.cleanEndAnimation();
-}
-
 void GameManage::factoryUpdate(void)
 {
 	int factorysNum = factorys.size();
 	for (int i = 0; i < factorysNum; i++)
 	{
-		vector<TouchStatus> list = map->collisionDetectionOvl(factorys[i]);
+		vector<NearInfo> list = map->calNearObject(factorys[i], 2);
+
 		int listNum = list.size();
 		for (int j = 0; j < listNum; j++)
 		{
@@ -675,7 +686,7 @@ void GameManage::setPD3DDevice(LPDIRECT3DDEVICE9 pD3DDevice)
 
 void GameManage::state_read_input(GameState name)
 {
-	if (Keyboard_IsPress(DIK_RETURN))
+	if (Keyboard_IsTrigger(DIK_RETURN))
 	{
 		gs = name;
 	}
