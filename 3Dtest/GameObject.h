@@ -1,6 +1,15 @@
 #pragma once
+/*==============================================================================
+[GameObject.h]
+Author : darknessWONG
+Date   : 2018/11/23
+--------------------------------------------------------------------------------
+The base unit in this game,
+everything you want to draw of do the collision should be a gameObject
+==============================================================================*/
 #include <d3dx9.h>
 #include "Physics.h"
+#include "Model.h"
 
 class GameObject
 {
@@ -18,16 +27,19 @@ public:
 	virtual void positionUpdateY(void);
 	virtual void positionUpdateZ(void);
 	virtual void positionUpdate(void);
-	virtual void draw(LPDIRECT3DDEVICE9 pD3DDevice) = 0;
+	virtual void draw(LPDIRECT3DDEVICE9 pD3DDevice);
 	/*cal the new bounding box
 	so that you should call it every time you set a new position or bounding center*/
 	virtual void calBounding(void);
-	virtual RECTF getBoundingRect(void) = 0;
+	virtual RECTF getBoundingRect(void);
+	virtual BOXF getBoundingBox(void);
 	/*the center of the bounding box
 	position may not be the center of the bounding box, so it have to be calculate*/
-	virtual D3DXVECTOR2 getBoundingCenter(void) = 0;
+	virtual D3DXVECTOR2 getBoundingCenter(void);
+	virtual D3DXVECTOR3 getBoundingCenter3D(void);
 	//calculate vecNowPos through center, set vecNowPos to let the bounding center get on the position where center at.
-	virtual void setBoundingCenter(D3DXVECTOR2 center) = 0;
+	virtual void setBoundingCenter(D3DXVECTOR2 center);
+	virtual void setBoundingCenter3D(D3DXVECTOR3 center);
 
 	/*===========================================
 	public function
@@ -41,9 +53,13 @@ public:
 	//if isDisappear is true, will setIsDisplay to false and setOverlapLevel to -100(is unrelated to ovl)
 	//if isDisappear is false, will setIsDisplay to true and setOverlapLevel to ovl
 	void setDisappear(bool isDisappear, int ovl = 10);
+	void resetAnimaCount(void);
+
 	/*===========================================
 	public geter / seter
 	============================================*/
+	Model* getModel(void);
+	void setModel(Model* model);
 	D3DXMATRIX* getMtxWorld(void);
 	void setMtxWorld(D3DXMATRIX* mtxWorld);
 	D3DXVECTOR3* getVecFront(void);
@@ -69,21 +85,23 @@ public:
 	D3DXVECTOR3 *getVecScale(void);
 	void setVecScale(D3DXVECTOR3* vecScale);
 	D3DXVECTOR3 *getVecRotation(void);
-	void setVecRotation(D3DXVECTOR3 *vecRotation);
+	void setVecRotation(D3DXVECTOR3* vecRotation);
 	D3DXVECTOR3* getVecRotateAxis(void);
 	void setVecRotateAxis(D3DXVECTOR3* vecRotateAxis);
 	float getRotateSpeed(void);
 	void setRotateSpeed(float rotateSpeed);
 	float getRotateDamping(void);
 	void setRotateDamping(float rotateDamping);
+	bool getIsPlayAnima(void);
+	void setIsPlayAnima(bool isPlayAnima);
 	D3DXVECTOR3* getVecTargetFront(void);
 	void setVecTargetFront(D3DXVECTOR3* vecTargetFront);
 	bool getMoveThisTurn(void);
-	//D3DXVECTOR3 *getVecTargetPos(void);
-	//void setVecTargetPos(D3DXVECTOR3 * vecTargetPos);
 	bool getIsDelete(void);
 	void setIsDelete(bool isDelete);
 private:
+	Model* model;
+
 	D3DXMATRIX *mtxWorld;
 
 	D3DXVECTOR3 *vecFront;   //the up direct of camera(normalize vector)
@@ -109,8 +127,13 @@ private:
 	float rotateSpeed;
 	float rotateDamping;
 
+	D3DXVECTOR3 boundingBoxMin;
+	D3DXVECTOR3 boundingBoxMax;
+
+	float animaCounter;
+	bool isPlayAnima;
+
 	D3DXVECTOR3 *vecTargetFront;
-	//D3DXVECTOR3 *vecTargetPos;
 	static D3DXVECTOR3* zeroDirect;
 
 	bool isDelete;

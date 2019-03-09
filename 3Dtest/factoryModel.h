@@ -4,11 +4,10 @@
 #include "ItemFactory.h"
 
 class factoryModel :
-	public Model
+	public GameObject
 {
 public:
 	factoryModel();
-	factoryModel(string modelName);
 	~factoryModel();
 
 	Item* createItem(float x, float y);

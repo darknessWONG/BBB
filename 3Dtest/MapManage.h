@@ -14,6 +14,12 @@ typedef struct
 	TouchType touchType;
 }TouchStatus;
 
+typedef struct
+{
+	GameObject* obj;
+	float dis;
+}NearInfo;
+
 class MapManage
 {
 public:
@@ -38,6 +44,7 @@ public:
 	TouchType collisionDetection(GameObject* gameObject1, GameObject* gameObject2);
 	vector<GameObject*> calObjectInCycle(Vigilance* cycle);
 	vector<GameObject*> calObjectOnSight(Enemy* enemy, Player* player);
+	vector<NearInfo> calNearObject(GameObject* gameObject, float limit);
 	/*===========================================
 	public geter / seter
 	============================================*/
