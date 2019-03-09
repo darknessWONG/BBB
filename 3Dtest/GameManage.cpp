@@ -288,7 +288,6 @@ void GameManage::game_state_init(void)
 	factorys.push_back(fm1);
 	map->addGameObject(fm1);
 
-
 	factoryModel* fm2 = new factoryModel();
 	fm2->setModel(models[1]);
 	fm2->setItemType(ResourceM::RESOURCEM_BRICK);
