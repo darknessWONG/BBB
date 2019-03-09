@@ -89,46 +89,6 @@ BOOL ItemFactory::item_unite(Item * ia, Item * ib)
 	return false;
 }
 
-//void ItemFactory::setItemStatus(Item * item, ResourceM type)
-//{
-//	Model* itemModel = new Model("radio.x");
-//	itemModel->setIsWithAnimation(false);
-//	item->setStatusNow(type);
-//	switch (type)
-//	{
-//	case RESOURCEM_WOOD:
-//		itemModel->setModelPath("asset\\hew_models\\hew_tree_block.x");
-//		itemModel->loadModel(ItemFactory::g_pD3DDevice);
-//		break;
-//	case RESOURCEM_IRON:
-//		itemModel->setModelPath("asset\\hew_models\\hew_iron_block.x");
-//		itemModel->loadModel(ItemFactory::g_pD3DDevice);
-//		break;
-//	case RESOURCEM_BRICK:
-//		itemModel->setModelPath("asset\\hew_models\\hew_rock_block.x");
-//		itemModel->loadModel(ItemFactory::g_pD3DDevice);
-//		break;
-//	case RESOURCEM_MARRY:
-//		itemModel->setModelPath("asset\\hew_models\\hew_marry_block.x");
-//		itemModel->loadModel(ItemFactory::g_pD3DDevice);
-//		break;
-//	case RESOURCEM_ROLLER:
-//		itemModel->setModelPath("asset\\hew_models\\hew_roller_block.x");
-//		itemModel->loadModel(ItemFactory::g_pD3DDevice);
-//		break;
-//	case RESOURCEM_FERRIS:
-//		itemModel->setModelPath("asset\\hew_models\\hew_ferris_block.x");
-//		itemModel->loadModel(ItemFactory::g_pD3DDevice);
-//		break;
-//	case RESOURCEM_VIKING:
-//		itemModel->setModelPath("asset\\hew_models\\hew_viking_block.x");
-//		itemModel->loadModel(ItemFactory::g_pD3DDevice);
-//		break;
-//	}
-//	item->setModel(itemModel);
-//	
-//}
-
 void ItemFactory::setItemStatus(Item * item, ResourceM type)
 {
 	item->setStatusNow(type);

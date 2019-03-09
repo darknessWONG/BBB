@@ -47,6 +47,7 @@ Workbench::~Workbench()
 {
 	safe_delete<Item*>(items);
 	safe_delete<Vertex>(grid);
+	delete[] recipe;
 
 }
 
