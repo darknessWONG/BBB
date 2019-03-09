@@ -7,11 +7,6 @@ Player::Player()
 {
 }
 
-Player::Player(string modelPath)
-	:Chara(modelPath)
-{
-}
-
 
 Player::~Player()
 {

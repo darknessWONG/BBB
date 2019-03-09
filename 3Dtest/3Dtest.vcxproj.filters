@@ -3,16 +3,11 @@
   <ItemGroup>
     <ClCompile Include="3Dtest.cpp" />
     <ClCompile Include="AllocateHierarchy.cpp" />
-    <ClCompile Include="Animation.cpp" />
-    <ClCompile Include="AnimationManage.cpp" />
-    <ClCompile Include="AnimationSet.cpp" />
-    <ClCompile Include="AnimationTemplate.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Chara.cpp" />
     <ClCompile Include="Common.cpp" />
     <ClCompile Include="debugPrintf.cpp" />
     <ClCompile Include="Emitter.cpp" />
-    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="factoryModel.cpp" />
     <ClCompile Include="font.cpp" />
     <ClCompile Include="GameManage.cpp" />
@@ -25,8 +20,6 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapManage.cpp" />
     <ClCompile Include="Model.cpp" />
-    <ClCompile Include="MyMesh.cpp" />
-    <ClCompile Include="Parts.cpp" />
     <ClCompile Include="Number.cpp" />
     <ClCompile Include="Particle2D.cpp" />
     <ClCompile Include="Physics.cpp" />
@@ -45,16 +38,11 @@
   <ItemGroup>
     <ClInclude Include="3Dtest.h" />
     <ClInclude Include="AllocateHierarchy.h" />
-    <ClInclude Include="Animation.h" />
-    <ClInclude Include="AnimationManage.h" />
-    <ClInclude Include="AnimationSet.h" />
-    <ClInclude Include="AnimationTemplate.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Chara.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="debugPrintf.h" />
     <ClInclude Include="Emitter.h" />
-    <ClInclude Include="Enemy.h" />
     <ClInclude Include="factoryModel.h" />
     <ClInclude Include="font.h" />
     <ClInclude Include="GameManage.h" />
@@ -66,8 +54,6 @@
     <ClInclude Include="Light.h" />
     <ClInclude Include="MapManage.h" />
     <ClInclude Include="Model.h" />
-    <ClInclude Include="MyMesh.h" />
-    <ClInclude Include="Parts.h" />
     <ClInclude Include="Number.h" />
     <ClInclude Include="Particle2D.h" />
     <ClInclude Include="Physics.h" />

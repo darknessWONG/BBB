@@ -9,6 +9,8 @@ GameObject::GameObject()
 	mtxWorld = new D3DXMATRIX();
 	D3DXMatrixIdentity(mtxWorld);
 
+	model = NULL;
+
 	vecFront = new D3DXVECTOR3(0, 0, 1);    //the up direct of camera(normalize vector)
 	vecRight = new D3DXVECTOR3(1, 0, 0);    //the front direct of camera(normalize vector)
 	vecUp = new D3DXVECTOR3(0, 1, 0);	     //the right direct of camera(normalize vector)
@@ -18,7 +20,6 @@ GameObject::GameObject()
 	moveDamping = MOVE_DAMPING;
 
 	vecScale = new D3DXVECTOR3(1, 1, 1);
-	vecRotation = new D3DXVECTOR3(0, 0, 0);
 
 	vecRotateAxis = new D3DXVECTOR3(0, 0, 0);
 	rotateSpeed = 0;
@@ -31,6 +32,9 @@ GameObject::GameObject()
 	overlapLevel = 0;
 	isDisplay = true;
 	isDelete = false;
+
+	animaCounter = 0;
+	isPlayAnima = true;
 }
 
 
@@ -44,7 +48,6 @@ GameObject::~GameObject()
 
 	safe_delete<D3DXVECTOR3>(vecNowPos);
 	safe_delete<D3DXVECTOR3>(vecMoveSpeed);
-	//safe_delete<D3DXVECTOR3>(vecTargetFront);
 
 	safe_delete<D3DXVECTOR3>(vecRotateAxis);
 
@@ -67,10 +70,6 @@ void GameObject::calWorldMatrix(void)
 	mtxTrans._42 = vecNowPos->y;
 	mtxTrans._43 = vecNowPos->z;
 
-	//D3DXMATRIX mtxRotate;
-	//D3DXMatrixIdentity(&mtxRotate);
-	//D3DXMatrixRotationAxis(&mtxRotate, vecRotateAxis, rotateSpeed);
-
 	float cosFront = vecFront->z;
 	float sinFront = sqrt(1 - cosFront * cosFront);
 	if (vecFront->x > 0)
@@ -84,13 +83,8 @@ void GameObject::calWorldMatrix(void)
 	mtxRotate._31 = -sinFront;
 	mtxRotate._33 = cosFront;
 
-	D3DXMATRIX mtxRotation;
-	D3DXMatrixIdentity(&mtxRotation);
-	D3DXMatrixRotationYawPitchRoll(&mtxRotation, D3DXToRadian(vecRotation->y), D3DXToRadian(vecRotation->x), D3DXToRadian(vecRotation->z));
-
 	D3DXMatrixMultiply(mtxWorld, mtxWorld, &mtxScale);
 	D3DXMatrixMultiply(mtxWorld, mtxWorld, &mtxRotate);
-	D3DXMatrixMultiply(mtxWorld, mtxWorld, &mtxRotation);
 	D3DXMatrixMultiply(mtxWorld, mtxWorld, &mtxTrans);
 
 }
@@ -102,6 +96,15 @@ void GameObject::beforeUpdate(void)
 
 void GameObject::dataUpdate(void)
 {
+	if (model != NULL)
+	{
+		if (isPlayAnima)
+		{
+			animaCounter += 0.001f;
+		}
+		model->dataUpdate(animaCounter);
+	}
+	calBounding();
 	calSpeed();
 	calFront();
 
@@ -134,8 +137,137 @@ void GameObject::positionUpdate(void)
 	setVecNowPos(&newPos);
 }
 
+void GameObject::draw(LPDIRECT3DDEVICE9 pD3DDevice)
+{
+	if (isDisplay)
+	{
+		if (model != NULL)
+		{
+			model->draw(pD3DDevice, mtxWorld, animaCounter);
+		}
+	}
+}
+
 void GameObject::calBounding(void)
 {
+	if (model != NULL)
+	{
+		D3DXMATRIX matrix;
+		D3DXMatrixIdentity(&matrix);
+
+		D3DXMATRIX scale;
+		D3DXMatrixIdentity(&scale);
+		D3DXMatrixScaling(&scale, vecScale->x, vecScale->y, vecScale->z);
+		D3DXMatrixMultiply(&matrix, &matrix, &scale);
+
+		BOXF boundingBox = model->getBoundingBox();
+		boundingBoxMin = { boundingBox.left, boundingBox.bottom, boundingBox.front };
+		D3DXVec3TransformCoord(&boundingBoxMin, &boundingBoxMin, &matrix);
+		boundingBoxMax = { boundingBox.right, boundingBox.top, boundingBox.back };
+		D3DXVec3TransformCoord(&boundingBoxMax, &boundingBoxMax, &matrix);
+	}
+}
+
+RECTF GameObject::getBoundingRect(void)
+{
+	if (model != NULL)
+	{
+		RECTF rect;
+		float maxX = Physics::round(boundingBoxMax.x, FLOAT_BITS);
+		float minX = Physics::round(boundingBoxMin.x, FLOAT_BITS);
+		float maxZ = Physics::round(boundingBoxMax.z, FLOAT_BITS);
+		float minZ = Physics::round(boundingBoxMin.z, FLOAT_BITS);
+		float posX = Physics::round(vecNowPos->x, FLOAT_BITS);
+		float posZ = Physics::round(vecNowPos->z, FLOAT_BITS);
+
+		rect.left = minX + posX;
+		rect.right = maxX + posX;
+		rect.top = maxZ + posZ;
+		rect.bottom = minZ + posZ;
+		/*	rect.left = minX;
+		rect.right = maxX;
+		rect.top = maxZ;
+		rect.bottom = minZ;*/
+		return rect;
+	}
+	else
+	{
+		return RECTF{ 0.0f, 0.0f, 0.0f, 0.0f };
+	}
+}
+
+BOXF GameObject::getBoundingBox(void)
+{
+	if (model != NULL)
+	{
+		float maxX = Physics::round(boundingBoxMax.x, FLOAT_BITS);
+		float minX = Physics::round(boundingBoxMin.x, FLOAT_BITS);
+		float maxY = Physics::round(boundingBoxMax.y, FLOAT_BITS);
+		float minY = Physics::round(boundingBoxMin.y, FLOAT_BITS);
+		float maxZ = Physics::round(boundingBoxMax.z, FLOAT_BITS);
+		float minZ = Physics::round(boundingBoxMin.z, FLOAT_BITS);
+		float posX = Physics::round(vecNowPos->x, FLOAT_BITS);
+		float posY = Physics::round(vecNowPos->y, FLOAT_BITS);
+		float posZ = Physics::round(vecNowPos->z, FLOAT_BITS);
+
+		return BOXF{ minX + posX, maxX + posX, minY + posY, maxY + posY, minZ + posZ, maxZ + posZ };
+	}
+	else
+	{
+		return BOXF{ 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
+	}
+}
+
+D3DXVECTOR2 GameObject::getBoundingCenter(void)
+{
+	if (model != NULL)
+	{
+		RECTF rect = getBoundingRect();
+		D3DXVECTOR2 center = { 0, 0 };
+		center.x = Physics::round((rect.left + rect.right) / 2, FLOAT_BITS);
+		center.y = Physics::round((rect.bottom + rect.top) / 2, FLOAT_BITS);
+		return center;
+	}
+	else
+	{
+		D3DXVECTOR2 pos = { vecNowPos->x, vecNowPos->z };
+		return pos;
+	}
+
+}
+
+D3DXVECTOR3 GameObject::getBoundingCenter3D(void)
+{
+	if (model != NULL)
+	{
+		BOXF rect = getBoundingBox();
+		D3DXVECTOR3 center = { 0, 0, 0 };
+		center.x = Physics::round((rect.left + rect.right) / 2, FLOAT_BITS);
+		center.y = Physics::round((rect.bottom + rect.top) / 2, FLOAT_BITS);
+		center.z = Physics::round((rect.front + rect.back) / 2, FLOAT_BITS);
+
+		return center;
+	}
+	else
+	{
+		return *vecNowPos;
+	}
+}
+
+void GameObject::setBoundingCenter(D3DXVECTOR2 center)
+{
+	D3DXVECTOR2 boundingCenter = getBoundingCenter();
+	D3DXVECTOR2 offset = { vecNowPos->x - boundingCenter.x, vecNowPos->z - boundingCenter.y };
+
+	*vecNowPos = { center.x + offset.x, vecNowPos->y, center.y + offset.y };
+}
+
+void GameObject::setBoundingCenter3D(D3DXVECTOR3 center)
+{
+	D3DXVECTOR3 boundingCenter3D = getBoundingCenter3D();
+	D3DXVECTOR3 offset = { vecNowPos->x - boundingCenter3D.x, vecNowPos->y - boundingCenter3D.y, vecNowPos->z - boundingCenter3D.z };
+
+	*vecNowPos = { center.x + offset.x, center.y + offset.y, center.y + offset.y };
 }
 
 void GameObject::addSpeed(D3DXVECTOR3 * speedDir, float speed)
@@ -147,12 +279,6 @@ void GameObject::addSpeed(D3DXVECTOR3 * speedDir, float speed)
 
 void GameObject::calSpeed(void)
 {
-	if (D3DXVec3Length(vecMoveSpeed) > maxSpeed)
-	{
-		D3DXVec3Normalize(vecMoveSpeed, vecMoveSpeed);
-		*vecMoveSpeed *= maxSpeed;
-	}
-	*vecMoveSpeed *= moveDamping;
 }
 
 void GameObject::calFront(void)
@@ -194,6 +320,21 @@ void GameObject::setDisappear(bool isDisappear, int ovl)
 		setIsDisplay(!isDisappear);
 		setOverlapLevel(ovl);
 	}
+}
+
+void GameObject::resetAnimaCount(void)
+{
+	animaCounter = 0.001f;
+}
+
+Model * GameObject::getModel(void)
+{
+	return model;
+}
+
+void GameObject::setModel(Model * model)
+{
+	this->model = model;
 }
 
 D3DXMATRIX* GameObject::getMtxWorld(void)
@@ -363,6 +504,16 @@ float GameObject::getRotateDamping(void)
 void GameObject::setRotateDamping(float rotateDamping)
 {
 	this->rotateDamping = rotateDamping;
+}
+
+bool GameObject::getIsPlayAnima(void)
+{
+	return isPlayAnima;
+}
+
+void GameObject::setIsPlayAnima(bool isPlayAnima)
+{
+	this->isPlayAnima = isPlayAnima;
 }
 
 D3DXVECTOR3 * GameObject::getVecTargetFront(void)
