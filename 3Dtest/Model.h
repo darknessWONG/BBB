@@ -1,9 +1,17 @@
 ﻿#pragma once
+/*==============================================================================
+[Model.h]
+Author : darknessWONG
+Date   : 2018/11/23
+--------------------------------------------------------------------------------
+The model with is from xfile,
+you can only load the model once even if there are many gameObject is useing a
+same model.
+==============================================================================*/
 #include "stdafx.h"
-#include "GameObject.h"
 #include "AllocateHierarchy.h"
-class Model :
-	public GameObject
+#include "Physics.h"
+class Model
 {
 public:
 	Model();
@@ -12,21 +20,15 @@ public:
 	/*===========================================
 	virtual member
 	============================================*/
-	virtual void dataUpdate(void);
-	virtual void draw(LPDIRECT3DDEVICE9 pD3DDevice);
+	//it will cal the animation status in this function,
+	//so every gameObejct should save there onw animaCount
+	virtual void dataUpdate(float animaCount);
+	virtual void draw(LPDIRECT3DDEVICE9 pD3DDevice, D3DXMATRIX * const matWorld, float animaCount);
 	/*cal the new bounding box
 	so that you should call it every time you set a new position or bounding center*/
 	virtual void calBounding(void);
 	virtual RECTF getBoundingRect(void);
 	virtual BOXF getBoundingBox(void);
-	/*the center of the bounding box
-	position may not be the center of the bounding box, so it have to be calculate*/
-	virtual D3DXVECTOR2 getBoundingCenter(void);
-	virtual D3DXVECTOR3 getBoundingCenter3D(void);
-	//calculate vecNowPos through center, set vecNowPos to let the bounding center get on the position where center at.
-	virtual void setBoundingCenter(D3DXVECTOR2 center);
-	virtual void setBoundingCenter3D(D3DXVECTOR3 center);
-
 	/*===========================================
 	public function
 	============================================*/
@@ -41,10 +43,6 @@ public:
 	void setModelPath(string modelPath);
 	bool getIsWithAnimation(void);
 	void setIsWithAnimation(bool isWithAnimation);
-	bool getIsPlayAnimation(void);
-	void setIsPlayAnimation(bool isPlayAnimation);
-	D3DXVECTOR2 getBoundingBoxMax(void);
-	D3DXVECTOR2 getBoundingBoxMin(void);
 
 	//提供给外界的接口
 
@@ -70,8 +68,6 @@ private:
 
 	string modelPath;
 	bool isWithAnimation;
-
-	bool isPlayAnimation;
 
 	//mesh
 	LPD3DXMESH mesh = NULL;

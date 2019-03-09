@@ -9,7 +9,6 @@
 #include "Workbench.h"
 #include "Emitter.h"
 #include "factoryModel.h"
-#include "AnimationManage.h"
 #include "GameTitle.h"
 #include "GameTutorial.h"
 #include "GameResult.h"
@@ -50,7 +49,6 @@ public:
 	void checkEnd(void);
 	void ItemUpdate(void);
 	void workbenchUpdate(void);
-	void animationUpdate(void);
 	void factoryUpdate(void);
 	void handOutBoxUpdate(void);
 
@@ -71,7 +69,8 @@ private:
 	vector<Item*> items;
 	vector<Workbench*> wbs;
 	vector<factoryModel*> factorys;
-	vector<Model*> handOutbox;
+	vector<GameObject*> handOutbox;
+	vector<Model*> models;
 	
 	vector<GameObject*> others;
 
@@ -82,8 +81,6 @@ private:
 	GameResult *pResult;
 
 	MapManage* map = NULL;
-
-	AnimationManage am;
 
 	GameState gs;
 };

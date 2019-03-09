@@ -1,6 +1,7 @@
 #pragma once
 #include "Item.h"
 #include "Common.h"
+#include "Model.h"
 #include <d3dx9.h>
 
 enum ResourceM
@@ -23,6 +24,8 @@ public:
 	ItemFactory();
 	~ItemFactory();
 
+	static void Init(void);
+	static void Uninit(void);
 	static Item* create_item(float x, float y, ResourceM type);
 	static BOOL item_unite(Item* ia, Item* ib);
 	static void setItemStatus(Item* item, ResourceM type);
@@ -30,5 +33,6 @@ public:
 	static void setDevice(LPDIRECT3DDEVICE9 device);
 private:
 	static LPDIRECT3DDEVICE9 g_pD3DDevice;
+	static vector<Model*> models;
 };
 

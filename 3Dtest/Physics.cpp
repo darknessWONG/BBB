@@ -197,6 +197,8 @@ float Physics::round(float src, int bits)
 	ss << fixed << setprecision(bits) << src;
 	ss >> src;
 
+	ss.clear();
+
 	return src;
 }
 

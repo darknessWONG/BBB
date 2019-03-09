@@ -2,11 +2,10 @@
 #include "Model.h"
 #include "Chara.h"
 class Item :
-	public Model
+	public GameObject
 {
 public:
 	Item();
-	Item(string modelPath);
 	~Item();
 
 	/*===========================================
