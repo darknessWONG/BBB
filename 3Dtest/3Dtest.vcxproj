@@ -167,6 +167,7 @@
     <ClInclude Include="factoryModel.h" />
     <ClInclude Include="font.h" />
     <ClInclude Include="GameManage.h" />
+    <ClInclude Include="gamepad.h" />
     <ClInclude Include="GameTutorial.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="GameObject.h" />
@@ -203,6 +204,7 @@
     <ClCompile Include="factoryModel.cpp" />
     <ClCompile Include="font.cpp" />
     <ClCompile Include="GameManage.cpp" />
+    <ClCompile Include="gamepad.cpp" />
     <ClCompile Include="GameTutorial.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="GameObject.cpp" />

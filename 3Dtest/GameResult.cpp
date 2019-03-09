@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "GameResult.h"
+#include "gamepad.h"
 
 GameResult::GameResult()
 {
@@ -24,7 +25,7 @@ GameResult::~GameResult()
 
 void GameResult::Update()
 {
-	if (Keyboard_IsTrigger(DIK_RETURN)) {
+	if (Keyboard_IsTrigger(DIK_RETURN) || Gamepad_isTrigger(XINPUT_GAMEPAD_START) || Gamepad_isTrigger(XINPUT_GAMEPAD_A)) {
 		bEnd = true;
 	}
 

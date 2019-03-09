@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "GameTitle.h"
+#include "gamepad.h"
 
 GameTitle::GameTitle()
 {
@@ -23,7 +24,7 @@ GameTitle::~GameTitle()
 
 void GameTitle::Update()
 {
-	if (Keyboard_IsTrigger(DIK_RETURN)) {
+	if (Keyboard_IsTrigger(DIK_RETURN) || Gamepad_isTrigger(XINPUT_GAMEPAD_START) || Gamepad_isTrigger(XINPUT_GAMEPAD_A)) {
 		bEnd = true;
 	}
 	counter += increment;

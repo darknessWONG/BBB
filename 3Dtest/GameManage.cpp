@@ -12,6 +12,7 @@
 #include "font.h"
 #include "texture.h"
 #include "factoryModel.h"
+#include "gamepad.h"
 
 
 GameManage::GameManage()
@@ -57,11 +58,13 @@ void GameManage::init(void)
 	playerMesh->setIsWithAnimation(true);
 	playerMesh->loadModel(pD3DDevice);
 	models.push_back(playerMesh);
+	// box
 	Model* radioMesh = new Model("radio.x");
 	radioMesh->setIsWithAnimation(false);
 	radioMesh->loadModel(pD3DDevice);
 	models.push_back(radioMesh);
-	Model* faceMesh = new Model("face.x");
+	// bin
+	Model* faceMesh = new Model("radio.x");
 	faceMesh->setIsWithAnimation(false);
 	faceMesh->loadModel(pD3DDevice);
 	models.push_back(faceMesh);
@@ -70,6 +73,7 @@ void GameManage::init(void)
 	wallMesh->loadModel(pD3DDevice);
 	models.push_back(wallMesh);
 
+	Gamepad_Initialize();
 
 	Font_Initialize();
 }
@@ -113,6 +117,7 @@ void GameManage::update(void)
 	camera->calWatchAt();
 	camera->calWorldMatrix();
 	camera->draw(pD3DDevice);
+	Gamepad_Update();
 
 	switch (gs)
 	{
@@ -171,6 +176,7 @@ void GameManage::update(void)
 		ranking_state_clean();
 	}
 
+	
 	map->updateGameObejcts();
 }
 
@@ -685,7 +691,7 @@ void GameManage::setPD3DDevice(LPDIRECT3DDEVICE9 pD3DDevice)
 
 void GameManage::state_read_input(GameState name)
 {
-	if (Keyboard_IsTrigger(DIK_RETURN))
+	if (Keyboard_IsTrigger(DIK_RETURN) || Gamepad_isTrigger(XINPUT_GAMEPAD_BACK))
 	{
 		gs = name;
 	}

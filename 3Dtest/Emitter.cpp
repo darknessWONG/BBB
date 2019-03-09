@@ -9,6 +9,7 @@
 #include "sprite.h"
 #include "texture.h"
 #include "input.h"
+#include "Number.h"
 
 Emitter::Emitter()
 {
@@ -19,7 +20,7 @@ Emitter::Emitter()
 		list[i].count = 0;
 	}
 
-	score = 0;
+	score = 10000;
 
 	curActive = 0;
 	create_count = 0;
@@ -121,8 +122,10 @@ void Emitter::Draw()
 		}
 	}
 
+	// score
+	Number::Draw(score, 6, D3DXVECTOR2(Common::screen_width - 200, Common::screen_height - 20.0f), 0.5f);
 
-	//debug
+#if _DEBUG
 	char buf[256];
 	for (int i = 0; i < MAX_ORDER; i++) {
 		sprintf_s(buf, "[%d] - %s | recipe:%d | pos:%.2f | time: %d/%d",
@@ -140,6 +143,8 @@ void Emitter::Draw()
 	Font_SetSize(30);
 	Font_SetColor(255, 255, 255, 255);
 	Font_Draw(Common::screen_width - 200, Common::screen_height - 40.0f, buf);
+#endif // _DEBUG
+
 }
 
 void Emitter::Submit(int index)
@@ -155,7 +160,7 @@ void Emitter::Submit(int index)
 			}
 		}
 	}
-	// TODO Minus Score
+	// Error check
 	score -= 1000;
 }
 
