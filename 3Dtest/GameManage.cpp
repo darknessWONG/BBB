@@ -264,6 +264,10 @@ void GameManage::game_state_init(void)
 	Workbench::initRecipe();
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 48c16c5c1ff3dcf65c1ba700fc878158d77d5b82
 	Player* mesh = new Player();
 	mesh->setModel(models[0]);
 	mesh->setWalkSpeed(0.01);
