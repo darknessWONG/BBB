@@ -84,4 +84,5 @@ private:
 
 	GameState gs;
 	int totalScore;
+	int bgm;
 };

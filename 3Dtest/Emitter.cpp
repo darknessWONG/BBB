@@ -10,6 +10,7 @@
 #include "texture.h"
 #include "input.h"
 #include "Number.h"
+#include "sound.h"
 
 #define TIMER_GUAGE_SIZE		(600.0f)
 #define TIMER_POSITION_X		(20)
@@ -174,7 +175,8 @@ void Emitter::Submit(int index)
 		if (list[i].isActive == 1) {
 			if (list[i].recipe + 3 == index) {
 				// Plus Score
-				timer -= 500.0f;
+				PlaySound(SOUND_LABEL_SE_SUCCESS);
+				timer -= 10 * 60.0f;
 				score += Recipe::getScore(i);
 				// Delete this Order
 				Delete(i);

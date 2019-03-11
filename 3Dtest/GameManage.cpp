@@ -13,6 +13,7 @@
 #include "texture.h"
 #include "factoryModel.h"
 #include "gamepad.h"
+#include "sound.h"
 
 
 GameManage::GameManage()
@@ -42,7 +43,7 @@ GameManage::~GameManage()
 void GameManage::init(void)
 {
 	map = new MapManage();
-
+	bgm = -1;
 	ItemFactory::setDevice(pD3DDevice);
 	ItemFactory::Init();
 
@@ -222,6 +223,16 @@ void GameManage::title_state_init(void)
 {
 	pTitle = new GameTitle();
 
+	if (bgm == SOUND_LABEL_MUSIC_GAME) {
+		StopSound(SOUND_LABEL_MUSIC_GAME);
+		bgm = -1;
+	}
+
+	if (bgm != SOUND_LABEL_MUSIC_TITLE) {
+		PlaySound(SOUND_LABEL_MUSIC_TITLE);
+		bgm = SOUND_LABEL_MUSIC_TITLE;
+	}
+
 	gs = GameState_title_state_running;
 }
 
@@ -236,6 +247,8 @@ void GameManage::title_state_update(void)
 
 void GameManage::title_state_clean(void)
 {
+	PlaySound(SOUND_LABEL_SE_PASS);
+
 	delete pTitle;
 
 	gs = GameState_tutorial_state_init;
@@ -260,6 +273,8 @@ void GameManage::tutorial_state_update(void)
 
 void GameManage::tutorial_state_clean(void)
 {
+	PlaySound(SOUND_LABEL_SE_PASS);
+
 	delete pTutorial;
 
 	gs = GameState_game_state_init;
@@ -269,6 +284,16 @@ void GameManage::game_state_init(void)
 {
 	totalScore = 0;
 	Workbench::initRecipe();
+
+	if (bgm == SOUND_LABEL_MUSIC_TITLE) {
+		StopSound(SOUND_LABEL_MUSIC_TITLE);
+		bgm = -1;
+	}
+
+	if (bgm != SOUND_LABEL_MUSIC_GAME) {
+		PlaySound(SOUND_LABEL_MUSIC_GAME);
+		bgm = SOUND_LABEL_MUSIC_GAME;
+	}
 
 	Player* mesh = new Player();
 	mesh->setModel(models[0]);
@@ -520,6 +545,16 @@ void GameManage::result_state_init(void)
 	pResult = new GameResult();
 	pResult->setScore(totalScore);
 	gs = GameState_result_state_running;
+
+	if (bgm == SOUND_LABEL_MUSIC_GAME) {
+		StopSound(SOUND_LABEL_MUSIC_GAME);
+		bgm = -1;
+	}
+
+	if (bgm != SOUND_LABEL_MUSIC_TITLE) {
+		PlaySound(SOUND_LABEL_MUSIC_TITLE);
+		bgm = SOUND_LABEL_MUSIC_TITLE;
+	}
 }
 
 void GameManage::result_state_update(void)
@@ -534,6 +569,8 @@ void GameManage::result_state_update(void)
 
 void GameManage::result_state_clean(void)
 {
+	PlaySound(SOUND_LABEL_SE_PASS);
+
 	delete pResult;
 	delete pEmitter;
 

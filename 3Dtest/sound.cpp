@@ -35,7 +35,10 @@ SOUNDPARAM g_aParam[SOUND_LABEL_MAX] =
 {
 	{ "asset/sound/title.wav", -1 },
 	{ "asset/sound/game.wav", -1 },
-	{ "asset/sound/temp.wav", 0 },					// ’e”­ŽË‰¹
+	{ "asset/sfx/walk.wav", -1 },					// walk sound
+	{ "asset/sfx/drop.wav", 0 },					// ’e”­ŽË‰¹
+	{ "asset/sfx/pass.wav", 0 },
+	{ "asset/sfx/success.wav", 0 },
 };
 
 //=============================================================================
