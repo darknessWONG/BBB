@@ -43,7 +43,7 @@ void GameTitle::Draw()
 	Sprite_Draw_Background(texture_background);
 	pParticle->Draw();
 	Sprite_Draw_Size(texture_logo, Common::screen_width * 0.5f, Common::screen_height * 0.25f, 600, 428);
-	Sprite_Draw_Size(texture_startgame, Common::screen_width * 0.5f, Common::screen_height * 0.7f, 200, 50, gColor);
+	Sprite_Draw_Size(texture_startgame, Common::screen_width * 0.5f, Common::screen_height * 0.75f, 600, 80, gColor);
 }
 
 bool GameTitle::isEnd()
