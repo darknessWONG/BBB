@@ -76,6 +76,7 @@ void GameManage::init(void)
 	Gamepad_Initialize();
 
 	Font_Initialize();
+	totalScore = 0;
 }
 
 void GameManage::beforeUpdate(void)
@@ -266,7 +267,7 @@ void GameManage::tutorial_state_clean(void)
 
 void GameManage::game_state_init(void)
 {
-
+	totalScore = 0;
 	Workbench::initRecipe();
 
 	Player* mesh = new Player();
@@ -456,10 +457,14 @@ void GameManage::game_state_update(void)
 	factoryUpdate();
 
 	state_read_input(GameState::GameState_game_state_clean);
+
+	if (pEmitter->isEnd())
+		gs = GameState::GameState_game_state_clean;
 }
 
 void GameManage::game_state_clean(void)
 {
+	totalScore = pEmitter->getScore();
 	map->cleanGameObject();
 	int gameObjectsNum = others.size();
 	for (int i = 0; i < gameObjectsNum; i++)
@@ -513,7 +518,7 @@ void GameManage::game_state_clean(void)
 void GameManage::result_state_init(void)
 {
 	pResult = new GameResult();
-
+	pResult->setScore(totalScore);
 	gs = GameState_result_state_running;
 }
 

@@ -16,6 +16,8 @@ public:
 	void Update();
 	void Draw();
 
+	void setScore(int number);
+
 	bool isEnd();	// check is result flag is end or not
 private:
 	// scene end flag
@@ -30,5 +32,6 @@ private:
 	D3DXCOLOR gColor;			// start icon‚Ìdiffuse color
 
 	// result grade
+	int score;
 	int grade;
 };

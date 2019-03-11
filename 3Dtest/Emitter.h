@@ -4,10 +4,11 @@
 #include "Recipe.h"
 
 #define MAX_ORDER			(4)
-#define ORDER_COMING_SPEED	(600)
 #define ORDER_MOVESPEED		(4.0f)
 #define ORDER_WIDTH			(205.0f)
-#define ORDER_TIME			(3000)
+#define ORDER_COMING_SPEED	((10.0f) * (60.0f))
+#define ORDER_TIME			((60.0f) * (60.0f))
+#define TIME_LIMIT			((90.0f) * (60.0f))
 
 typedef struct Order_tag {
 	int isActive;
@@ -26,6 +27,10 @@ public:
 	void Update();
 	void Draw();
 	void Submit(int index);
+	
+	// getter
+	int getScore();
+	bool isEnd();
 
 private:
 	void Create();
@@ -36,4 +41,5 @@ private:
 	int create_count;
 
 	int score;					// temp score
+	int timer;
 };

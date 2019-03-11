@@ -5,25 +5,25 @@
 // ATTRACTION DATA
 Building list[Attraction::ATTRACTION_MAX] = {
 	// MARRY
-	{ 8, 0, TEX_MARRY,{
+	{ 10000, 0, TEX_MARRY,{
 		Resource::RESOURCE_WOOD,		Resource::RESOURCE_NONE,		Resource::RESOURCE_BRICK,
 		Resource::RESOURCE_NONE,		Resource::RESOURCE_BRICK,		Resource::RESOURCE_IRON,
 		Resource::RESOURCE_IRON,		Resource::RESOURCE_WOOD,		Resource::RESOURCE_NONE, }
 	},
 	// ROLLER
-	{ 20, 0, TEX_ROLLER,{
+	{ 10000, 0, TEX_ROLLER,{
 		Resource::RESOURCE_NONE,		Resource::RESOURCE_NONE,		Resource::RESOURCE_IRON,
 		Resource::RESOURCE_IRON,		Resource::RESOURCE_IRON,		Resource::RESOURCE_WOOD,
 		Resource::RESOURCE_WOOD,		Resource::RESOURCE_WOOD,		Resource::RESOURCE_BRICK, }
 	},
 	// FERRIS
-	{ 100, 0, TEX_FERRIS,{
+	{ 10000, 0, TEX_FERRIS,{
 		Resource::RESOURCE_NONE,		Resource::RESOURCE_BRICK,		Resource::RESOURCE_NONE,
 		Resource::RESOURCE_IRON,		Resource::RESOURCE_BRICK,		Resource::RESOURCE_IRON,
 		Resource::RESOURCE_NONE,		Resource::RESOURCE_IRON,		Resource::RESOURCE_NONE, }
 	},
 	// VIKING
-	{ 1000, 0, TEX_VIKING,{
+	{ 10000, 0, TEX_VIKING,{
 		Resource::RESOURCE_NONE,		Resource::RESOURCE_IRON,		Resource::RESOURCE_NONE,
 		Resource::RESOURCE_WOOD,		Resource::RESOURCE_NONE,		Resource::RESOURCE_WOOD,
 		Resource::RESOURCE_WOOD,		Resource::RESOURCE_WOOD,		Resource::RESOURCE_WOOD, }
