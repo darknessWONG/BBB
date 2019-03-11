@@ -16,5 +16,6 @@ public:
 	void setItemType(ResourceM itemType);
 private:
 	ResourceM itemType;
+
 };
 

@@ -94,7 +94,8 @@ void Model::loadModel(LPDIRECT3DDEVICE9 pD3DDevice)
 	if (isWithAnimation)
 	{
 		m_pAllocateHier = new CAllocateHierarchy();
-		D3DXLoadMeshHierarchyFromX(modelPath.c_str(), D3DXMESH_MANAGED, pD3DDevice, m_pAllocateHier, NULL, &m_pFrameRoot, &m_pAnimController);
+		D3DXLoadMeshHierarchyFromX(modelPath.c_str(), D3DXMESH_MANAGED, pD3DDevice, m_pAllocateHier, 
+			NULL, &m_pFrameRoot, &m_pAnimController);
 		setupBoneMatrixPointers(m_pFrameRoot, m_pFrameRoot);
 
 		boundingBoxMin = { FLT_MAX, FLT_MAX ,FLT_MAX };

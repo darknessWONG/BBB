@@ -98,9 +98,15 @@ void GameObject::dataUpdate(void)
 {
 	if (model != NULL)
 	{
-		if (isPlayAnima)
+		if (isPlayAnima && (animaPlayFream > 0 || -1 == animaPlayFream))
 		{
-			animaCounter += 0.001f;
+			animaCounter += 1 / 4800.0f;
+			animaPlayFream = animaPlayFream - 1 < -1 ? -1 : animaPlayFream - 1;
+			if (animaPlayFream == 0)
+			{
+				isPlayAnima = false;
+				resetAnimaCount();
+			}
 		}
 		model->dataUpdate(animaCounter);
 	}
@@ -511,6 +517,16 @@ bool GameObject::getIsPlayAnima(void)
 void GameObject::setIsPlayAnima(bool isPlayAnima)
 {
 	this->isPlayAnima = isPlayAnima;
+}
+
+int GameObject::getAnimaPlayFream(void)
+{
+	return animaPlayFream;
+}
+
+void GameObject::setAnimaPlayFream(int animaPlayFream)
+{
+	this->animaPlayFream = animaPlayFream;
 }
 
 D3DXVECTOR3 * GameObject::getVecTargetFront(void)

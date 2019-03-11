@@ -15,6 +15,7 @@ Player::~Player()
 
 void Player::dataUpdate(void)
 {
+	findHoldings = false;
 	D3DXVECTOR3 dir = { 0.0f, 0.0f, 0.0f };
 	bool isWalk = false;
 	if (Keyboard_IsPress(DIK_W))

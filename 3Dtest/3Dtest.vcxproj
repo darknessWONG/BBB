@@ -168,6 +168,7 @@
     <ClInclude Include="font.h" />
     <ClInclude Include="GameManage.h" />
     <ClInclude Include="GameTutorial.h" />
+    <ClInclude Include="HandoutBox.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="input.h" />
@@ -204,6 +205,7 @@
     <ClCompile Include="font.cpp" />
     <ClCompile Include="GameManage.cpp" />
     <ClCompile Include="GameTutorial.cpp" />
+    <ClCompile Include="HandoutBox.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="input.cpp" />

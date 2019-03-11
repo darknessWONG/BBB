@@ -24,19 +24,19 @@ Workbench::Workbench(int line, int column, float width, float length)
 	{
 		grid[j].position = D3DXVECTOR3(i, 0, length / 2);
 		grid[j].color = 0xFFFF0000;
-		grid[j].texPos = D3DXVECTOR2(j / (columnNum + 1), 0);
+		//grid[j].texPos = D3DXVECTOR2(j / (columnNum + 1), 0);
 
 		grid[j + 1].position = D3DXVECTOR3(i, 0, -length / 2);
 		grid[j + 1].color = 0xFFFF0000;
-		grid[j + 1].texPos = D3DXVECTOR2(j / (columnNum + 1), 1);
+		//grid[j + 1].texPos = D3DXVECTOR2(j / (columnNum + 1), 1);
 
 		grid[vertexNum - 1 - j].position = D3DXVECTOR3(-width / 2, 0, k);
 		grid[vertexNum - 1 - j].color = 0xFFFF0000;
-		grid[vertexNum - 1 - j].texPos = D3DXVECTOR2(0, j / (lineNum + 1));
+		//grid[vertexNum - 1 - j].texPos = D3DXVECTOR2(0, j / (lineNum + 1));
 
 		grid[vertexNum - 1 - (j + 1)].position = D3DXVECTOR3(width / 2, 0, k);
 		grid[vertexNum - 1 - (j + 1)].color = 0xFFFF0000;
-		grid[vertexNum - 1 - (j + 1)].texPos = D3DXVECTOR2(1, j / (lineNum + 1));
+		//grid[vertexNum - 1 - (j + 1)].texPos = D3DXVECTOR2(1, j / (lineNum + 1));
 	}
 
 	items = new Item*[lineNum * columnNum]{NULL};
@@ -58,7 +58,10 @@ void Workbench::draw(LPDIRECT3DDEVICE9 pD3DDevice)
 	pD3DDevice->SetTransform(D3DTS_WORLD, getMtxWorld()); //set the world matrix to the device
 	pD3DDevice->SetTexture(0, NULL);
 
+
+	pD3DDevice->SetRenderState(D3DRS_LIGHTING, false);
 	pD3DDevice->DrawPrimitiveUP(D3DPT_LINELIST, (lineNum + 1) + (columnNum + 1), grid, sizeof(Vertex));
+	pD3DDevice->SetRenderState(D3DRS_LIGHTING, true);
 }
 
 void Workbench::dataUpdate(void)

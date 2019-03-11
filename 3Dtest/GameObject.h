@@ -94,6 +94,8 @@ public:
 	void setRotateDamping(float rotateDamping);
 	bool getIsPlayAnima(void);
 	void setIsPlayAnima(bool isPlayAnima);
+	int getAnimaPlayFream(void);
+	void setAnimaPlayFream(int animaPlayFream);
 	D3DXVECTOR3* getVecTargetFront(void);
 	void setVecTargetFront(D3DXVECTOR3* vecTargetFront);
 	bool getMoveThisTurn(void);
@@ -132,6 +134,7 @@ private:
 
 	float animaCounter;
 	bool isPlayAnima;
+	int animaPlayFream;
 
 	D3DXVECTOR3 *vecTargetFront;
 	static D3DXVECTOR3* zeroDirect;

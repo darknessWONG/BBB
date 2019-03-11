@@ -26,7 +26,7 @@ void Item::positionUpdateY(void)
 	if (belong != NULL)
 	{
 		D3DXVECTOR3 pos = *getVecNowPos();
-		pos.y = belong->getModel()->getBoundingBox().top;
+		pos.y = belong->getModel()->getBoundingBox().top + (getBoundingBox().top - getBoundingBox().bottom);
 		setVecNowPos(&pos);
 	}
 	else
@@ -57,7 +57,7 @@ void Item::positionUpdate(void)
 		setBoundingCenter(center);
 
 		D3DXVECTOR3 pos = *getVecNowPos();
-		pos.y = belong->getModel()->getBoundingBox().top;
+		pos.y = belong->getModel()->getBoundingBox().top + (getBoundingBox().top - getBoundingBox().bottom);
 		setVecNowPos(&pos);
 	}
 	else
