@@ -183,6 +183,7 @@
     <ClInclude Include="Recipe.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="GameResult.h" />
+    <ClInclude Include="sound.h" />
     <ClInclude Include="SpecialArea.h" />
     <ClInclude Include="sprite.h" />
     <ClInclude Include="stdafx.h" />
@@ -220,6 +221,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Recipe.cpp" />
     <ClCompile Include="GameResult.cpp" />
+    <ClCompile Include="sound.cpp" />
     <ClCompile Include="SpecialArea.cpp" />
     <ClCompile Include="sprite.cpp" />
     <ClCompile Include="stdafx.cpp">

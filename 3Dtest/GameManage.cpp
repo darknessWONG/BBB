@@ -668,7 +668,7 @@ void GameManage::cleanDead(void)
 {
 	for (int i = 0; i < items.size(); i++)
 	{
-		if (items[i]->getIsDestory())
+		if (items[i]->getIsDestory() || items[i]->getIsDelete())
 		{
 			Item* tmp = items[i];
 			for (vector<Item*>::iterator it = items.begin(); it != items.end(); it++)

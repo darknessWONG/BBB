@@ -12,6 +12,7 @@ Date   : 2018/09/05
 #include "GameManage.h"
 #include "system_timer.h"
 #include "GameManage.h"
+#include "sound.h"
 //#include "mydirect3d.h"
 //#include "debug_font.h"
 #include "input.h"
@@ -212,6 +213,11 @@ bool Initialize(HINSTANCE hInstance, HWND hWnd)
 		return false;
 	}
 
+	// Sound
+	if (!InitSound(hWnd)) {
+		return false;
+	}
+
 	// テクスチャの読み込み
 	if (Texture_Load() > 0) {
 		MessageBox(hWnd, "いくつか読み込めなかったテクスチャファイルがあります", "エラー", MB_OK);
@@ -315,6 +321,8 @@ void Finalize(void)
 
 	// DirectInput版キーボードモジュールの終了処理
 	Keyboard_Finalize();
+
+	UninitSound();
 
 #if defined(_DEBUG) || defined(DEBUG)
 	// デバックフォントモジュールの終了処理

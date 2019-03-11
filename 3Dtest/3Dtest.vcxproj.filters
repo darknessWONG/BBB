@@ -35,6 +35,7 @@
     <ClCompile Include="Vigilance.cpp" />
     <ClCompile Include="Workbench.cpp" />
     <ClCompile Include="gamepad.cpp" />
+    <ClCompile Include="sound.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3Dtest.h" />
@@ -72,6 +73,7 @@
     <ClInclude Include="Vigilance.h" />
     <ClInclude Include="Workbench.h" />
     <ClInclude Include="gamepad.h" />
+    <ClInclude Include="sound.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="3Dtest.rc" />
