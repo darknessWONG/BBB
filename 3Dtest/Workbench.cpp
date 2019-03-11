@@ -59,7 +59,6 @@ void Workbench::draw(LPDIRECT3DDEVICE9 pD3DDevice)
 	pD3DDevice->SetTransform(D3DTS_WORLD, getMtxWorld()); //set the world matrix to the device
 	pD3DDevice->SetTexture(0, NULL);
 
-
 	pD3DDevice->SetRenderState(D3DRS_LIGHTING, false);
 	pD3DDevice->DrawPrimitiveUP(D3DPT_LINELIST, (lineNum + 1) + (columnNum + 1), grid, sizeof(Vertex));
 	pD3DDevice->SetRenderState(D3DRS_LIGHTING, true);
@@ -258,23 +257,23 @@ void Workbench::initRecipe(void)
 	recipeNum = 4;
 	recipe = new int*[recipeNum];
 	recipe[0] = new int[10]{
-		ResourceM::RESOURCEM_WOOD,		ResourceM::RESOURCEM_NONE,		ResourceM::RESOURCEM_BRICK,
-		ResourceM::RESOURCEM_NONE,		ResourceM::RESOURCEM_BRICK,		ResourceM::RESOURCEM_IRON,
-		ResourceM::RESOURCEM_IRON,		ResourceM::RESOURCEM_WOOD,		ResourceM::RESOURCEM_NONE,
+		ResourceM::RESOURCEM_NONE,		ResourceM::RESOURCEM_WOOD,		ResourceM::RESOURCEM_NONE,
+		ResourceM::RESOURCEM_NONE,		ResourceM::RESOURCEM_WOOD,		ResourceM::RESOURCEM_NONE,
+		ResourceM::RESOURCEM_IRON,		ResourceM::RESOURCEM_BRICK,		ResourceM::RESOURCEM_BRICK,
 	3};
 	recipe[1] = new int[10]{
-		ResourceM::RESOURCEM_NONE,		ResourceM::RESOURCEM_NONE,		ResourceM::RESOURCEM_IRON,
-		ResourceM::RESOURCEM_IRON,		ResourceM::RESOURCEM_IRON,		ResourceM::RESOURCEM_WOOD,
-		ResourceM::RESOURCEM_WOOD,		ResourceM::RESOURCEM_WOOD,		ResourceM::RESOURCEM_BRICK,
+		ResourceM::RESOURCEM_NONE,		ResourceM::RESOURCEM_NONE,		ResourceM::RESOURCEM_BRICK,
+		ResourceM::RESOURCEM_NONE,		ResourceM::RESOURCEM_IRON,		ResourceM::RESOURCEM_NONE,
+		ResourceM::RESOURCEM_NONE,		ResourceM::RESOURCEM_NONE,		ResourceM::RESOURCEM_NONE,
 	4};
 	recipe[2] = new int[10]{
 		ResourceM::RESOURCEM_NONE,		ResourceM::RESOURCEM_BRICK,		ResourceM::RESOURCEM_NONE,
-		ResourceM::RESOURCEM_IRON,		ResourceM::RESOURCEM_BRICK,		ResourceM::RESOURCEM_IRON,
-		ResourceM::RESOURCEM_NONE,		ResourceM::RESOURCEM_IRON,		ResourceM::RESOURCEM_NONE,
+		ResourceM::RESOURCEM_IRON,		ResourceM::RESOURCEM_NONE,		ResourceM::RESOURCEM_IRON,
+		ResourceM::RESOURCEM_NONE,		ResourceM::RESOURCEM_WOOD,		ResourceM::RESOURCEM_NONE,
 	5 };
 	recipe[3] = new int[10]{
 		ResourceM::RESOURCEM_NONE,		ResourceM::RESOURCEM_IRON,		ResourceM::RESOURCEM_NONE,
+		ResourceM::RESOURCEM_NONE,		ResourceM::RESOURCEM_NONE,		ResourceM::RESOURCEM_NONE,
 		ResourceM::RESOURCEM_WOOD,		ResourceM::RESOURCEM_NONE,		ResourceM::RESOURCEM_WOOD,
-		ResourceM::RESOURCEM_WOOD,		ResourceM::RESOURCEM_WOOD,		ResourceM::RESOURCEM_WOOD,
 	6};
 }

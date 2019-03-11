@@ -5,28 +5,28 @@
 // ATTRACTION DATA
 Building list[Attraction::ATTRACTION_MAX] = {
 	// MARRY
-	{ 10000, 0, TEX_MARRY,{
-		Resource::RESOURCE_WOOD,		Resource::RESOURCE_NONE,		Resource::RESOURCE_BRICK,
-		Resource::RESOURCE_NONE,		Resource::RESOURCE_BRICK,		Resource::RESOURCE_IRON,
-		Resource::RESOURCE_IRON,		Resource::RESOURCE_WOOD,		Resource::RESOURCE_NONE, }
+	{ 150, 0, TEX_MARRY,{
+		Resource::RESOURCE_NONE,		Resource::RESOURCE_WOOD,		Resource::RESOURCE_NONE,
+		Resource::RESOURCE_NONE,		Resource::RESOURCE_WOOD,		Resource::RESOURCE_NONE,
+		Resource::RESOURCE_IRON,		Resource::RESOURCE_BRICK,		Resource::RESOURCE_BRICK, }
 	},
 	// ROLLER
-	{ 10000, 0, TEX_ROLLER,{
-		Resource::RESOURCE_NONE,		Resource::RESOURCE_NONE,		Resource::RESOURCE_IRON,
-		Resource::RESOURCE_IRON,		Resource::RESOURCE_IRON,		Resource::RESOURCE_WOOD,
-		Resource::RESOURCE_WOOD,		Resource::RESOURCE_WOOD,		Resource::RESOURCE_BRICK, }
+	{ 40, 0, TEX_ROLLER,{
+		Resource::RESOURCE_NONE,		Resource::RESOURCE_NONE,		Resource::RESOURCE_BRICK,
+		Resource::RESOURCE_NONE,		Resource::RESOURCE_IRON,		Resource::RESOURCE_NONE,
+		Resource::RESOURCE_NONE,		Resource::RESOURCE_NONE,		Resource::RESOURCE_NONE, }
 	},
 	// FERRIS
-	{ 10000, 0, TEX_FERRIS,{
+	{ 100, 0, TEX_FERRIS,{
 		Resource::RESOURCE_NONE,		Resource::RESOURCE_BRICK,		Resource::RESOURCE_NONE,
-		Resource::RESOURCE_IRON,		Resource::RESOURCE_BRICK,		Resource::RESOURCE_IRON,
-		Resource::RESOURCE_NONE,		Resource::RESOURCE_IRON,		Resource::RESOURCE_NONE, }
+		Resource::RESOURCE_IRON,		Resource::RESOURCE_NONE,		Resource::RESOURCE_IRON,
+		Resource::RESOURCE_NONE,		Resource::RESOURCE_WOOD,		Resource::RESOURCE_NONE, }
 	},
 	// VIKING
-	{ 10000, 0, TEX_VIKING,{
+	{ 60, 0, TEX_VIKING,{
 		Resource::RESOURCE_NONE,		Resource::RESOURCE_IRON,		Resource::RESOURCE_NONE,
-		Resource::RESOURCE_WOOD,		Resource::RESOURCE_NONE,		Resource::RESOURCE_WOOD,
-		Resource::RESOURCE_WOOD,		Resource::RESOURCE_WOOD,		Resource::RESOURCE_WOOD, }
+		Resource::RESOURCE_NONE,		Resource::RESOURCE_NONE,		Resource::RESOURCE_NONE,
+		Resource::RESOURCE_WOOD,		Resource::RESOURCE_NONE,		Resource::RESOURCE_WOOD, }
 	},
 };
 
