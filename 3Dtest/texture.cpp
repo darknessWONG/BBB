@@ -25,6 +25,7 @@ static const TextureFileData TEXTURE_FILES[] = {
 	{ "asset/sprite/start.png", 600, 100 },
 	{ "asset/sprite/fail.png", 1000, 200 },
 	{ "asset/sprite/limit_time.png", 1000, 200 },
+	{ "asset/sprite/kusa.png", 200, 133 },
 	{ "asset/sprite/hew_tutorial.png", 700, 412 },
 	{ "asset/sprite/number.png", 728, 95 },
 	{ "asset/sprite/balloon.png", 1218, 3059 },
