@@ -190,6 +190,7 @@ RECTF GameObject::getBoundingRect(void)
 		rect.right = maxX + posX;
 		rect.top = maxZ + posZ;
 		rect.bottom = minZ + posZ;
+
 		return rect;
 	}
 	else
