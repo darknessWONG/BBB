@@ -83,4 +83,6 @@ private:
 	MapManage* map = NULL;
 
 	GameState gs;
+	int totalScore;
+	int bgm;
 };

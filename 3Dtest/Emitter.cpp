@@ -9,6 +9,14 @@
 #include "sprite.h"
 #include "texture.h"
 #include "input.h"
+#include "Number.h"
+#include "sound.h"
+
+#define TIMER_GUAGE_SIZE		(600.0f)
+#define TIMER_POSITION_X		(20)
+#define TIMER_POSITION_Y		(20)
+
+
 
 Emitter::Emitter()
 {
@@ -19,6 +27,7 @@ Emitter::Emitter()
 		list[i].count = 0;
 	}
 
+	timer = 0;
 	score = 0;
 
 	curActive = 0;
@@ -95,8 +104,15 @@ void Emitter::Update()
 		}
 	}
 
-	// debug submit
-	
+	if (score < 0) {
+		score = 0;
+	}
+
+	// debug
+	if (timer < 0) 
+		timer = 0;
+
+	timer++;
 }
 
 void Emitter::Draw()
@@ -121,8 +137,17 @@ void Emitter::Draw()
 		}
 	}
 
+	// score
+	Number::Draw(score, 6, D3DXVECTOR2(Common::screen_width - 200, Common::screen_height - 20.0f), 0.5f);
 
-	//debug
+	// timer
+	Sprite_Draw_Size(TEX_GUAGE,
+		TIMER_POSITION_X + TIMER_GUAGE_SIZE * 0.5f - TIMER_GUAGE_SIZE * ((float)timer / TIME_LIMIT) * 0.5f,
+		Common::screen_height - TIMER_POSITION_Y,
+		TIMER_GUAGE_SIZE - TIMER_GUAGE_SIZE * ((float)timer / TIME_LIMIT),
+		20);
+
+#if _DEBUG
 	char buf[256];
 	for (int i = 0; i < MAX_ORDER; i++) {
 		sprintf_s(buf, "[%d] - %s | recipe:%d | pos:%.2f | time: %d/%d",
@@ -136,10 +161,12 @@ void Emitter::Draw()
 	Font_SetColor(255, 255, 255, 255);
 	Font_Draw(10.0f, Common::screen_height - 30.0f - (MAX_ORDER * 30.0f), buf);
 
-	sprintf_s(buf, "SCORE : %+08d", score);
+	sprintf_s(buf, "TIMER : %+08d", timer);
 	Font_SetSize(30);
 	Font_SetColor(255, 255, 255, 255);
-	Font_Draw(Common::screen_width - 200, Common::screen_height - 40.0f, buf);
+	Font_Draw(Common::screen_width - 200, Common::screen_height - 140.0f, buf);
+#endif // _DEBUG
+
 }
 
 void Emitter::Submit(int index)
@@ -147,7 +174,9 @@ void Emitter::Submit(int index)
 	for (int i = 0; i < MAX_ORDER; i++) {
 		if (list[i].isActive == 1) {
 			if (list[i].recipe + 3 == index) {
-				// TODO Plus Score
+				// Plus Score
+				PlaySound(SOUND_LABEL_SE_SUCCESS);
+				timer -= 10 * 60.0f;
 				score += Recipe::getScore(i);
 				// Delete this Order
 				Delete(i);
@@ -155,8 +184,18 @@ void Emitter::Submit(int index)
 			}
 		}
 	}
-	// TODO Minus Score
+	// Error check
 	score -= 1000;
+}
+
+int Emitter::getScore()
+{
+	return score;
+}
+
+bool Emitter::isEnd()
+{
+	return timer > TIME_LIMIT;
 }
 
 void Emitter::Delete(int index)

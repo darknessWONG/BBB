@@ -13,6 +13,9 @@
 #include "texture.h"
 #include "factoryModel.h"
 #include "HandoutBox.h"
+#include "gamepad.h"
+#include "sound.h"
+
 
 
 GameManage::GameManage()
@@ -42,7 +45,7 @@ GameManage::~GameManage()
 void GameManage::init(void)
 {
 	map = new MapManage();
-
+	bgm = -1;
 	ItemFactory::setDevice(pD3DDevice);
 	ItemFactory::Init();
 
@@ -58,11 +61,13 @@ void GameManage::init(void)
 	playerMesh->setIsWithAnimation(true);
 	playerMesh->loadModel(pD3DDevice);
 	models.push_back(playerMesh);
+	// box
 	Model* radioMesh = new Model("radio.x");
 	radioMesh->setIsWithAnimation(false);
 	radioMesh->loadModel(pD3DDevice);
 	models.push_back(radioMesh);
-	Model* faceMesh = new Model("face.x");
+	// bin
+	Model* faceMesh = new Model("radio.x");
 	faceMesh->setIsWithAnimation(false);
 	faceMesh->loadModel(pD3DDevice);
 	models.push_back(faceMesh);
@@ -87,8 +92,10 @@ void GameManage::init(void)
 	handoutBoxMesh->loadModel(pD3DDevice);
 	models.push_back(handoutBoxMesh);
 
+	Gamepad_Initialize();
 
 	Font_Initialize();
+	totalScore = 0;
 }
 
 void GameManage::beforeUpdate(void)
@@ -135,6 +142,7 @@ void GameManage::update(void)
 	camera->calWatchAt();
 	camera->calWorldMatrix();
 	camera->draw(pD3DDevice);
+	Gamepad_Update();
 
 	switch (gs)
 	{
@@ -193,6 +201,7 @@ void GameManage::update(void)
 		ranking_state_clean();
 	}
 
+	
 	map->updateGameObejcts();
 }
 
@@ -232,6 +241,16 @@ void GameManage::title_state_init(void)
 {
 	pTitle = new GameTitle();
 
+	if (bgm == SOUND_LABEL_MUSIC_GAME) {
+		StopSound(SOUND_LABEL_MUSIC_GAME);
+		bgm = -1;
+	}
+
+	if (bgm != SOUND_LABEL_MUSIC_TITLE) {
+		PlaySound(SOUND_LABEL_MUSIC_TITLE);
+		bgm = SOUND_LABEL_MUSIC_TITLE;
+	}
+
 	gs = GameState_title_state_running;
 }
 
@@ -246,6 +265,8 @@ void GameManage::title_state_update(void)
 
 void GameManage::title_state_clean(void)
 {
+	PlaySound(SOUND_LABEL_SE_PASS);
+
 	delete pTitle;
 
 	gs = GameState_tutorial_state_init;
@@ -270,6 +291,8 @@ void GameManage::tutorial_state_update(void)
 
 void GameManage::tutorial_state_clean(void)
 {
+	PlaySound(SOUND_LABEL_SE_PASS);
+
 	delete pTutorial;
 
 	gs = GameState_game_state_init;
@@ -277,8 +300,18 @@ void GameManage::tutorial_state_clean(void)
 
 void GameManage::game_state_init(void)
 {
-
+	totalScore = 0;
 	Workbench::initRecipe();
+
+	if (bgm == SOUND_LABEL_MUSIC_TITLE) {
+		StopSound(SOUND_LABEL_MUSIC_TITLE);
+		bgm = -1;
+	}
+
+	if (bgm != SOUND_LABEL_MUSIC_GAME) {
+		PlaySound(SOUND_LABEL_MUSIC_GAME);
+		bgm = SOUND_LABEL_MUSIC_GAME;
+	}
 
 	Player* mesh = new Player();
 	mesh->setModel(models[0]);
@@ -469,10 +502,14 @@ void GameManage::game_state_update(void)
 	factoryUpdate();
 
 	state_read_input(GameState::GameState_game_state_clean);
+
+	if (pEmitter->isEnd())
+		gs = GameState::GameState_game_state_clean;
 }
 
 void GameManage::game_state_clean(void)
 {
+	totalScore = pEmitter->getScore();
 	map->cleanGameObject();
 	int gameObjectsNum = others.size();
 	for (int i = 0; i < gameObjectsNum; i++)
@@ -526,8 +563,18 @@ void GameManage::game_state_clean(void)
 void GameManage::result_state_init(void)
 {
 	pResult = new GameResult();
-
+	pResult->setScore(totalScore);
 	gs = GameState_result_state_running;
+
+	if (bgm == SOUND_LABEL_MUSIC_GAME) {
+		StopSound(SOUND_LABEL_MUSIC_GAME);
+		bgm = -1;
+	}
+
+	if (bgm != SOUND_LABEL_MUSIC_TITLE) {
+		PlaySound(SOUND_LABEL_MUSIC_TITLE);
+		bgm = SOUND_LABEL_MUSIC_TITLE;
+	}
 }
 
 void GameManage::result_state_update(void)
@@ -542,6 +589,8 @@ void GameManage::result_state_update(void)
 
 void GameManage::result_state_clean(void)
 {
+	PlaySound(SOUND_LABEL_SE_PASS);
+
 	delete pResult;
 	delete pEmitter;
 
@@ -711,7 +760,7 @@ void GameManage::setPD3DDevice(LPDIRECT3DDEVICE9 pD3DDevice)
 
 void GameManage::state_read_input(GameState name)
 {
-	if (Keyboard_IsTrigger(DIK_RETURN))
+	if (Keyboard_IsTrigger(DIK_RETURN) || Gamepad_isTrigger(XINPUT_GAMEPAD_BACK))
 	{
 		gs = name;
 	}

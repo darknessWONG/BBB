@@ -1,5 +1,7 @@
-#include "stdafx.h"
+#include "stdafx.h",
 #include "GameTitle.h"
+#include "gamepad.h"
+
 
 GameTitle::GameTitle()
 {
@@ -23,7 +25,7 @@ GameTitle::~GameTitle()
 
 void GameTitle::Update()
 {
-	if (Keyboard_IsTrigger(DIK_RETURN)) {
+	if (Keyboard_IsTrigger(DIK_RETURN) || Gamepad_isTrigger(XINPUT_GAMEPAD_START) || Gamepad_isTrigger(XINPUT_GAMEPAD_A)) {
 		bEnd = true;
 	}
 	counter += increment;
@@ -42,7 +44,6 @@ void GameTitle::Draw()
 	pParticle->Draw();
 	Sprite_Draw_Size(texture_logo, Common::screen_width * 0.5f, Common::screen_height * 0.25f, 600, 428);
 	Sprite_Draw_Size(texture_startgame, Common::screen_width * 0.5f, Common::screen_height * 0.7f, 200, 50, gColor);
-	//Number::Draw(192387129, 10, D3DXVECTOR2(100.0f, 100.0f), 1.0f);
 }
 
 bool GameTitle::isEnd()

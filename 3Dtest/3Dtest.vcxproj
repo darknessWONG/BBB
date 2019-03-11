@@ -167,6 +167,7 @@
     <ClInclude Include="factoryModel.h" />
     <ClInclude Include="font.h" />
     <ClInclude Include="GameManage.h" />
+    <ClInclude Include="gamepad.h" />
     <ClInclude Include="GameTutorial.h" />
     <ClInclude Include="HandoutBox.h" />
     <ClInclude Include="Item.h" />
@@ -183,6 +184,7 @@
     <ClInclude Include="Recipe.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="GameResult.h" />
+    <ClInclude Include="sound.h" />
     <ClInclude Include="SpecialArea.h" />
     <ClInclude Include="sprite.h" />
     <ClInclude Include="stdafx.h" />
@@ -204,6 +206,7 @@
     <ClCompile Include="factoryModel.cpp" />
     <ClCompile Include="font.cpp" />
     <ClCompile Include="GameManage.cpp" />
+    <ClCompile Include="gamepad.cpp" />
     <ClCompile Include="GameTutorial.cpp" />
     <ClCompile Include="HandoutBox.cpp" />
     <ClCompile Include="Item.cpp" />
@@ -220,6 +223,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Recipe.cpp" />
     <ClCompile Include="GameResult.cpp" />
+    <ClCompile Include="sound.cpp" />
     <ClCompile Include="SpecialArea.cpp" />
     <ClCompile Include="sprite.cpp" />
     <ClCompile Include="stdafx.cpp">

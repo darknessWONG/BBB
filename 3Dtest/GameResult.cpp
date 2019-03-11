@@ -1,5 +1,10 @@
 #include "stdafx.h"
 #include "GameResult.h"
+#include "gamepad.h"
+
+#define SCORE_PER_GRADE	(5000)
+#define MAX_GRADE		(5)
+#define MIN_GRADE		(0)
 
 GameResult::GameResult()
 {
@@ -12,8 +17,7 @@ GameResult::GameResult()
 	increment = 1;
 	pParticle = new Particle2D();
 
-	// temp
-	grade = 0;
+	setScore(0);
 }
 
 GameResult::~GameResult()
@@ -24,7 +28,7 @@ GameResult::~GameResult()
 
 void GameResult::Update()
 {
-	if (Keyboard_IsTrigger(DIK_RETURN)) {
+	if (Keyboard_IsTrigger(DIK_RETURN) || Gamepad_isTrigger(XINPUT_GAMEPAD_START) || Gamepad_isTrigger(XINPUT_GAMEPAD_A)) {
 		bEnd = true;
 	}
 
@@ -40,6 +44,17 @@ void GameResult::Draw()
 {
 	Sprite_Draw_Background(texture_background);
 	pParticle->Draw();
+}
+
+void GameResult::setScore(int number)
+{
+	score = number;
+
+	grade = score / SCORE_PER_GRADE;
+	grade = min(grade, MAX_GRADE);
+	grade = max(grade, MIN_GRADE);
+
+	texture_background = TEX_RESULT1 + grade;
 }
 
 bool GameResult::isEnd()

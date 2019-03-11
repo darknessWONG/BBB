@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "GameTutorial.h"
+#include "gamepad.h"
 
 #define TEXTURE_BACKGROUND_PADDING	(20)
 
@@ -17,7 +18,7 @@ GameTutorial::~GameTutorial()
 
 void GameTutorial::Update()
 {
-	if (Keyboard_IsTrigger(DIK_RETURN)) {
+	if (Keyboard_IsTrigger(DIK_RETURN) || Gamepad_isTrigger(XINPUT_GAMEPAD_START) || Gamepad_isTrigger(XINPUT_GAMEPAD_A)) {
 		bEnd = true;
 	}
 }

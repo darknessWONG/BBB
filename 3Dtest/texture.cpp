@@ -30,9 +30,9 @@ static const TextureFileData TEXTURE_FILES[] = {
 	{ "asset/sprite/ferris.png", 1889, 1974 },
 	{ "asset/sprite/viking.png", 2116, 2099 },
 	{ "asset/sprite/none.png", 100, 100 },
-	{ "asset/sprite/wood.png", 100, 100 },
-	{ "asset/sprite/iron.png", 100, 100 },
-	{ "asset/sprite/brick.png", 100, 100 },
+	{ "asset/sprite/wood.png", 256, 256 },
+	{ "asset/sprite/iron.jpg", 256, 256 },
+	{ "asset/sprite/brick.jpg", 256, 256 },
 	{ "asset/sprite/guage.png", 1190, 175 },
 	{ "asset/sprite/crystal.png", 256, 256 },
 };
