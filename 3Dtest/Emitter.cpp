@@ -88,7 +88,7 @@ void Emitter::Update()
 			list[i].count += 1;
 			if (list[i].count >= list[i].times) {
 				// TODO Score Minus
-				score -= 1000;
+				score -= 10;
 				// Delete this order from list
 				Delete(i);
 			}
@@ -185,7 +185,7 @@ void Emitter::Submit(int index)
 		}
 	}
 	// Error check
-	score -= 1000;
+	//score -= 1000;
 }
 
 int Emitter::getScore()

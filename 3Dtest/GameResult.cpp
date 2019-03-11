@@ -2,7 +2,7 @@
 #include "GameResult.h"
 #include "gamepad.h"
 
-#define SCORE_PER_GRADE	(5000)
+#define SCORE_PER_GRADE	(100)
 #define MAX_GRADE		(5)
 #define MIN_GRADE		(0)
 
