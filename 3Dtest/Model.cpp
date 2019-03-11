@@ -169,6 +169,7 @@ void Model::calBoundingBox(LPD3DXFRAME pFrameBase, D3DXVECTOR3 &boundingBoxMin, 
 
 		D3DXVec3TransformCoord(&boxMax, &boxMax, &pFrameBase->TransformationMatrix);
 		D3DXVec3TransformCoord(&boxMin, &boxMin, &pFrameBase->TransformationMatrix);
+
 		boundingBoxMin = Physics::takeSmallerVaule(boxMin, boundingBoxMin);
 		boundingBoxMax = Physics::takebiggerVaule(boxMax, boundingBoxMax);
 	}
