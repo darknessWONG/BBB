@@ -54,6 +54,15 @@ void Player::dataUpdate(void)
 			releaseHoldings();
 		}
 	}
+	if (Keyboard_IsTrigger(DIK_K))
+	{
+		isWalk = false;
+		D3DXVECTOR3 nowSpeed = *getVecMoveSpeed();
+		float speed = D3DXVec3Length(&nowSpeed);
+		D3DXVECTOR3 front = *getVecFront();
+		front = -front;
+		addSpeed(&front, speed);
+	}
 
 
 	if (true == isWalk)

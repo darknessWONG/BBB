@@ -724,7 +724,7 @@ void GameManage::handOutBoxUpdate(void)
 			{
 				list[j].obj->setIsDisplay(false);
 				list[j].obj->setIsDelete(true);
-				pEmitter->Submit(((Item*)list[i].obj)->getStatusNow());
+				pEmitter->Submit(((Item*)list[j].obj)->getStatusNow());
 
 				handOutbox[i]->setIsPlayAnima(true);
 				handOutbox[i]->setAnimaPlayFream(120);
