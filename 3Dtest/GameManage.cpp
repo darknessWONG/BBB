@@ -14,7 +14,7 @@
 
 GameManage::GameManage()
 {
-	gs = GameState::GameStateGameInit;
+	gs = GameState::GameStateTitleInit;
 }
 
 GameManage::GameManage(LPDIRECT3DDEVICE9 pD3DDevice)
@@ -279,7 +279,7 @@ void GameManage::gameStateInit(void)
 	mesh->setWalkSpeed(0.3f);
 	mesh->setMaxSpeed(0.3f);
 	mesh->setCanMove(true);
-	mesh->setVecNowPos(new D3DXVECTOR3(-90, 0, -85));
+	mesh->setVecNowPos(new D3DXVECTOR3(-88, 0, -83));
 	mesh->setOverlapLevel(1);
 	mesh->setBattleChara(bc);
 	player = mesh;
@@ -1116,11 +1116,11 @@ void GameManage::fade(void)
 	{
 		if (isFade == 1)
 		{
-			fadeAlpha = fadeAlpha + 100 > 255 ? 255 : fadeAlpha + 100;
+			fadeAlpha = fadeAlpha + 15 > 255 ? 255 : fadeAlpha + 15;
 		}
 		else
 		{
-			fadeAlpha = fadeAlpha - 100 < 0 ? 0 : fadeAlpha - 100;
+			fadeAlpha = fadeAlpha - 15 < 0 ? 0 : fadeAlpha - 15;
 		}
 
 		UI *ui = new UI({ 0, 0 }, Common::screen_width, Common::screen_height, -1);

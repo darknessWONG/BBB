@@ -2,7 +2,6 @@
 #include "Physics.h"
 #include <math.h>
 
-
 Physics::Physics()
 {
 }
@@ -124,7 +123,7 @@ BOOL Physics::lineTouchLine(line line1, line line2, D3DXVECTOR2& intersectPoint)
 	intersectPoint.x = (line2.b - line1.b) / (line1.a - line2.a);
 	intersectPoint.y = line1.a * intersectPoint.x + line1.b;
 
-	return TRUE;
+	return 1;
 }
 
 BOOL Physics::linesegmentTouchLinesegment(line_segment line1, line_segment line2)
@@ -173,10 +172,9 @@ line_segment Physics::createLinesegment(D3DXVECTOR2 point1, D3DXVECTOR2 point2)
 
 float Physics::round(float src, int bits)
 {
-	stringstream ss;
-	ss << fixed << setprecision(bits) << src;
-	ss >> src;
-
+	long long tmp = pow(10, bits);
+	long long newSrc = src * tmp;
+	src = (double)newSrc / tmp;
 	return src;
 }
 

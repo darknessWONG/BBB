@@ -39,6 +39,7 @@ void MapManage::updateGameObejcts(void)
 	for (int i = 0; i < gameObjectNum; i++)
 	{
 		gameObjects[i]->calBounding();
+		gameObjects[i]->dataUpdate();
 		if (!gameObjects[i]->getCanMove() || !gameObjects[i]->getMoveThisTurn())
 		{
 			gameObjects[i]->unlockThisTurn();
@@ -48,7 +49,6 @@ void MapManage::updateGameObejcts(void)
 		{
 			continue;
 		}
-		gameObjects[i]->dataUpdate();
 		//x position update
 		gameObjects[i]->positionUpdateX();
 		vector<TouchStatus> list = collisionDetectionOvl(gameObjects[i]);
@@ -202,15 +202,15 @@ vector<TouchStatus> MapManage::collisionDetectionOvl(GameObject * gameObject)
 	int ganmeObjectNum = (int)gameObjects.size();
 	for (int i = 0; i < ganmeObjectNum; i++)
 	{
-		if (gameObjects[i] == gameObject)
-		{
-			continue;
-		}
 		if (0 > gameObject->getOverlapLevel() + gameObjects[i]->getOverlapLevel())
 		{
 			continue;
 		}
 		if (!gameObjects[i]->getIsDisplay())
+		{
+			continue;
+		}
+		if (gameObjects[i] == gameObject)
 		{
 			continue;
 		}
