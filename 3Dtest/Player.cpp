@@ -18,29 +18,24 @@ void Player::dataUpdate(void)
 	findHoldings = false;
 	D3DXVECTOR3 dir = { 0.0f, 0.0f, 0.0f };
 	bool isWalk = false;
-	if (Keyboard_IsPress(DIK_W) || Gamepad_isPress(XINPUT_GAMEPAD_DPAD_UP))
+	if (Keyboard_IsPress(DIK_W) || Gamepad_isPress(XINPUT_GAMEPAD_DPAD_UP) || Gamepad_GetLY() > 0)
 	{
 		dir.z += 1;
 		isWalk = true;
 	}
-	if (Keyboard_IsPress(DIK_S) || Gamepad_isPress(XINPUT_GAMEPAD_DPAD_DOWN))
+	if (Keyboard_IsPress(DIK_S) || Gamepad_isPress(XINPUT_GAMEPAD_DPAD_DOWN) || Gamepad_GetLY() < 0)
 	{
 		dir.z -= 1;
 		isWalk = true;
 	}
-	if (Keyboard_IsPress(DIK_A) || Gamepad_isPress(XINPUT_GAMEPAD_DPAD_LEFT))
+	if (Keyboard_IsPress(DIK_A) || Gamepad_isPress(XINPUT_GAMEPAD_DPAD_LEFT) || Gamepad_GetLX() < 0)
 	{
 		dir.x -= 1;
 		isWalk = true;
 	}
-	if (Keyboard_IsPress(DIK_D) || Gamepad_isPress(XINPUT_GAMEPAD_DPAD_RIGHT))
+	if (Keyboard_IsPress(DIK_D) || Gamepad_isPress(XINPUT_GAMEPAD_DPAD_RIGHT) || Gamepad_GetLX() > 0)
 	{
 		dir.x += 1;
-		isWalk = true;
-	}
-	if (!isWalk) {
-		dir.x += Gamepad_GetLX();
-		dir.z += Gamepad_GetLY();
 		isWalk = true;
 	}
 	if (Keyboard_IsTrigger(DIK_SPACE) || Gamepad_isTrigger(XINPUT_GAMEPAD_A))
