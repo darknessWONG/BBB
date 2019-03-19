@@ -8,7 +8,7 @@ GameTutorial::GameTutorial()
 {
 	bEnd = false;
 
-	texture_background = TEX_NONE;
+	texture_background = TEX_TUTORIAL;
 
 }
 

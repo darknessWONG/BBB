@@ -12,6 +12,7 @@
 #include "GameTitle.h"
 #include "GameTutorial.h"
 #include "GameResult.h"
+#include "meshfield.h"
 
 class GameManage
 {
@@ -81,6 +82,8 @@ private:
 	GameResult *pResult;
 
 	MapManage* map = NULL;
+
+	Meshfield *pMeshfield;
 
 	GameState gs;
 	int totalScore;

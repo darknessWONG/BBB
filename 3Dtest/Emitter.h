@@ -7,7 +7,7 @@
 #define ORDER_MOVESPEED		(4.0f)
 #define ORDER_WIDTH			(205.0f)
 #define ORDER_COMING_SPEED	((5.0f) * (60.0f))
-#define ORDER_TIME			((20.0f) * (60.0f))
+#define ORDER_TIME			((30.0f) * (60.0f))
 #define TIME_LIMIT			((60.0f) * (60.0f))
 
 typedef struct Order_tag {
@@ -42,4 +42,5 @@ private:
 
 	int score;					// temp score
 	int timer;
+	int minusFX;
 };

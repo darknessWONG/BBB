@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "input.h"
 #include "gamepad.h"
+#include "sound.h"
 
 Player::Player()
 {
@@ -47,6 +48,7 @@ void Player::dataUpdate(void)
 		else
 		{
 			releaseHoldings();
+			PlaySound(SOUND_LABEL_SE_DROP);
 		}
 	}
 	if (Keyboard_IsTrigger(DIK_K))

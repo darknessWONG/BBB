@@ -29,6 +29,7 @@ Emitter::Emitter()
 
 	timer = 0;
 	score = 0;
+	minusFX = 0;
 
 	curActive = 0;
 	create_count = 0;
@@ -89,6 +90,7 @@ void Emitter::Update()
 			if (list[i].count >= list[i].times) {
 				// TODO Score Minus
 				score -= 10;
+				minusFX = 30;
 				// Delete this order from list
 				Delete(i);
 			}
@@ -113,6 +115,13 @@ void Emitter::Update()
 		timer = 0;
 
 	timer++;
+
+	if (minusFX > 0) {
+		minusFX--;
+	}
+	else if (minusFX < 0) {
+		minusFX = 0;
+	}
 }
 
 void Emitter::Draw()
@@ -139,8 +148,14 @@ void Emitter::Draw()
 
 	// score
 	Number::Draw(score, 6, D3DXVECTOR2(Common::screen_width - 200, Common::screen_height - 20.0f), 0.5f);
+	// minus texture
+	if (minusFX > 0) {
+		Sprite_Draw_Size(TEX_FAIL, Common::screen_width - 100, Common::screen_height - 60.0f, 150, 30);
+	}
 
-	// timer
+	// timer text
+	Sprite_Draw_Size(TEX_LIMITTIME, TIMER_POSITION_X + 60.0f, Common::screen_height - TIMER_POSITION_Y - 35.0f, 150, 30);
+	// timer gauge
 	Sprite_Draw_Size(TEX_GUAGE,
 		TIMER_POSITION_X + TIMER_GUAGE_SIZE * 0.5f - TIMER_GUAGE_SIZE * ((float)timer / TIME_LIMIT) * 0.5f,
 		Common::screen_height - TIMER_POSITION_Y,

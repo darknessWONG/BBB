@@ -17,7 +17,6 @@
 #include "sound.h"
 
 
-
 GameManage::GameManage()
 {
 	gs = GameState::GameState_title_state_init;
@@ -227,6 +226,7 @@ void GameManage::draw(void)
 	if (gs == GameState::GameState_game_state_running)
 	{
 		map->drawGameObjects(pD3DDevice);
+		pMeshfield->Draw(pD3DDevice);
 		pEmitter->Draw();
 	}
 
@@ -539,7 +539,8 @@ void GameManage::game_state_init(void)
 	wbs.push_back(wb);
 	map->addGameObject(wb);
 
-
+	pMeshfield = new Meshfield();
+	pMeshfield->Initialize(50.0f, 1, 1, TEX_GROUND, pD3DDevice);
 
 	pEmitter = new Emitter();
 
@@ -611,6 +612,10 @@ void GameManage::game_state_clean(void)
 	wbs.clear();
 	factorys.clear();
 	handOutbox.clear();
+	
+	delete pMeshfield;
+	pMeshfield = NULL;
+
 	gs = GameState_result_state_init;
 }
 
