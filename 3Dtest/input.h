@@ -16,6 +16,7 @@
 #include <Windows.h>
 // dinput.hをインクルードする前にこれを入れないと警告が出るので注意
 #define DIRECTINPUT_VERSION (0x0800)
+//constexpr int DIRECTINPUT_VERSION = 0x0800;
 #include <dinput.h>
 
 

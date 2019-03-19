@@ -172,9 +172,9 @@ line_segment Physics::createLinesegment(D3DXVECTOR2 point1, D3DXVECTOR2 point2)
 
 float Physics::round(float src, int bits)
 {
-	long long tmp = pow(10, bits);
-	long long newSrc = src * tmp;
-	src = (double)newSrc / tmp;
+	double tmp = pow(10, bits);
+	long long newSrc =(long long)(src * tmp);
+	src = (float)(newSrc / tmp);
 	return src;
 }
 

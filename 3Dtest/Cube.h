@@ -30,8 +30,8 @@ private:
 
 
 
-	static Vertex3D cubeVertex[CUBE_VERTEX_NUM];
-	static WORD cubeIndex[CUBE_INDEX_NUM];
+	static Vertex3D cubeVertex[CUBE_VERTEX_NUM()];
+	static WORD cubeIndex[CUBE_INDEX_NUM()];
 	static LPDIRECT3DVERTEXBUFFER9 pVertexBuffer;
 	static LPDIRECT3DINDEXBUFFER9 pIndexBuffer;
 };
