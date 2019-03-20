@@ -13,6 +13,11 @@ Battle::Battle()
 	bs = BattleState::BattleStateBegin;
 	lastBs = BattleState::BattleStateBegin;
 	action = NULL;
+
+	isShowingText = false;
+	showMessage = "";
+	nowMessage = "";
+	showMessageFrame = 0;
 #ifdef SKILL_EFFICIENCY
 	skillEfficiency = SKILL_EFFICIENCY;
 #else
@@ -35,6 +40,11 @@ Battle::Battle(MapManage *map, PerformManage *pm, MeumUI* commandMeum, MeumUI* t
 
 	createTextBox();
 	createStatusBox();
+
+	isShowingText = false;
+	showMessage = "";
+	nowMessage = "";
+	showMessageFrame = 0;
 
 #ifdef SKILL_EFFICIENCY
 	skillEfficiency = SKILL_EFFICIENCY;
@@ -72,29 +82,37 @@ void Battle::start(void)
 
 	commandMeum->setIsReadInput(false);
 
-	switch (bs)
+	if (isShowingText)
 	{
-	case BattleStateBegin:
-		beginPhase();
-		break;
-	case BattleStateStandby:
-		standbyPhase();
-		break;
-	case BattleStateCommand:
-		commandPhase();
-		break;
-	case BattleStateMove:
-		movePhase();
-		break;
-	case BattleStateDamage:
-		damagePhase();
-		break;
-	case BattleStateEnd:
-		endPhase();
-		break;
-	case BattleStateMapMove:
-		mapMovePhase();
-		break;
+		showingMessage();
+	}
+	else
+	{
+
+		switch (bs)
+		{
+		case BattleStateBegin:
+			beginPhase();
+			break;
+		case BattleStateStandby:
+			standbyPhase();
+			break;
+		case BattleStateCommand:
+			commandPhase();
+			break;
+		case BattleStateMove:
+			movePhase();
+			break;
+		case BattleStateDamage:
+			damagePhase();
+			break;
+		case BattleStateEnd:
+			endPhase();
+			break;
+		case BattleStateMapMove:
+			mapMovePhase();
+			break;
+		}
 	}
 	calStatusMessage();
 }
@@ -687,6 +705,7 @@ int Battle::calDamageVal(int atk, int def, int skillDamage)
 
 void Battle::takeDamage(void)
 {
+	string damageMessage = "";
 	int targetNum = (int)action->passive.size();
 	for (int i = 0; i < targetNum; i++)
 	{
@@ -697,8 +716,10 @@ void Battle::takeDamage(void)
 			{
 				action->passive[i]->setDisappear(true);
 			}
+			damageMessage += calDamageMessage(action->active, action->passive[i], action->damage[i]);
 		}
 	}
+	displayMessage(damageMessage);
 }
 
 void Battle::addMovePerform(Chara * act, Chara * target, int flag)
@@ -747,7 +768,46 @@ void Battle::addSkillPerform(GameObject * act, D3DXVECTOR3 start, D3DXVECTOR3 ta
 
 void Battle::displayMessage(string str)
 {
-	textBox->setDisplayStr(str);
+	//textBox->setDisplayStr(str);
+	showMessage = str;
+	nowMessage = "";
+	isShowingText = true;
+	showMessageFrame = 0;
+}
+
+void Battle::calMessageThisFream(void)
+{
+	if (0 == showMessageFrame % FREAM_PER_LETTER 
+		&& nowMessage.length() <= showMessage.length())
+	{
+		nowMessage += showMessage[nowMessage.length()];
+		textBox->setDisplayStr(nowMessage);
+	}
+	showMessageFrame++;
+}
+
+void Battle::showingMessage(void)
+{
+	if (showMessageFrame >= showMessage.length() * FREAM_PER_LETTER)
+	{
+		isShowingText = false;
+	}
+	else
+	{
+		calMessageThisFream();
+	}
+}
+
+string Battle::calDamageMessage(Chara * active, Chara * passive, int damage)
+{
+	string damageMessage = "";
+	damageMessage += active->getBattleChara()->getName();
+	damageMessage += " is take ";
+	damageMessage += to_string(damage);
+	damageMessage += " to ";
+	damageMessage += passive->getBattleChara()->getName();
+
+	return damageMessage;
 }
 
 void Battle::tabDeadEnemy(void)
@@ -766,25 +826,26 @@ void Battle::calStatusMessage(void)
 {
 	int charasNum = (int)charas.size();
 	string displayStr;
-	stringstream ss;
-	string tmpStr;
+	//stringstream ss;
+	//string tmpStr;
 	for (int i = 0; i < charasNum; i++)
 	{
 		displayStr += charas[i]->getBattleChara()->getName();
 		displayStr += "         ";
 
-		ss.clear();
-		ss << charas[i]->getBattleChara()->getHpNow();
-		ss >> tmpStr;
-		displayStr += tmpStr;
+		//ss.clear();
+		//ss << charas[i]->getBattleChara()->getHpNow();
+		//ss >> tmpStr;
+		//displayStr += tmpStr;
+		displayStr += to_string(charas[i]->getBattleChara()->getHpNow());
 
 		displayStr += "/";
 
-		ss.clear();
-		ss << charas[i]->getBattleChara()->getHpMax();
-		ss >> tmpStr;
-		displayStr += tmpStr;
-
+		//ss.clear();
+		//ss << charas[i]->getBattleChara()->getHpMax();
+		//ss >> tmpStr;
+		//displayStr += tmpStr;
+		displayStr += to_string(charas[i]->getBattleChara()->getHpMax());
 		displayStr += "%";
 	}
 	statusBox->setDisplayStr(displayStr);

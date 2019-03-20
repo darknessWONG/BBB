@@ -360,8 +360,8 @@ void GameManage::gameStateInit(void)
 	BattleChara* bc4 = new BattleChara();
 	bc4->setAtk(10);
 	bc4->setCamp(CampType::CampTypeEnemy);
-	bc4->setHpMax(10);
-	bc4->setHpNow(10);
+	bc4->setHpMax(20);
+	bc4->setHpNow(20);
 	bc4->setMovePoint(10);
 	bc4->setMpMax(10);
 	bc4->setMpNow(10);

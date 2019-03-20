@@ -129,6 +129,15 @@ private:
 	void takeDamage(void);
 
 	/*===========================================
+	about show message
+	============================================*/
+	void displayMessage(string str);
+	void calMessageThisFream(void);
+	void showingMessage(void);
+	string calDamageMessage(Chara* active, Chara* passive, int damage);
+
+
+	/*===========================================
 	tool function
 	============================================*/
 	//should only change bs by this function, 
@@ -140,7 +149,6 @@ private:
 	if flag is 1, it will add a force move perform*/
 	void addMovePerform(Chara* act, Chara* target, int flag);
 	void addSkillPerform(GameObject* act, D3DXVECTOR3 start, D3DXVECTOR3 target);
-	void displayMessage(string str);
 	void tabDeadEnemy(void);
 	void calStatusMessage(void);
 	void createSkillModel(int textureIndex, D3DXVECTOR3 position);
@@ -174,6 +182,11 @@ private:
 
 	float skillEfficiency;
 	float defEfficiency;
+
+	bool isShowingText;
+	string showMessage;
+	string nowMessage;
+	int showMessageFrame;
 
 	Billboard* skillBillboard;
 
