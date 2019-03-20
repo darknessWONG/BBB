@@ -159,6 +159,7 @@
   <ItemGroup>
     <ClInclude Include="AllocateHierarchy.h" />
     <ClInclude Include="Battle.h" />
+    <ClInclude Include="BattleArea.h" />
     <ClInclude Include="BattleChara.h" />
     <ClInclude Include="BattleSkill.h" />
     <ClInclude Include="Billboard.h" />
@@ -196,6 +197,7 @@
   <ItemGroup>
     <ClCompile Include="AllocateHierarchy.cpp" />
     <ClCompile Include="Battle.cpp" />
+    <ClCompile Include="BattleArea.cpp" />
     <ClCompile Include="BattleChara.cpp" />
     <ClCompile Include="BattleSkill.cpp" />
     <ClCompile Include="Billboard.cpp" />

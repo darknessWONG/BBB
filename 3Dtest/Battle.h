@@ -44,6 +44,7 @@ public:
 	void start(void);
 	void addCharas(Chara* chara);
 	bool checkCharaIsInBattle(Chara* chara);
+	Cycle calBattleArea(void);
 	/*-------------------
 	return value:
 	0 if not end

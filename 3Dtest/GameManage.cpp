@@ -10,6 +10,7 @@
 #include "MeumUI.h"
 #include "UI.h"
 #include "MyMesh.h"
+#include "BattleArea.h"
 #include "NameTap.h"
 
 GameManage::GameManage()
@@ -233,6 +234,17 @@ void GameManage::titleStateClean(void)
 
 void GameManage::gameStateInit(void)
 {
+	BattleArea* baa = new BattleArea({ 5, 0, 0 });
+	baa->setIsDisplay(true);
+	baa->setMaxSpeed(0.3f);
+	baa->setCanMove(true);
+	baa->setVecNowPos(new D3DXVECTOR3(0, 3, 0));
+	baa->setOverlapLevel(-1000);
+	baa->setIsDelete(false);
+	baa->setVecScale(new D3DXVECTOR3(5, 5, 5));
+	others.push_back(baa);
+	map->addGameObject(baa);
+
 	BattleSkill* fireBall = new BattleSkill();
 	fireBall->setTextureIndex(8);
 	fireBall->setCost(1);
@@ -279,13 +291,14 @@ void GameManage::gameStateInit(void)
 	mesh->setWalkSpeed(0.3f);
 	mesh->setMaxSpeed(0.3f);
 	mesh->setCanMove(true);
-	mesh->setVecNowPos(new D3DXVECTOR3(-88, 0, -83));
+	//mesh->setVecNowPos(new D3DXVECTOR3(-88, 0, -83));
+	mesh->setVecNowPos(new D3DXVECTOR3(0, 0, 0));
 	mesh->setOverlapLevel(1);
 	mesh->setBattleChara(bc);
 	player = mesh;
 	map->addGameObject(mesh);
 
-	GameObject* tree = new GameObject();
+	/*GameObject* tree = new GameObject();
 	tree->setModel(models[ModelType::ModelTypeRockWall]);
 	tree->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
 	tree->setCanMove(false);
@@ -633,7 +646,7 @@ void GameManage::gameStateInit(void)
 	enemy11->setBattleRadius(20);
 	enemys.push_back(enemy11);
 	boss = enemy11;
-	map->addGameObject(enemy11);
+	map->addGameObject(enemy11);*/
 
 	if (isFade == 1)
 	{
@@ -697,7 +710,7 @@ void GameManage::gameStateUpdate(void)
 		}
 		if (winStatus)
 		{
-			setIsFade(1);
+			//setIsFade(1);
 		}
 	}
 	if (fadeAlpha == 0 && isFade == -1)

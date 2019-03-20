@@ -539,6 +539,39 @@ bool Battle::checkCharaIsInBattle(Chara * chara)
 	return false;
 }
 
+Cycle Battle::calBattleArea(void)
+{
+	D3DXVECTOR2 center1;
+	D3DXVECTOR2 center2;
+	float max = 0;
+	
+	int charaNum = charas.size();
+	for (int i = 0; i < charaNum; i++)
+	{
+		for (int j = i + 1; j < charaNum; j++)
+		{
+			D3DXVECTOR2 centerA = charas[i]->getBoundingCenter();
+			D3DXVECTOR2 centerB = charas[j]->getBoundingCenter();
+			float length = D3DXVec2LengthSq(&( centerA - centerB));
+			if (length > max)
+			{
+				center1 = centerA;
+				center2 = centerB;
+				max = length;
+			}
+		}
+	}
+
+	Cycle cycle;
+	cycle.r =  sqrt(max) / 2;
+	cycle.center_x = fabs(center1.x - center2.x / 2);
+	cycle.center_x = center1.x > center2.x ? cycle.center_x + center2.x : cycle.center_x + center1.x;
+	cycle.center_y = fabs(center1.y - center2.y / 2);
+	cycle.center_y = center1.y > center2.y ? cycle.center_y + center2.y : cycle.center_y + center1.y;
+
+	return cycle;
+}
+
 void Battle::createActionMeum(void)
 {
 	commandMeum->cleanOption();

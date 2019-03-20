@@ -40,13 +40,15 @@ public:
 	============================================*/
 	//This function should be called once before this call first time be instanced
 	static void initStaticMember(LPDIRECT3DDEVICE9 pD3DDevice);
+
+	static LPDIRECT3DVERTEXBUFFER9 pVertexBuffer;
+	static LPDIRECT3DINDEXBUFFER9 pIndexBuffer;
 private:
 	Camera const* camera;
 	int textureIndex;
 
 	static Vertex3D point[4];
 	static WORD index[6];
-	static LPDIRECT3DVERTEXBUFFER9 pVertexBuffer;
-	static LPDIRECT3DINDEXBUFFER9 pIndexBuffer;
+
 };
 
