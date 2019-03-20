@@ -872,15 +872,16 @@ void GameManage::enemyUpdate(Enemy* enemy)
 	int trackingListNum = (int)trackingList.size();
 	for (int i = 0; i < trackingListNum; i++)
 	{
-		if (player != trackingList[i])
+		if (trackingList[i] != player)
 		{
 			continue;
 		}
 		D3DXVECTOR2 listObjCenter = trackingList[i]->getBoundingCenter();
 		D3DXVECTOR3 targe = D3DXVECTOR3(listObjCenter.x, 0, listObjCenter.y);
 
-		vector<GameObject*> sightList = map->calObjectOnSight(enemy, trackingList[i]);
-		if (sightList.size() != 0)
+		vector<GameObject*> sightList;
+		bool isOnSight = map->calObjectOnSight(enemy, trackingList[i], sightList);
+		if (!isOnSight)
 		{
 			continue;
 		}

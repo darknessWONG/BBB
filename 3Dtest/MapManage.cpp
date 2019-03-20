@@ -302,6 +302,48 @@ vector<GameObject*> MapManage::calObjectOnSight(GameObject * enemy, GameObject *
 	return list;
 }
 
+
+bool MapManage::calObjectOnSight(GameObject * enemy, GameObject * player, vector<GameObject*> &list) const
+{
+	//check is behind
+	D3DXVECTOR2 vec = player->getBoundingCenter() - enemy->getBoundingCenter();
+	D3DXVECTOR3 enemyFront = *enemy->getVecFront();
+	D3DXVECTOR2 enemyFront2D = { enemyFront.x, enemyFront.z };
+	float dot = D3DXVec2Dot(&vec, &enemyFront2D);
+	if (dot < 0)
+	{
+		return false;
+	}
+
+	//check is have Obstacle
+	line_segment sight = Physics::createLinesegment(enemy->getBoundingCenter(), player->getBoundingCenter());
+
+	int gameObjNum = (int)gameObjects.size();
+	for (int i = 0; i < gameObjNum; i++)
+	{
+		if (gameObjects[i] == enemy || gameObjects[i] == player || typeid(Vigilance) == typeid(*gameObjects[i]))
+		{
+			continue;
+		}
+		RECTF rect = gameObjects[i]->getBoundingRect();
+		line_segment diagonal1 = Physics::createLinesegment(D3DXVECTOR2(rect.left, rect.top), D3DXVECTOR2(rect.right, rect.bottom));
+		line_segment diagonal2 = Physics::createLinesegment(D3DXVECTOR2(rect.right, rect.top), D3DXVECTOR2(rect.left, rect.bottom));
+		if (Physics::linesegmentTouchLinesegment(sight, diagonal1) || Physics::linesegmentTouchLinesegment(sight, diagonal2))
+		{
+			list.push_back(gameObjects[i]);
+		}
+	}
+
+	if (list.size() > 0)
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+}
+
 vector<GameObject*> MapManage::calObjectOnSightOvl(GameObject * active, GameObject * target) const
 {
 	line_segment sight = Physics::createLinesegment(active->getBoundingCenter(), target->getBoundingCenter());

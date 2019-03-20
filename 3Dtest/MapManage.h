@@ -47,6 +47,7 @@ public:
 	vector<GameObject*> calObjectInCycle(Vigilance* cycle);
 	vector<GameObject*> calObjectInCycle(D3DXVECTOR2 center, float radius);
 	vector<GameObject*> calObjectOnSight(GameObject* enemy, GameObject* player) const;
+	bool calObjectOnSight(GameObject* enemy, GameObject* player, vector<GameObject*> &list) const;
 	//check object on sight or not whth overlap level, it will do overlap test with actve and the object on sight
 	vector<GameObject*> calObjectOnSightOvl(GameObject* active, GameObject* target) const;
 
