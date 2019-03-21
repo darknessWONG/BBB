@@ -115,6 +115,7 @@ void GameManage::beforeUpdate(void)
 		map->addGameObject2D(uis[i]);
 	}
 
+	map->addGameObject(baa);
 	map->gameObjectsBeforeUpdate();
 }
 
@@ -234,17 +235,6 @@ void GameManage::titleStateClean(void)
 
 void GameManage::gameStateInit(void)
 {
-	BattleArea* baa = new BattleArea({ 5, 0, 0 });
-	baa->setIsDisplay(true);
-	baa->setMaxSpeed(0.3f);
-	baa->setCanMove(true);
-	baa->setVecNowPos(new D3DXVECTOR3(0, 3, 0));
-	baa->setOverlapLevel(-1000);
-	baa->setIsDelete(false);
-	baa->setVecScale(new D3DXVECTOR3(5, 5, 5));
-	others.push_back(baa);
-	map->addGameObject(baa);
-
 	BattleSkill* fireBall = new BattleSkill();
 	fireBall->setTextureIndex(8);
 	fireBall->setCost(1);
@@ -291,14 +281,13 @@ void GameManage::gameStateInit(void)
 	mesh->setWalkSpeed(0.3f);
 	mesh->setMaxSpeed(0.3f);
 	mesh->setCanMove(true);
-	//mesh->setVecNowPos(new D3DXVECTOR3(-88, 0, -83));
-	mesh->setVecNowPos(new D3DXVECTOR3(0, 0, 0));
+	mesh->setVecNowPos(new D3DXVECTOR3(-88, 0, -83));
 	mesh->setOverlapLevel(1);
 	mesh->setBattleChara(bc);
 	player = mesh;
 	map->addGameObject(mesh);
 
-	/*GameObject* tree = new GameObject();
+	GameObject* tree = new GameObject();
 	tree->setModel(models[ModelType::ModelTypeRockWall]);
 	tree->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
 	tree->setCanMove(false);
@@ -646,7 +635,15 @@ void GameManage::gameStateInit(void)
 	enemy11->setBattleRadius(20);
 	enemys.push_back(enemy11);
 	boss = enemy11;
-	map->addGameObject(enemy11);*/
+	map->addGameObject(enemy11);
+
+	baa = new BattleArea({ 5, -88, -83 });
+	baa->setIsDisplay(false);
+	baa->setMaxSpeed(0.3f);
+	baa->setCanMove(true);
+	baa->setOverlapLevel(-1000);
+	baa->setIsDelete(false);
+	map->addGameObject(baa);
 
 	if (isFade == 1)
 	{
@@ -697,6 +694,7 @@ void GameManage::gameStateUpdate(void)
 				}
 				player->setIsReadInput(false);
 				battleUpdate();
+				battleAreaUpdate();
 			}
 		}
 		cameraUpdate();
@@ -868,19 +866,29 @@ void GameManage::enemyUpdate(Enemy* enemy)
 		enemy->setDisappear(false);
 	}
 
-	vector<GameObject*> battleList = map->calObjectInCycle(enemy->getBoundingCenter(), enemy->getBattleRadius());
-	int battleListNum = (int)battleList.size();
-	for (int i = 0; i < battleListNum; i++)
+	//check is can add into battle
+	if (!checkIsInBattle()) //if is not in battle, check battle start prerequisite
 	{
-		if (player != battleList[i] || player->getIsDelete())
+		vector<GameObject*> battleList = map->calObjectInCycle(enemy->getBoundingCenter(), enemy->getBattleRadius());
+		int battleListNum = (int)battleList.size();
+		for (int i = 0; i < battleListNum; i++)
 		{
-			continue;
+			if (player != battleList[i] || player->getIsDelete())
+			{
+				continue;
+			}
+			battleInit();
+			addCharaToBattle(battle, enemy);
+			return;
 		}
-		battleInit();
+	}
+	else if(Physics::pointInCycle(&baa->getCycle(), &enemy->getBoundingCenter())) //if is already in battle, check the prerequisite of add into battle
+	{
 		addCharaToBattle(battle, enemy);
 		return;
 	}
 
+	//check is have something to track or not
 	vector<GameObject*> trackingList = map->calObjectInCycle(enemy->getBoundingCenter(), enemy->getTrackingRadius());
 	int trackingListNum = (int)trackingList.size();
 	for (int i = 0; i < trackingListNum; i++)
@@ -903,6 +911,20 @@ void GameManage::enemyUpdate(Enemy* enemy)
 		return;
 	}
 	enemy->setIsTracking(false);
+}
+
+void GameManage::battleAreaUpdate(void)
+{
+	if (checkIsInBattle())
+	{
+		Cycle cyc = battle->calBattleArea();
+		baa->setCycle(cyc);
+		baa->setIsDisplay(true);
+	}
+	else
+	{
+		baa->setIsDisplay(false);
+	}
 }
 
 void GameManage::othersUpdate(void)

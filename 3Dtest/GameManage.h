@@ -19,6 +19,7 @@ Date   : 2018/11/23
 #include "PerformManage.h"
 #include "UI.h"
 #include "Battle.h"
+#include "BattleArea.h"
 
 class GameManage
 {
@@ -63,6 +64,7 @@ private:
 	void cameraUpdate(void);
 	void enemyUpdate(void);
 	void enemyUpdate(Enemy* enemy);
+	void battleAreaUpdate(void);
 	void othersUpdate(void);
 
 	/*===========================================
@@ -100,6 +102,7 @@ private:
 	vector<GameObject*> others;
 	vector<MeumUI*> uis;
 	vector<Model*> models;
+	BattleArea* baa;
 
 	Battle* battle = NULL;
 	BattleResultType battleResult;

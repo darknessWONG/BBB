@@ -27,6 +27,7 @@ public:
 	/*===========================================
 	public geter / seter
 	============================================*/
+	Cycle getCycle(void);
 	void setCycle(Cycle cycle);
 private:
 	Cycle cycle;

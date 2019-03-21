@@ -564,9 +564,9 @@ Cycle Battle::calBattleArea(void)
 
 	Cycle cycle;
 	cycle.r =  sqrt(max) / 2;
-	cycle.center_x = fabs(center1.x - center2.x / 2);
+	cycle.center_x = fabs((center1.x - center2.x) / 2);
 	cycle.center_x = center1.x > center2.x ? cycle.center_x + center2.x : cycle.center_x + center1.x;
-	cycle.center_y = fabs(center1.y - center2.y / 2);
+	cycle.center_y = fabs((center1.y - center2.y) / 2);
 	cycle.center_y = center1.y > center2.y ? cycle.center_y + center2.y : cycle.center_y + center1.y;
 
 	return cycle;

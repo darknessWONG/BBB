@@ -31,8 +31,11 @@ BattleArea::BattleArea(Cycle cycle)
 
 BattleArea::~BattleArea()
 {
-	//safe_delete<Vertex3D>(vertex);
-	//safe_delete<WORD>(index);
+	safe_delete<Vertex3D>(point);
+	safe_delete<WORD>(index);
+	SAFE_RELEASE(pVertexBuffer);
+	SAFE_RELEASE(pIndexBuffer);
+
 }
 
 void BattleArea::calWorldMatrix(void)
@@ -65,38 +68,38 @@ void BattleArea::dataUpdate(void)
 	setVecNowPos(&pos);
 
 	ZeroMemory(point, (CYCLE_SEGMENTATION + 1) * sizeof(Vertex3D));
-	point[0] = { {0, 0.5, 0}, {0, 1, 0}, 0xFFFF0000, {0, 0} };
+	point[0] = { {0.0f, 0.01f, 0.0f}, {0, 1, 0}, 0x88FF0000, {0, 0} };
 
 
 	float preDegree = 360 / CYCLE_SEGMENTATION;
 	for (int i = 1; i < CYCLE_SEGMENTATION + 1; i++)
 	{
-		float dergree = i * preDegree;
+		int dergree = i * preDegree;
 		double radian = D3DXToRadian(dergree);
-		//double sin1;
-		//if ((dergree % 90) == 0 && (dergree % 90) % 2 == 0)
-		//{
-		//	sin1 = 0;
-		//}
-		//else
-		//{
-		//	sin1 = sin(radian);
-		//}
-		point[i].pos.x = cycle.r * sin(dergree);
-		point[i].pos.y = 0.0f;
-		//double cos1;
-		//if((dergree % 90) == 0 && (dergree % 90) % 2 == 1)
-		//{
-		//	cos1 = 0;
-		//}
-		//else
-		//{
-		//	cos1 = cos(radian);
-		//}
+		double sin1;
+		if ((dergree % 90) == 0 && (dergree % 90) % 2 == 0)
+		{
+			sin1 = 0;
+		}
+		else
+		{
+			sin1 = sin(radian);
+		}
+		point[i].pos.x = cycle.r * sin1;
+		point[i].pos.y = 0.01f;
+		double cos1;
+		if((dergree % 90) == 0 && (dergree % 90) % 2 == 1)
+		{
+			cos1 = 0;
+		}
+		else
+		{
+			cos1 = cos(radian);
+		}
 
-		point[i].pos.z = cycle.r * cos(dergree);
+		point[i].pos.z = cycle.r * cos1;
 		point[i].normal = { 0, 1, 0 };
-		point[i].color = 0xFFFF0000;
+		point[i].color = 0x88FF0000;
 		point[i].uv = { 0.0f, 0.0f };
 	}
 
@@ -109,30 +112,29 @@ void BattleArea::draw(LPDIRECT3DDEVICE9 pD3DDevice)
 	{
 		WORD* pIndex; // 仮想アドレス
 		pIndexBuffer->Lock(0, 0, (void**)&pIndex, 0);
-		memcpy(pIndex, index, 6 * sizeof(WORD));
+		memcpy(pIndex, index, CYCLE_SEGMENTATION * 3 * sizeof(WORD));
 		pIndexBuffer->Unlock();
 
 		Vertex3D* pV;
 		pVertexBuffer->Lock(0, 0, (void**)&pV, 0);
-		memcpy(pV, point, 4 * sizeof(Vertex3D));
+		memcpy(pV, point, (CYCLE_SEGMENTATION + 1) * sizeof(Vertex3D));
 		pVertexBuffer->Unlock();
 
-		//pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, CYCLE_SEGMENTATION + 1, 0, CYCLE_SEGMENTATION);
-
+		//set special attribute
+		pD3DDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
+		//pD3DDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
 
 		pD3DDevice->SetFVF(FVF_VERTEX3D);
 		pD3DDevice->SetTexture(0, NULL);
-
+		pD3DDevice->SetTransform(D3DTS_WORLD, getMtxWorld());
 		pD3DDevice->SetStreamSource(0, pVertexBuffer, 0, sizeof(Vertex3D));
 		pD3DDevice->SetIndices(pIndexBuffer);
-		//set world matrix
-		pD3DDevice->SetTransform(D3DTS_WORLD, getMtxWorld());
 		//draw
-		pD3DDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
-		//pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, 4, 0, 2);
 		pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, CYCLE_SEGMENTATION + 1, 0, CYCLE_SEGMENTATION);
 
+		//restore special attribute
 		pD3DDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
+		//pD3DDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 	}
 }
 
@@ -143,16 +145,16 @@ RECTF BattleArea::getBoundingRect(void)
 
 D3DXVECTOR2 BattleArea::getBoundingCenter(void)
 {
-	D3DXVECTOR3 nowPos = *getVecNowPos();
-	return D3DXVECTOR2(nowPos.x, nowPos.z);
+	return { cycle.center_x, cycle.center_y };
 }
 
 void BattleArea::setBoundingCenter(D3DXVECTOR2 center)
 {
-	D3DXVECTOR3 nowPos = *getVecNowPos();
-	nowPos.x = center.x;
-	nowPos.z = center.y;
-	setVecNowPos(&nowPos);
+}
+
+Cycle BattleArea::getCycle(void)
+{
+	return cycle;
 }
 
 void BattleArea::setCycle(Cycle cycle)
