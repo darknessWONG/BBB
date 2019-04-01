@@ -100,7 +100,7 @@ void GameObject::dataUpdate(void)
 	{
 		if (isPlayAnima)
 		{
-			animaCounter += 0.001f;
+			animaCounter += 1/ 1200.0f;
 		}
 		model->dataUpdate(animaCounter);
 	}

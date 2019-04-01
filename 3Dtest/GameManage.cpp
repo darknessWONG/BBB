@@ -48,39 +48,39 @@ void GameManage::init(void)
 	light->init(pD3DDevice);
 
 	//load textures
-	TextureHandler2D::AddTexture("net.jpg", 383, 300);
-	TextureHandler2D::AddTexture("grass.jpg", 1024, 987);
-	TextureHandler2D::AddTexture("shadow000.jpg", 80, 80);
-	TextureHandler2D::AddTexture("brid1.png", 2736, 1824);
-	TextureHandler2D::AddTexture("brid2.png", 2736, 1824);
-	TextureHandler2D::AddTexture("win.png", 2736, 1824);
-	TextureHandler2D::AddTexture("lose.png", 2736, 1824);
-	TextureHandler2D::AddTexture("title.png", 580, 326);
-	TextureHandler2D::AddTexture("fire ball.png", 2736, 1824);
-	TextureHandler2D::AddTexture("arrow1.png", 2736, 1824);
+	TextureHandler2D::AddTexture(".\\asset\\Texture2D\\net.jpg", 383, 300);
+	TextureHandler2D::AddTexture(".\\asset\\Texture2D\\grass.jpg", 1024, 987);
+	TextureHandler2D::AddTexture(".\\asset\\Texture2D\\shadow000.jpg", 80, 80);
+	TextureHandler2D::AddTexture(".\\asset\\Texture2D\\brid1.png", 2736, 1824);
+	TextureHandler2D::AddTexture(".\\asset\\Texture2D\\brid2.png", 2736, 1824);
+	TextureHandler2D::AddTexture(".\\asset\\Texture2D\\win.png", 2736, 1824);
+	TextureHandler2D::AddTexture(".\\asset\\Texture2D\\lose.png", 2736, 1824);
+	TextureHandler2D::AddTexture(".\\asset\\Texture2D\\title.png", 580, 326);
+	TextureHandler2D::AddTexture(".\\asset\\Texture2D\\fire ball.png", 2736, 1824);
+	TextureHandler2D::AddTexture(".\\asset\\Texture2D\\arrow1.png", 2736, 1824);
 	TextureHandler2D::LoadTextures(pD3DDevice);
 
 	Billboard::initStaticMember(pD3DDevice);
 
 	fadeFrame = new MeumUI();
 
-	Model *playerModel = new Model("player.blend.x");
+	Model *playerModel = new Model(".\\asset\\models\\player.blend.x");
 	playerModel->setIsWithAnimation(true);
 	playerModel->loadModel(pD3DDevice);
 	models.push_back(playerModel);
-	Model *monsterModel = new Model("moster.blend.x");
+	Model *monsterModel = new Model(".\\asset\\models\\moster.blend.x");
 	monsterModel->setIsWithAnimation(true);
 	monsterModel->loadModel(pD3DDevice);
 	models.push_back(monsterModel);
-	Model *wallModel = new Model("rock wall.blend.x");
+	Model *wallModel = new Model(".\\asset\\models\\rock wall.blend.x");
 	wallModel->setIsWithAnimation(false);
 	wallModel->loadModel(pD3DDevice);
 	models.push_back(wallModel);
-	Model *wall2Model = new Model("rock wall2.blend.x");
+	Model *wall2Model = new Model(".\\asset\\models\\rock wall2.blend.x");
 	wall2Model->setIsWithAnimation(false);
 	wall2Model->loadModel(pD3DDevice);
 	models.push_back(wall2Model);
-	Model *groundModel = new Model("aaa.blend.x");
+	Model *groundModel = new Model(".\\asset\\models\\aaa.blend.x");
 	groundModel->setIsWithAnimation(false);
 	groundModel->loadModel(pD3DDevice);
 	models.push_back(groundModel);
@@ -267,8 +267,8 @@ void GameManage::gameStateInit(void)
 	BattleChara* bc = new BattleChara();
 	bc->setAtk(10);
 	bc->setCamp(CampType::CampTypePlayer);
-	bc->setHpMax(40);
-	bc->setHpNow(40);
+	bc->setHpMax(50);
+	bc->setHpNow(50);
 	bc->setMovePoint(20);
 	bc->setMpMax(10);
 	bc->setMpNow(10);
@@ -282,6 +282,7 @@ void GameManage::gameStateInit(void)
 	mesh->setMaxSpeed(0.3f);
 	mesh->setCanMove(true);
 	mesh->setVecNowPos(new D3DXVECTOR3(-88, 0, -83));
+	//mesh->setVecNowPos(new D3DXVECTOR3(-20, 0, 40));
 	mesh->setOverlapLevel(1);
 	mesh->setBattleChara(bc);
 	player = mesh;
@@ -610,11 +611,61 @@ void GameManage::gameStateInit(void)
 	enemys.push_back(enemy10);
 	map->addGameObject(enemy10);
 
+	BattleChara* bc14 = new BattleChara();
+	bc14->setAtk(10);
+	bc14->setCamp(CampType::CampTypeEnemy);
+	bc14->setHpMax(10);
+	bc14->setHpNow(10);
+	bc14->setMovePoint(10);
+	bc14->setMpMax(10);
+	bc14->setMpNow(10);
+	bc14->setName("enemy12");
+	bc14->setSpeed(10);
+	Enemy* enemy12 = new Enemy();
+	enemy12->setModel(models[ModelType::ModelTypeMonster]);
+	enemy12->setWalkSpeed(0.05f);
+	enemy12->setMaxSpeed(0.05f);
+	enemy12->setCanMove(true);
+	enemy12->setVecNowPos(new D3DXVECTOR3(0, 0, 40));
+	enemy12->setVecPatrolStart(new D3DXVECTOR3(0, 0, 60));
+	enemy12->setVecPatrolEnd(new D3DXVECTOR3(0, 0, 40));
+	enemy12->setOverlapLevel(1);
+	enemy12->setBattleChara(bc14);
+	enemy12->setTrackingRadius(20);
+	enemy12->setBattleRadius(5);
+	enemys.push_back(enemy12);
+	map->addGameObject(enemy12);
+
+	BattleChara* bc15 = new BattleChara();
+	bc15->setAtk(10);
+	bc15->setCamp(CampType::CampTypeEnemy);
+	bc15->setHpMax(10);
+	bc15->setHpNow(10);
+	bc15->setMovePoint(10);
+	bc15->setMpMax(10);
+	bc15->setMpNow(10);
+	bc15->setName("enemy13");
+	bc15->setSpeed(10);
+	Enemy* enemy13 = new Enemy();
+	enemy13->setModel(models[ModelType::ModelTypeMonster]);
+	enemy13->setWalkSpeed(0.05f);
+	enemy13->setMaxSpeed(0.05f);
+	enemy13->setCanMove(true);
+	enemy13->setVecNowPos(new D3DXVECTOR3(10, 0, 50));
+	enemy13->setVecPatrolStart(new D3DXVECTOR3(10, 0, 60));
+	enemy13->setVecPatrolEnd(new D3DXVECTOR3(10, 0, 40));
+	enemy13->setOverlapLevel(1);
+	enemy13->setBattleChara(bc15);
+	enemy13->setTrackingRadius(20);
+	enemy13->setBattleRadius(5);
+	enemys.push_back(enemy13);
+	map->addGameObject(enemy13);
+
 	BattleChara* bc13 = new BattleChara();
 	bc13->setAtk(10);
 	bc13->setCamp(CampType::CampTypeEnemy);
-	bc13->setHpMax(10);
-	bc13->setHpNow(10);
+	bc13->setHpMax(30);
+	bc13->setHpNow(30);
 	bc13->setMovePoint(10);
 	bc13->setMpMax(10);
 	bc13->setMpNow(10);
@@ -627,12 +678,12 @@ void GameManage::gameStateInit(void)
 	enemy11->setMaxSpeed(0.05f);
 	enemy11->setCanMove(true);
 	enemy11->setVecNowPos(new D3DXVECTOR3(30, 0, 40));
-	enemy11->setVecPatrolStart(new D3DXVECTOR3(30, 0, 20));
+	enemy11->setVecPatrolStart(new D3DXVECTOR3(30, 0, 60));
 	enemy11->setVecPatrolEnd(new D3DXVECTOR3(30, 0, 40));
 	enemy11->setOverlapLevel(1);
 	enemy11->setBattleChara(bc13);
-	enemy11->setTrackingRadius(50);
-	enemy11->setBattleRadius(20);
+	enemy11->setTrackingRadius(30);
+	enemy11->setBattleRadius(15);
 	enemys.push_back(enemy11);
 	boss = enemy11;
 	map->addGameObject(enemy11);
@@ -708,7 +759,7 @@ void GameManage::gameStateUpdate(void)
 		}
 		if (winStatus)
 		{
-			//setIsFade(1);
+			setIsFade(1);
 		}
 	}
 	if (fadeAlpha == 0 && isFade == -1)
@@ -856,12 +907,12 @@ void GameManage::enemyUpdate(void)
 void GameManage::enemyUpdate(Enemy* enemy)
 {
 	D3DXVECTOR3 dis = *enemy->getVecNowPos() - *player->getVecNowPos();
-	if (D3DXVec3LengthSq(&dis) > 4900)
+/*	if (D3DXVec3LengthSq(&dis) > 4900)
 	{
 		enemy->setDisappear(true);
 		return;
 	}
-	else if(battle == NULL || !battle->checkCharaIsInBattle(enemy))
+	else*/ if(battle == NULL || !battle->checkCharaIsInBattle(enemy))
 	{
 		enemy->setDisappear(false);
 	}
@@ -946,7 +997,7 @@ void GameManage::battleInit(void)
 {
 	if (!checkIsInBattle())
 	{
-		Model *faceModel = new Model("face.x");
+		Model *faceModel = new Model(".\\asset\\models\\face.x");
 		faceModel->setIsWithAnimation(false);
 		faceModel->loadModel(pD3DDevice);
 		models.push_back(faceModel);
