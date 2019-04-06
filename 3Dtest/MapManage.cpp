@@ -167,19 +167,8 @@ TouchType MapManage::collisionDetection(GameObject * gameObject1, GameObject * g
 {
 	TouchType is_hitted = TouchType::noTouch;
 
-	RECTF rect1 = gameObject1->getBoundingRect();
-	D3DXVECTOR2* position1 = new D3DXVECTOR2[4];
-	position1[0] = D3DXVECTOR2(rect1.left, rect1.top);
-	position1[1] = D3DXVECTOR2(rect1.right, rect1.top);
-	position1[2] = D3DXVECTOR2(rect1.left, rect1.bottom);
-	position1[3] = D3DXVECTOR2(rect1.right, rect1.bottom);
-
-	RECTF rect2 = gameObject2->getBoundingRect();
-	D3DXVECTOR2* position2 = new D3DXVECTOR2[4];
-	position2[0] = D3DXVECTOR2(rect2.left, rect2.top);
-	position2[1] = D3DXVECTOR2(rect2.right, rect2.top);
-	position2[2] = D3DXVECTOR2(rect2.left, rect2.bottom);
-	position2[3] = D3DXVECTOR2(rect2.right, rect2.bottom);
+	D3DXVECTOR2* position1 = Physics::rectToPoints(gameObject1->getBoundingRect());
+	D3DXVECTOR2* position2 = Physics::rectToPoints(gameObject2->getBoundingRect());
 
 	is_hitted = Physics::rectTouchRect(position1, position2);
 	delete[] position1;
@@ -192,12 +181,7 @@ TouchType MapManage::collisionDetection(GameObject * gameObject1, GameObject * g
 vector<TouchStatus> MapManage::collisionDetectionOvl(GameObject * gameObject)
 {
 	vector<TouchStatus> list;
-	RECTF rect = gameObject->getBoundingRect();
-	D3DXVECTOR2* position = new D3DXVECTOR2[4];
-	position[0] = D3DXVECTOR2(rect.left, rect.top);
-	position[1] = D3DXVECTOR2(rect.right, rect.top);
-	position[2] = D3DXVECTOR2(rect.left, rect.bottom);
-	position[3] = D3DXVECTOR2(rect.right, rect.bottom);
+	D3DXVECTOR2* position = Physics::rectToPoints(gameObject->getBoundingRect());
 
 	int ganmeObjectNum = (int)gameObjects.size();
 	for (int i = 0; i < ganmeObjectNum; i++)
@@ -214,12 +198,7 @@ vector<TouchStatus> MapManage::collisionDetectionOvl(GameObject * gameObject)
 		{
 			continue;
 		}
-		RECTF rect2 = gameObjects[i]->getBoundingRect();
-		D3DXVECTOR2* position2 = new D3DXVECTOR2[4];
-		position2[0] = D3DXVECTOR2(rect2.left, rect2.top);
-		position2[1] = D3DXVECTOR2(rect2.right, rect2.top);
-		position2[2] = D3DXVECTOR2(rect2.left, rect2.bottom);
-		position2[3] = D3DXVECTOR2(rect2.right, rect2.bottom);
+		D3DXVECTOR2* position2 = Physics::rectToPoints(gameObjects[i]->getBoundingRect());
 
 		TouchType ty = Physics::rectTouchRect(position2, position);
 		if (ty != TouchType::noTouch)
@@ -373,12 +352,7 @@ vector<GameObject*> MapManage::calObjectOnSightOvl(GameObject * active, GameObje
 vector<TouchStatus> MapManage::collisionDetection(GameObject * gameObject)
 {
 	vector<TouchStatus> list;
-	RECTF rect = gameObject->getBoundingRect();
-	D3DXVECTOR2* position = new D3DXVECTOR2[4];
-	position[0] = D3DXVECTOR2(rect.left, rect.top);
-	position[1] = D3DXVECTOR2(rect.right, rect.top);
-	position[2] = D3DXVECTOR2(rect.left, rect.bottom);
-	position[3] = D3DXVECTOR2(rect.right, rect.bottom);
+	D3DXVECTOR2* position = Physics::rectToPoints(gameObject->getBoundingRect());
 
 	int ganmeObjectNum = (int)gameObjects.size();
 	for (int i = 0; i < ganmeObjectNum; i++)
@@ -387,12 +361,7 @@ vector<TouchStatus> MapManage::collisionDetection(GameObject * gameObject)
 		{
 			continue;
 		}
-		RECTF rect2 = gameObjects[i]->getBoundingRect();
-		D3DXVECTOR2* position2 = new D3DXVECTOR2[4];
-		position2[0] = D3DXVECTOR2(rect2.left, rect2.top);
-		position2[1] = D3DXVECTOR2(rect2.right, rect2.top);
-		position2[2] = D3DXVECTOR2(rect2.left, rect2.bottom);
-		position2[3] = D3DXVECTOR2(rect2.right, rect2.bottom);
+		D3DXVECTOR2* position2 = Physics::rectToPoints(gameObjects[i]->getBoundingRect());
 
 		TouchType ty = Physics::rectTouchRect(position2, position);
 		if (ty != TouchType::noTouch)

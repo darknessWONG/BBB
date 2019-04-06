@@ -297,7 +297,7 @@ void GameManage::gameStateInit(void)
 	tree->setOverlapLevel(500);
 	others.push_back(tree);
 	map->addGameObject(tree);
-
+	
 	GameObject* tree10 = new GameObject();
 	tree10->setModel(models[ModelType::ModelTypeRockWall]);
 	tree10->setVecRotateAxis(new D3DXVECTOR3(0, 1, 0));
@@ -873,7 +873,8 @@ BOOL GameManage::checkEnd(void)
 	}
 	else if(boss == NULL)
 	{
-		return 2;
+		//return 2;
+		return FALSE;
 	}
 	return FALSE;
 }

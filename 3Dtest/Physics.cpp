@@ -178,6 +178,24 @@ float Physics::round(float src, int bits)
 	return src;
 }
 
+D3DXVECTOR2 * Physics::rectToPoints(RECTF rect)
+{
+	D3DXVECTOR2* points = new D3DXVECTOR2[4];
+	points[0] = D3DXVECTOR2(rect.left, rect.top);
+	points[1] = D3DXVECTOR2(rect.right, rect.top);
+	points[2] = D3DXVECTOR2(rect.left, rect.bottom);
+	points[3] = D3DXVECTOR2(rect.right, rect.bottom);
+
+	return points;
+}
+
+RECTF Physics::pointsToRect(D3DXVECTOR2 * points)
+{
+	RECTF rect = { points[0].x, points[1].x, points[0].y, points[2].y };
+
+	return rect;
+}
+
 D3DXVECTOR3 Physics::takeSmallerVaule(D3DXVECTOR3 a, D3DXVECTOR3 b)
 {
 	float x = a.x < b.x ? a.x : b.x;

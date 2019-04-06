@@ -63,6 +63,8 @@ public:
 	void setModel(Model* model);
 	D3DXMATRIX* getMtxWorld(void);
 	void setMtxWorld(D3DXMATRIX* mtxWorld);
+	D3DXMATRIX* getMtxRotate(void);
+	void setMtxRotate(D3DXMATRIX* mtxRotate);
 	D3DXVECTOR3* getVecFront(void);
 	void setVecFront(D3DXVECTOR3* vecFront);
 	D3DXVECTOR3* getVecRight(void);
@@ -102,6 +104,7 @@ private:
 	Model* model;
 
 	D3DXMATRIX *mtxWorld;
+	D3DXMATRIX *mtxRotate;
 
 	D3DXVECTOR3 *vecFront;   //the up direct of camera(normalize vector)
 	D3DXVECTOR3 *vecRight;   //the front direct of camera(normalize vector)

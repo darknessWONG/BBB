@@ -70,21 +70,27 @@ void GameObject::calWorldMatrix(void)
 	mtxTrans._42 = vecNowPos->y;
 	mtxTrans._43 = vecNowPos->z;
 
+	/*
+	normal of angle is {0, 0, 1}.
+	The dot of front and normal is 0 * x + 0 * y + 1 * z = 1 * 1 * cos
+	So cos = z
+	*/
 	float cosFront = vecFront->z;
 	float sinFront = sqrt(1 - cosFront * cosFront);
 	if (vecFront->x > 0)
 	{
 		sinFront = -sinFront;
 	}
-	D3DXMATRIX mtxRotate;
-	D3DXMatrixIdentity(&mtxRotate);
-	mtxRotate._11 = cosFront;
-	mtxRotate._13 = sinFront;
-	mtxRotate._31 = -sinFront;
-	mtxRotate._33 = cosFront;
+	safe_delete<D3DXMATRIX>(mtxRotate);
+	mtxRotate = new D3DXMATRIX;
+	D3DXMatrixIdentity(mtxRotate);
+	mtxRotate->_11 = cosFront;
+	mtxRotate->_13 = sinFront;
+	mtxRotate->_31 = -sinFront;
+	mtxRotate->_33 = cosFront;
 
 	D3DXMatrixMultiply(mtxWorld, mtxWorld, &mtxScale);
-	D3DXMatrixMultiply(mtxWorld, mtxWorld, &mtxRotate);
+	D3DXMatrixMultiply(mtxWorld, mtxWorld, mtxRotate);
 	D3DXMatrixMultiply(mtxWorld, mtxWorld, &mtxTrans);
 
 }
@@ -144,6 +150,26 @@ void GameObject::draw(LPDIRECT3DDEVICE9 pD3DDevice)
 		if (model != NULL)
 		{
 			model->draw(pD3DDevice, mtxWorld, animaCounter);
+
+#ifdef _DEBUG
+			D3DMATERIAL9 blue;
+			blue.Diffuse = { 1.0f, 1.0f, 1.0f, 0.5f };
+			blue.Ambient = blue.Diffuse;
+			pD3DDevice->SetMaterial(&blue);
+			pD3DDevice->SetTexture(0, 0); // disable texture
+
+			LPD3DXMESH boxMesh;
+
+			D3DXMATRIX mtxBoxWorld = *getMtxWorld();
+			mtxBoxWorld._42 += (boundingBoxMax.y - boundingBoxMin.y) / 2;
+
+			D3DXCreateBox(pD3DDevice, boundingBoxMax.x - boundingBoxMin.x, boundingBoxMax.y - boundingBoxMin.y, boundingBoxMax.z - boundingBoxMin.z, &boxMesh, 0);
+			pD3DDevice->SetTransform(D3DTS_WORLD, &mtxBoxWorld);
+			boxMesh->DrawSubset(0);
+
+			boxMesh->Release();
+#endif
+
 		}
 	}
 }
@@ -184,10 +210,6 @@ RECTF GameObject::getBoundingRect(void)
 		rect.right = maxX + posX;
 		rect.top = maxZ + posZ;
 		rect.bottom = minZ + posZ;
-	/*	rect.left = minX;
-		rect.right = maxX;
-		rect.top = maxZ;
-		rect.bottom = minZ;*/
 		return rect;
 	}
 	else
@@ -346,6 +368,17 @@ void GameObject::setMtxWorld(D3DXMATRIX* mtxWorld)
 {
 	safe_delete<D3DXMATRIX>(this->mtxWorld);
 	this->mtxWorld = new D3DXMATRIX(*mtxWorld);
+}
+
+D3DXMATRIX * GameObject::getMtxRotate(void)
+{
+	return mtxRotate;
+}
+
+void GameObject::setMtxRotate(D3DXMATRIX * mtxRotate)
+{
+	safe_delete<D3DXMATRIX>(this->mtxRotate);
+	this->mtxRotate = new D3DXMATRIX(*mtxRotate);
 }
 
 D3DXVECTOR3* GameObject::getVecFront(void)

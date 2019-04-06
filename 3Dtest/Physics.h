@@ -81,6 +81,9 @@ public:
 	static line_segment createLinesegment(D3DXVECTOR2 point1, D3DXVECTOR2 point2);
 	static float round(float src, int bits);
 
+	static D3DXVECTOR2* rectToPoints(RECTF rect);
+	static RECTF pointsToRect(D3DXVECTOR2* points);
+
 	//it will return a vector which element are the smaller one between a and b
 	static D3DXVECTOR3 takeSmallerVaule(D3DXVECTOR3 a, D3DXVECTOR3 b);
 	//it will return a vector which element are the bigger one between a and b
