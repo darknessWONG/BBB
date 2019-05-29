@@ -1,6 +1,7 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "TextureHandler2D.h"
 #include "debugPrintf.h"
+#include <fstream>
 
 
 vector<Texture> TextureHandler2D::textures;
@@ -33,6 +34,17 @@ void TextureHandler2D::AddTexture(string path, float width, float height)
 	tex.width = width;
 	tex.height = height;
 	textures.push_back(tex);
+}
+
+void TextureHandler2D::AddTextureBatch(string batchFile)
+{
+	fstream f(batchFile);
+	string file;
+	int width, height;
+	while (f >> file >> width >> height)
+	{
+		AddTexture(file, width, height);
+	}
 }
 
 Texture TextureHandler2D::GetTexture(int index)

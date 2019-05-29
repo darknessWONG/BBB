@@ -1,5 +1,6 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "GameObject.h"
+#include "RoundShadowHandler.h"
 #include "Common.h"
 
 D3DXVECTOR3* GameObject::zeroDirect = new D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -152,22 +153,28 @@ void GameObject::draw(LPDIRECT3DDEVICE9 pD3DDevice)
 			model->draw(pD3DDevice, mtxWorld, animaCounter);
 
 #ifdef _DEBUG
-			D3DMATERIAL9 blue;
-			blue.Diffuse = { 1.0f, 1.0f, 1.0f, 0.5f };
-			blue.Ambient = blue.Diffuse;
-			pD3DDevice->SetMaterial(&blue);
-			pD3DDevice->SetTexture(0, 0); // disable texture
+			//D3DMATERIAL9 blue;
+			//blue.Diffuse = { 1.0f, 1.0f, 1.0f, 0.5f };
+			//blue.Ambient = blue.Diffuse;
+			//pD3DDevice->SetMaterial(&blue);
+			//pD3DDevice->SetTexture(0, 0); // disable texture
 
-			LPD3DXMESH boxMesh;
+			//LPD3DXMESH boxMesh;
 
-			D3DXMATRIX mtxBoxWorld = *getMtxWorld();
-			mtxBoxWorld._42 += (boundingBoxMax.y - boundingBoxMin.y) / 2;
+			//D3DXMATRIX mtxBoxWorld = *getMtxWorld();
+			//mtxBoxWorld._42 += (boundingBoxMax.y - boundingBoxMin.y) / 2;
 
-			D3DXCreateBox(pD3DDevice, boundingBoxMax.x - boundingBoxMin.x, boundingBoxMax.y - boundingBoxMin.y, boundingBoxMax.z - boundingBoxMin.z, &boxMesh, 0);
-			pD3DDevice->SetTransform(D3DTS_WORLD, &mtxBoxWorld);
-			boxMesh->DrawSubset(0);
+			//D3DXCreateBox(pD3DDevice, boundingBoxMax.x - boundingBoxMin.x, boundingBoxMax.y - boundingBoxMin.y, boundingBoxMax.z - boundingBoxMin.z, &boxMesh, 0);
+			//pD3DDevice->SetTransform(D3DTS_WORLD, &mtxBoxWorld);
+			//boxMesh->DrawSubset(0);
 
-			boxMesh->Release();
+			//boxMesh->Release();
+#endif
+
+#ifdef ROUNDSHADOWHANDLER
+			D3DXVECTOR3 *pos = getVecNowPos();
+			D3DXVECTOR2 pos2D(pos->x, pos->z);
+			RoundShadowHandler::addPos(pos2D);
 #endif
 
 		}

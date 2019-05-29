@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "GameManage.h"
 #include "Model.h"
 #include "Player.h"
@@ -12,6 +12,7 @@
 #include "MyMesh.h"
 #include "BattleArea.h"
 #include "NameTap.h"
+#include "RoundShadowHandler.h"
 
 GameManage::GameManage()
 {
@@ -48,17 +49,20 @@ void GameManage::init(void)
 	light->init(pD3DDevice);
 
 	//load textures
-	TextureHandler2D::AddTexture(".\\asset\\Texture2D\\net.jpg", 383, 300);
-	TextureHandler2D::AddTexture(".\\asset\\Texture2D\\grass.jpg", 1024, 987);
-	TextureHandler2D::AddTexture(".\\asset\\Texture2D\\shadow000.jpg", 80, 80);
-	TextureHandler2D::AddTexture(".\\asset\\Texture2D\\brid1.png", 2736, 1824);
-	TextureHandler2D::AddTexture(".\\asset\\Texture2D\\brid2.png", 2736, 1824);
-	TextureHandler2D::AddTexture(".\\asset\\Texture2D\\win.png", 2736, 1824);
-	TextureHandler2D::AddTexture(".\\asset\\Texture2D\\lose.png", 2736, 1824);
-	TextureHandler2D::AddTexture(".\\asset\\Texture2D\\title.png", 580, 326);
-	TextureHandler2D::AddTexture(".\\asset\\Texture2D\\fire ball.png", 2736, 1824);
-	TextureHandler2D::AddTexture(".\\asset\\Texture2D\\arrow1.png", 2736, 1824);
+	//TextureHandler2D::AddTexture(".\\asset\\Texture2D\\net.jpg", 383, 300);
+	//TextureHandler2D::AddTexture(".\\asset\\Texture2D\\grass.jpg", 1024, 987);
+	//TextureHandler2D::AddTexture(".\\asset\\Texture2D\\shadow000.jpg", 80, 80);
+	//TextureHandler2D::AddTexture(".\\asset\\Texture2D\\brid1.png", 2736, 1824);
+	//TextureHandler2D::AddTexture(".\\asset\\Texture2D\\brid2.png", 2736, 1824);
+	//TextureHandler2D::AddTexture(".\\asset\\Texture2D\\win.png", 2736, 1824);
+	//TextureHandler2D::AddTexture(".\\asset\\Texture2D\\lose.png", 2736, 1824);
+	//TextureHandler2D::AddTexture(".\\asset\\Texture2D\\title.png", 580, 326);
+	//TextureHandler2D::AddTexture(".\\asset\\Texture2D\\fire ball.png", 2736, 1824);
+	//TextureHandler2D::AddTexture(".\\asset\\Texture2D\\arrow1.png", 2736, 1824);
+	TextureHandler2D::AddTextureBatch(".\\asset\\Texture2D\\input.txt");
 	TextureHandler2D::LoadTextures(pD3DDevice);
+
+	RoundShadowHandler::init(pD3DDevice, 2);
 
 	Billboard::initStaticMember(pD3DDevice);
 

@@ -1,5 +1,6 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "MapManage.h"
+#include "RoundShadowHandler.h"
 
 
 MapManage::MapManage()
@@ -152,6 +153,9 @@ void MapManage::drawGameObjects(LPDIRECT3DDEVICE9 pD3DDevice)
 		gameObjects2D[i]->draw(pD3DDevice);
 	}
 
+#ifdef ROUNDSHADOWHANDLER
+	RoundShadowHandler::draw(pD3DDevice);
+#endif
 }
 
 void MapManage::gameObjectsBeforeUpdate(void)

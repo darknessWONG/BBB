@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 /*==============================================================================
 
 [TextureHandler2D.h]
@@ -26,6 +26,7 @@ public:
 
 	static void LoadTextures(LPDIRECT3DDEVICE9 g_pD3DDevice);
 	static void AddTexture(string path, float width, float height);
+	static void AddTextureBatch(string batchFile);
 	static Texture GetTexture(int index);
 private:
 	static vector<Texture> textures;

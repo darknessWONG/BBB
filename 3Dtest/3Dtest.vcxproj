@@ -185,6 +185,7 @@
     <ClInclude Include="Physics.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="RoundShadowHandler.h" />
     <ClInclude Include="SideEffect.h" />
     <ClInclude Include="SpecialArea.h" />
     <ClInclude Include="stdafx.h" />
@@ -223,6 +224,7 @@
     <ClCompile Include="PerformManage.cpp" />
     <ClCompile Include="Physics.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="RoundShadowHandler.cpp" />
     <ClCompile Include="SideEffect.cpp" />
     <ClCompile Include="SpecialArea.cpp" />
     <ClCompile Include="stdafx.cpp">
